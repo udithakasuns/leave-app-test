@@ -63,7 +63,6 @@ buck-out/
 # Ruby / CocoaPods
 /ios/Pods/
 /vendor/bundle/
-/ios/rtc_leave_app.xcodeproj/project.pbxproj
 ios/Podfile.lock
 yarn.lock
 
