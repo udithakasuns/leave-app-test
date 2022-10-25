@@ -27,6 +27,7 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 const styles = StyleSheet.create({
     sectionContainer: {
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
 });
+
 const Section: React.FC<
     PropsWithChildren<{
         title: string;
@@ -60,6 +62,7 @@ const Section: React.FC<
                 }}>
                 {title}
             </Text>
+            <MaterialIcon name='dinner-dining' size={29} />
             <Text
                 style={[
                     styles.sectionDescription,
