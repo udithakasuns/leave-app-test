@@ -5,7 +5,7 @@ import LAIcon, { IconSize } from '../index';
 
 const ICON_NAME = 'check';
 const ICON_COLOR = theme.colors.primaryColor;
-const ICON_TEST_ID = 'button';
+const ICON_TEST_ID = 'iconButton';
 
 it('renders icon by default', () => {
     render(<LAIcon name={ICON_NAME} />);
@@ -63,7 +63,7 @@ it('should execute icon onPress', () => {
     const { getByTestId } = render(
         <LAIcon name={ICON_NAME} onPress={onPress} testID={ICON_TEST_ID} />,
     );
-    fireEvent(getByTestId('button'), 'onPress');
+    fireEvent(getByTestId('iconButton'), 'onPress');
     expect(onPress).toHaveBeenCalledTimes(1);
 });
 
@@ -88,6 +88,6 @@ it('renders with all attributes and should execute icon onPress', () => {
             touchableRef={useRef}
         />,
     );
-    fireEvent(getByTestId('button'), 'onPress');
+    fireEvent(getByTestId('iconButton'), 'onPress');
     expect(onPress).toHaveBeenCalledTimes(1);
 });
