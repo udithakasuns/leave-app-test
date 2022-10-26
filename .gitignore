@@ -66,4 +66,8 @@ buck-out/
 ios/Podfile.lock
 yarn.lock
 
+# jest
+#
+coverage/
+cache/jest/
 package-lock.json
