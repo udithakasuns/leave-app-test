@@ -19,9 +19,9 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = ({ navigation }) => (
         />
         <Button
             title='Apply Leave'
-            onPress={() =>
-                navigation.navigate('Modal', { screen: 'ApplyLeave' })
-            }
+            // onPress={() =>
+            //     navigation.navigate('Modal', { screen: 'ApplyLeave' })
+            // }
         />
         <Button title='Go back' onPress={() => navigation.goBack()} />
     </View>

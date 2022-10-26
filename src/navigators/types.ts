@@ -1,14 +1,9 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export type ModalScreensParamsList = {
-    ApplyLeave: undefined;
-};
-
 export type AuthScreensParamList = {
     EmployeeHome: undefined;
     ManagerHome: undefined;
-    Modal: NavigatorScreenParams<ModalScreensParamsList>;
 };
 
 export type RootScreensParamsList = {
@@ -34,9 +29,4 @@ export type EmployeeHomeScreensProps = NativeStackScreenProps<
 export type ManagerHomeScreensProps = NativeStackScreenProps<
     AuthScreensParamList,
     'ManagerHome'
->;
-
-export type ApplyLeaveScreensProps = NativeStackScreenProps<
-    ModalScreensParamsList,
-    'ApplyLeave'
 >;

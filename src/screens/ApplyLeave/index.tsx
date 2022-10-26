@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import { ApplyLeaveScreensProps } from '../../navigators/types';
 
 const styles = StyleSheet.create({
     container: {
@@ -10,11 +9,11 @@ const styles = StyleSheet.create({
     content: {},
 });
 
-const ApplyLeave: React.FC<ApplyLeaveScreensProps> = ({ navigation }) => (
+const ApplyLeave: React.FC = () => (
     <View style={styles.container}>
         <View style={styles.content}>
             <Text>Apply Leave Modal</Text>
-            <Button title='Close' onPress={() => navigation.goBack()} />
+            {/* <Button title='Close' onPress={() => navigation.goBack()} /> */}
         </View>
     </View>
 );
