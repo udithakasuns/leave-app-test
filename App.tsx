@@ -27,6 +27,7 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 const styles = StyleSheet.create({
     sectionContainer: {
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
 });
+
 const Section: React.FC<
     PropsWithChildren<{
         title: string;
@@ -57,9 +59,12 @@ const Section: React.FC<
             <Text
                 style={{
                     color: isDarkMode ? Colors.white : Colors.black,
+                    fontFamily: 'Poppins-Regular',
+                    fontSize: 22,
                 }}>
                 {title}
             </Text>
+            <MaterialIcon name='dinner-dining' size={29} />
             <Text
                 style={[
                     styles.sectionDescription,
@@ -97,8 +102,7 @@ const App = () => {
                             : Colors.white,
                     }}>
                     <Section title='Step One'>
-                        Edit <Text style={styles.highlight}>App.tsx</Text> to
-                        change this screen and then come back to see your edits.
+                        Edit <Text style={styles.highlight}>App.tsx</Text> to f{' '}
                     </Section>
                     <Section title='See Your Changes'>
                         <ReloadInstructions />

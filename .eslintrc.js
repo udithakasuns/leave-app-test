@@ -31,6 +31,7 @@ module.exports = {
                 unnamedComponents: 'arrow-function',
             },
         ],
+        'import/prefer-default-export': 'off',
         'react/jsx-filename-extension': [0, { extensions: ['.js', '.jsx'] }],
         'import/extensions': [
             'error',
