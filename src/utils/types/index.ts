@@ -15,3 +15,7 @@ export type Colors = {
 
 // Custom Utility type to set attributes required.
 export type AtLeast<T, K extends keyof T> = Partial<T> & Pick<T, K>;
+
+export type TestProps = {
+    testID: string;
+};
