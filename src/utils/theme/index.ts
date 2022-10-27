@@ -34,6 +34,8 @@ const fontSize = {
     fs18: ms(18),
     fs20: ms(20),
     fs24: ms(24),
+    fs28: ms(28),
+    fs32: ms(32),
 };
 
 const lineHeight = {
