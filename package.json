@@ -11,7 +11,8 @@
         "lint:fix": "eslint --fix .",
         "dev:init": "yarn && cd ios && pod deintegrate && pod install && cd ..",
         "prepare": "husky install",
-        "cache:clean": "yarn start -- --reset-cache"
+        "cache:clean": "yarn start -- --reset-cache",
+        "test:w": "yarn run test --watch"
     },
     "dependencies": {
         "@react-navigation/drawer": "^6.5.0",
@@ -29,6 +30,7 @@
         "@babel/core": "^7.12.9",
         "@babel/runtime": "^7.12.5",
         "@react-native-community/eslint-config": "^2.0.0",
+        "@testing-library/jest-native": "^5.1.2",
         "@testing-library/react-native": "^11.3.0",
         "@tsconfig/react-native": "^2.0.2",
         "@types/jest": "^26.0.23",
@@ -77,6 +79,9 @@
         ],
         "transformIgnorePatterns": [
             "node_modules/(?!(@react-native|react-native|react-native-vector-icons)/)"
+        ],
+        "setupFilesAfterEnv": [
+            "@testing-library/jest-native/extend-expect"
         ]
     }
 }

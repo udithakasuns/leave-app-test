@@ -3,7 +3,7 @@ import React from 'react';
 import { ViewStyle } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import theme from '../../../utils/theme';
-import { AtLeast } from '../../../utils/types';
+import { AtLeast, TestProps } from '../../../utils/types';
 import { styles } from './styles';
 
 const { scale, colors } = theme;
@@ -17,7 +17,7 @@ export enum IconSize {
     xxLarge = scale.sc48,
 }
 
-interface Props {
+interface Props extends TestProps {
     name: string;
     size: IconSize;
     color: string;
@@ -27,7 +27,6 @@ interface Props {
     backgroundColor: string;
     touchableRef: React.LegacyRef<MaterialIcon>;
     increasePadding: number;
-    testID: string;
 }
 
 const LAIcon = ({
