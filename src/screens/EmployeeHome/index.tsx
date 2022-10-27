@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import { EmployeeHomeScreensProps } from '../../navigators/types';
+import { EmployeeHomeScreensProps } from 'navigators/types';
 
 const styles = StyleSheet.create({
     container: {

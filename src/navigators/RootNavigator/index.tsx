@@ -1,8 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Splash from 'screens/Splash';
+import Login from 'screens/Login';
 import { RootScreensParamsList } from '../types';
-import Splash from '../../screens/Splash';
-import Login from '../../screens/Login';
 import AuthNavigator from '../AuthNavigator';
 
 const StackNav = createNativeStackNavigator<RootScreensParamsList>();

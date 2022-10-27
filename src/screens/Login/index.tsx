@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import { LoginScreenProps } from '../../navigators/types';
+import LAText from 'components/atoms/LAText';
+import { LoginScreenProps } from 'navigators/types';
 
 const styles = StyleSheet.create({
     container: {
@@ -19,6 +20,7 @@ const Login: React.FC<LoginScreenProps> = ({ navigation }) => (
                 navigation.navigate('Auth', { screen: 'EmployeeHome' })
             }
         />
+        <LAText>Hello</LAText>
     </View>
 );
 

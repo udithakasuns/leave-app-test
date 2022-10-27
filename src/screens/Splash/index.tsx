@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
-import { SplashScreenProps } from '../../navigators/types';
+import { SplashScreenProps } from 'navigators/types';
 
 const styles = StyleSheet.create({
     container: {

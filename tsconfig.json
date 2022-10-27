@@ -7,6 +7,17 @@
 
     /* Completeness */
     "skipLibCheck": true,
-    "noUnusedLocals": true                                 /* Skip type checking all .d.ts files. */
+    "noUnusedLocals": true,                                 /* Skip type checking all .d.ts files. */
+    "baseUrl": ".",
+    "paths" : {
+      "src/*": ["src/*"],
+      "assets/*": ["src/assets/*"],
+      "screens/*": ["src/screens/*"],
+      "components/*": ["src/components/*"],
+      "navigators/*": ["src/navigators/*"],
+      "services/*": ["src/services/*"],
+      "utils/*": ["src/utils/*"],
+      "zustand/*": ["src/zustand/*"],
+    }
   },
 }
