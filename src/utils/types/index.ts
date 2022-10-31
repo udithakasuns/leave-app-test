@@ -1,6 +1,7 @@
 export type Colors = {
     white: string;
     black: string;
+    gray: string;
     primaryColor: string;
     secondaryColor: string;
     tertiaryColor: string;
@@ -10,6 +11,7 @@ export type Colors = {
     secondaryLabel: string;
     error: string;
     errorBackground: string;
+    disabledColor: string;
     secondaryGray: string;
 };
 

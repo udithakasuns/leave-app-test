@@ -10,6 +10,7 @@ import {
 const colors: Colors = {
     white: '#FFFFFF',
     black: '#000000',
+    gray: '#888888',
 
     // design system
     primaryColor: '#FBBF24',
@@ -25,6 +26,7 @@ const colors: Colors = {
 
     error: '#DC2626',
     errorBackground: '#FEE2E2',
+    disabledColor: '#CFCFCF',
 };
 
 const fontSize = {
