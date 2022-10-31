@@ -21,13 +21,19 @@ interface Props extends TextInputProps {
     error: boolean;
     caption: string;
     disabled: boolean;
-    value: string | '';
     leftIconName: string;
     leftIconSize: number;
     leftIconColor: string;
     rightIconName: string;
     rightIconSize: number;
     rightIconColor: string;
+    testIdcontainer: string;
+    testIdInputContainer: string;
+    testIdLabel: string;
+    testIdInput: string;
+    testIdLeftIcon: string;
+    testIdRightIcon: string;
+    testIdCaption: string;
 }
 
 const LAInput = ({
@@ -47,6 +53,13 @@ const LAInput = ({
     rightIconColor,
     rightIconSize,
     caption,
+    testIdcontainer,
+    testIdInputContainer,
+    testIdLabel,
+    testIdInput,
+    testIdLeftIcon,
+    testIdRightIcon,
+    testIdCaption,
     ...rest
 }: AtLeast<Props, 'label' | 'placeholder' | 'value'>) => {
     const [focused, setFocused] = useState<boolean>(false);
@@ -88,17 +101,25 @@ const LAInput = ({
 
     if (type === 'COMMENT') {
         return (
-            <View style={[styles.container, containerStyle]}>
-                <LAText style={styles.label}>{label}</LAText>
-                <View style={[styles.inputContainer, inputContainerStyle]}>
+            <View
+                testID={testIdcontainer}
+                style={[styles.container, containerStyle]}>
+                <LAText testID={testIdLabel} style={styles.label}>
+                    {label}
+                </LAText>
+                <View
+                    testID={testIdInputContainer}
+                    style={[styles.inputContainer, inputContainerStyle]}>
                     <TextInput
                         {...rest}
+                        testID={testIdInput}
                         style={[styles.input, styles.commentInput]}
                         ref={reference}
                         multiline
                         editable={!disabled}
                         placeholder={placeholder}
                         placeholderTextColor={getPlaceholderTextColor()}
+                        value={value}
                         onFocus={onToggleFocus}
                         onBlur={onToggleFocus}
                     />
@@ -107,11 +128,18 @@ const LAInput = ({
         );
     }
     return (
-        <View style={[styles.container, containerStyle]}>
-            <LAText style={styles.label}>{label}</LAText>
-            <View style={[styles.inputContainer, inputContainerStyle]}>
+        <View
+            testID={testIdcontainer}
+            style={[styles.container, containerStyle]}>
+            <LAText testID={testIdLabel} style={styles.label}>
+                {label}
+            </LAText>
+            <View
+                testID={testIdInputContainer}
+                style={[styles.inputContainer, inputContainerStyle]}>
                 {leftIconName && (
                     <LAIcon
+                        testID={testIdLeftIcon}
                         name={leftIconName}
                         color={getLeftIconColor()}
                         size={leftIconSize || getIconSize()}
@@ -119,6 +147,7 @@ const LAInput = ({
                 )}
                 <TextInput
                     {...rest}
+                    testID={testIdInput}
                     ref={reference}
                     editable={!disabled}
                     style={styles.input}
@@ -130,13 +159,18 @@ const LAInput = ({
                 />
                 {rightIconName && (
                     <LAIcon
+                        testID={testIdRightIcon}
                         name={rightIconName}
                         color={getRightIconColor()}
                         size={rightIconSize || getIconSize()}
                     />
                 )}
             </View>
-            {caption && <LAText style={styles.caption}>{caption}</LAText>}
+            {caption && (
+                <LAText testID={testIdCaption} style={styles.caption}>
+                    {caption}
+                </LAText>
+            )}
         </View>
     );
 };

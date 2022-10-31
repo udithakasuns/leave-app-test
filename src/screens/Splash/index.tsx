@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 import { SplashScreenProps } from 'navigators/types';
 import LAInput from 'src/components/atoms/LAInput';
+import { TextInput } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
     container: {
@@ -15,6 +16,8 @@ const styles = StyleSheet.create({
 const Splash: React.FC<SplashScreenProps> = ({ navigation }) => {
     const [value, setValue] = React.useState<string>('');
 
+    const testRef: React.LegacyRef<TextInput> = React.createRef();
+
     return (
         <View style={styles.container}>
             <LAInput
@@ -25,14 +28,22 @@ const Splash: React.FC<SplashScreenProps> = ({ navigation }) => {
                 rightIconName='home'
                 caption='my caption'
                 error
+                onChangeText={val => setValue(val)}
+                onSubmitEditing={() => {
+                    if (testRef && testRef.current) {
+                        testRef.current.focus();
+                    }
+                }}
             />
             <LAInput
+                reference={testRef}
                 type='LARGE'
                 label='Large'
                 placeholder='input large'
                 value={value}
                 leftIconName='home'
                 rightIconName='home'
+                onChangeText={val => setValue(val)}
             />
             <LAInput
                 type='SMALL'
@@ -48,6 +59,8 @@ const Splash: React.FC<SplashScreenProps> = ({ navigation }) => {
                 label='Comment'
                 placeholder='input Comment'
                 value={value}
+                // disabled
+                error
             />
             {/* <Text>Splash</Text>
         <Button title='Login' onPress={() => navigation.navigate('Login')} /> */}

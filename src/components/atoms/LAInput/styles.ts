@@ -9,7 +9,7 @@ interface Props {
     type: InputTypes;
     error: boolean;
     focused: boolean;
-    value: string;
+    value: string | undefined;
 }
 
 const { colors, fontSize, scale } = theme;
