@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 import { View, TextInput, TextInputProps, ViewStyle } from 'react-native';
@@ -11,7 +12,8 @@ import { InputTypes } from './types';
 const { colors } = theme;
 
 interface Props extends TextInputProps {
-    // ref: React.LegacyRef<TextInput>;
+    reference: React.LegacyRef<TextInput>;
+    placeholder: string;
     containerStyle: ViewStyle;
     inputContainerStyle: ViewStyle;
     type: InputTypes;
@@ -29,7 +31,7 @@ interface Props extends TextInputProps {
 }
 
 const LAInput = ({
-    // ref,
+    reference,
     containerStyle,
     inputContainerStyle,
     type = 'DEFAULT',
@@ -45,6 +47,7 @@ const LAInput = ({
     rightIconColor,
     rightIconSize,
     caption,
+    ...rest
 }: AtLeast<Props, 'label' | 'placeholder' | 'value'>) => {
     const [focused, setFocused] = useState<boolean>(false);
 
@@ -89,9 +92,11 @@ const LAInput = ({
                 <LAText style={styles.label}>{label}</LAText>
                 <View style={[styles.inputContainer, inputContainerStyle]}>
                     <TextInput
-                        // ref={ref}
-                        multiline
+                        {...rest}
                         style={[styles.input, styles.commentInput]}
+                        ref={reference}
+                        multiline
+                        editable={!disabled}
                         placeholder={placeholder}
                         placeholderTextColor={getPlaceholderTextColor()}
                         onFocus={onToggleFocus}
@@ -113,7 +118,8 @@ const LAInput = ({
                     />
                 )}
                 <TextInput
-                    // ref={ref}
+                    {...rest}
+                    ref={reference}
                     editable={!disabled}
                     style={styles.input}
                     placeholder={placeholder}
