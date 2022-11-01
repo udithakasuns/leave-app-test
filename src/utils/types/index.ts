@@ -19,5 +19,12 @@ export type Colors = {
 export type AtLeast<T, K extends keyof T> = Partial<T> & Pick<T, K>;
 
 export type TestProps = {
-    testID: string;
+    testId: string;
+    testIdcontainer: string;
+    testIdInputContainer: string;
+    testIdLabel: string;
+    testIdInput: string;
+    testIdLeftIcon: string;
+    testIdRightIcon: string;
+    testIdCaption: string;
 };
