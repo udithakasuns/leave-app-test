@@ -1,9 +1,10 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import { StyleSheet, Text, TextProps, ColorValue } from 'react-native';
 import theme from 'src/utils/theme';
 import { AtLeast, TestProps } from '../../../utils/types';
 import { styles } from './styles';
+
+const { colors } = theme;
 
 type TextType =
     | 'H1'
@@ -32,14 +33,14 @@ const LAText = ({
     numberOfLines,
     onPress,
     testID,
-    type = 'H6',
+    color = colors.black,
+    type = 'ParaLG',
 }: AtLeast<Props, 'children'>) => (
     <Text
         style={StyleSheet.flatten([styles[`${type}`], { color }, style])}
         numberOfLines={numberOfLines}
         onPress={onPress}
-        testID={testID}
-       >
+        testID={testID}>
         {children}
     </Text>
 );
