@@ -39,7 +39,7 @@ const LAIcon = ({
     increasePadding = 1,
     enableBackground,
     onPress,
-    testID,
+    testId,
 }: AtLeast<Props, 'name'>) => {
     let iconSize = size;
     let padding = 0;
@@ -94,7 +94,7 @@ const LAIcon = ({
             onPress={onPress}
             ref={touchableRef}
             style={[styleObject]}
-            testID={testID}
+            testID={testId}
         />
     );
 };
