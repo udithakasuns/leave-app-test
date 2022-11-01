@@ -119,13 +119,4 @@ describe('Testing text atom', () => {
         fireEvent(getByTestId('text'), 'onPress');
         expect(onPress).toHaveBeenCalledTimes(1);
     });
-
-    it('should execute text onPress', () => {
-        const { getByTestId } = render(
-            <LAText testID={TEST_ID} type='H1'>
-                {CHILD}
-            </LAText>,
-        );
-        expect(getByTestId('text')).toHaveStyle(styles.H1Text);
-    });
 });

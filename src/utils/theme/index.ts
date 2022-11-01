@@ -19,11 +19,13 @@ const colors: Colors = {
     primaryGray: '#A4A4A4',
     secondaryGray: '#E4E4E7',
     primaryGrayLabel: '#71717A',
+    tertiaryLabel: '#27272A',
 
     secondaryOutline: '#F59E0B',
     secondaryLabel: '#78350F',
 
     error: '#DC2626',
+    errorLabel: '#7F1D1D',
     errorBackground: '#FEE2E2',
 };
 
@@ -60,6 +62,7 @@ const scale = {
     sc12: ms(12),
     sc15: ms(15),
     sc16: ms(16),
+    sc18: ms(18),
     sc20: ms(20),
     sc24: ms(24),
     sc32: ms(32),
@@ -92,6 +95,7 @@ const scale = {
     vsc40: vs(40),
     vsc48: vs(48),
     vsc50: vs(50),
+    vsc54: vs(54),
     vsc56: vs(56),
     vsc64: vs(64),
     vsc68: vs(68),
@@ -109,6 +113,7 @@ const radius = {
     rd14: s(14),
     rd24: s(24),
     rd36: s(36),
+    rd50: s(50),
 };
 
 const deviceDimensions = {
