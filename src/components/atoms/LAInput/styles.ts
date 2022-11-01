@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 import theme from 'src/utils/theme';
 import { InputTypes } from './types';
 
@@ -12,18 +12,9 @@ interface Props {
     value: string | undefined;
 }
 
-const { colors, fontSize, scale } = theme;
+const { colors, fontFamily, scale } = theme;
 
 export const styles = ({ type, disabled, focused, value, error }: Props) => {
-    // const labelFontWeight = Platform.OS === 'ios' && type === 'COMMENT' ? '400' : '500' :
-
-    // const labelFontSize =
-    //     type === 'LARGE'
-    //         ? fontSize.fs18
-    //         : type === 'SMALL'
-    //         ? fontSize.fs14
-    //         : fontSize.fs16;
-
     const labelColor = disabled
         ? colors.disabledColor
         : error
@@ -83,6 +74,7 @@ export const styles = ({ type, disabled, focused, value, error }: Props) => {
         input: {
             flex: 1,
             marginHorizontal: scale.sc6,
+            fontFamily: fontFamily.poppins400,
             color: inputColor,
             padding: 0,
         },
@@ -91,9 +83,7 @@ export const styles = ({ type, disabled, focused, value, error }: Props) => {
             textAlignVertical: 'top',
         },
         caption: {
-            fontSize: fontSize.fs12,
             color: captionColor,
-            marginTop: scale.vsc8,
         },
     });
 };

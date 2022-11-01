@@ -104,7 +104,10 @@ const LAInput = ({
             <View
                 testID={testIdcontainer}
                 style={[styles.container, containerStyle]}>
-                <LAText testID={testIdLabel} type='body1' style={styles.label}>
+                <LAText
+                    testID={testIdLabel}
+                    type='SubH'
+                    color={styles.label.color}>
                     {label}
                 </LAText>
                 <View
@@ -131,7 +134,7 @@ const LAInput = ({
         <View
             testID={testIdcontainer}
             style={[styles.container, containerStyle]}>
-            <LAText testID={testIdLabel} type='body1' style={styles.label}>
+            <LAText testID={testIdLabel} type='SubH' color={styles.label.color}>
                 {label}
             </LAText>
             <View
@@ -167,7 +170,10 @@ const LAInput = ({
                 )}
             </View>
             {caption && (
-                <LAText testID={testIdCaption} style={styles.caption}>
+                <LAText
+                    testID={testIdCaption}
+                    type='ParaXS'
+                    color={styles.caption.color}>
                     {caption}
                 </LAText>
             )}
