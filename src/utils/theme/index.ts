@@ -10,6 +10,7 @@ import {
 const colors: Colors = {
     white: '#FFFFFF',
     black: '#000000',
+    gray: '#888888',
 
     // design system
     primaryColor: '#FBBF24',
@@ -25,6 +26,7 @@ const colors: Colors = {
 
     error: '#DC2626',
     errorBackground: '#FEE2E2',
+    disabledColor: '#CFCFCF',
 };
 
 const fontSize = {
@@ -117,7 +119,15 @@ const deviceDimensions = {
 };
 
 const fontFamily = {
-    poppins: 'Poppins-Regular',
+    poppins100: 'Poppins-Thin',
+    poppins200: 'Poppins-ExtraLight',
+    poppins300: 'Poppins-Light',
+    poppins400: 'Poppins-Regular',
+    poppins500: 'Poppins-Medium',
+    poppins600: 'Poppins-SemiBold',
+    poppins700: 'Poppins-Bold',
+    poppins800: 'Poppins-ExtraBold',
+    poppins900: 'Poppins-Black',
 };
 
 export default {

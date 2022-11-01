@@ -1,57 +1,55 @@
 import { StyleSheet } from 'react-native';
 import theme from '../../../utils/theme';
 
-const { colors, fontSize, lineHeight } = theme;
+const { fontSize, fontFamily } = theme;
 
 export const styles = StyleSheet.create({
-    text: {
-        fontFamily: theme.fontFamily.poppins,
-        fontStyle: 'normal',
-        color: colors.black,
-    },
-    H1Text: {
-        fontSize: fontSize.fs32,
-        lineHeight: lineHeight.lh64,
-        fontWeight: '700',
-    },
-    H2Text: {
-        fontSize: fontSize.fs28,
-        lineHeight: lineHeight.lh40,
-        fontWeight: '700',
-    },
-    H3Text: {
+    H1: {
         fontSize: fontSize.fs24,
-        lineHeight: lineHeight.lh32,
-        fontWeight: '700',
+        fontFamily: fontFamily.poppins400,
     },
-    H4Text: {
+    H1Bold: {
+        fontSize: fontSize.fs24,
+        fontFamily: fontFamily.poppins700,
+    },
+    H2: {
         fontSize: fontSize.fs20,
-        lineHeight: lineHeight.lh24,
-        fontWeight: '700',
+        fontFamily: fontFamily.poppins400,
     },
-    H5Text: {
+    H2Bold: {
+        fontSize: fontSize.fs20,
+        fontFamily: fontFamily.poppins700,
+    },
+    SubH: {
+        fontSize: fontSize.fs18,
+        fontFamily: fontFamily.poppins400,
+    },
+    SubHBold: {
+        fontSize: fontSize.fs18,
+        fontFamily: fontFamily.poppins700,
+    },
+    ParaLG: {
         fontSize: fontSize.fs16,
-        lineHeight: lineHeight.lh20,
-        fontWeight: '700',
+        fontFamily: fontFamily.poppins400,
     },
-    H6Text: {
-        fontSize: fontSize.fs14,
-        lineHeight: lineHeight.lh18,
-        fontWeight: '600',
-    },
-    body1Text: {
+    ParaLGBold: {
         fontSize: fontSize.fs16,
-        lineHeight: lineHeight.lh22,
-        fontWeight: '400',
+        fontFamily: fontFamily.poppins700,
     },
-    body2Text: {
+    ParaSM: {
         fontSize: fontSize.fs14,
-        lineHeight: lineHeight.lh18,
-        fontWeight: '400',
+        fontFamily: fontFamily.poppins400,
     },
-    body3Text: {
+    ParaSMBold: {
+        fontSize: fontSize.fs14,
+        fontFamily: fontFamily.poppins700,
+    },
+    ParaXS: {
         fontSize: fontSize.fs12,
-        lineHeight: lineHeight.lh18,
-        fontWeight: '700',
+        fontFamily: fontFamily.poppins400,
+    },
+    ParaXSBold: {
+        fontSize: fontSize.fs12,
+        fontFamily: fontFamily.poppins700,
     },
 });
