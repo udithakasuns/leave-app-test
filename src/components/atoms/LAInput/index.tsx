@@ -104,7 +104,7 @@ const LAInput = ({
             <View
                 testID={testIdcontainer}
                 style={[styles.container, containerStyle]}>
-                <LAText testID={testIdLabel} style={styles.label}>
+                <LAText testID={testIdLabel} type='body1' style={styles.label}>
                     {label}
                 </LAText>
                 <View
@@ -131,7 +131,7 @@ const LAInput = ({
         <View
             testID={testIdcontainer}
             style={[styles.container, containerStyle]}>
-            <LAText testID={testIdLabel} style={styles.label}>
+            <LAText testID={testIdLabel} type='body1' style={styles.label}>
                 {label}
             </LAText>
             <View

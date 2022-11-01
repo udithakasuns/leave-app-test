@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import theme from '../../../utils/theme';
 
-const { colors, fontSize, lineHeight } = theme;
+const { colors, fontSize, lineHeight, fontFamily } = theme;
 
 export const styles = StyleSheet.create({
     text: {
@@ -40,9 +40,10 @@ export const styles = StyleSheet.create({
         fontWeight: '600',
     },
     body1Text: {
+        fontFamily: fontFamily.poppinsBold,
         fontSize: fontSize.fs16,
-        lineHeight: lineHeight.lh22,
-        fontWeight: '400',
+        // lineHeight: lineHeight.lh22,
+        // fontWeight: '400',
     },
     body2Text: {
         fontSize: fontSize.fs14,
