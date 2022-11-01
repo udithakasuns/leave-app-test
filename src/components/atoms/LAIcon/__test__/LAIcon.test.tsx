@@ -17,7 +17,7 @@ describe('Testing text icon', () => {
     });
 
     it('renders icon with custom testID', () => {
-        render(<LAIcon name={ICON_NAME} testID={ICON_TEST_ID} />);
+        render(<LAIcon name={ICON_NAME} testId={ICON_TEST_ID} />);
     });
 
     it('renders icon with icon size', () => {
@@ -62,7 +62,7 @@ describe('Testing text icon', () => {
     it('should execute icon onPress', () => {
         const onPress = jest.fn();
         const { getByTestId } = render(
-            <LAIcon name={ICON_NAME} onPress={onPress} testID={ICON_TEST_ID} />,
+            <LAIcon name={ICON_NAME} onPress={onPress} testId={ICON_TEST_ID} />,
         );
         fireEvent(getByTestId('iconButton'), 'onPress');
         expect(onPress).toHaveBeenCalledTimes(1);
@@ -81,7 +81,7 @@ describe('Testing text icon', () => {
                 name={ICON_NAME}
                 color={ICON_COLOR}
                 onPress={onPress}
-                testID={ICON_TEST_ID}
+                testId={ICON_TEST_ID}
                 size={IconSize.xLarge}
                 enableBackground
                 backgroundColor={theme.colors.primaryColor}

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, TextInputProps, ViewStyle } from 'react-native';
 import theme from 'src/utils/theme';
-import { AtLeast } from 'src/utils/types';
+import { AtLeast, TestProps } from 'src/utils/types';
 import LAIcon, { IconSize } from '../LAIcon';
 import LAText from '../LAText';
 import inputStyles from './styles';
@@ -11,7 +11,7 @@ import { InputTypes } from './types';
 
 const { colors } = theme;
 
-interface Props extends TextInputProps {
+interface Props extends TextInputProps, TestProps {
     reference: React.LegacyRef<TextInput>;
     placeholder: string;
     containerStyle: ViewStyle;
@@ -27,13 +27,6 @@ interface Props extends TextInputProps {
     rightIconName: string;
     rightIconSize: number;
     rightIconColor: string;
-    testIdcontainer: string;
-    testIdInputContainer: string;
-    testIdLabel: string;
-    testIdInput: string;
-    testIdLeftIcon: string;
-    testIdRightIcon: string;
-    testIdCaption: string;
 }
 
 const LAInput = ({
@@ -142,7 +135,7 @@ const LAInput = ({
                 style={[styles.inputContainer, inputContainerStyle]}>
                 {leftIconName && (
                     <LAIcon
-                        testID={testIdLeftIcon}
+                        testId={testIdLeftIcon}
                         name={leftIconName}
                         color={getLeftIconColor()}
                         size={leftIconSize || getIconSize()}
@@ -162,7 +155,7 @@ const LAInput = ({
                 />
                 {rightIconName && (
                     <LAIcon
-                        testID={testIdRightIcon}
+                        testId={testIdRightIcon}
                         name={rightIconName}
                         color={getRightIconColor()}
                         size={rightIconSize || getIconSize()}
