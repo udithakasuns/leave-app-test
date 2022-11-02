@@ -90,7 +90,7 @@ const LAChip = ({
                 </Pressable>
             )}
             <LAText
-                testId={testIdContent}
+                testID={testIdContent}
                 style={[styles.content, contentStyle]}
                 color={disabled ? disabledColor : contentColor}
                 type={contentTextType}>
