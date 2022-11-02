@@ -19,7 +19,16 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.H1Text);
+        expect(getByTestId('text')).toHaveStyle(styles.H1);
+    });
+
+    it('renders text with type H3', () => {
+        const { getByTestId } = render(
+            <LAText testID={TEST_ID} type='H1Bold'>
+                {CHILD}
+            </LAText>,
+        );
+        expect(getByTestId('text')).toHaveStyle(styles.H1Bold);
     });
 
     it('renders text with type H2', () => {
@@ -28,74 +37,92 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.H2Text);
+        expect(getByTestId('text')).toHaveStyle(styles.H2);
     });
 
-    it('renders text with type H3', () => {
+    it('renders text with type H2Bold', () => {
         const { getByTestId } = render(
-            <LAText testID={TEST_ID} type='H3'>
+            <LAText testID={TEST_ID} type='H2Bold'>
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.H3Text);
+        expect(getByTestId('text')).toHaveStyle(styles.H2Bold);
     });
 
-    it('renders text with type H4', () => {
+    it('renders text with type SubH', () => {
         const { getByTestId } = render(
-            <LAText testID={TEST_ID} type='H4'>
+            <LAText testID={TEST_ID} type='SubH'>
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.H4Text);
+        expect(getByTestId('text')).toHaveStyle(styles.SubH);
     });
 
-    it('renders text with type H5', () => {
+    it('renders text with type SubHBold', () => {
         const { getByTestId } = render(
-            <LAText testID={TEST_ID} type='H5'>
+            <LAText testID={TEST_ID} type='SubHBold'>
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.H5Text);
+        expect(getByTestId('text')).toHaveStyle(styles.SubHBold);
     });
 
-    it('renders text with type H6', () => {
+    it('renders text with type ParaLG', () => {
         const { getByTestId } = render(
-            <LAText testID={TEST_ID} type='H6'>
+            <LAText testID={TEST_ID} type='ParaLG'>
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.H6Text);
+        expect(getByTestId('text')).toHaveStyle(styles.ParaLG);
     });
 
-    it('renders text with type body1', () => {
+    it('renders text with type ParaLGBold', () => {
         const { getByTestId } = render(
-            <LAText testID={TEST_ID} type='body1'>
+            <LAText testID={TEST_ID} type='ParaLGBold'>
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.body1Text);
+        expect(getByTestId('text')).toHaveStyle(styles.ParaLGBold);
     });
 
-    it('renders text with type body2', () => {
+    it('renders text with type ParaSM', () => {
         const { getByTestId } = render(
-            <LAText testID={TEST_ID} type='body2'>
+            <LAText testID={TEST_ID} type='ParaSM'>
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.body2Text);
+        expect(getByTestId('text')).toHaveStyle(styles.ParaSM);
     });
 
-    it('renders text with type body3', () => {
+    it('renders text with type ParaSMBold', () => {
         const { getByTestId } = render(
-            <LAText testID={TEST_ID} type='body3'>
+            <LAText testID={TEST_ID} type='ParaSMBold'>
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.body3Text);
+        expect(getByTestId('text')).toHaveStyle(styles.ParaSMBold);
+    });
+
+    it('renders text with type ParaXS', () => {
+        const { getByTestId } = render(
+            <LAText testID={TEST_ID} type='ParaXS'>
+                {CHILD}
+            </LAText>,
+        );
+        expect(getByTestId('text')).toHaveStyle(styles.ParaXS);
+    });
+
+    it('renders text with type ParaXSBold', () => {
+        const { getByTestId } = render(
+            <LAText testID={TEST_ID} type='ParaXSBold'>
+                {CHILD}
+            </LAText>,
+        );
+        expect(getByTestId('text')).toHaveStyle(styles.ParaXSBold);
     });
 
     it('renders text with style', () => {
-        const style = styles.H1Text;
+        const style = styles.H1;
         const { getByTestId } = render(
             <LAText testID={TEST_ID} style={style}>
                 {CHILD}
