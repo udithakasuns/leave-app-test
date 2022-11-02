@@ -14,7 +14,7 @@ interface Props {
 
 const { colors, fontFamily, scale } = theme;
 
-export const styles = ({ type, disabled, focused, value, error }: Props) => {
+const styles = ({ type, disabled, focused, value, error }: Props) => {
     const labelColor = disabled
         ? colors.disabledColor
         : error

@@ -13,6 +13,7 @@ export type Colors = {
     errorBackground: string;
     disabledColor: string;
     secondaryGray: string;
+    gray600: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -27,4 +28,19 @@ export type TestProps = {
     testIdLeftIcon: string;
     testIdRightIcon: string;
     testIdCaption: string;
+    testIdContent: string;
 };
+
+export type TextTypeProps =
+    | 'H1'
+    | 'H1Bold'
+    | 'H2'
+    | 'H2Bold'
+    | 'SubH'
+    | 'SubHBold'
+    | 'ParaLG'
+    | 'ParaLGBold'
+    | 'ParaSM'
+    | 'ParaSMBold'
+    | 'ParaXS'
+    | 'ParaXSBold';

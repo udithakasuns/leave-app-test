@@ -27,6 +27,7 @@ const colors: Colors = {
     error: '#DC2626',
     errorBackground: '#FEE2E2',
     disabledColor: '#CFCFCF',
+    gray600: '#52525B',
 };
 
 const fontSize = {
@@ -111,6 +112,7 @@ const radius = {
     rd14: s(14),
     rd24: s(24),
     rd36: s(36),
+    rd64: s(64),
 };
 
 const deviceDimensions = {
