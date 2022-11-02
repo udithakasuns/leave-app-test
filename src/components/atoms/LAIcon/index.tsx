@@ -11,10 +11,10 @@ const { scale, colors } = theme;
 export enum IconSize {
     xSmall = scale.sc12,
     small = scale.sc16,
-    medium = scale.sc24,
-    large = scale.sc32,
-    xLarge = scale.sc40,
-    xxLarge = scale.sc48,
+    medium = scale.sc18,
+    large = scale.sc24,
+    xLarge = scale.sc28,
+    xxLarge = scale.sc32,
 }
 
 interface Props extends TestProps {

@@ -12,11 +12,19 @@ export type Colors = {
     error: string;
     errorBackground: string;
     disabledColor: string;
+    errorLabel: string;
     secondaryGray: string;
+    tertiaryLabel: string;
+    secondaryBackground: string;
+    tertiaryLabelGray: string;
+    dividerColor: string;
 };
 
 // Custom Utility type to set attributes required.
 export type AtLeast<T, K extends keyof T> = Partial<T> & Pick<T, K>;
+
+// Custom Utility type to set attributes nullable.
+export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 export type TestProps = {
     testId: string;
@@ -27,4 +35,5 @@ export type TestProps = {
     testIdLeftIcon: string;
     testIdRightIcon: string;
     testIdCaption: string;
+    testIdLoading: string;
 };

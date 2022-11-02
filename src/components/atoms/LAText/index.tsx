@@ -6,7 +6,7 @@ import { styles } from './styles';
 
 const { colors } = theme;
 
-type TextType =
+export type TextType =
     | 'H1'
     | 'H1Bold'
     | 'H2'
