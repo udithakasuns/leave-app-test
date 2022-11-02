@@ -6,20 +6,6 @@ import { styles } from './styles';
 
 const { colors } = theme;
 
-// type TextType =
-//     | 'H1'
-//     | 'H1Bold'
-//     | 'H2'
-//     | 'H2Bold'
-//     | 'SubH'
-//     | 'SubHBold'
-//     | 'ParaLG'
-//     | 'ParaLGBold'
-//     | 'ParaSM'
-//     | 'ParaSMBold'
-//     | 'ParaXS'
-//     | 'ParaXSBold';
-
 interface Props extends TextProps, TestProps {
     children: React.ReactNode;
     type: TextTypeProps;

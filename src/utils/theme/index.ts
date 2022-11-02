@@ -1,17 +1,16 @@
 import { Dimensions } from 'react-native';
-import { Colors } from '../types/index';
 import {
     moderateScale as ms,
     moderateVerticalScale as mvs,
     scale as s,
     verticalScale as vs,
 } from '../helpers/scalingUtil';
+import { Colors } from '../types/index';
 
 const colors: Colors = {
     white: '#FFFFFF',
     black: '#000000',
     gray: '#888888',
-
     // design system
     primaryColor: '#FBBF24',
     secondaryColor: '#FEF3C7',
@@ -20,14 +19,18 @@ const colors: Colors = {
     primaryGray: '#A4A4A4',
     secondaryGray: '#E4E4E7',
     primaryGrayLabel: '#71717A',
+    tertiaryLabel: '#27272A',
 
+    secondaryBackground: '#FFFBEB',
     secondaryOutline: '#F59E0B',
     secondaryLabel: '#78350F',
 
     error: '#DC2626',
+    errorLabel: '#7F1D1D',
     errorBackground: '#FEE2E2',
     disabledColor: '#CFCFCF',
     gray600: '#52525B',
+    dividerColor: '#D4D4D8',
 };
 
 const fontSize = {
@@ -39,6 +42,7 @@ const fontSize = {
     fs24: ms(24),
     fs28: ms(28),
     fs32: ms(32),
+    fs40: ms(40),
 };
 
 const lineHeight = {
@@ -48,7 +52,11 @@ const lineHeight = {
     lh22: vs(22),
     lh24: vs(24),
     lh32: vs(32),
+    lh36: vs(36),
     lh40: vs(40),
+    lh46: vs(46),
+    lh50: vs(50),
+    lh54: vs(54),
     lh64: vs(64),
 };
 
@@ -63,11 +71,13 @@ const scale = {
     sc12: ms(12),
     sc15: ms(15),
     sc16: ms(16),
+    sc18: ms(18),
     sc20: ms(20),
     sc24: ms(24),
     sc32: ms(32),
     sc28: ms(28),
     sc40: ms(40),
+    sc46: ms(46),
     sc48: ms(48),
     sc50: ms(50),
     sc64: ms(64),
@@ -95,6 +105,7 @@ const scale = {
     vsc40: vs(40),
     vsc48: vs(48),
     vsc50: vs(50),
+    vsc54: vs(54),
     vsc56: vs(56),
     vsc64: vs(64),
     vsc68: vs(68),
@@ -109,10 +120,12 @@ const radius = {
     rd4: s(4),
     rd6: s(6),
     rd8: s(8),
+    rd12: s(12),
     rd14: s(14),
     rd24: s(24),
     rd36: s(36),
     rd64: s(64),
+    rd50: s(50),
 };
 
 const deviceDimensions = {
