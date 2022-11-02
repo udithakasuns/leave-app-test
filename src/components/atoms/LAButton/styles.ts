@@ -1,20 +1,14 @@
 /* eslint-disable no-nested-ternary */
-import { StyleSheet, ColorValue } from 'react-native';
+import { StyleSheet } from 'react-native';
 import theme from 'src/utils/theme';
-import { ButtonMode, AlignType, ButtonSize } from './types';
+import { AlignType, ButtonMode, ColorProp } from './types';
 
 const { scale, radius, colors } = theme;
-
-type ColorProp = {
-    background: ColorValue;
-    textIcon: ColorValue;
-    borderColor?: ColorValue;
-};
 
 export default (
     mode: ButtonMode,
     alignContent: AlignType,
-    size: ButtonSize,
+    containerPadding: number,
 ) => {
     const getColor = (): ColorProp => {
         switch (mode) {
@@ -44,20 +38,13 @@ export default (
     };
 
     const getBorderWidth = () =>
-        mode === 'outlined' || mode === 'outlined-error' ? 1.5 : 0;
-
-    const getPaddingBySize = () =>
-        size === 'large'
-            ? scale.vsc16
-            : size === 'medium'
-            ? scale.vsc12
-            : scale.vsc10;
+        mode === 'outlined' || mode === 'outlined-error' ? 1 : 0;
 
     return StyleSheet.create({
         buttonContainer: {
             width: '100%',
             borderRadius: radius.rd50,
-            paddingVertical: getPaddingBySize(),
+            paddingVertical: containerPadding,
             justifyContent: 'center',
             paddingHorizontal: scale.sc24,
             alignItems: alignContent,
@@ -70,15 +57,14 @@ export default (
             alignItems: 'center',
         },
         rightIcon: {
-            paddingRight: scale.sc12,
+            paddingLeft: scale.sc8,
             color: getColor().textIcon,
         },
         leftIcon: {
-            paddingLeft: scale.sc12,
+            paddingLeft: scale.sc8,
             color: getColor().textIcon,
         },
         labelContainer: {
-            marginTop: scale.vsc2,
             color: getColor().textIcon,
         },
 
