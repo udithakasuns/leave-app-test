@@ -32,7 +32,7 @@ export default ({ isLeftSelected, isRightSelected }: StyleProp) => {
                 rightBorder: colors.secondaryOutline,
                 rightBackground: colors.secondaryBackground,
                 rightLabel: colors.secondaryLabel,
-                leftLabel: colors.tertiaryLabelGray,
+                leftLabel: colors.gray600,
             };
         }
         return {
@@ -63,7 +63,7 @@ export default ({ isLeftSelected, isRightSelected }: StyleProp) => {
             backgroundColor: getColor().rightBackground ?? colors.tertiaryColor,
         },
         leftText: {
-            color: getColor().rightLabel ?? colors.tertiaryLabelGray,
+            color: getColor().rightLabel ?? colors.gray600,
         },
         rightText: {
             color: getColor().leftLabel,

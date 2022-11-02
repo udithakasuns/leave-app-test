@@ -14,9 +14,9 @@ export type Colors = {
     disabledColor: string;
     errorLabel: string;
     secondaryGray: string;
+    gray600: string;
     tertiaryLabel: string;
     secondaryBackground: string;
-    tertiaryLabelGray: string;
     dividerColor: string;
 };
 
@@ -35,5 +35,20 @@ export type TestProps = {
     testIdLeftIcon: string;
     testIdRightIcon: string;
     testIdCaption: string;
+    testIdContent: string;
     testIdLoading: string;
 };
+
+export type TextTypeProps =
+    | 'H1'
+    | 'H1Bold'
+    | 'H2'
+    | 'H2Bold'
+    | 'SubH'
+    | 'SubHBold'
+    | 'ParaLG'
+    | 'ParaLGBold'
+    | 'ParaSM'
+    | 'ParaSMBold'
+    | 'ParaXS'
+    | 'ParaXSBold';

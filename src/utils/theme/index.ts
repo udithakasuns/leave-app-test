@@ -20,7 +20,6 @@ const colors: Colors = {
     secondaryGray: '#E4E4E7',
     primaryGrayLabel: '#71717A',
     tertiaryLabel: '#27272A',
-    tertiaryLabelGray: '#52525B',
 
     secondaryBackground: '#FFFBEB',
     secondaryOutline: '#F59E0B',
@@ -30,6 +29,7 @@ const colors: Colors = {
     errorLabel: '#7F1D1D',
     errorBackground: '#FEE2E2',
     disabledColor: '#CFCFCF',
+    gray600: '#52525B',
     dividerColor: '#D4D4D8',
 };
 
@@ -124,6 +124,7 @@ const radius = {
     rd14: s(14),
     rd24: s(24),
     rd36: s(36),
+    rd64: s(64),
     rd50: s(50),
 };
 
