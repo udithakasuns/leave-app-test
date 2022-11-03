@@ -21,7 +21,16 @@ const Splash: React.FC<SplashScreenProps> = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <LAChip content='My Chip' outline disabled />
+            <LAChip
+                content='My Chip'
+                outline
+                // disabled
+                // onPressChip={() => console.log('Chip')}
+                // onPressLeft={() => console.log('Left')}
+                // onPressRight={() => console.log('right')}
+                // leftIconName='home'
+                rightIconName='home'
+            />
             <LAChip content='My Chip' contentColor='red' />
             <LAChip
                 content='My Chip'

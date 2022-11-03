@@ -15,6 +15,7 @@ const TEST_ID_CONTAINER = 'TEST_ID_CONTAINER';
 const TEST_ID_CONTENT = 'TEST_ID_CONTENT';
 const TEST_ID_LEFT_ICON = 'TEST_ID_LEFT_ICON';
 const TEST_ID_RIGHT_ICON = 'TEST_ID_RIGHT_ICON';
+const TEST_ID_CHIP_PRESSABLE = 'TEST_ID_CHIP_PRESSABLE';
 const TEST_ID_LEFT_PRESSABLE = 'TEST_ID_LEFT_PRESSABLE';
 const TEST_ID_RIGHT_PRESSABLE = 'TEST_ID_RIGHT_PRESSABLE';
 
@@ -194,6 +195,34 @@ describe('Testing chip atom', () => {
         expect(queryByTestId(TEST_ID_RIGHT_PRESSABLE)).not.toBeDisabled();
         fireEvent.press(screen.getByTestId(TEST_ID_RIGHT_ICON), pressEventData);
         expect(onPressRight).toHaveBeenCalledWith(pressEventData);
+    });
+
+    it('renders chip and press the chip', () => {
+        const onPressChip = jest.fn();
+        const pressEventData = {
+            test: 'Testing',
+        };
+        const { queryByTestId } = render(
+            <LAChip
+                testIdContent={TEST_ID_CONTAINER}
+                testIdChipPressable={TEST_ID_CHIP_PRESSABLE}
+                testIdRightPressable={TEST_ID_RIGHT_PRESSABLE}
+                testIdLeftPressable={TEST_ID_LEFT_PRESSABLE}
+                testIdRightIcon={TEST_ID_RIGHT_ICON}
+                testIdLeftIcon={TEST_ID_LEFT_ICON}
+                content={TEXT_CONTENT}
+                rightIconName={RIGHT_ICON_NAME}
+                leftIconName={LEFT_ICON_NAME}
+                onPressChip={onPressChip}
+            />,
+        );
+        expect(queryByTestId(TEST_ID_RIGHT_ICON)).toBeTruthy();
+        expect(queryByTestId(TEST_ID_LEFT_ICON)).toBeTruthy();
+        expect(queryByTestId(TEST_ID_RIGHT_PRESSABLE)).toBeDisabled();
+        expect(queryByTestId(TEST_ID_LEFT_PRESSABLE)).toBeDisabled();
+        expect(queryByTestId(TEST_ID_CHIP_PRESSABLE)).not.toBeDisabled();
+        fireEvent.press(screen.getByTestId(TEST_ID_CONTAINER), pressEventData);
+        expect(onPressChip).toHaveBeenCalledWith(pressEventData);
     });
 
     it('renders disable chip and test left press event', () => {

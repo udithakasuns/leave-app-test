@@ -13,14 +13,15 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		183689C08025B944D0C254BD /* libPods-rtc_leave_app-rtc_leave_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3151DDAFE9A713844497B505 /* libPods-rtc_leave_app-rtc_leave_appTests.a */; };
 		275757852CDE4C03815A30BC /* Poppins-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D2D4267CDF6A4BB4AEFED5B8 /* Poppins-SemiBoldItalic.ttf */; };
 		2CC75B0597614EEA864C93C3 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92F12AB1A1554B438EF6A701 /* Poppins-Medium.ttf */; };
 		35D97B7A87FF4662A15A0757 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3E1678591C11475CAACAA30C /* Poppins-Italic.ttf */; };
 		3A4A509A324348048C3B679E /* Poppins-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 525E704CFD0F4618A7C14B68 /* Poppins-BlackItalic.ttf */; };
 		4A78F458E10744CC9FE1AA75 /* Poppins-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6978510F1EDD460280550B30 /* Poppins-ExtraLightItalic.ttf */; };
+		4BBBA9CB70D3BB3AA2ED8CF5 /* libPods-rtc_leave_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA6760A8FD7DD573FB2E9FF8 /* libPods-rtc_leave_app.a */; };
 		73ED03B0A3C94CB2A1E19CD8 /* Poppins-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6A7044D625F84E61804966C1 /* Poppins-MediumItalic.ttf */; };
 		74387E848C2340209E80F630 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7C0030049F8549F2A54EBA9E /* Poppins-SemiBold.ttf */; };
-		75B2E73281F716A7F10C363F /* libPods-rtc_leave_app-rtc_leave_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CABA1AEB567A79B7DCFB7545 /* libPods-rtc_leave_app-rtc_leave_appTests.a */; };
 		80D20B1938084B60B188B9CF /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9B0969179B3A4BDD85CF7301 /* Poppins-ExtraBold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8EB356D767F64775B1863311 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B071626937840DC982141F7 /* Poppins-Bold.ttf */; };
@@ -31,7 +32,6 @@
 		ECFFC4132FBE47819434C9D5 /* Poppins-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A92FF3B1E4534C2BBC71692E /* Poppins-ExtraBoldItalic.ttf */; };
 		F24A98D9107143F9959BE119 /* Poppins-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4CF75C325B1A4FA4A957EFA5 /* Poppins-LightItalic.ttf */; };
 		F700BC20610B41C19ACEDEC9 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0138524B00E64D17BB2DB125 /* Poppins-Thin.ttf */; };
-		FE5BA61C5093D83EE6485308 /* libPods-rtc_leave_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 495D1292DE5926A7F0128546 /* libPods-rtc_leave_app.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,23 +56,21 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = rtc_leave_app/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = rtc_leave_app/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = rtc_leave_app/main.m; sourceTree = "<group>"; };
+		19D831C1F25F13BE0DB6CAAA /* Pods-rtc_leave_app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rtc_leave_app.debug.xcconfig"; path = "Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app.debug.xcconfig"; sourceTree = "<group>"; };
+		2961DB19FD38F224608F049D /* Pods-rtc_leave_app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rtc_leave_app.release.xcconfig"; path = "Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app.release.xcconfig"; sourceTree = "<group>"; };
+		3151DDAFE9A713844497B505 /* libPods-rtc_leave_app-rtc_leave_appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rtc_leave_app-rtc_leave_appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E1678591C11475CAACAA30C /* Poppins-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Italic.ttf"; path = "../src/assets/fonts/Poppins-Italic.ttf"; sourceTree = "<group>"; };
-		44086B01655235FCB38B0A25 /* Pods-rtc_leave_app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rtc_leave_app.release.xcconfig"; path = "Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app.release.xcconfig"; sourceTree = "<group>"; };
-		495D1292DE5926A7F0128546 /* libPods-rtc_leave_app.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rtc_leave_app.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CF75C325B1A4FA4A957EFA5 /* Poppins-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-LightItalic.ttf"; path = "../src/assets/fonts/Poppins-LightItalic.ttf"; sourceTree = "<group>"; };
 		525E704CFD0F4618A7C14B68 /* Poppins-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BlackItalic.ttf"; path = "../src/assets/fonts/Poppins-BlackItalic.ttf"; sourceTree = "<group>"; };
 		5FEA8DEB0EC94E52A5A3B97A /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../src/assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; };
-		67CB1ED75EA3A11A3634B546 /* Pods-rtc_leave_app-rtc_leave_appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rtc_leave_app-rtc_leave_appTests.release.xcconfig"; path = "Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests.release.xcconfig"; sourceTree = "<group>"; };
 		6978510F1EDD460280550B30 /* Poppins-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraLightItalic.ttf"; path = "../src/assets/fonts/Poppins-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
 		6A7044D625F84E61804966C1 /* Poppins-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-MediumItalic.ttf"; path = "../src/assets/fonts/Poppins-MediumItalic.ttf"; sourceTree = "<group>"; };
 		6E604D9BA44A49D399382E61 /* Poppins-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Light.ttf"; path = "../src/assets/fonts/Poppins-Light.ttf"; sourceTree = "<group>"; };
 		74A734C28F46431C8D68BCE1 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BoldItalic.ttf"; path = "../src/assets/fonts/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
-		7878C59E043597E2995266E1 /* Pods-rtc_leave_app-rtc_leave_appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rtc_leave_app-rtc_leave_appTests.debug.xcconfig"; path = "Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7B071626937840DC982141F7 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		7C0030049F8549F2A54EBA9E /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = rtc_leave_app/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		92F12AB1A1554B438EF6A701 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
-		9424B62C8F483AC0FD36F17B /* Pods-rtc_leave_app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rtc_leave_app.debug.xcconfig"; path = "Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app.debug.xcconfig"; sourceTree = "<group>"; };
 		9B0969179B3A4BDD85CF7301 /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBold.ttf"; path = "../src/assets/fonts/Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 		A92FF3B1E4534C2BBC71692E /* Poppins-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/Poppins-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		BD3252F72907C763001D966A /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
@@ -91,11 +89,13 @@
 		BD3253042907C763001D966A /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
 		BD3253052907C763001D966A /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		BD3253062907C763001D966A /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		BE780CE852DE4E2FE6AA9C3C /* Pods-rtc_leave_app-rtc_leave_appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rtc_leave_app-rtc_leave_appTests.debug.xcconfig"; path = "Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BF588C7BD404451088CD03FD /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../src/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		C5B8EC67DC7643C0B412DBF8 /* Poppins-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ThinItalic.ttf"; path = "../src/assets/fonts/Poppins-ThinItalic.ttf"; sourceTree = "<group>"; };
-		CABA1AEB567A79B7DCFB7545 /* libPods-rtc_leave_app-rtc_leave_appTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rtc_leave_app-rtc_leave_appTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB72F42FB1CC8DA8CBD7E7FC /* Pods-rtc_leave_app-rtc_leave_appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rtc_leave_app-rtc_leave_appTests.release.xcconfig"; path = "Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests.release.xcconfig"; sourceTree = "<group>"; };
 		D2D4267CDF6A4BB4AEFED5B8 /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBoldItalic.ttf"; path = "../src/assets/fonts/Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		FA6760A8FD7DD573FB2E9FF8 /* libPods-rtc_leave_app.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rtc_leave_app.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75B2E73281F716A7F10C363F /* libPods-rtc_leave_app-rtc_leave_appTests.a in Frameworks */,
+				183689C08025B944D0C254BD /* libPods-rtc_leave_app-rtc_leave_appTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,7 +111,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FE5BA61C5093D83EE6485308 /* libPods-rtc_leave_app.a in Frameworks */,
+				4BBBA9CB70D3BB3AA2ED8CF5 /* libPods-rtc_leave_app.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,8 +152,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				495D1292DE5926A7F0128546 /* libPods-rtc_leave_app.a */,
-				CABA1AEB567A79B7DCFB7545 /* libPods-rtc_leave_app-rtc_leave_appTests.a */,
+				FA6760A8FD7DD573FB2E9FF8 /* libPods-rtc_leave_app.a */,
+				3151DDAFE9A713844497B505 /* libPods-rtc_leave_app-rtc_leave_appTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -220,10 +220,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9424B62C8F483AC0FD36F17B /* Pods-rtc_leave_app.debug.xcconfig */,
-				44086B01655235FCB38B0A25 /* Pods-rtc_leave_app.release.xcconfig */,
-				7878C59E043597E2995266E1 /* Pods-rtc_leave_app-rtc_leave_appTests.debug.xcconfig */,
-				67CB1ED75EA3A11A3634B546 /* Pods-rtc_leave_app-rtc_leave_appTests.release.xcconfig */,
+				19D831C1F25F13BE0DB6CAAA /* Pods-rtc_leave_app.debug.xcconfig */,
+				2961DB19FD38F224608F049D /* Pods-rtc_leave_app.release.xcconfig */,
+				BE780CE852DE4E2FE6AA9C3C /* Pods-rtc_leave_app-rtc_leave_appTests.debug.xcconfig */,
+				CB72F42FB1CC8DA8CBD7E7FC /* Pods-rtc_leave_app-rtc_leave_appTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -259,12 +259,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "rtc_leave_appTests" */;
 			buildPhases = (
-				5B7711991E41445B1E40F36C /* [CP] Check Pods Manifest.lock */,
+				DC3CF6B9BC7F261C2E8D4065 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				E19DF6F5066D610AE19CE269 /* [CP] Embed Pods Frameworks */,
-				D04EE6765EE1013D680CA51E /* [CP] Copy Pods Resources */,
+				0C9CA6EF2D53FD0324A78A89 /* [CP] Embed Pods Frameworks */,
+				FC07A96D1E2A917454A111C8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -280,14 +280,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "rtc_leave_app" */;
 			buildPhases = (
-				6CF065CD14F214942AE0E038 /* [CP] Check Pods Manifest.lock */,
+				BE94709B5EBB16B980E9F9E1 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				08B9C2F425B24ECA3ECE4D26 /* [CP] Embed Pods Frameworks */,
-				D88B3C8FBCACB4FA20C0D781 /* [CP] Copy Pods Resources */,
+				6B7CF22CF9482D311F6E17B7 /* [CP] Embed Pods Frameworks */,
+				6AC586EC41CC5C63995C1B78 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -388,7 +388,41 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		08B9C2F425B24ECA3ECE4D26 /* [CP] Embed Pods Frameworks */ = {
+		0C9CA6EF2D53FD0324A78A89 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6AC586EC41CC5C63995C1B78 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6B7CF22CF9482D311F6E17B7 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -405,29 +439,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5B7711991E41445B1E40F36C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-rtc_leave_app-rtc_leave_appTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6CF065CD14F214942AE0E038 /* [CP] Check Pods Manifest.lock */ = {
+		BE94709B5EBB16B980E9F9E1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -449,7 +461,29 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D04EE6765EE1013D680CA51E /* [CP] Copy Pods Resources */ = {
+		DC3CF6B9BC7F261C2E8D4065 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-rtc_leave_app-rtc_leave_appTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FC07A96D1E2A917454A111C8 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -464,40 +498,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D88B3C8FBCACB4FA20C0D781 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app/Pods-rtc_leave_app-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E19DF6F5066D610AE19CE269 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-rtc_leave_app-rtc_leave_appTests/Pods-rtc_leave_app-rtc_leave_appTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -552,7 +552,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7878C59E043597E2995266E1 /* Pods-rtc_leave_app-rtc_leave_appTests.debug.xcconfig */;
+			baseConfigurationReference = BE780CE852DE4E2FE6AA9C3C /* Pods-rtc_leave_app-rtc_leave_appTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -579,7 +579,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 67CB1ED75EA3A11A3634B546 /* Pods-rtc_leave_app-rtc_leave_appTests.release.xcconfig */;
+			baseConfigurationReference = CB72F42FB1CC8DA8CBD7E7FC /* Pods-rtc_leave_app-rtc_leave_appTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -603,7 +603,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9424B62C8F483AC0FD36F17B /* Pods-rtc_leave_app.debug.xcconfig */;
+			baseConfigurationReference = 19D831C1F25F13BE0DB6CAAA /* Pods-rtc_leave_app.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -629,7 +629,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 44086B01655235FCB38B0A25 /* Pods-rtc_leave_app.release.xcconfig */;
+			baseConfigurationReference = 2961DB19FD38F224608F049D /* Pods-rtc_leave_app.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

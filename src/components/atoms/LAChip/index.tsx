@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import {
     View,
@@ -33,8 +34,10 @@ interface Props extends TestProps {
     rightIconName: string;
     rightIconSize: number;
     rightIconColor: string;
+    onPressChip: () => void;
     onPressLeft: () => void;
     onPressRight: () => void;
+    testIdChipPressable: string;
     testIdLeftPressable: string;
     testIdRightPressable: string;
 }
@@ -54,12 +57,14 @@ const LAChip = ({
     rightIconName,
     rightIconSize = sc16,
     rightIconColor,
+    onPressChip,
     onPressLeft,
     onPressRight,
     disabled = false,
     testIdcontainer,
     testIdLeftIcon,
     testIdRightIcon,
+    testIdChipPressable,
     testIdLeftPressable,
     testIdRightPressable,
     testIdContent,
@@ -71,7 +76,7 @@ const LAChip = ({
         backgroundColor,
     });
 
-    return (
+    const Component = () => (
         <View
             testID={testIdcontainer}
             style={[styles.container, containerStyle]}>
@@ -79,7 +84,7 @@ const LAChip = ({
                 <Pressable
                     testID={testIdLeftPressable}
                     hitSlop={10}
-                    disabled={disabled}
+                    disabled={Boolean(onPressChip) || disabled}
                     onPress={onPressLeft}>
                     <LAIcon
                         testId={testIdLeftIcon}
@@ -100,7 +105,7 @@ const LAChip = ({
                 <Pressable
                     testID={testIdRightPressable}
                     hitSlop={10}
-                    disabled={disabled}
+                    disabled={Boolean(onPressChip) || disabled}
                     onPress={onPressRight}>
                     <LAIcon
                         testId={testIdRightIcon}
@@ -112,6 +117,20 @@ const LAChip = ({
             )}
         </View>
     );
+
+    if (onPressChip) {
+        return (
+            <Pressable
+                testID={testIdChipPressable}
+                onPress={onPressChip}
+                disabled={
+                    Boolean(onPressLeft) || Boolean(onPressRight) || disabled
+                }>
+                <Component />
+            </Pressable>
+        );
+    }
+    return <Component />;
 };
 
 export default LAChip;
