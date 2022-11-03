@@ -38,6 +38,70 @@ describe('Testing text icon', () => {
         );
     });
 
+    it('renders icon with enableBackground & xSmall icon size', () => {
+        const increasePadding = 2;
+        const { queryByTestId } = render(
+            <LAIcon
+                name={ICON_NAME}
+                testId={ICON_TEST_ID}
+                size={IconSize.xSmall}
+                enableBackground
+                increasePadding={increasePadding}
+            />,
+        );
+        expect(queryByTestId(ICON_TEST_ID)).toHaveStyle({
+            padding: increasePadding * theme.scale.sc2,
+        });
+    });
+
+    it('renders icon with enableBackground & small icon size', () => {
+        const increasePadding = 2;
+        const { queryByTestId } = render(
+            <LAIcon
+                name={ICON_NAME}
+                testId={ICON_TEST_ID}
+                size={IconSize.small}
+                enableBackground
+                increasePadding={increasePadding}
+            />,
+        );
+        expect(queryByTestId(ICON_TEST_ID)).toHaveStyle({
+            padding: increasePadding * theme.scale.sc2,
+        });
+    });
+
+    it('renders icon with enableBackground & medium icon size', () => {
+        const increasePadding = 2;
+        const { queryByTestId } = render(
+            <LAIcon
+                name={ICON_NAME}
+                testId={ICON_TEST_ID}
+                size={IconSize.medium}
+                enableBackground
+                increasePadding={increasePadding}
+            />,
+        );
+        expect(queryByTestId(ICON_TEST_ID)).toHaveStyle({
+            padding: increasePadding * theme.scale.sc2,
+        });
+    });
+
+    it('renders icon with enableBackground & xxLarge icon size', () => {
+        const increasePadding = 2;
+        const { queryByTestId } = render(
+            <LAIcon
+                name={ICON_NAME}
+                testId={ICON_TEST_ID}
+                size={IconSize.xxLarge}
+                enableBackground
+                increasePadding={increasePadding}
+            />,
+        );
+        expect(queryByTestId(ICON_TEST_ID)).toHaveStyle({
+            padding: increasePadding * theme.scale.sc4,
+        });
+    });
+
     it('renders icon with background enable, background color & increased padding of the background', () => {
         render(
             <LAIcon

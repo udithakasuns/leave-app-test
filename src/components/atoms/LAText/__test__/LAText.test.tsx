@@ -10,7 +10,7 @@ const TEST_ID = 'text';
 describe('Testing text atom', () => {
     it('renders text by default', () => {
         render(<LAText>{CHILD}</LAText>);
-        expect(screen.getByText('Testing')).toBeTruthy();
+        expect(screen.getByText(CHILD)).toBeTruthy();
     });
 
     it('renders text with type H1', () => {
@@ -19,7 +19,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.H1);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.H1);
     });
 
     it('renders text with type H3', () => {
@@ -28,7 +28,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.H1Bold);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.H1Bold);
     });
 
     it('renders text with type H2', () => {
@@ -37,7 +37,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.H2);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.H2);
     });
 
     it('renders text with type H2Bold', () => {
@@ -46,7 +46,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.H2Bold);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.H2Bold);
     });
 
     it('renders text with type SubH', () => {
@@ -55,7 +55,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.SubH);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.SubH);
     });
 
     it('renders text with type SubHBold', () => {
@@ -64,7 +64,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.SubHBold);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.SubHBold);
     });
 
     it('renders text with type ParaLG', () => {
@@ -73,7 +73,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.ParaLG);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.ParaLG);
     });
 
     it('renders text with type ParaLGBold', () => {
@@ -82,7 +82,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.ParaLGBold);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.ParaLGBold);
     });
 
     it('renders text with type ParaSM', () => {
@@ -91,7 +91,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.ParaSM);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.ParaSM);
     });
 
     it('renders text with type ParaSMBold', () => {
@@ -100,7 +100,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.ParaSMBold);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.ParaSMBold);
     });
 
     it('renders text with type ParaXS', () => {
@@ -109,7 +109,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.ParaXS);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.ParaXS);
     });
 
     it('renders text with type ParaXSBold', () => {
@@ -118,7 +118,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(styles.ParaXSBold);
+        expect(getByTestId(TEST_ID)).toHaveStyle(styles.ParaXSBold);
     });
 
     it('renders text with style', () => {
@@ -128,12 +128,12 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        expect(getByTestId('text')).toHaveStyle(style);
+        expect(getByTestId(TEST_ID)).toHaveStyle(style);
     });
 
     it('renders text with number of lines', () => {
         render(<LAText numberOfLines={1}>{CHILD}</LAText>);
-        expect(screen.getByText('Testing')).toBeTruthy();
+        expect(screen.getByText(CHILD)).toBeTruthy();
     });
 
     it('should execute text onPress', () => {
@@ -143,7 +143,7 @@ describe('Testing text atom', () => {
                 {CHILD}
             </LAText>,
         );
-        fireEvent(getByTestId('text'), 'onPress');
+        fireEvent(getByTestId(TEST_ID), 'onPress');
         expect(onPress).toHaveBeenCalledTimes(1);
     });
 });

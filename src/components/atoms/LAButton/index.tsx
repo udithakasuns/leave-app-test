@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import { Circle as ProgressBar } from 'react-native-progress';
 import theme from '../../../utils/theme';
-import { AtLeast, TestProps } from '../../../utils/types';
+import { AtLeast, TestProps, TextTypeProps } from '../../../utils/types';
 import LAIcon, { IconSize } from '../LAIcon';
-import LAText, { TextType } from '../LAText';
+import LAText from '../LAText';
 import styles from './styles';
 import { AlignType, ButtonMode, ButtonSize, PropertiesBySize } from './types';
 
@@ -20,7 +20,7 @@ const { scale } = theme;
 
 interface Props extends PressableProps, TestProps {
     label: string;
-    labelType: TextType;
+    labelType: TextTypeProps;
     onPress: () => void;
     alignContent: AlignType;
     mode: ButtonMode;
@@ -53,6 +53,7 @@ const LAButton = ({
     testID,
     loading,
     testIdLoading,
+    testIdLabel,
     ...rest
 }: AtLeast<Props, 'label' | 'onPress'>) => {
     const getPropertiesBySize = (): PropertiesBySize => {
@@ -109,6 +110,7 @@ const LAButton = ({
                         />
                     )}
                     <LAText
+                        testID={testIdLabel}
                         style={[labelContainer, labelStyle]}
                         type={labelType ?? getPropertiesBySize().labelType}>
                         {label}

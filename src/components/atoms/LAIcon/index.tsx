@@ -70,6 +70,7 @@ const LAIcon = ({
                 iconSize = scale.sc40;
                 padding = increasePadding * scale.sc4;
                 break;
+            /* istanbul ignore next */
             default:
                 break;
         }

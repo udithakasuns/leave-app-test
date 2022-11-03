@@ -13,7 +13,8 @@
         "prepare": "husky install",
         "cache:clean": "yarn start -- --reset-cache",
         "jest:clean": "jest --clearCache",
-        "test:w": "yarn run test --watch"
+        "test:w": "yarn run test --watch",
+        "test:cover": "run test -- --coverage --watchAll=false"
     },
     "dependencies": {
         "@react-navigation/drawer": "^6.5.0",

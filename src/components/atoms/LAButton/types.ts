@@ -1,6 +1,6 @@
 import { ColorValue } from 'react-native';
+import { TextTypeProps } from 'src/utils/types';
 import { IconSize } from '../LAIcon';
-import { TextType } from '../LAText';
 
 export type ButtonMode =
     | 'outlined'
@@ -15,7 +15,7 @@ export type ButtonSize = 'small' | 'medium' | 'large';
 export type PropertiesBySize = {
     containerPadding: number;
     iconSize: IconSize;
-    labelType: TextType;
+    labelType: TextTypeProps;
 };
 
 export type ColorProp = {
