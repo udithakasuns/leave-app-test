@@ -34,7 +34,7 @@ describe('Testing button atom', () => {
         );
         expect(getByText(BUTTON_LABEL)).toBeTruthy();
         expect(queryByTestId(TEST_ID_BUTTON_LABEL)).toHaveStyle({
-            fontSize: fontSize.fs16,
+            fontSize: fontSize.fs14,
             fontFamily: fontFamily.poppins400,
         });
     });
@@ -53,9 +53,8 @@ describe('Testing button atom', () => {
             />,
         );
         expect(getByText(BUTTON_LABEL)).toBeTruthy();
-        expect(queryByTestId(TEST_ID_BUTTON_LABEL)).toHaveStyle({
-            fontSize: fontSize.fs16,
-            fontFamily: fontFamily.poppins400,
+        expect(queryByTestId(TEST_ID_BUTTON)).toHaveStyle({
+            paddingVertical: theme.scale.vsc16,
         });
     });
 

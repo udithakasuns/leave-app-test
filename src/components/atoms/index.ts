@@ -5,3 +5,5 @@ export { default as Avatar, AvatarSize } from './LAAvatar';
 export { default as LeaveCard } from './LALeaveCard';
 export { default as Input } from './LAInput';
 export { default as Chip } from './LAChip';
+export { default as Spacer } from './LASpacer';
+export type { Props as ChipProps } from './LAChip';
