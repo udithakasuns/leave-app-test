@@ -17,7 +17,8 @@
       "navigators/*": ["src/navigators/*"],
       "services/*": ["src/services/*"],
       "utils/*": ["src/utils/*"],
-      "zustand/*": ["src/zustand/*"],
+      "store/*": ["src/store/*"],
+      "configs/*": ["src/configs/*"],
     }
   },
 }

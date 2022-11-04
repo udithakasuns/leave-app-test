@@ -52,3 +52,11 @@ export type TextTypeProps =
     | 'ParaSMBold'
     | 'ParaXS'
     | 'ParaXSBold';
+
+export type UserTokenType = 'idToken' | 'accessToken' | 'refreshToken';
+
+export type UserTokens = {
+    idToken: string;
+    accessToken: string;
+    refreshToken: string;
+};
