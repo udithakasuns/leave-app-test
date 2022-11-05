@@ -1,6 +1,5 @@
 import React from 'react';
 import { View } from 'react-native';
-import theme from 'src/utils/theme';
 import { TestProps } from 'src/utils/types';
 import { styles } from './styles';
 
