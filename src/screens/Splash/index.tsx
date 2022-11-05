@@ -1,9 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 import { SplashScreenProps } from 'navigators/types';
-import LAInput from 'src/components/atoms/LAInput';
-import LAChip from 'src/components/atoms/LAChip';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import LAChip from 'src/components/atoms/LAChip';
 
 const styles = StyleSheet.create({
     container: {
@@ -14,61 +13,48 @@ const styles = StyleSheet.create({
     },
 });
 
-const Splash: React.FC<SplashScreenProps> = ({ navigation }) => {
-    const [value, setValue] = React.useState<string>('');
+const Splash: React.FC<SplashScreenProps> = () => (
+    <View style={styles.container}>
+        <LAChip
+            content='My Chip'
+            outline
+            // disabled
+            // onPressChip={() => console.log('Chip')}
+            // onPressLeft={() => console.log('Left')}
+            // onPressRight={() => console.log('right')}
+            // leftIconName='home'
+            rightIconName='home'
+        />
+        <LAChip content='My Chip' contentColor='red' />
+        <LAChip
+            content='My Chip'
+            contentColor='red'
+            backgroundColor='blue'
+            disabled
+        />
+        <LAChip content='My Chip' contentColor='red' contentTextType='H1Bold' />
+        <LAChip content='My Chip' outline />
+        <LAChip content='My Chip' outline outlineColor='red' />
+        <LAChip content='My Chip' disabled outlineColor='red' />
+        <LAChip content='My Chip' outline disabled outlineColor='red' />
 
-    const testRef: React.LegacyRef<TextInput> = React.createRef();
-
-    return (
-        <View style={styles.container}>
-            <LAChip
-                content='My Chip'
-                outline
-                // disabled
-                // onPressChip={() => console.log('Chip')}
-                // onPressLeft={() => console.log('Left')}
-                // onPressRight={() => console.log('right')}
-                // leftIconName='home'
-                rightIconName='home'
-            />
-            <LAChip content='My Chip' contentColor='red' />
-            <LAChip
-                content='My Chip'
-                contentColor='red'
-                backgroundColor='blue'
-                disabled
-            />
-            <LAChip
-                content='My Chip'
-                contentColor='red'
-                contentTextType='H1Bold'
-            />
-            <LAChip content='My Chip' outline />
-            <LAChip content='My Chip' outline outlineColor='red' />
-            <LAChip content='My Chip' disabled outlineColor='red' />
-            <LAChip content='My Chip' outline disabled outlineColor='red' />
-
-            <LAChip leftIconName='home' content='My Chip' />
-            <LAChip
-                leftIconName='home'
-                rightIconName='home'
-                content='My Chip'
-            />
-            <LAChip
-                disabled
-                leftIconName='home'
-                rightIconName='home'
-                content='My Chip'
-            />
-            <LAChip content='🌴 My Chip' contentTextType='H1Bold' />
-            <LAChip
-                content='🌴 My Chip'
-                leftIconName='home'
-                rightIconName='home'
-                // onPressLeft={() => console.log('presed')}
-                // onPressRight={() => console.log('presed')}
-            />
-            {/* <LAInput
+        <LAChip leftIconName='home' content='My Chip' />
+        <LAChip leftIconName='home' rightIconName='home' content='My Chip' />
+        <LAChip
+            disabled
+            leftIconName='home'
+            rightIconName='home'
+            content='My Chip'
+        />
+        <LAChip content='🌴 My Chip' contentTextType='H1Bold' />
+        <LAChip
+            content='🌴 My Chip'
+            leftIconName='home'
+            rightIconName='home'
+            // onPressLeft={() => console.log('presed')}
+            // onPressRight={() => console.log('presed')}
+        />
+        {/* <LAInput
                 label='One'
                 placeholder='input one'
                 value={value}
@@ -110,10 +96,9 @@ const Splash: React.FC<SplashScreenProps> = ({ navigation }) => {
                 // disabled
                 error
             /> */}
-            {/* <Text>Splash</Text>
+        {/* <Text>Splash</Text>
         <Button title='Login' onPress={() => navigation.navigate('Login')} /> */}
-        </View>
-    );
-};
+    </View>
+);
 
 export default Splash;

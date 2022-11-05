@@ -7,3 +7,4 @@ export { default as Input } from './LAInput';
 export { default as Chip } from './LAChip';
 export { default as Spacer } from './LASpacer';
 export type { Props as ChipProps } from './LAChip';
+export type { ButtonMode } from './LAButton/types';
