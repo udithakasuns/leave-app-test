@@ -1,13 +1,8 @@
-import { StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { EdgeInsets } from 'react-native-safe-area-context';
 import theme from 'src/utils/theme';
 
-interface Styles {
-    container: ViewStyle;
-    bodyContainer: ViewStyle;
-}
-
-export default (insets: EdgeInsets): Styles =>
+export default (insets: EdgeInsets) =>
     StyleSheet.create({
         container: { flex: 1, justifyContent: 'flex-end', margin: 0 },
         bodyContainer: {
@@ -16,5 +11,7 @@ export default (insets: EdgeInsets): Styles =>
             borderTopRightRadius: theme.radius.rd24,
             paddingBottom: insets.bottom,
             marginTop: theme.lineHeight.lh16,
+            paddingHorizontal: theme.scale.sc20,
         },
+        headerContainer: { marginTop: theme.scale.vsc20 },
     });

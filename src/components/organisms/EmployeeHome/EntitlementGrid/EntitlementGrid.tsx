@@ -34,6 +34,7 @@ const EntitlementGrid = ({ entitlements, onEntitlementPress }: Props) => {
                 keyExtractor={item => item.entitlementId.toString()}
                 style={{ flexGrow: 0 }}
                 numColumns={3}
+                scrollEnabled={false}
                 columnWrapperStyle={{
                     overflow: 'visible',
                 }}

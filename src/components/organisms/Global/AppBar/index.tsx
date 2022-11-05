@@ -92,10 +92,10 @@ const AppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
             <Modal
                 onClose={() => setModalVisible(state => !state)}
                 isVisible={modalVisible}
+                header='Change your role'
                 sheetBody={
                     <RoleSheetBody
                         appBarProperties={appBarProperties()}
-                        onClose={() => setModalVisible(state => !state)}
                         onPress={selected => {
                             if (
                                 selected === 'employee' &&

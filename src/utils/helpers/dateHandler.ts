@@ -28,3 +28,18 @@ export const getStartEndDate = (start: number, end: number) => {
     }
     return `${getFormattedDate(start)} to ${getFormattedDate(end)}`;
 };
+
+export const getGreetingsByTime = () => {
+    const today = new Date();
+    const currentHour = today.getHours();
+
+    if (currentHour < 12) {
+        return 'Good Morning!';
+    }
+
+    if (currentHour < 18) {
+        return 'Good Afternoon!';
+    }
+
+    return 'Good Evening!';
+};

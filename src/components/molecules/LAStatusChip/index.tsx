@@ -4,7 +4,7 @@ import theme from 'src/utils/theme';
 import { AtLeast, StatusType, TestProps } from 'src/utils/types';
 import { styles } from './styles';
 
-const { colors, scale } = theme;
+const { colors } = theme;
 
 type StatusChipProps = Partial<TestProps> & {
     status: StatusType;
@@ -62,7 +62,7 @@ const LAStatusChip = ({
             content={chipProps.content}
             leftIconName={chipProps.leftIconName}
             leftIconLibrary='community'
-            contentColor={theme.colors.gray600}
+            contentColor={colors.gray600}
             leftIconColor={chipProps.leftIconColor}
             leftIconSize={IconSize.xxSmall}
             onPressChip={onPress}
