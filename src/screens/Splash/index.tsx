@@ -1,7 +1,6 @@
 import { SplashScreenProps } from 'navigators/types';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
 import LAChip from 'src/components/atoms/LAChip';
 
 const styles = StyleSheet.create({
