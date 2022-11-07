@@ -2,7 +2,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { ButtonGroup, MultiButtonProps } from 'src/components/molecules';
-import { styles } from '../../EmployeeHome/LeaveRequestList/styles';
+import { styles } from './styles';
 
 export const SortSheetBody = ({
     sortByButtons,
