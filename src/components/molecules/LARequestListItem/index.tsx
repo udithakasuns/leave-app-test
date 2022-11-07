@@ -4,8 +4,9 @@ import { Chip, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import { StatusType, TestProps } from 'src/utils/types';
 import { StatusChip } from '..';
+import { styles } from './styles';
 
-const { scale, ms, colors } = theme;
+const { colors } = theme;
 
 interface Props extends Partial<TestProps> {
     date: string;
@@ -14,14 +15,8 @@ interface Props extends Partial<TestProps> {
 }
 
 const LARequestListItem = ({ date, status, entitlement }: Props) => (
-    <View
-        style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginVertical: scale.vsc12,
-        }}>
-        <View style={{ flexDirection: 'row', width: ms(75) }}>
+    <View style={styles.container}>
+        <View style={styles.dateContainer}>
             <Text type='ParaSM'>{date}</Text>
         </View>
         <Chip
@@ -29,16 +24,9 @@ const LARequestListItem = ({ date, status, entitlement }: Props) => (
             contentColor={colors.gray600}
             onPressChip={() => {}}
             contentTextType='ParaLG'
-            contentStyle={{
-                marginHorizontal: scale.sc6,
-            }}
-            pressableContainerStyle={{
-                alignSelf: 'center',
-            }}
-            containerStyle={{
-                paddingVertical: scale.sc8,
-                backgroundColor: colors.white,
-            }}
+            contentStyle={styles.contentStyle}
+            pressableContainerStyle={styles.pressableContainerStyle}
+            containerStyle={styles.containerStyle}
         />
         <StatusChip status={status} onPress={() => {}} />
     </View>

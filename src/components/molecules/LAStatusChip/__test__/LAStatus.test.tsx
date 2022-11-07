@@ -1,12 +1,11 @@
 import '@testing-library/jest-native/extend-expect';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import React from 'react';
-import { color } from 'react-native-reanimated';
 import theme from 'src/utils/theme';
 import { StatusType } from 'src/utils/types';
 import LAStatusChip from '../index';
 
-const { colors, scale } = theme;
+const { colors } = theme;
 
 const TEST_ID_CHIP = 'TEST_ID_CHIP';
 const TEST_ID_CONTENT = 'TEST_ID_CONTENT';

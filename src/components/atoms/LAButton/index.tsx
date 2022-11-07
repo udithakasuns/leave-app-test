@@ -18,7 +18,7 @@ import { AlignType, ButtonMode, ButtonSize, PropertiesBySize } from './types';
 
 const { scale } = theme;
 
-interface Props extends PressableProps, TestProps {
+export interface Props extends PressableProps, TestProps {
     label: string;
     labelType: TextTypeProps;
     onPress: () => void;

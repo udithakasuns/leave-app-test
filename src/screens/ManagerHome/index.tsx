@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const ManagerHome: React.FC<ManagerHomeScreensProps> = ({ navigation }) => (
+const ManagerHome: React.FC<ManagerHomeScreensProps> = () => (
     <View style={styles.container}>
         <AppBar currentScreen='manager' onPressNotification={() => {}} />
     </View>

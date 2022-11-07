@@ -1,5 +1,5 @@
 import { EmployeeHomeScreensProps } from 'navigators/types';
-import React, { useState } from 'react';
+import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { Button, Spacer, Text } from 'src/components/atoms';
 import { AppBar, LeaveRequestList } from 'src/components/organisms';
@@ -11,49 +11,42 @@ import { styles } from './styles';
 
 const { scale } = theme;
 
-const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
-    const [sortBy, setSortBy] = useState<number>(1);
-
-    return (
-        <View style={styles.innerContainer}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <AppBar
-                    currentScreen='employee'
-                    onPressNotification={() => {}}
-                />
-                <Spacer />
-                <Text type='H1Bold'>
-                    Hey Thiran {'\n'}
-                    {getGreetingsByTime()}
-                </Text>
-                <Spacer height={8} />
-                <EntitlementGrid
-                    entitlements={entitlements}
-                    onEntitlementPress={() => {}}
-                />
-                <Spacer />
-                <Text type='SubHBold'>Leave Requests</Text>
-                <LeaveRequestList leaveRequests={leaveRequests} />
-                <View
-                    style={{ marginBottom: scale.vsc40 * leaveRequests.length }}
-                />
-            </ScrollView>
+const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => (
+    <View style={styles.innerContainer}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+            <AppBar currentScreen='employee' onPressNotification={() => {}} />
+            <Spacer />
+            <Text type='H1Bold'>
+                Hey Thiran {'\n'}
+                {getGreetingsByTime()}
+            </Text>
+            <Spacer height={8} />
+            <EntitlementGrid
+                entitlements={entitlements}
+                onEntitlementPress={() => {}}
+            />
+            <Spacer />
+            <Text type='SubHBold'>Leave Requests</Text>
+            <LeaveRequestList leaveRequests={leaveRequests} />
             <View
-                style={{
-                    position: 'absolute',
-                    alignSelf: 'center',
-                    width: '100%',
-                    bottom: 20,
-                }}>
-                <Button
-                    label='Apply Leave'
-                    icon='arrow-forward'
-                    iconPosition='left'
-                    onPress={() => {}}
-                />
-            </View>
+                style={{ marginBottom: scale.vsc40 * leaveRequests.length }}
+            />
+        </ScrollView>
+        <View
+            style={{
+                position: 'absolute',
+                alignSelf: 'center',
+                width: '100%',
+                bottom: 20,
+            }}>
+            <Button
+                label='Apply Leave'
+                icon='arrow-forward'
+                iconPosition='left'
+                onPress={() => {}}
+            />
         </View>
-    );
-};
+    </View>
+);
 
 export default EmployeeHome;
