@@ -11,15 +11,16 @@ interface Props extends Partial<TestProps> {
     month: string;
 }
 
-const LAMonthSection = ({ month }: Props) => (
+const LAMonthSection = ({ month, testId, testIdContent }: Props) => (
     <View style={styles.container}>
         <Text
+            testID={testIdContent}
             type='ParaSM'
             style={styles.contentContainer}
             color={colors.primaryGrayLabel}>
             {month}
         </Text>
-        <Divider />
+        <Divider testId={testId} />
     </View>
 );
 

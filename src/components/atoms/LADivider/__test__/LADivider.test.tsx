@@ -10,8 +10,8 @@ const TEST_ID_CONTAINER = 'TEST_ID_CONTAINER';
 
 const BORDER_WIDTH = 0.5;
 
-describe('Testing spacer atom', () => {
-    it('renders default spacer', () => {
+describe('Testing divider atom', () => {
+    it('renders default divider', () => {
         const { queryByTestId } = render(
             <Divider testId={TEST_ID_CONTAINER} />,
         );
@@ -23,7 +23,7 @@ describe('Testing spacer atom', () => {
         });
     });
 
-    it('renders spacer with height', () => {
+    it('renders divider with borderWidth', () => {
         const { queryByTestId } = render(
             <Divider borderWidth={BORDER_WIDTH} testId={TEST_ID_CONTAINER} />,
         );

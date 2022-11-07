@@ -14,12 +14,22 @@ interface Props extends Partial<TestProps> {
     status: StatusType;
 }
 
-const LARequestListItem = ({ date, status, entitlement }: Props) => (
+const LARequestListItem = ({
+    date,
+    status,
+    entitlement,
+    testIdContent,
+    testIdChip,
+    testId,
+}: Props) => (
     <View style={styles.container}>
         <View style={styles.dateContainer}>
-            <Text type='ParaSM'>{date}</Text>
+            <Text testID={testIdContent} type='ParaSM'>
+                {date}
+            </Text>
         </View>
         <Chip
+            testIdContent={testIdChip}
             content={entitlement}
             contentColor={colors.gray600}
             onPressChip={() => {}}
@@ -28,7 +38,7 @@ const LARequestListItem = ({ date, status, entitlement }: Props) => (
             pressableContainerStyle={styles.pressableContainerStyle}
             containerStyle={styles.containerStyle}
         />
-        <StatusChip status={status} onPress={() => {}} />
+        <StatusChip testId={testId} status={status} onPress={() => {}} />
     </View>
 );
 

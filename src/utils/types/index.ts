@@ -40,6 +40,7 @@ export type TestProps = {
     testIdCaption: string;
     testIdContent: string;
     testIdLoading: string;
+    testIdChip: string;
 };
 
 export type TextTypeProps =
