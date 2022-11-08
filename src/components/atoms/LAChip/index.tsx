@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import theme from 'src/utils/theme';
 import { AtLeast, TestProps, TextTypeProps } from 'utils/types';
-import LAIcon from '../LAIcon';
+import LAIcon, { IconLibrary } from '../LAIcon';
 import LAText from '../LAText';
 import chipStyles from './styles';
 
@@ -18,19 +18,22 @@ const {
     scale: { sc16 },
 } = theme;
 
-interface Props extends TestProps {
+export interface Props extends TestProps {
     content: string;
     contentColor: ColorValue;
     contentTextType: TextTypeProps;
     outline: boolean;
     outlineColor: ColorValue;
     backgroundColor: ColorValue;
+    pressableContainerStyle: ViewStyle;
     containerStyle: ViewStyle;
     contentStyle: TextStyle;
     disabled: boolean;
     leftIconName: string;
     leftIconSize: number;
     leftIconColor: string;
+    leftIconLibrary: IconLibrary;
+    rightIconLibrary: IconLibrary;
     rightIconName: string;
     rightIconSize: number;
     rightIconColor: string;
@@ -47,6 +50,7 @@ const LAChip = ({
     contentColor = gray600,
     contentTextType = 'ParaSM',
     contentStyle,
+    pressableContainerStyle,
     outline = false,
     outlineColor,
     backgroundColor = tertiaryColor,
@@ -54,6 +58,8 @@ const LAChip = ({
     leftIconName,
     leftIconSize = sc16,
     leftIconColor,
+    leftIconLibrary,
+    rightIconLibrary,
     rightIconName,
     rightIconSize = sc16,
     rightIconColor,
@@ -88,6 +94,7 @@ const LAChip = ({
                     onPress={onPressLeft}>
                     <LAIcon
                         testId={testIdLeftIcon}
+                        library={leftIconLibrary}
                         name={leftIconName}
                         color={disabled ? disabledColor : leftIconColor}
                         size={leftIconSize}
@@ -110,6 +117,7 @@ const LAChip = ({
                     <LAIcon
                         testId={testIdRightIcon}
                         name={rightIconName}
+                        library={rightIconLibrary}
                         color={disabled ? disabledColor : rightIconColor}
                         size={rightIconSize}
                     />
@@ -123,6 +131,7 @@ const LAChip = ({
             <Pressable
                 testID={testIdChipPressable}
                 onPress={onPressChip}
+                style={pressableContainerStyle}
                 disabled={
                     Boolean(onPressLeft) || Boolean(onPressRight) || disabled
                 }>

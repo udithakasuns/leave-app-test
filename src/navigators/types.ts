@@ -1,3 +1,4 @@
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
@@ -29,4 +30,9 @@ export type EmployeeHomeScreensProps = NativeStackScreenProps<
 export type ManagerHomeScreensProps = NativeStackScreenProps<
     AuthScreensParamList,
     'ManagerHome'
+>;
+
+export type DrawerScreenNavigationProp = DrawerNavigationProp<
+    AuthScreensParamList,
+    'EmployeeHome'
 >;

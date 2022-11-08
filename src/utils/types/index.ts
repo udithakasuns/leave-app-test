@@ -15,9 +15,12 @@ export type Colors = {
     errorLabel: string;
     secondaryGray: string;
     gray600: string;
+    gray300: string;
     tertiaryLabel: string;
     secondaryBackground: string;
     dividerColor: string;
+    approved: string;
+    pending: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -37,6 +40,7 @@ export type TestProps = {
     testIdCaption: string;
     testIdContent: string;
     testIdLoading: string;
+    testIdChip: string;
 };
 
 export type TextTypeProps =
@@ -60,3 +64,46 @@ export type UserTokens = {
     accessToken: string;
     refreshToken: string;
 };
+
+export type LeaveType = {
+    typeId: number;
+    name: string;
+};
+export interface Entitlement {
+    entitlementId: number;
+    totalHoursAllocated: number;
+    totalHoursUsed: number;
+    leaveType: LeaveType;
+    validFrom: number;
+    validTo: number;
+    active: boolean;
+    totalDaysAllocated: number;
+    totalDaysUsed: number;
+    balanceInDays: number;
+}
+
+export type StatusType = 'PENDING' | 'APPROVED' | 'DENIED' | 'CANCELLED';
+
+export type EmployeeType = {
+    employeeId: string;
+    name?: string | null;
+    designation?: string | null;
+    authPic?: string | null;
+};
+
+export type LeaveRequestType = {
+    startDate: number;
+    endDate: number;
+    leaveType: LeaveType;
+    reasonForLeave: string | null;
+    leaveState: string;
+    status: StatusType;
+    requestDesc?: string | null;
+    reviewerComment?: null;
+    employee: EmployeeType;
+};
+
+export interface Section {
+    title: string;
+    data: LeaveRequestType[];
+}

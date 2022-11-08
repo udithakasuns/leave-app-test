@@ -2,6 +2,7 @@
 import React from 'react';
 import { ViewStyle } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import theme from '../../../utils/theme';
 import { AtLeast, TestProps } from '../../../utils/types';
 import { styles } from './styles';
@@ -9,6 +10,7 @@ import { styles } from './styles';
 const { scale, colors } = theme;
 
 export enum IconSize {
+    xxSmall = scale.sc10,
     xSmall = scale.sc12,
     small = scale.sc16,
     medium = scale.sc18,
@@ -16,6 +18,8 @@ export enum IconSize {
     xLarge = scale.sc28,
     xxLarge = scale.sc32,
 }
+
+export type IconLibrary = 'material' | 'community';
 
 interface Props extends TestProps {
     name: string;
@@ -27,12 +31,13 @@ interface Props extends TestProps {
     backgroundColor: string;
     touchableRef: React.LegacyRef<MaterialIcon>;
     increasePadding: number;
+    library?: IconLibrary;
 }
 
 const LAIcon = ({
     size = IconSize.large,
     name,
-    color,
+    color = colors.black,
     style,
     backgroundColor = colors.secondaryGray,
     touchableRef,
@@ -40,6 +45,7 @@ const LAIcon = ({
     enableBackground,
     onPress,
     testId,
+    library = 'material',
 }: AtLeast<Props, 'name'>) => {
     let iconSize = size;
     let padding = 0;
@@ -85,6 +91,19 @@ const LAIcon = ({
               ...style,
           }
         : { ...style };
+
+    if (library === 'community')
+        return (
+            <MaterialCommunityIcons
+                name={name}
+                size={iconSize}
+                color={color}
+                onPress={onPress}
+                ref={touchableRef}
+                style={[styleObject]}
+                testID={testId}
+            />
+        );
 
     return (
         <MaterialIcon

@@ -21,8 +21,9 @@ const LALeaveCard = ({
     uniCodeIcon,
     leaveType,
     isSelected = false,
-    width = theme.s(130),
+    width = theme.s(120),
     style,
+    testId,
 }: PartialBy<Props, 'isSelected' | 'width' | 'style'>) => {
     const {
         container,
@@ -33,7 +34,7 @@ const LALeaveCard = ({
     } = styles(isSelected, width);
 
     return (
-        <View style={[container, style]}>
+        <View testID={testId} style={[container, style]}>
             <View style={leaveContainer}>
                 <LAText type='H1' style={takenLeavesContainer}>
                     {takenLeaves}

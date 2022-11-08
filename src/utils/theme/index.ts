@@ -30,15 +30,21 @@ const colors: Colors = {
     errorBackground: '#FEE2E2',
     disabledColor: '#CFCFCF',
     gray600: '#52525B',
+    gray300: '#E8E8E8',
     dividerColor: '#D4D4D8',
+
+    approved: '#65A30D',
+    pending: '#FCD34D',
 };
 
 const fontSize = {
+    fs10: ms(10),
     fs12: ms(12),
     fs14: ms(14),
     fs16: ms(16),
     fs18: ms(18),
     fs20: ms(20),
+    fs22: ms(22),
     fs24: ms(24),
     fs28: ms(28),
     fs32: ms(32),
@@ -57,6 +63,7 @@ const lineHeight = {
     lh46: vs(46),
     lh50: vs(50),
     lh54: vs(54),
+    lh58: vs(58),
     lh64: vs(64),
 };
 

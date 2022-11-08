@@ -11,7 +11,12 @@ export type HalfDayProp = {
     isLeftSelected: boolean;
 };
 
-interface Props extends Partial<TestProps> {
+type HalfButtonPropsTest = Partial<TestProps> & {
+    testIdRightButton: string;
+    testIdLeftButton: string;
+};
+
+interface Props extends Partial<HalfButtonPropsTest> {
     label: string;
     icon: string;
     isHalfSelected: boolean;
@@ -25,6 +30,9 @@ const LAHalfButton = ({
     icon,
     isHalfSelected = false,
     halfDay,
+    testId,
+    testIdRightButton,
+    testIdLeftButton,
 }: Props) => {
     const [isHalfDay, setIsHalfDay] = useState<boolean>(isHalfSelected);
     const [selectedHalfDay, setSelectedHalfDay] =
@@ -67,11 +75,13 @@ const LAHalfButton = ({
         return (
             <View style={halfButtonContainer}>
                 <TouchableOpacity
+                    testID={testIdRightButton}
                     onPress={() => onHalfDayPress(1)}
                     style={rightContainer}>
                     <Text color={leftText.color}>{halfDay.rightHalfTitle}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                    testID={testIdLeftButton}
                     onPress={() => onHalfDayPress(2)}
                     style={leftContainer}>
                     <Text color={rightText.color}>{halfDay.leftHalfTitle}</Text>
@@ -82,6 +92,7 @@ const LAHalfButton = ({
 
     return (
         <Button
+            testID={testId}
             label={label}
             mode='contained-gray'
             icon={icon}

@@ -1,6 +1,6 @@
 import { render, fireEvent } from '@testing-library/react-native';
 import React from 'react';
-import theme from '../../../../utils/theme';
+import theme from 'src/utils/theme';
 import LAIcon, { IconSize } from '../index';
 
 const ICON_NAME = 'check';
@@ -38,6 +38,70 @@ describe('Testing text icon', () => {
         );
     });
 
+    it('renders icon with enableBackground & xSmall icon size', () => {
+        const increasePadding = 2;
+        const { queryByTestId } = render(
+            <LAIcon
+                name={ICON_NAME}
+                testId={ICON_TEST_ID}
+                size={IconSize.xSmall}
+                enableBackground
+                increasePadding={increasePadding}
+            />,
+        );
+        expect(queryByTestId(ICON_TEST_ID)).toHaveStyle({
+            padding: increasePadding * theme.scale.sc2,
+        });
+    });
+
+    it('renders icon with enableBackground & small icon size', () => {
+        const increasePadding = 2;
+        const { queryByTestId } = render(
+            <LAIcon
+                name={ICON_NAME}
+                testId={ICON_TEST_ID}
+                size={IconSize.small}
+                enableBackground
+                increasePadding={increasePadding}
+            />,
+        );
+        expect(queryByTestId(ICON_TEST_ID)).toHaveStyle({
+            padding: increasePadding * theme.scale.sc2,
+        });
+    });
+
+    it('renders icon with enableBackground & medium icon size', () => {
+        const increasePadding = 2;
+        const { queryByTestId } = render(
+            <LAIcon
+                name={ICON_NAME}
+                testId={ICON_TEST_ID}
+                size={IconSize.medium}
+                enableBackground
+                increasePadding={increasePadding}
+            />,
+        );
+        expect(queryByTestId(ICON_TEST_ID)).toHaveStyle({
+            padding: increasePadding * theme.scale.sc2,
+        });
+    });
+
+    it('renders icon with enableBackground & xxLarge icon size', () => {
+        const increasePadding = 2;
+        const { queryByTestId } = render(
+            <LAIcon
+                name={ICON_NAME}
+                testId={ICON_TEST_ID}
+                size={IconSize.xxLarge}
+                enableBackground
+                increasePadding={increasePadding}
+            />,
+        );
+        expect(queryByTestId(ICON_TEST_ID)).toHaveStyle({
+            padding: increasePadding * theme.scale.sc4,
+        });
+    });
+
     it('renders icon with background enable, background color & increased padding of the background', () => {
         render(
             <LAIcon
@@ -66,6 +130,20 @@ describe('Testing text icon', () => {
         );
         fireEvent(getByTestId('iconButton'), 'onPress');
         expect(onPress).toHaveBeenCalledTimes(1);
+    });
+
+    it('renders icon with community library', () => {
+        const { queryByTestId } = render(
+            <LAIcon
+                name={ICON_NAME}
+                library='community'
+                testId={ICON_TEST_ID}
+            />,
+        );
+        expect(queryByTestId(ICON_TEST_ID)).toBeVisible();
+        expect(queryByTestId(ICON_TEST_ID)).toHaveStyle({
+            color: theme.colors.black,
+        });
     });
 
     it('renders with all attributes and should execute icon onPress', () => {

@@ -1,19 +1,22 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
 import { ManagerHomeScreensProps } from 'navigators/types';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { AppBar } from 'src/components/organisms';
+import theme from 'src/utils/theme';
+
+const { scale } = theme;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        paddingHorizontal: scale.sc20,
+        backgroundColor: 'white',
     },
 });
 
-const ManagerHome: React.FC<ManagerHomeScreensProps> = ({ navigation }) => (
+const ManagerHome: React.FC<ManagerHomeScreensProps> = () => (
     <View style={styles.container}>
-        <Text>Manager Home</Text>
-        <Button title='Go back' onPress={() => navigation.goBack()} />
+        <AppBar currentScreen='manager' onPressNotification={() => {}} />
     </View>
 );
 
