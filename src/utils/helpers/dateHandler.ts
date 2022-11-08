@@ -8,15 +8,12 @@ export const getFormattedDate = (date: number) => {
         case 1:
         case 21:
             return `${day}st`;
-            break;
         case 2:
         case 22:
             return `${day}nd`;
-            break;
         case 3:
         case 23:
             return `${day}rd`;
-            break;
         default:
             return `${day}th`;
     }

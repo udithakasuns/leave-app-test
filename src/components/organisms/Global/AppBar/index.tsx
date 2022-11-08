@@ -1,5 +1,4 @@
 /* eslint-disable import/no-cycle */
-import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
@@ -13,17 +12,13 @@ import {
     Spacer,
 } from 'src/components/atoms';
 import { Modal } from 'src/components/molecules';
-import { AuthScreensParamList } from 'src/navigators/types';
+import { DrawerScreenNavigationProp } from 'src/navigators/types';
 import theme from 'src/utils/theme';
 import { RoleSheetBody } from './RoleSheetBody';
 import { styles } from './styles';
 
 const { colors } = theme;
 
-type DrawerScreenNavigationProp = DrawerNavigationProp<
-    AuthScreensParamList,
-    'EmployeeHome'
->;
 export type CurrentScreen = 'employee' | 'manager';
 
 type AppBarProps = {

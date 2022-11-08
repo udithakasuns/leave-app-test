@@ -3,6 +3,7 @@ import { FlatList, Pressable, ScrollView } from 'react-native';
 import { LeaveCard } from 'src/components/atoms';
 import { getLeaveUnicode } from 'src/utils/helpers/unicodeHandler';
 import { Entitlement, TestProps } from 'src/utils/types';
+import { styles } from './styles';
 
 export type EntitlementSelection = Entitlement & {
     isSelected?: boolean;
@@ -27,17 +28,15 @@ const EntitlementGrid = ({ entitlements, onEntitlementPress }: Props) => {
     return (
         <ScrollView
             horizontal
-            contentContainerStyle={{ width: '100%', height: '100%' }}>
+            contentContainerStyle={styles.scrollViewContainer}>
             <FlatList
                 data={entitlements}
                 renderItem={renderItem}
                 keyExtractor={item => item.entitlementId.toString()}
-                style={{ flexGrow: 0 }}
+                style={styles.flatListContainer}
                 numColumns={3}
                 scrollEnabled={false}
-                columnWrapperStyle={{
-                    overflow: 'visible',
-                }}
+                columnWrapperStyle={styles.columnWrapperStyle}
             />
         </ScrollView>
     );

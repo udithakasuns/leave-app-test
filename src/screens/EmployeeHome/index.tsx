@@ -32,13 +32,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => (
                 style={{ marginBottom: scale.vsc40 * leaveRequests.length }}
             />
         </ScrollView>
-        <View
-            style={{
-                position: 'absolute',
-                alignSelf: 'center',
-                width: '100%',
-                bottom: 20,
-            }}>
+        <View style={styles.buttonContainer}>
             <Button
                 label='Apply Leave'
                 icon='arrow-forward'

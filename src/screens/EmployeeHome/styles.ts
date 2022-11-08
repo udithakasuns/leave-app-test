@@ -13,4 +13,10 @@ export const styles = StyleSheet.create({
         paddingHorizontal: scale.sc20,
         backgroundColor: 'white',
     },
+    buttonContainer: {
+        position: 'absolute',
+        alignSelf: 'center',
+        width: '100%',
+        bottom: 20,
+    },
 });
