@@ -19,6 +19,13 @@ export const getFormattedDate = (date: number) => {
     }
 };
 
+export const getFormattedMonth = (date: number) => {
+    const dateFormate = new Date(date);
+    const dateIOS = DateTime.fromISO(dateFormate.toISOString());
+    const month = dateIOS.toLocaleString({ month: 'long' });
+    return month;
+};
+
 export const getStartEndDate = (start: number, end: number) => {
     if (start === end) {
         return getFormattedDate(start);

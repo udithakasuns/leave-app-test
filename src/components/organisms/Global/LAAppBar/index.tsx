@@ -32,7 +32,7 @@ export type SelectedProperties = {
     employeeMode: ButtonMode;
 };
 
-const AppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
+const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
     const navigation = useNavigation<DrawerScreenNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
 
@@ -112,4 +112,4 @@ const AppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
     );
 };
 
-export default AppBar;
+export default LAAppBar;

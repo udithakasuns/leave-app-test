@@ -18,7 +18,7 @@ type FilterProps = {
     leaveTypeChips: MultiChipProps[];
 };
 
-const Filters = ({
+const LAFilters = ({
     sortByButtons,
     leaveTypeChips,
     leaveStatusChips,
@@ -85,4 +85,4 @@ const Filters = ({
     );
 };
 
-export default Filters;
+export default LAFilters;

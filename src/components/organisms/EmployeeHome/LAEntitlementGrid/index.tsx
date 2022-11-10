@@ -14,7 +14,7 @@ interface Props extends Partial<TestProps> {
     onEntitlementPress: (item: Entitlement) => void;
 }
 
-const EntitlementGrid = ({ entitlements, onEntitlementPress }: Props) => {
+const LAEntitlementGrid = ({ entitlements, onEntitlementPress }: Props) => {
     const renderItem = ({ item }: { item: Entitlement }) => (
         <Pressable onPress={() => onEntitlementPress(item)}>
             <LeaveCard
@@ -42,4 +42,4 @@ const EntitlementGrid = ({ entitlements, onEntitlementPress }: Props) => {
     );
 };
 
-export default EntitlementGrid;
+export default LAEntitlementGrid;

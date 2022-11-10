@@ -99,7 +99,7 @@ export type LeaveRequestType = {
     leaveState: string;
     status: StatusType;
     requestDesc?: string | null;
-    reviewerComment?: null;
+    reviewerComment?: string | null;
     employee: EmployeeType;
 };
 

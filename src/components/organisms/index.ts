@@ -1,4 +1,6 @@
-export { default as AppBar } from './Global/AppBar';
-export { default as Filters } from './Global/Filters';
+/* eslint-disable import/no-cycle */
+export { default as LAAppBar } from './Global/LAAppBar';
+export { default as LAFilters } from './Global/LAFilters';
 
-export { default as LeaveRequestList } from './EmployeeHome/LeaveRequestList';
+export { default as LALeaveRequestList } from './EmployeeHome/LALeaveRequestList';
+export { default as LAEntitlementGrid } from './EmployeeHome/LAEntitlementGrid';
