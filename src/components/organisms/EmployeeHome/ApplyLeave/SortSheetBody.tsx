@@ -9,7 +9,7 @@ export const SortSheetBody = ({
     onPress,
 }: {
     sortByButtons: MultiButtonProps[];
-    onPress: (multiButtons: MultiButtonProps[]) => void;
+    onPress: (Multibuttons: MultiButtonProps[]) => void;
 }) => (
     <View style={styles.sortSheetContainer}>
         <ButtonGroup buttons={sortByButtons} onPress={onPress} />

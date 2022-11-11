@@ -82,7 +82,14 @@ export interface Entitlement {
     balanceInDays: number;
 }
 
-export type StatusType = 'PENDING' | 'APPROVED' | 'DENIED' | 'CANCELLED';
+export enum Status {
+    PENDING = 'PENDING',
+    APPROVED = 'APPROVED',
+    DENIED = 'DENIED',
+    CANCELLED = 'CANCELLED',
+}
+
+export type StatusType = keyof typeof Status;
 
 export type EmployeeType = {
     employeeId: string;
@@ -107,3 +114,20 @@ export interface Section {
     title: string;
     data: LeaveRequestType[];
 }
+
+type RequestParams = {
+    sortKey: 'creationDate' | 'startDate';
+    page: number;
+    size: number;
+    status: string;
+    startDate: string;
+    endDate: string;
+    leaveType: string;
+};
+
+export type LeaveRequestParams = Partial<RequestParams>;
+
+export type FilterTypes = {
+    name: string;
+    typeId: number;
+};

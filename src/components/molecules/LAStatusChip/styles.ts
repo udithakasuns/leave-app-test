@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import theme from 'src/utils/theme';
 
-const { colors, scale } = theme;
+const { colors, scale, ms } = theme;
 
 export const styles = StyleSheet.create({
     container: {
@@ -15,5 +15,7 @@ export const styles = StyleSheet.create({
     },
     pressableContainer: {
         alignSelf: 'center',
+        maxWidth: ms(110),
+        flex: 1,
     },
 });

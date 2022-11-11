@@ -12,6 +12,7 @@ const { colors } = theme;
 export type MultiChipProps = AtLeast<ChipProps, 'content'> & {
     chipId: number;
     selected?: boolean;
+    chipInfo?: string;
 };
 
 export type ChipsGroupProps = {
@@ -24,23 +25,28 @@ const LAChipGroup = ({
     chips,
     ...rest
 }: AtLeast<ChipsGroupProps, 'chips'>) => {
-    const [chipsLocal, setChipsLocal] = useState<MultiChipProps[]>(chips);
+    const [chipsLocal, setChipsLocal] = useState<MultiChipProps[]>([]);
 
-    const handleOnPress = useCallback((id: number) => {
-        chipsLocal.forEach(chipItem => {
-            if (chipItem.selected && chipItem.chipId === id) {
-                chipItem.selected = false;
-            } else {
-                chipItem.selected = chipItem.selected || chipItem.chipId === id;
-            }
-        });
-        setChipsLocal([...chipsLocal]);
-        if (onPress) onPress(chipsLocal);
-    }, []);
+    const handleOnPress = useCallback(
+        (id: number) => {
+            chipsLocal.forEach(chipItem => {
+                if (chipItem.selected && chipItem.chipId === id) {
+                    chipItem.selected = false;
+                } else {
+                    chipItem.selected =
+                        chipItem.selected || chipItem.chipId === id;
+                }
+            });
+            setChipsLocal([...chipsLocal]);
+            if (onPress) onPress(chipsLocal);
+        },
+        [chipsLocal],
+    );
 
     useEffect(() => {
-        setChipsLocal(chips);
-    }, [chips]);
+        const chipsDeepClone = JSON.parse(JSON.stringify(chips));
+        setChipsLocal([...chipsDeepClone]);
+    }, []);
 
     return (
         <View style={styles.container}>

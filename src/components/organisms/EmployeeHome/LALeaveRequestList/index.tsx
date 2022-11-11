@@ -2,12 +2,7 @@
 import React from 'react';
 import { ScrollView, SectionList, View } from 'react-native';
 import { Chip, Divider, Spacer } from 'src/components/atoms';
-import {
-    MonthSection,
-    MultiButtonProps,
-    MultiChipProps,
-    RequestListItem,
-} from 'src/components/molecules';
+import { MonthSection, RequestListItem } from 'src/components/molecules';
 import { getStartEndDate } from 'src/utils/helpers/dateHandler';
 import { getLeaveUnicode } from 'src/utils/helpers/unicodeHandler';
 import theme from 'src/utils/theme';
@@ -18,61 +13,26 @@ import {
     TestProps,
 } from 'src/utils/types';
 import { LAFilters } from '../..';
+import { FilterProps } from '../../Global/LAFilters';
 import { styles } from './styles';
 
 const { colors } = theme;
-
-const leaveStatusChips: MultiChipProps[] = [
-    {
-        chipId: 1,
-        content: 'Pending',
-    },
-    {
-        chipId: 2,
-        content: 'Approved',
-    },
-    {
-        chipId: 3,
-        content: 'Denied',
-    },
-];
-
-const leaveTypeChips: MultiChipProps[] = [
-    {
-        chipId: 1,
-        content: 'Causal',
-    },
-    {
-        chipId: 2,
-        content: 'Annual',
-    },
-    {
-        chipId: 3,
-        content: 'Sick',
-    },
-];
-
-const sortByButtons: MultiButtonProps[] = [
-    {
-        buttonId: 1,
-        label: 'Date Requested',
-        selected: true,
-    },
-    {
-        buttonId: 2,
-        label: 'LeaveDate',
-    },
-];
 
 export type EntitlementSelection = Entitlement & {
     isSelected?: boolean;
 };
 
-interface Props extends Partial<TestProps> {
+interface Props extends Partial<TestProps>, FilterProps {
     leaveRequests: Section[];
 }
 
-const LALeaveRequestList = ({ leaveRequests }: Props) => {
+const LALeaveRequestList = ({
+    leaveRequests,
+    sortByButtons,
+    onSortPress,
+    onFilterPress,
+    filterChips,
+}: Props) => {
     const Item = ({ item }: { item: LeaveRequestType }) => (
         <RequestListItem
             date={getStartEndDate(item.startDate, item.endDate)}
@@ -80,15 +40,17 @@ const LALeaveRequestList = ({ leaveRequests }: Props) => {
             entitlement={`${getLeaveUnicode(item.leaveType)}  ${
                 item.leaveType.name
             }`}
+            onPress={() => {}}
         />
     );
 
     return (
         <View style={styles.container}>
             <LAFilters
-                leaveStatusChips={leaveStatusChips}
-                leaveTypeChips={leaveTypeChips}
+                filterChips={filterChips}
                 sortByButtons={sortByButtons}
+                onSortPress={onSortPress}
+                onFilterPress={onFilterPress}
             />
             <ScrollView
                 horizontal

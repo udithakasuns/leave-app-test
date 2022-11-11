@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Button, Spacer, Text } from 'src/components/atoms';
 import {
@@ -12,26 +12,51 @@ import {
 import { SortSheetBody } from './SortSheetBody';
 import { styles } from './styles';
 
-type FilterProps = {
+export type FilterChipsProps = {
+    id: number;
+    title: string;
+    chips: MultiChipProps[];
+};
+
+export type FilterProps = {
     sortByButtons: MultiButtonProps[];
-    leaveStatusChips: MultiChipProps[];
-    leaveTypeChips: MultiChipProps[];
+    filterChips: FilterChipsProps[];
+    onSortPress: (multiButtons: MultiButtonProps[]) => void;
+    onFilterPress: (multiButtons: FilterChipsProps[]) => void;
 };
 
 const LAFilters = ({
     sortByButtons,
-    leaveTypeChips,
-    leaveStatusChips,
+    filterChips,
+    onSortPress,
+    onFilterPress,
 }: FilterProps) => {
     const [isSortModalVisible, setIsSortModalVisible] =
         useState<boolean>(false);
 
     const [isFilterModalVisible, setIsFilterModalVisible] =
         useState<boolean>(false);
+
+    const [filterChipsLocal, setFilterChipsLocal] = useState<
+        FilterChipsProps[]
+    >([]);
+
+    const getSortByLabel = () => {
+        const selectedButton = sortByButtons.filter(
+            btn => btn.selected === true,
+        )[0];
+        return selectedButton.label;
+    };
+
+    useEffect(() => {
+        const chipsDeepClone = JSON.parse(JSON.stringify(filterChips));
+        setFilterChipsLocal(chipsDeepClone);
+    }, [isFilterModalVisible]);
+
     return (
         <>
             <FilterButtons
-                sortBy='Date Request'
+                sortBy={getSortByLabel()}
                 onPressSortBy={() => setIsSortModalVisible(state => !state)}
                 onPressFilter={() => setIsFilterModalVisible(state => !state)}
             />
@@ -42,7 +67,10 @@ const LAFilters = ({
                 sheetBody={
                     <SortSheetBody
                         sortByButtons={sortByButtons}
-                        onPress={() => {}}
+                        onPress={multiButtons => {
+                            onSortPress(multiButtons);
+                            setIsSortModalVisible(state => !state);
+                        }}
                     />
                 }
             />
@@ -52,31 +80,41 @@ const LAFilters = ({
                 header='Filter by:'
                 sheetBody={
                     <View style={styles.filterSheetContainer}>
+                        {filterChipsLocal.map(item => (
+                            <View
+                                style={{ alignSelf: 'flex-start' }}
+                                key={item.id}>
+                                <Spacer height={5} />
+                                <Text
+                                    style={styles.filterSheetSubHeadings}
+                                    type='ParaSMBold'>
+                                    {item.title}
+                                </Text>
+                                <Spacer height={5} />
+                                <ChipGroup
+                                    chips={item.chips}
+                                    onPress={chips => {
+                                        filterChipsLocal.map(mapChip => {
+                                            const selectedChip = mapChip;
+                                            if (mapChip.id === item.id) {
+                                                selectedChip.chips = chips;
+                                            }
+                                            return selectedChip;
+                                        });
+                                    }}
+                                />
+                                <Spacer height={5} />
+                            </View>
+                        ))}
                         <Spacer height={5} />
-                        <Text
-                            style={styles.filterSheetSubHeadings}
-                            type='ParaSMBold'>
-                            Leave Status
-                        </Text>
-                        <Spacer height={5} />
-                        <ChipGroup
-                            chips={leaveStatusChips}
-                            onPress={() => {}}
-                        />
-                        <Spacer height={5} />
-                        <Text
-                            style={styles.filterSheetSubHeadings}
-                            type='ParaSMBold'>
-                            Leave Type
-                        </Text>
-                        <Spacer height={5} />
-                        <ChipGroup chips={leaveTypeChips} onPress={() => {}} />
-                        <Spacer height={10} />
                         <Button
                             label='Apply'
                             mode='outlined'
                             labelStyle={{ paddingHorizontal: 10 }}
-                            onPress={() => {}}
+                            onPress={() => {
+                                setIsFilterModalVisible(state => !state);
+                                onFilterPress(filterChipsLocal);
+                            }}
                         />
                     </View>
                 }

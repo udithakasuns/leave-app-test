@@ -1,9 +1,13 @@
 import { DateTime } from 'luxon';
 
-export const getFormattedDate = (date: number) => {
+export const getFormattedDate = (date: number): DateTime => {
     const dateFormate = new Date(date);
     const dateIOS = DateTime.fromISO(dateFormate.toISOString());
-    const day = dateIOS.toLocaleString({ day: 'numeric' });
+    return dateIOS;
+};
+
+export const getFormattedDay = (date: number): string => {
+    const day = getFormattedDate(date).toLocaleString({ day: 'numeric' });
     switch (Number(day)) {
         case 1:
         case 21:
@@ -19,21 +23,19 @@ export const getFormattedDate = (date: number) => {
     }
 };
 
-export const getFormattedMonth = (date: number) => {
-    const dateFormate = new Date(date);
-    const dateIOS = DateTime.fromISO(dateFormate.toISOString());
-    const month = dateIOS.toLocaleString({ month: 'long' });
+export const getFormattedMonth = (date: number): string => {
+    const month = getFormattedDate(date).toLocaleString({ month: 'long' });
     return month;
 };
 
 export const getStartEndDate = (start: number, end: number) => {
     if (start === end) {
-        return getFormattedDate(start);
+        return getFormattedDay(start);
     }
-    return `${getFormattedDate(start)} to ${getFormattedDate(end)}`;
+    return `${getFormattedDay(start)} to ${getFormattedDay(end)}`;
 };
 
-export const getGreetingsByTime = () => {
+export const getGreetingsByTime = (): string => {
     const today = new Date();
     const currentHour = today.getHours();
 
