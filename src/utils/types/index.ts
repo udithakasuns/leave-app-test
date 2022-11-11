@@ -131,3 +131,14 @@ export type FilterTypes = {
     name: string;
     typeId: number;
 };
+
+export enum EmployeeModal {
+    'APPLY_LEAVE_MODAL',
+    'CHOSE_DATE_MODAL',
+    'PENDING_LEAVE_MODAL',
+    'DENIED_LEAVE_MODAL',
+    'APPROVED_LEAVE_MODAL',
+    'REVOKE_REQUEST_MODAL',
+    'CANCEL_REQUEST_MODAL',
+    'LEAVE_INFORMATION',
+}

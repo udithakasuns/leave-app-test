@@ -11,13 +11,14 @@ export type EntitlementSelection = Entitlement & {
 
 interface Props extends Partial<TestProps> {
     entitlements: EntitlementSelection[];
-    onEntitlementPress: (item: Entitlement) => void;
+    onEntitlementPress: (item: EntitlementSelection) => void;
 }
 
 const LAEntitlementGrid = ({ entitlements, onEntitlementPress }: Props) => {
-    const renderItem = ({ item }: { item: Entitlement }) => (
+    const renderItem = ({ item }: { item: EntitlementSelection }) => (
         <Pressable onPress={() => onEntitlementPress(item)}>
             <LeaveCard
+                isSelected={item.isSelected}
                 takenLeaves={item.totalDaysUsed.toString()}
                 totalLeaves={item.balanceInDays.toString()}
                 uniCodeIcon={getLeaveUnicode(item.leaveType)}

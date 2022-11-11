@@ -6,9 +6,12 @@ import { Button, Spacer, Text } from 'src/components/atoms';
 import { MultiButtonProps, MultiChipProps } from 'src/components/molecules';
 import {
     LAAppBar,
+    LAEmployeeModals,
     LAEntitlementGrid,
     LALeaveRequestList,
 } from 'src/components/organisms';
+import { LAEmployeeModalProps } from 'src/components/organisms/EmployeeHome/LAEmployeeModals';
+import { EntitlementSelection } from 'src/components/organisms/EmployeeHome/LAEntitlementGrid';
 import { FilterChipsProps } from 'src/components/organisms/Global/LAFilters';
 import { getGreetingsByTime } from 'src/utils/helpers/dateHandler';
 import { filterChips } from 'src/utils/helpers/defaultData';
@@ -17,6 +20,7 @@ import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequest';
 import theme from 'src/utils/theme';
 import {
+    EmployeeModal,
     Entitlement,
     FilterTypes,
     LeaveRequestParams,
@@ -45,6 +49,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     });
     const [filterChipsLocal, setFilterChipsLocal] =
         useState<FilterChipsProps[]>(filterChips);
+    const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
 
     const { data: statusTypes }: UseQueryResult<FilterTypes[]> =
         useFilterTypesData();
@@ -79,8 +84,25 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         setFilterChipsLocal(chips);
     };
 
+    const handleEntitlementPress = (entitlement: EntitlementSelection) => {
+        const entitlementsDeepClone: EntitlementSelection[] = JSON.parse(
+            JSON.stringify(entitlements),
+        );
+        entitlementsDeepClone.map(item => {
+            const tempEntitlement = item;
+            if (item.entitlementId === entitlement.entitlementId) {
+                tempEntitlement.isSelected = true;
+            }
+            return tempEntitlement;
+        });
+        setEmployeeModal({
+            entitlements: entitlementsDeepClone,
+            modalType: EmployeeModal.APPLY_LEAVE_MODAL,
+        });
+    };
+
     useEffect(() => {
-        if (statusTypes && filterChipsLocal.length < 2) {
+        if (statusTypes !== undefined && filterChipsLocal.length < 2) {
             const chipProps: MultiChipProps[] = statusTypes?.map(
                 (item): MultiChipProps => ({
                     chipId: item.typeId,
@@ -114,7 +136,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 {entitlements && (
                     <LAEntitlementGrid
                         entitlements={entitlements}
-                        onEntitlementPress={() => {}}
+                        onEntitlementPress={handleEntitlementPress}
                     />
                 )}
                 <Spacer />
@@ -144,9 +166,19 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     label='Apply Leave'
                     icon='arrow-forward'
                     iconPosition='left'
-                    onPress={() => {}}
+                    onPress={() =>
+                        setEmployeeModal({
+                            ...employeeModal,
+                            modalType: EmployeeModal.APPLY_LEAVE_MODAL,
+                        })
+                    }
                 />
             </View>
+            <LAEmployeeModals
+                modalType={employeeModal?.modalType}
+                entitlements={employeeModal?.entitlements ?? entitlements}
+                onClose={() => setEmployeeModal(undefined)}
+            />
         </View>
     );
 };
