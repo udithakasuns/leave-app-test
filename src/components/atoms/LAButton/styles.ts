@@ -9,6 +9,7 @@ export default (
     mode: ButtonMode,
     alignContent: AlignType,
     containerPadding: number,
+    iconColor?: string,
 ) => {
     const getColor = (): ColorProp => {
         switch (mode) {
@@ -58,11 +59,11 @@ export default (
         },
         rightIcon: {
             paddingLeft: scale.sc8,
-            color: getColor().textIcon,
+            color: iconColor ?? getColor().textIcon,
         },
         leftIcon: {
             paddingLeft: scale.sc8,
-            color: getColor().textIcon,
+            color: iconColor ?? getColor().textIcon,
         },
         labelContainer: {
             color: getColor().textIcon,

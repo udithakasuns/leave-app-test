@@ -21,6 +21,7 @@ export type Colors = {
     dividerColor: string;
     approved: string;
     pending: string;
+    green700: string;
 };
 
 // Custom Utility type to set attributes required.

@@ -2,7 +2,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Spacer, Text } from 'src/components/atoms';
-import { Modal } from 'src/components/molecules';
+import { Modal, SelectionButton } from 'src/components/molecules';
 import theme from 'src/utils/theme';
 import { AtLeast, EmployeeModal, TestProps } from 'src/utils/types';
 import LAEntitlementGrid from '../LAEntitlementGrid';
@@ -32,13 +32,19 @@ const LAEmployeeModals = ({
                 <View>
                     <Spacer height={theme.scale.vsc8} />
                     <Text type='ParaLG'>Select leave type</Text>
-                    <Spacer height={theme.scale.sc4} />
+                    <Spacer height={theme.scale.vsc4} />
                     {entitlements && (
                         <LAEntitlementGrid
                             entitlements={entitlements}
                             onEntitlementPress={() => {}}
                         />
                     )}
+                    <Spacer height={theme.scale.vsc10} />
+                    <SelectionButton
+                        label='Select the leave date'
+                        onPress={() => {}}
+                    />
+                    <Spacer height={theme.scale.vsc10} />
                 </View>
             }
         />
@@ -51,8 +57,7 @@ const LAEmployeeModals = ({
                 <View>
                     <Spacer height={theme.scale.vsc8} />
                     <Text type='ParaLG'>Select leave type</Text>
-                    <Spacer height={theme.scale.sc4} />
-                    <Spacer height={theme.scale.sc4} />
+                    <Spacer height={theme.scale.vsc12} />
                     {entitlements && (
                         <LAEntitlementGrid
                             entitlements={entitlements}

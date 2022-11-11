@@ -34,6 +34,7 @@ const colors: Colors = {
     dividerColor: '#D4D4D8',
 
     approved: '#65A30D',
+    green700: '#15803D',
     pending: '#FCD34D',
 };
 
