@@ -1,4 +1,5 @@
 import { UseQueryResult } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { EmployeeHomeScreensProps } from 'navigators/types';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -51,8 +52,10 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         useState<FilterChipsProps[]>(filterChips);
     const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
 
-    const { data: statusTypes }: UseQueryResult<FilterTypes[]> =
-        useFilterTypesData();
+    const {
+        data: statusTypes,
+        isError: isStatusError,
+    }: UseQueryResult<FilterTypes[], AxiosError> = useFilterTypesData();
     const { data: entitlements }: UseQueryResult<Entitlement[]> =
         useEntitlementData();
     const { data: leaveRequests }: UseQueryResult<Section[]> =
@@ -102,7 +105,11 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     useEffect(() => {
-        if (statusTypes !== undefined && filterChipsLocal.length < 2) {
+        if (
+            statusTypes !== undefined &&
+            filterChipsLocal.length < 2 &&
+            !isStatusError
+        ) {
             const chipProps: MultiChipProps[] = statusTypes?.map(
                 (item): MultiChipProps => ({
                     chipId: item.typeId,
