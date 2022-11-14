@@ -1,10 +1,9 @@
-/* eslint-disable import/no-cycle */
 import React from 'react';
 import { View } from 'react-native';
 import { ButtonGroup, MultiButtonProps } from 'src/components/molecules';
 import { styles } from './styles';
 
-export const SortSheetBody = ({
+const SortSheetBody = ({
     sortByButtons,
     onPress,
 }: {
@@ -15,3 +14,5 @@ export const SortSheetBody = ({
         <ButtonGroup buttons={sortByButtons} onPress={onPress} />
     </View>
 );
+
+export default SortSheetBody;

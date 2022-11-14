@@ -19,4 +19,6 @@ export const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         marginLeft: scale.sc10,
     },
+    chipsContainer: { alignSelf: 'flex-start' },
+    commonPadding: { paddingHorizontal: 10 },
 });

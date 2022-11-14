@@ -1,16 +1,13 @@
 /* eslint-disable import/no-cycle */
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { Button, Spacer, Text } from 'src/components/atoms';
 import {
-    ChipGroup,
     FilterButtons,
     Modal,
     MultiButtonProps,
     MultiChipProps,
 } from 'src/components/molecules';
-import { SortSheetBody } from './SortSheetBody';
-import { styles } from './styles';
+import FilterSheetBody from './FilterSheetBody';
+import SortSheetBody from './SortSheetBody';
 
 export type FilterChipsProps = {
     id: number;
@@ -23,6 +20,11 @@ export type FilterProps = {
     filterChips: FilterChipsProps[];
     onSortPress: (multiButtons: MultiButtonProps[]) => void;
     onFilterPress: (multiButtons: FilterChipsProps[]) => void;
+};
+
+export type ResetOptions = {
+    resetEnable: boolean;
+    resetData: boolean;
 };
 
 const LAFilters = ({
@@ -41,6 +43,11 @@ const LAFilters = ({
         FilterChipsProps[]
     >([]);
 
+    const [resetOption, setRestOption] = useState<ResetOptions>({
+        resetData: false,
+        resetEnable: false,
+    });
+
     const getSortByLabel = () => {
         const selectedButton = sortByButtons.filter(
             btn => btn.selected === true,
@@ -51,7 +58,35 @@ const LAFilters = ({
     useEffect(() => {
         const chipsDeepClone = JSON.parse(JSON.stringify(filterChips));
         setFilterChipsLocal(chipsDeepClone);
+        const isChipSelected = filterChips.every(item => {
+            if (item.chips.filter(chip => chip.selected).length > 0) {
+                return false;
+            }
+            return true;
+        });
+        setRestOption({
+            ...resetOption,
+            resetEnable: !isChipSelected,
+        });
     }, [isFilterModalVisible]);
+
+    useEffect(() => {
+        if (resetOption.resetData) {
+            const restedFilterChips = filterChipsLocal.map(item => {
+                item.chips.map(chip => {
+                    const tempChip = chip;
+                    tempChip.selected = false;
+                    return tempChip;
+                });
+                return item;
+            });
+            setFilterChipsLocal([...restedFilterChips]);
+            setRestOption({
+                ...resetOption,
+                resetData: false,
+            });
+        }
+    }, [resetOption.resetData]);
 
     return (
         <>
@@ -79,44 +114,13 @@ const LAFilters = ({
                 isVisible={isFilterModalVisible}
                 header='Filter by:'
                 sheetBody={
-                    <View style={styles.filterSheetContainer}>
-                        {filterChipsLocal.map(item => (
-                            <View
-                                style={{ alignSelf: 'flex-start' }}
-                                key={item.id}>
-                                <Spacer height={5} />
-                                <Text
-                                    style={styles.filterSheetSubHeadings}
-                                    type='ParaSMBold'>
-                                    {item.title}
-                                </Text>
-                                <Spacer height={5} />
-                                <ChipGroup
-                                    chips={item.chips}
-                                    onPress={chips => {
-                                        filterChipsLocal.map(mapChip => {
-                                            const selectedChip = mapChip;
-                                            if (mapChip.id === item.id) {
-                                                selectedChip.chips = chips;
-                                            }
-                                            return selectedChip;
-                                        });
-                                    }}
-                                />
-                                <Spacer height={5} />
-                            </View>
-                        ))}
-                        <Spacer height={5} />
-                        <Button
-                            label='Apply'
-                            mode='outlined'
-                            labelStyle={{ paddingHorizontal: 10 }}
-                            onPress={() => {
-                                setIsFilterModalVisible(state => !state);
-                                onFilterPress(filterChipsLocal);
-                            }}
-                        />
-                    </View>
+                    <FilterSheetBody
+                        filterChipsLocal={filterChipsLocal}
+                        onFilterPress={onFilterPress}
+                        resetOption={resetOption}
+                        setIsFilterModalVisible={setIsFilterModalVisible}
+                        setRestOption={setRestOption}
+                    />
                 }
             />
         </>
