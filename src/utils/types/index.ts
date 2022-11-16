@@ -83,6 +83,10 @@ export interface Entitlement {
     balanceInDays: number;
 }
 
+export type EntitlementSelection = Entitlement & {
+    isSelected: boolean;
+};
+
 export enum Status {
     PENDING = 'PENDING',
     APPROVED = 'APPROVED',
@@ -92,6 +96,14 @@ export enum Status {
 
 export type StatusType = keyof typeof Status;
 
+export enum States {
+    FULLDAY = 'FULLDAY',
+    HALFDAY_MORNING = 'HALFDAY_MORNING',
+    HALFDAY_EVENING = 'HALFDAY_EVENING',
+}
+
+export type LeaveSate = keyof typeof States;
+
 export type EmployeeType = {
     employeeId: string;
     name?: string | null;
@@ -100,8 +112,8 @@ export type EmployeeType = {
 };
 
 export type LeaveRequestType = {
-    startDate: number;
-    endDate: number;
+    startDate: string;
+    endDate: string;
     leaveType: LeaveType;
     reasonForLeave: string | null;
     leaveState: string;
@@ -143,3 +155,12 @@ export enum EmployeeModal {
     'CANCEL_REQUEST_MODAL',
     'LEAVE_INFORMATION',
 }
+
+export type ApplyFormValues = {
+    typeId: number;
+    leaveState?: LeaveSate;
+    requestDesc: string;
+    startDate: string;
+    endDate: string;
+    entitlements: EntitlementSelection[];
+};

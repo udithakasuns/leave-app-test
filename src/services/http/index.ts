@@ -4,3 +4,4 @@ export {
     getHttpLeaveRequest,
     getHttpFilterTypes,
 } from './getRequest';
+export { postHttpApplyLeave } from './postRequest';
