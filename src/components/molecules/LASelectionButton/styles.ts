@@ -6,7 +6,8 @@ const { radius } = theme;
 export const styles = StyleSheet.create({
     buttonContainer: {
         borderRadius: radius.rd8,
-        justifyContent: 'space-between',
+        justifyContent: 'center',
+        flex: 1,
     },
     iconLabelContainer: {
         width: '100%',

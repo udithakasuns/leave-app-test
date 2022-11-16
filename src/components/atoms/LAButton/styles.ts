@@ -15,7 +15,7 @@ export default (
         switch (mode) {
             case 'outlined':
                 return {
-                    background: colors.secondaryColor,
+                    background: colors.secondaryBackground,
                     textIcon: colors.secondaryLabel,
                     borderColor: colors.primaryColor,
                 };

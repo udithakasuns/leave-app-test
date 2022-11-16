@@ -99,7 +99,7 @@ const LAInput = ({
                 style={[styles.container, containerStyle]}>
                 <LAText
                     testID={testIdLabel}
-                    type='SubH'
+                    type='ParaLG'
                     color={styles.label.color}>
                     {label}
                 </LAText>

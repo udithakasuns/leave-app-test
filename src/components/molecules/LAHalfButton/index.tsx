@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Button, Text } from 'src/components/atoms';
-import { TestProps } from 'src/utils/types';
+import { States, TestProps } from 'src/utils/types';
 import styles from './styles';
 
 export type HalfDayProp = {
@@ -21,24 +22,31 @@ interface Props extends Partial<HalfButtonPropsTest> {
     icon: string;
     isHalfSelected: boolean;
     onPress: (title: string) => void;
+    onInitialPress: () => void;
     halfDay: Omit<HalfDayProp, 'isRightSelected' | 'isLeftSelected'>;
+    selectedDay: Pick<HalfDayProp, 'isRightSelected' | 'isLeftSelected'>;
 }
 
 const LAHalfButton = ({
     label,
     onPress,
+    onInitialPress,
     icon,
     isHalfSelected = false,
     halfDay,
+    selectedDay,
     testId,
     testIdRightButton,
     testIdLeftButton,
 }: Props) => {
     const [isHalfDay, setIsHalfDay] = useState<boolean>(isHalfSelected);
-    const [selectedHalfDay, setSelectedHalfDay] =
-        useState<Pick<HalfDayProp, 'isRightSelected' | 'isLeftSelected'>>();
+    const [selectedHalfDay, setSelectedHalfDay] = useState<
+        Pick<HalfDayProp, 'isRightSelected' | 'isLeftSelected'> | undefined
+    >(selectedDay);
 
     const onButtonPress = () => {
+        onInitialPress && onInitialPress();
+        setSelectedHalfDay(undefined);
         setIsHalfDay(true);
     };
 
@@ -70,6 +78,10 @@ const LAHalfButton = ({
         isLeftSelected: selectedHalfDay?.isLeftSelected,
         isRightSelected: selectedHalfDay?.isRightSelected,
     });
+
+    useEffect(() => {
+        setIsHalfDay(isHalfSelected);
+    }, [isHalfSelected]);
 
     if (isHalfDay) {
         return (

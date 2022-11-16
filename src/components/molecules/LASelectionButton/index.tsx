@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import { Button, IconSize } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import { AtLeast, TestProps } from 'src/utils/types';
@@ -13,6 +14,7 @@ interface Props extends Partial<TestProps> {
     icon: string;
     selectedIcon: string;
     iconSize: IconSize;
+    buttonStyle: StyleProp<ViewStyle>;
 }
 
 const LASelectionButton = ({
@@ -23,6 +25,7 @@ const LASelectionButton = ({
     icon = 'arrow-forward',
     selectedIcon = 'check-circle',
     iconSize,
+    buttonStyle,
 }: AtLeast<Props, 'label' | 'onPress'>) => (
     <Button
         testID={testId}
@@ -33,7 +36,7 @@ const LASelectionButton = ({
         iconSize={iconSize}
         iconColor={isSelected ? colors.green700 : colors.tertiaryLabel}
         iconLabelContainerStyle={styles.iconLabelContainer}
-        buttonStyle={styles.buttonContainer}
+        buttonStyle={[styles.buttonContainer, buttonStyle]}
         onPress={onPress}
     />
 );

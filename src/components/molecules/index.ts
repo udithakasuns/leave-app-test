@@ -8,5 +8,6 @@ export { default as FilterButtons } from './LAFilterButtons';
 export { default as MonthSection } from './LAMonthSection';
 export { default as ButtonGroup } from './LAButtonGroup';
 export { default as SelectionButton } from './LASelectionButton';
+export { default as ButtonDock } from './LAButtonDock';
 export type { MultiChipProps } from './LAChipGroup';
 export type { MultiButtonProps } from './LAButtonGroup';
