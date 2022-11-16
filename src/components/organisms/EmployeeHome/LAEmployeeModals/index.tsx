@@ -1,72 +1,79 @@
-/* eslint-disable import/no-cycle */
-import React from 'react';
+import { FormikProps } from 'formik';
+import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Spacer, Text } from 'src/components/atoms';
-import { Modal, SelectionButton } from 'src/components/molecules';
+import { Spacer } from 'src/components/atoms';
+import { Modal } from 'src/components/molecules';
 import theme from 'src/utils/theme';
-import { AtLeast, EmployeeModal, TestProps } from 'src/utils/types';
-import LAEntitlementGrid from '../LAEntitlementGrid';
-import { EntitlementSelection } from '../LALeaveRequestList';
+import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
+import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
 
-export type LAEmployeeModalProps = {
+export type ModalProps = {
     modalType: EmployeeModal;
-    entitlements?: EntitlementSelection[];
 };
+
+export type LAEmployeeModalProps = Partial<ModalProps>;
 
 interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     onClose: () => void;
+    formik: FormikProps<ApplyFormValues>;
+    onPressSelectDate: () => void;
+    onBackPress: (modalType: EmployeeModal) => void;
 }
 
 const LAEmployeeModals = ({
     modalType,
     onClose,
-    entitlements,
-}: AtLeast<Props, 'onClose'>) => (
-    <>
-        <Modal
-            onClose={onClose}
-            isVisible={modalType === EmployeeModal.APPLY_LEAVE_MODAL}
-            header='Apply Leave'
-            style={{ paddingBottom: theme.scale.sc24 }}
-            sheetBody={
-                <View>
-                    <Spacer height={theme.scale.vsc8} />
-                    <Text type='ParaLG'>Select leave type</Text>
-                    <Spacer height={theme.scale.vsc4} />
-                    {entitlements && (
-                        <LAEntitlementGrid
-                            entitlements={entitlements}
-                            onEntitlementPress={() => {}}
+    formik,
+    onBackPress,
+    onPressSelectDate,
+}: Props) => {
+    const [isHalfSelected, setIsHalfSelected] = useState(false);
+    const onCancellation = () => {
+        setIsHalfSelected(false);
+        formik.resetForm();
+        const entitlementsDeepClone = formik.values.entitlements.map(item => {
+            const tempEntitlement = item;
+            tempEntitlement.isSelected = false;
+            return tempEntitlement;
+        });
+        formik.setFieldValue('entitlements', entitlementsDeepClone);
+        onClose();
+    };
+    return (
+        <>
+            {modalType === EmployeeModal.APPLY_LEAVE_MODAL && (
+                <Modal
+                    onClose={onCancellation}
+                    isVisible
+                    header='Apply Leave'
+                    style={{ paddingBottom: theme.scale.sc24 }}
+                    sheetBody={
+                        <ApplyLeaveSheetBody
+                            formik={formik}
+                            onPressSelectDate={onPressSelectDate}
+                            isHalfSelected={isHalfSelected}
+                            setIsHalfSelected={setIsHalfSelected}
+                            onCancellation={onCancellation}
                         />
-                    )}
-                    <Spacer height={theme.scale.vsc10} />
-                    <SelectionButton
-                        label='Select the leave date'
-                        onPress={() => {}}
-                    />
-                    <Spacer height={theme.scale.vsc10} />
-                </View>
-            }
-        />
-        <Modal
-            onClose={onClose}
-            isVisible={modalType === EmployeeModal.APPLY_LEAVE_MODAL}
-            header='Choose Date'
-            style={{ paddingBottom: theme.scale.sc24 }}
-            sheetBody={
-                <View>
-                    <Spacer height={theme.scale.vsc8} />
-                    <Text type='ParaLG'>Select leave type</Text>
-                    <Spacer height={theme.scale.vsc12} />
-                    {entitlements && (
-                        <LAEntitlementGrid
-                            entitlements={entitlements}
-                            onEntitlementPress={() => {}}
-                        />
-                    )}
-                </View>
-            }
-        />
-    </>
-);
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.CHOSE_DATE_MODAL && (
+                <Modal
+                    onClose={() => onBackPress(EmployeeModal.CHOSE_DATE_MODAL)}
+                    isVisible
+                    header='Choose Date'
+                    headerIcon='arrow-back'
+                    style={{ paddingBottom: theme.scale.sc24 }}
+                    sheetBody={
+                        <View>
+                            <Spacer height={theme.scale.vsc8} />
+                            <Spacer height={theme.scale.vsc12} />
+                        </View>
+                    }
+                />
+            )}
+        </>
+    );
+};
 export default LAEmployeeModals;

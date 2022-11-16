@@ -6,24 +6,16 @@ import { MonthSection, RequestListItem } from 'src/components/molecules';
 import { getStartEndDate } from 'src/utils/helpers/dateHandler';
 import { getLeaveUnicode } from 'src/utils/helpers/unicodeHandler';
 import theme from 'src/utils/theme';
-import {
-    Entitlement,
-    LeaveRequestType,
-    Section,
-    TestProps,
-} from 'src/utils/types';
+import { LeaveRequestType, Section, TestProps } from 'src/utils/types';
 import { LAFilters } from '../..';
 import { FilterProps } from '../../Global/LAFilters';
 import { styles } from './styles';
 
 const { colors } = theme;
 
-export type EntitlementSelection = Entitlement & {
-    isSelected?: boolean;
-};
-
 interface Props extends Partial<TestProps>, FilterProps {
     leaveRequests: Section[];
+    onPressRequestItem: (item: LeaveRequestType) => void;
 }
 
 const LALeaveRequestList = ({
@@ -32,6 +24,7 @@ const LALeaveRequestList = ({
     onSortPress,
     onFilterPress,
     filterChips,
+    onPressRequestItem,
 }: Props) => {
     const Item = ({ item }: { item: LeaveRequestType }) => (
         <RequestListItem
@@ -40,7 +33,7 @@ const LALeaveRequestList = ({
             entitlement={`${getLeaveUnicode(item.leaveType)}  ${
                 item.leaveType.name
             }`}
-            onPress={() => {}}
+            onPress={() => onPressRequestItem(item)}
         />
     );
 
