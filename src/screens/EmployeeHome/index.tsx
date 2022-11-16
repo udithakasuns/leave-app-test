@@ -1,4 +1,4 @@
-import { UseQueryResult } from '@tanstack/react-query';
+import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { EmployeeHomeScreensProps } from 'navigators/types';
 import React, { useEffect, useState } from 'react';
@@ -12,22 +12,25 @@ import {
     LALeaveRequestList,
 } from 'src/components/organisms';
 import { LAEmployeeModalProps } from 'src/components/organisms/EmployeeHome/LAEmployeeModals';
-import { EntitlementSelection } from 'src/components/organisms/EmployeeHome/LAEntitlementGrid';
 import { FilterChipsProps } from 'src/components/organisms/Global/LAFilters';
 import { getGreetingsByTime } from 'src/utils/helpers/dateHandler';
 import { filterChips } from 'src/utils/helpers/defaultData';
 import { useEntitlementData } from 'src/utils/hooks/useEntitlementData';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
-import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequest';
+import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
 import theme from 'src/utils/theme';
 import {
     EmployeeModal,
     Entitlement,
+    EntitlementSelection,
     FilterTypes,
     LeaveRequestParams,
+    LeaveRequestType,
     Section,
 } from 'src/utils/types';
+import { postHttpApplyLeave } from 'src/services/http';
 import { styles } from './styles';
+import { useFormik } from '../../utils/hooks/useFormik';
 
 const { scale } = theme;
 
@@ -46,7 +49,6 @@ const sortByButtons: MultiButtonProps[] = [
 const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [requestsParams, setRequestsParams] = useState<LeaveRequestParams>({
         sortKey: 'creationDate',
-        size: 5,
     });
     const [filterChipsLocal, setFilterChipsLocal] =
         useState<FilterChipsProps[]>(filterChips);
@@ -56,10 +58,30 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         data: statusTypes,
         isError: isStatusError,
     }: UseQueryResult<FilterTypes[], AxiosError> = useFilterTypesData();
+
+    const { data: leaveRequests, refetch }: UseQueryResult<Section[]> =
+        useLeaveRequestData(requestsParams, true);
+
+    const handleMutationOnSuccess = () => {
+        setEmployeeModal({
+            modalType: undefined,
+        });
+        refetch();
+    };
+
+    const { mutate } = useMutation(['applyLeave'], postHttpApplyLeave, {
+        onSuccess: handleMutationOnSuccess,
+    });
+
+    const [formik] = useFormik(mutate);
+
     const { data: entitlements }: UseQueryResult<Entitlement[]> =
-        useEntitlementData();
-    const { data: leaveRequests }: UseQueryResult<Section[]> =
-        useLeaveRequestData(requestsParams);
+        useEntitlementData((data: Entitlement[]) => {
+            const entitlementsDeepClone: EntitlementSelection[] = JSON.parse(
+                JSON.stringify(data),
+            );
+            formik.setFieldValue('entitlements', entitlementsDeepClone);
+        });
 
     const handleSortBy = (muiltButtons: MultiButtonProps[]) => {
         const selectedButton = muiltButtons.filter(
@@ -98,10 +120,55 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             }
             return tempEntitlement;
         });
+        formik.setFieldValue('entitlements', entitlementsDeepClone);
+        formik.setFieldValue('typeId', entitlement.leaveType.typeId);
         setEmployeeModal({
-            entitlements: entitlementsDeepClone,
             modalType: EmployeeModal.APPLY_LEAVE_MODAL,
         });
+    };
+
+    const handleRequestItemPress = (item: LeaveRequestType) => {
+        switch (item.status) {
+            case 'PENDING':
+                setEmployeeModal({
+                    modalType: EmployeeModal.PENDING_LEAVE_MODAL,
+                });
+                break;
+            case 'APPROVED':
+                setEmployeeModal({
+                    modalType: EmployeeModal.APPROVED_LEAVE_MODAL,
+                });
+                break;
+            case 'DENIED':
+                setEmployeeModal({
+                    modalType: EmployeeModal.DENIED_LEAVE_MODAL,
+                });
+                break;
+            default:
+                break;
+        }
+    };
+
+    const handleDateModalPress = () =>
+        setEmployeeModal({
+            ...employeeModal,
+            modalType: EmployeeModal.CHOSE_DATE_MODAL,
+        });
+
+    const handleDateModalBackPress = (modalType: EmployeeModal) => {
+        switch (modalType) {
+            case EmployeeModal.CHOSE_DATE_MODAL:
+                setEmployeeModal({
+                    ...employeeModal,
+                    modalType: EmployeeModal.APPLY_LEAVE_MODAL,
+                });
+                break;
+            default:
+                setEmployeeModal({
+                    modalType: EmployeeModal.LEAVE_INFORMATION,
+                });
+                break;
+        }
     };
 
     useEffect(() => {
@@ -142,7 +209,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 <Spacer height={8} />
                 {entitlements && (
                     <LAEntitlementGrid
-                        entitlements={entitlements}
+                        entitlements={entitlements as EntitlementSelection[]}
                         onEntitlementPress={handleEntitlementPress}
                     />
                 )}
@@ -155,6 +222,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                             sortByButtons={sortByButtons}
                             onSortPress={handleSortBy}
                             onFilterPress={handleFilter}
+                            onPressRequestItem={handleRequestItemPress}
                             filterChips={JSON.parse(
                                 JSON.stringify(filterChipsLocal),
                             )}
@@ -183,8 +251,10 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             </View>
             <LAEmployeeModals
                 modalType={employeeModal?.modalType}
-                entitlements={employeeModal?.entitlements ?? entitlements}
                 onClose={() => setEmployeeModal(undefined)}
+                formik={formik}
+                onPressSelectDate={handleDateModalPress}
+                onBackPress={handleDateModalBackPress}
             />
         </View>
     );

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getHttpEntitlements } from 'src/services/http';
 import { Entitlement } from '../types';
 
-export const useEntitlementData = () =>
+export const useEntitlementData = (onSuccess: (data: Entitlement[]) => void) =>
     useQuery<Entitlement[]>(['entitlements'], getHttpEntitlements, {
         refetchOnMount: true,
         refetchOnWindowFocus: true,
@@ -10,4 +10,5 @@ export const useEntitlementData = () =>
             const jsonData: Entitlement[] = json;
             return jsonData;
         },
+        onSuccess,
     });

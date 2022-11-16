@@ -3,14 +3,21 @@ import { getHttpLeaveRequest } from 'src/services/http';
 import { getFormattedMonth } from '../helpers/dateHandler';
 import { LeaveRequestParams, LeaveRequestType, Section } from '../types';
 
-export const useLeaveRequestData = (params?: LeaveRequestParams) =>
+export const useLeaveRequestData = (
+    params?: LeaveRequestParams,
+    limit?: boolean,
+) =>
     useQuery(['leaveRequests', params], () => getHttpLeaveRequest(params), {
         refetchOnMount: true,
         refetchOnWindowFocus: true,
         select: json => {
-            const requestItems: LeaveRequestType[] = json[0].items;
-            const monthTitles: string[] = requestItems.map(item =>
+            let requestItems: LeaveRequestType[] = json[0].items;
+            if (limit) requestItems = requestItems.slice(0, 5);
+            let monthTitles: string[] = requestItems.map(item =>
                 getFormattedMonth(item.startDate),
+            );
+            monthTitles = monthTitles.filter(
+                (item, pos) => monthTitles.indexOf(item) === pos,
             );
             const leaveRequestsData: Section[] = monthTitles.map(
                 (item: string): Section => ({
