@@ -1,12 +1,14 @@
 import { DateTime } from 'luxon';
 
-export const getFormattedDate = (date: number): DateTime => {
+export const getFormattedDate = (date: string): DateTime => {
     const dateFormate = new Date(date);
-    const dateIOS = DateTime.fromISO(dateFormate.toISOString());
+    const dateIOS = DateTime.fromISO(dateFormate.toISOString(), {
+        locale: 'en',
+    });
     return dateIOS;
 };
 
-export const getFormattedDay = (date: number): string => {
+export const getFormattedDay = (date: string): string => {
     const day = getFormattedDate(date).toLocaleString({ day: 'numeric' });
     switch (Number(day)) {
         case 1:
@@ -23,12 +25,12 @@ export const getFormattedDay = (date: number): string => {
     }
 };
 
-export const getFormattedMonth = (date: number): string => {
+export const getFormattedMonth = (date: string): string => {
     const month = getFormattedDate(date).toLocaleString({ month: 'long' });
     return month;
 };
 
-export const getStartEndDate = (start: number, end: number) => {
+export const getStartEndDate = (start: string, end: string) => {
     if (start === end) {
         return getFormattedDay(start);
     }
