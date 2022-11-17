@@ -23,7 +23,7 @@ export const getHttpLeaveRequest = async (
 };
 
 export const getHttpFilterTypes = async () => {
-    const apiConfig = await axiosConfig('accessToken');
+    const apiConfig = await axiosConfig('accessToken', { filterByInUse: true });
     const res = await axios.get(`${API_BASE_URL}/v1/leaves/types`, apiConfig);
     return res.data.results;
 };

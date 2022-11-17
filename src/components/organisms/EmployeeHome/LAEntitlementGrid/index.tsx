@@ -15,8 +15,8 @@ const LAEntitlementGrid = ({ entitlements, onEntitlementPress }: Props) => {
         <Pressable onPress={() => onEntitlementPress(item)}>
             <LeaveCard
                 isSelected={item.isSelected}
-                takenLeaves={item.totalDaysUsed.toString()}
-                totalLeaves={item.balanceInDays.toString()}
+                takenLeaves={item.balanceInDays.toString()}
+                totalLeaves={item.totalDaysAllocated.toString()}
                 uniCodeIcon={getLeaveUnicode(item.leaveType)}
                 leaveType={item.leaveType.name}
             />

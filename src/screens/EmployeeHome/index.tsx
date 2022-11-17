@@ -8,6 +8,7 @@ import { MultiButtonProps, MultiChipProps } from 'src/components/molecules';
 import {
     LAAppBar,
     LAEmployeeModals,
+    LAEmployeePopUp,
     LAEntitlementGrid,
     LALeaveRequestList,
 } from 'src/components/organisms';
@@ -21,6 +22,7 @@ import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
 import theme from 'src/utils/theme';
 import {
     EmployeeModal,
+    EmployeePopup,
     Entitlement,
     EntitlementSelection,
     FilterTypes,
@@ -29,6 +31,7 @@ import {
     Section,
 } from 'src/utils/types';
 import { postHttpApplyLeave } from 'src/services/http';
+import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
 import { styles } from './styles';
 import { useFormik } from '../../utils/hooks/useFormik';
 
@@ -53,6 +56,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [filterChipsLocal, setFilterChipsLocal] =
         useState<FilterChipsProps[]>(filterChips);
     const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
+    const [employeePopup, setEmployeePopup] = useState<LAEmployeePopUpProps>();
 
     const {
         data: statusTypes,
@@ -128,6 +132,9 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     const handleRequestItemPress = (item: LeaveRequestType) => {
+        setEmployeePopup({
+            modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
+        });
         switch (item.status) {
             case 'PENDING':
                 setEmployeeModal({
@@ -255,6 +262,10 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 formik={formik}
                 onPressSelectDate={handleDateModalPress}
                 onBackPress={handleDateModalBackPress}
+            />
+            <LAEmployeePopUp
+                modalType={employeePopup?.modalType}
+                onClose={() => setEmployeePopup(undefined)}
             />
         </View>
     );

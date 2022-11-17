@@ -157,6 +157,11 @@ export enum EmployeeModal {
     'LEAVE_INFORMATION',
 }
 
+export enum EmployeePopup {
+    'LEAVE_REQUEST_CONFIRMATION',
+    'LEAVE_REQUEST_REVOKE',
+}
+
 export type ApplyFormValues = {
     typeId: number;
     leaveState?: LeaveSate;

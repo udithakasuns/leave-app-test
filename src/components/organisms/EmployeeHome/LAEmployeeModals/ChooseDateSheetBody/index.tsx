@@ -167,7 +167,7 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
             <ButtonDock
                 primaryButton={{
                     label: 'Confirm Date',
-                    onPress: () => handleConfirmationPress,
+                    onPress: handleConfirmationPress,
                 }}
                 secondaryButton={{
                     label: 'Cancel',
