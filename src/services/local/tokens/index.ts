@@ -6,7 +6,7 @@ const keys = {
     USER_TOKENS: 'USER_TOKENS',
 };
 
-export const saveUserTokens = async ({
+export const localSaveUserTokens = async ({
     idToken,
     accessToken,
     refreshToken,
@@ -25,7 +25,7 @@ export const saveUserTokens = async ({
     }
 };
 
-export const getUserTokenByType = async (
+export const localGetUserTokenByType = async (
     tokenType: UserTokenType,
 ): Promise<string> => {
     try {
@@ -42,7 +42,7 @@ export const getUserTokenByType = async (
     }
 };
 
-export const getAllUserTokens = async (): Promise<{
+export const localGetAllUserTokens = async (): Promise<{
     idToken: string;
     accessToken: string;
     refreshToken: string;
@@ -64,22 +64,22 @@ export const getAllUserTokens = async (): Promise<{
     }
 };
 
-export const updateUserTokenByType = async (
+export const localUpdateUserTokenByType = async (
     tokenType: UserTokenType,
     token: string,
 ) => {
     try {
-        const allTokens = await getAllUserTokens();
+        const allTokens = await localGetAllUserTokens();
         if (allTokens) {
             const updatedTokens = { ...allTokens, [tokenType]: token };
-            saveUserTokens(updatedTokens);
+            localSaveUserTokens(updatedTokens);
         }
     } catch (error) {
         console.log('User token not updated in encrypted storage:: ', error);
     }
 };
 
-export const deleteAllUserTokens = async () => {
+export const localDeleteAllUserTokens = async () => {
     try {
         await EncryptedStorage.removeItem(keys.USER_TOKENS);
     } catch (error) {
@@ -87,7 +87,7 @@ export const deleteAllUserTokens = async () => {
     }
 };
 
-export const clearEncryptedStorage = async () => {
+export const localClearEncryptedStorage = async () => {
     try {
         await EncryptedStorage.clear();
     } catch (error) {
