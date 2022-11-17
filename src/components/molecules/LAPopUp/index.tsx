@@ -11,8 +11,9 @@ import {
     ViewStyle,
 } from 'react-native';
 import { Spacer, Text } from 'src/components/atoms';
+import theme from 'src/utils/theme';
 import { TestProps } from 'src/utils/types';
-import { styles } from './style';
+import { styles } from './styles';
 
 type DefaultHeaderProps = {
     title: string;
@@ -39,11 +40,14 @@ const LAPopUp: React.FC<Props> = ({
 }) => {
     const DefaultHeaderContainer = () => (
         <View style={styles.headerContainer}>
-            <Text type='H2Bold' style={{ textAlign: 'center' }}>
+            <Text type='H1Bold' style={styles.headerText}>
                 {defaultHeader?.title}
             </Text>
             <Spacer height={5} />
-            <Text type='ParaLG' color='#737373' style={{ textAlign: 'center' }}>
+            <Text
+                type='ParaLG'
+                color={theme.colors.primaryGrayLabel}
+                style={styles.headerText}>
                 {defaultHeader?.subTitle}
             </Text>
         </View>
