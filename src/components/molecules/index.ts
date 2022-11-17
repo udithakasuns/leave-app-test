@@ -10,6 +10,8 @@ export { default as ButtonGroup } from './LAButtonGroup';
 export { default as SocialButton } from './LASocialButton';
 export { default as SelectionButton } from './LASelectionButton';
 export { default as ButtonDock } from './LAButtonDock';
+export { default as AvatarChip } from './LAAvatarChip';
+export { default as RequestDetailsSection } from './LARequestDetailsSection';
 export { default as PopUp } from './LAPopUp';
 export type { MultiChipProps } from './LAChipGroup';
 export type { MultiButtonProps } from './LAButtonGroup';

@@ -5,3 +5,4 @@ export {
     getHttpFilterTypes,
 } from './getRequest';
 export { postHttpApplyLeave } from './postRequest';
+export { deleteHttpApplyLeave } from './deleteRequest';

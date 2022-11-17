@@ -71,17 +71,17 @@ export const getCalendarRangeDate = (
 
     let calendarDate = DateTime.fromISO(
         startDateFormate.toISOString(),
-    ).toFormat('MMM yyyy');
+    ).toFormat('MMM');
 
     calendarDate = `${getFormattedDay(
         startDateFormate.toDateString(),
     )} ${calendarDate}`;
 
-    if (endDate) {
+    if (endDate && startDate !== endDate) {
         const endDateFormate = new Date(endDate);
         const endCalendarDate = DateTime.fromISO(
             endDateFormate.toISOString(),
-        ).toFormat('MMM yyyy');
+        ).toFormat('MMM');
         const endDateString = `${getFormattedDay(
             endDateFormate.toDateString(),
         )} ${endCalendarDate}`;

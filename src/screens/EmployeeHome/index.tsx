@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { EmployeeHomeScreensProps } from 'navigators/types';
@@ -28,9 +29,10 @@ import {
     FilterTypes,
     LeaveRequestParams,
     LeaveRequestType,
+    RequestDetails,
     Section,
 } from 'src/utils/types';
-import { postHttpApplyLeave } from 'src/services/http';
+import { deleteHttpApplyLeave, postHttpApplyLeave } from 'src/services/http';
 import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
 import { styles } from './styles';
 import { useFormik } from '../../utils/hooks/useFormik';
@@ -66,16 +68,48 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const { data: leaveRequests, refetch }: UseQueryResult<Section[]> =
         useLeaveRequestData(requestsParams, true);
 
-    const handleMutationOnSuccess = () => {
+    const handleMutationOnSuccess = (data: any) => {
         setEmployeeModal({
             modalType: undefined,
         });
         refetch();
+        const tempDetails: RequestDetails = {
+            durationDays: '1 Day',
+            leaveRequest: undefined,
+        };
+        tempDetails.leaveRequest = data[0];
+        tempDetails.recipient = [
+            {
+                employeeId: '',
+                name: 'Kalana',
+                authPic:
+                    'https://media-exp1.licdn.com/dms/image/C5603AQGxMAXX8F3o3Q/profile-displayphoto-shrink_800_800/0/1660713820771?e=2147483647&v=beta&t=VSvPFV6_n8DNd85moQHh2f1DaftBJ4XFxu6at9SUW7g',
+            },
+        ];
+        setEmployeePopup({
+            requestDetails: tempDetails,
+            modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
+        });
     };
 
     const { mutate } = useMutation(['applyLeave'], postHttpApplyLeave, {
         onSuccess: handleMutationOnSuccess,
     });
+
+    const handleDeleteOnSuccess = () => {
+        setEmployeeModal({
+            ...employeeModal,
+            modalType: EmployeeModal.APPLY_LEAVE_MODAL,
+        });
+    };
+
+    const { mutate: deleteMutate } = useMutation(
+        ['applyLeaveDelete'],
+        deleteHttpApplyLeave,
+        {
+            onSuccess: handleDeleteOnSuccess,
+        },
+    );
 
     const [formik] = useFormik(mutate);
 
@@ -132,9 +166,6 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     const handleRequestItemPress = (item: LeaveRequestType) => {
-        setEmployeePopup({
-            modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
-        });
         switch (item.status) {
             case 'PENDING':
                 setEmployeeModal({
@@ -266,6 +297,20 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             <LAEmployeePopUp
                 modalType={employeePopup?.modalType}
                 onClose={() => setEmployeePopup(undefined)}
+                requestDetails={employeePopup?.requestDetails}
+                onConfirmationUndoPress={() => {
+                    setEmployeePopup(undefined);
+                    deleteMutate(
+                        employeePopup?.requestDetails?.leaveRequest
+                            ?.leaveRequestId ?? 0,
+                    );
+                }}
+                onConfirmationHomePress={() => {
+                    setEmployeePopup(undefined);
+                    formik.resetForm();
+                    formik.setFieldValue('entitlements', entitlements);
+                    refetch();
+                }}
             />
         </View>
     );

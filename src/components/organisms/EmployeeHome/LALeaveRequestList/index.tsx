@@ -4,7 +4,7 @@ import { ScrollView, SectionList, View } from 'react-native';
 import { Chip, Divider, Spacer } from 'src/components/atoms';
 import { MonthSection, RequestListItem } from 'src/components/molecules';
 import { getStartEndDate } from 'src/utils/helpers/dateHandler';
-import { getLeaveUnicode } from 'src/utils/helpers/unicodeHandler';
+import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import theme from 'src/utils/theme';
 import { LeaveRequestType, Section, TestProps } from 'src/utils/types';
 import { LAFilters } from '../..';
@@ -30,9 +30,10 @@ const LALeaveRequestList = ({
         <RequestListItem
             date={getStartEndDate(item.startDate, item.endDate)}
             status={item.status}
-            entitlement={`${getLeaveUnicode(item.leaveType)}  ${
-                item.leaveType.name
-            }`}
+            entitlement={getEntitlementChipText(
+                item.leaveType,
+                item.leaveType.name,
+            )}
             onPress={() => onPressRequestItem(item)}
         />
     );

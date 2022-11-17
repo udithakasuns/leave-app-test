@@ -18,3 +18,21 @@ export const getLeaveUnicode = (leaveType: LeaveType) => {
             return '';
     }
 };
+
+export const getLeaveName = (leaveType: LeaveType) => {
+    switch (leaveType.typeId) {
+        case 1:
+            return 'Annual';
+        case 2:
+            return 'Casual';
+        case 3:
+            return 'Medical';
+        default:
+            return '';
+    }
+};
+
+export const getEntitlementChipText = (leaveType: LeaveType, name: string) =>
+    `${getLeaveUnicode(leaveType)}  ${
+        name === '' ? getLeaveName(leaveType) : name
+    }`;
