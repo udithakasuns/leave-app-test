@@ -7,6 +7,7 @@ export { default as ChipGroup } from './LAChipGroup';
 export { default as FilterButtons } from './LAFilterButtons';
 export { default as MonthSection } from './LAMonthSection';
 export { default as ButtonGroup } from './LAButtonGroup';
+export { default as SocialButton } from './LASocialButton';
 export { default as SelectionButton } from './LASelectionButton';
 export { default as ButtonDock } from './LAButtonDock';
 export { default as PopUp } from './LAPopUp';

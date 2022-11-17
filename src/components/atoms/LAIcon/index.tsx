@@ -3,6 +3,7 @@ import React from 'react';
 import { ViewStyle } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SvgIcon } from 'src/assets/icons';
 import theme from '../../../utils/theme';
 import { AtLeast, TestProps } from '../../../utils/types';
 import { styles } from './styles';
@@ -19,7 +20,7 @@ export enum IconSize {
     xxLarge = scale.sc32,
 }
 
-export type IconLibrary = 'material' | 'community';
+export type IconLibrary = 'material' | 'community' | 'svg';
 
 interface Props extends TestProps {
     name: string;
@@ -104,6 +105,8 @@ const LAIcon = ({
                 testID={testId}
             />
         );
+
+    if (library === 'svg') return <SvgIcon name={name} />;
 
     return (
         <MaterialIcon

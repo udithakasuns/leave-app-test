@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { SplashScreenProps } from 'navigators/types';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -24,6 +25,7 @@ const Splash: React.FC<SplashScreenProps> = ({ navigation }) => {
         async function fetchData() {
             // You can await here
             const response = await httpUserLoginApi();
+            // eslint-disable-next-line no-console
             console.log('s', response);
             // ...
         }
