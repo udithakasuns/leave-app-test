@@ -113,6 +113,7 @@ export type EmployeeType = {
 };
 
 export type LeaveRequestType = {
+    leaveRequestId: number;
     startDate: string;
     endDate: string;
     leaveType: LeaveType;
@@ -122,6 +123,12 @@ export type LeaveRequestType = {
     requestDesc?: string | null;
     reviewerComment?: string | null;
     employee: EmployeeType;
+};
+
+export type RequestDetails = {
+    leaveRequest?: AtLeast<LeaveRequestType, 'leaveType'>;
+    durationDays: string;
+    recipient?: EmployeeType[];
 };
 
 export interface Section {
