@@ -22,6 +22,7 @@ export type Colors = {
     approved: string;
     pending: string;
     green700: string;
+    gray400: string;
 };
 
 // Custom Utility type to set attributes required.

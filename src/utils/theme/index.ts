@@ -30,6 +30,7 @@ const colors: Colors = {
     errorBackground: '#FEE2E2',
     disabledColor: '#CFCFCF',
     gray600: '#52525B',
+    gray400: '#A1A1AA',
     gray300: '#E8E8E8',
     dividerColor: '#D4D4D8',
 

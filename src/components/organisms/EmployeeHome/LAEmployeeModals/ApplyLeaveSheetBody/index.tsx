@@ -1,12 +1,13 @@
 import { FormikProps } from 'formik';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { Input, Spacer, Text } from 'src/components/atoms';
 import {
     ButtonDock,
     HalfButton,
     SelectionButton,
 } from 'src/components/molecules';
+import { getCalendarRangeDate } from 'src/utils/helpers/dateHandler';
 import theme from 'src/utils/theme';
 import {
     ApplyFormValues,
@@ -82,9 +83,7 @@ const ApplyLeaveSheetBody = ({
     };
 
     return (
-        <ScrollView
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps='handled'>
+        <View>
             <Spacer height={scale.vsc8} />
             <Text type='ParaLG'>Select leave type</Text>
             <Spacer height={scale.vsc4} />
@@ -96,7 +95,15 @@ const ApplyLeaveSheetBody = ({
             )}
             <Spacer height={scale.vsc10} />
             <SelectionButton
-                label='Select the leave date'
+                label={
+                    formik.values.startDate
+                        ? getCalendarRangeDate(
+                              formik.values.startDate,
+                              formik.values.endDate,
+                          )
+                        : 'Select the leave date'
+                }
+                isSelected={!!formik.values.startDate}
                 onPress={onPressSelectDate}
             />
             <Spacer height={scale.vsc10} />
@@ -104,11 +111,7 @@ const ApplyLeaveSheetBody = ({
                 <>
                     <Text type='ParaLG'>Select leave type</Text>
                     <Spacer height={scale.vsc4} />
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                        }}>
+                    <View style={styles.halfButtonsStyle}>
                         <SelectionButton
                             label='Full Day'
                             isSelected={getStateValidation(States.FULLDAY)}
@@ -141,9 +144,9 @@ const ApplyLeaveSheetBody = ({
                             }}
                         />
                     </View>
+                    <Spacer height={scale.vsc8} />
                 </>
             )}
-            <Spacer height={scale.vsc10} />
             <Input
                 type='COMMENT'
                 label='Comment'
@@ -170,7 +173,7 @@ const ApplyLeaveSheetBody = ({
                 }}
             />
             <Spacer height={scale.vsc10} />
-        </ScrollView>
+        </View>
     );
 };
 export default ApplyLeaveSheetBody;

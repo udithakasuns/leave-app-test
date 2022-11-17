@@ -1,11 +1,10 @@
 import { FormikProps } from 'formik';
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import { Spacer } from 'src/components/atoms';
 import { Modal } from 'src/components/molecules';
-import theme from 'src/utils/theme';
 import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
 import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
+import ChooseDateSheetBody from './ChooseDateSheetBody';
+import { styles } from './styles';
 
 export type ModalProps = {
     modalType: EmployeeModal;
@@ -46,7 +45,7 @@ const LAEmployeeModals = ({
                     onClose={onCancellation}
                     isVisible
                     header='Apply Leave'
-                    style={{ paddingBottom: theme.scale.sc24 }}
+                    style={styles.commonStyle}
                     sheetBody={
                         <ApplyLeaveSheetBody
                             formik={formik}
@@ -64,12 +63,12 @@ const LAEmployeeModals = ({
                     isVisible
                     header='Choose Date'
                     headerIcon='arrow-back'
-                    style={{ paddingBottom: theme.scale.sc24 }}
+                    style={styles.commonStyle}
                     sheetBody={
-                        <View>
-                            <Spacer height={theme.scale.vsc8} />
-                            <Spacer height={theme.scale.vsc12} />
-                        </View>
+                        <ChooseDateSheetBody
+                            formik={formik}
+                            onBackPress={onBackPress}
+                        />
                     }
                 />
             )}

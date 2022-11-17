@@ -15,4 +15,8 @@ export const styles = StyleSheet.create({
     commentContainerStyle: {
         margin: 0,
     },
+    halfButtonsStyle: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
 });

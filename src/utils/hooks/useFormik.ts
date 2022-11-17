@@ -2,6 +2,7 @@ import { UseMutateFunction } from '@tanstack/react-query';
 import { FormikProps, useFormik as useForm } from 'formik';
 import { ApplyFormValues } from 'src/utils/types';
 import * as yup from 'yup';
+import { States } from '../types/index';
 
 export const useFormik = (
     mutate: UseMutateFunction<
@@ -27,10 +28,11 @@ export const useFormik = (
         onSubmit: values => {
             mutate({
                 typeId: values.typeId,
-                startDate: '2022-10-06',
-                endDate: '2022-10-06',
+                startDate: values.startDate,
+                endDate:
+                    values.endDate === '' ? values.startDate : values.endDate,
                 requestDesc: values.requestDesc,
-                leaveState: values.leaveState,
+                leaveState: values.leaveState ?? States.FULLDAY,
             });
         },
     });

@@ -54,8 +54,12 @@ const LAModal = ({
             }}
             swipeDirection={['down']}>
             <View style={[bodyContainer, style]}>
-                {header && <DefaultHeaderContainer />}
-                {sheetBody}
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps='handled'>
+                    {header && <DefaultHeaderContainer />}
+                    {sheetBody}
+                </ScrollView>
             </View>
         </Modal>
     );

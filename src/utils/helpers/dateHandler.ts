@@ -51,3 +51,42 @@ export const getGreetingsByTime = (): string => {
 
     return 'Good Evening!';
 };
+
+export const getCalendarDate = (date: string): string => {
+    const dateFormate = new Date(date);
+    let calendarDate = DateTime.fromISO(dateFormate.toISOString()).toFormat(
+        'MMM yyyy',
+    );
+    calendarDate = `${getFormattedDay(
+        dateFormate.toDateString(),
+    )} ${calendarDate}`;
+    return calendarDate;
+};
+
+export const getCalendarRangeDate = (
+    startDate: string,
+    endDate?: string,
+): string => {
+    const startDateFormate = new Date(startDate);
+
+    let calendarDate = DateTime.fromISO(
+        startDateFormate.toISOString(),
+    ).toFormat('MMM yyyy');
+
+    calendarDate = `${getFormattedDay(
+        startDateFormate.toDateString(),
+    )} ${calendarDate}`;
+
+    if (endDate) {
+        const endDateFormate = new Date(endDate);
+        const endCalendarDate = DateTime.fromISO(
+            endDateFormate.toISOString(),
+        ).toFormat('MMM yyyy');
+        const endDateString = `${getFormattedDay(
+            endDateFormate.toDateString(),
+        )} ${endCalendarDate}`;
+        calendarDate = `${calendarDate} - ${endDateString}`;
+    }
+
+    return calendarDate;
+};
