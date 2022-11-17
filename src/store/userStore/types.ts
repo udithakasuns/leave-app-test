@@ -3,9 +3,11 @@ export type State = {
     username: string;
     email: string;
     active: boolean;
+    loading: boolean;
 };
 
 export type Actions = {
     saveUser: (user: State) => void;
     removeUser: () => void;
+    setLoading: (state: boolean) => void;
 };
