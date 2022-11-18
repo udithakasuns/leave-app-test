@@ -1,7 +1,8 @@
 import { ManagerHomeScreensProps } from 'navigators/types';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { AppBar } from 'src/components/organisms';
+import { Spacer } from 'src/components/atoms';
+import { LAAppBar } from 'src/components/organisms';
 import theme from 'src/utils/theme';
 
 const { scale } = theme;
@@ -16,7 +17,8 @@ const styles = StyleSheet.create({
 
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => (
     <View style={styles.container}>
-        <AppBar currentScreen='manager' onPressNotification={() => {}} />
+        <LAAppBar currentScreen='manager' onPressNotification={() => {}} />
+        <Spacer height={30} />
     </View>
 );
 

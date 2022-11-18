@@ -21,6 +21,8 @@ export type Colors = {
     dividerColor: string;
     approved: string;
     pending: string;
+    green700: string;
+    gray400: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -82,7 +84,26 @@ export interface Entitlement {
     balanceInDays: number;
 }
 
-export type StatusType = 'PENDING' | 'APPROVED' | 'DENIED' | 'CANCELLED';
+export type EntitlementSelection = Entitlement & {
+    isSelected: boolean;
+};
+
+export enum Status {
+    PENDING = 'PENDING',
+    APPROVED = 'APPROVED',
+    DENIED = 'DENIED',
+    CANCELLED = 'CANCELLED',
+}
+
+export type StatusType = keyof typeof Status;
+
+export enum States {
+    FULLDAY = 'FULLDAY',
+    HALFDAY_MORNING = 'HALFDAY_MORNING',
+    HALFDAY_EVENING = 'HALFDAY_EVENING',
+}
+
+export type LeaveSate = keyof typeof States;
 
 export type EmployeeType = {
     employeeId: string;
@@ -92,18 +113,67 @@ export type EmployeeType = {
 };
 
 export type LeaveRequestType = {
-    startDate: number;
-    endDate: number;
+    leaveRequestId: number;
+    startDate: string;
+    endDate: string;
     leaveType: LeaveType;
     reasonForLeave: string | null;
     leaveState: string;
     status: StatusType;
     requestDesc?: string | null;
-    reviewerComment?: null;
+    reviewerComment?: string | null;
     employee: EmployeeType;
+};
+
+export type RequestDetails = {
+    leaveRequest?: AtLeast<LeaveRequestType, 'leaveType'>;
+    durationDays: string;
+    recipient?: EmployeeType[];
 };
 
 export interface Section {
     title: string;
     data: LeaveRequestType[];
 }
+
+type RequestParams = {
+    sortKey: 'creationDate' | 'startDate';
+    page: number;
+    size: number;
+    status: string;
+    startDate: string;
+    endDate: string;
+    leaveType: string;
+};
+
+export type LeaveRequestParams = Partial<RequestParams>;
+
+export type FilterTypes = {
+    name: string;
+    typeId: number;
+};
+
+export enum EmployeeModal {
+    'APPLY_LEAVE_MODAL',
+    'CHOSE_DATE_MODAL',
+    'PENDING_LEAVE_MODAL',
+    'DENIED_LEAVE_MODAL',
+    'APPROVED_LEAVE_MODAL',
+    'REVOKE_REQUEST_MODAL',
+    'CANCEL_REQUEST_MODAL',
+    'LEAVE_INFORMATION',
+}
+
+export enum EmployeePopup {
+    'LEAVE_REQUEST_CONFIRMATION',
+    'LEAVE_REQUEST_REVOKE',
+}
+
+export type ApplyFormValues = {
+    typeId: number;
+    leaveState?: LeaveSate;
+    requestDesc: string;
+    startDate: string;
+    endDate: string;
+    entitlements: EntitlementSelection[];
+};

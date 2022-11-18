@@ -92,6 +92,7 @@ export default ({ isLeftSelected, isRightSelected }: StyleProp) => {
         initialButtonContainer: {
             borderRadius: radius.rd8,
             justifyContent: 'space-between',
+            flex: 1,
         },
     });
 };

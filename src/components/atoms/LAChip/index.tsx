@@ -105,6 +105,7 @@ const LAChip = ({
                 testID={testIdContent}
                 style={[styles.content, contentStyle]}
                 color={disabled ? disabledColor : contentColor}
+                numberOfLines={1}
                 type={contentTextType}>
                 {content}
             </LAText>

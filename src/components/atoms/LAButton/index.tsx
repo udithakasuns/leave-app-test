@@ -86,7 +86,12 @@ const LAButton = ({
         rightIcon,
         leftIcon,
         loadingContainer,
-    } = styles(mode, alignContent, getPropertiesBySize().containerPadding);
+    } = styles(
+        mode,
+        alignContent,
+        getPropertiesBySize().containerPadding,
+        iconColor,
+    );
 
     return (
         <Pressable

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React, { ReactElement } from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
 import Modal, { OnSwipeCompleteParams } from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
@@ -13,23 +13,25 @@ export type SheetProps = {
     onClose: () => void;
     sheetBody: ReactElement;
     header: string;
+    headerIcon: string;
     style: StyleProp<ViewStyle>;
 };
 
 const LAModal = ({
-    isVisible,
+    isVisible = false,
     onClose,
     sheetBody,
     header,
+    headerIcon = 'close',
     style,
-}: PartialBy<SheetProps, 'header' | 'style'>) => {
+}: PartialBy<SheetProps, 'header' | 'headerIcon' | 'style'>) => {
     const insets = useSafeAreaInsets();
 
     const { container, bodyContainer, headerContainer } = styles(insets);
     const DefaultHeaderContainer = () => (
         <View style={headerContainer}>
             <Icon
-                name='close'
+                name={headerIcon}
                 enableBackground
                 size={IconSize.medium}
                 increasePadding={2}
@@ -43,6 +45,8 @@ const LAModal = ({
         <Modal
             isVisible={isVisible}
             style={container}
+            animationInTiming={400}
+            avoidKeyboard
             onSwipeComplete={(params: OnSwipeCompleteParams) => {
                 if (params.swipingDirection === 'down') {
                     onClose();
@@ -50,8 +54,12 @@ const LAModal = ({
             }}
             swipeDirection={['down']}>
             <View style={[bodyContainer, style]}>
-                {header && <DefaultHeaderContainer />}
-                {sheetBody}
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps='handled'>
+                    {header && <DefaultHeaderContainer />}
+                    {sheetBody}
+                </ScrollView>
             </View>
         </Modal>
     );

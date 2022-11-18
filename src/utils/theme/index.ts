@@ -30,10 +30,12 @@ const colors: Colors = {
     errorBackground: '#FEE2E2',
     disabledColor: '#CFCFCF',
     gray600: '#52525B',
+    gray400: '#A1A1AA',
     gray300: '#E8E8E8',
     dividerColor: '#D4D4D8',
 
     approved: '#65A30D',
+    green700: '#15803D',
     pending: '#FCD34D',
 };
 
@@ -81,8 +83,9 @@ const scale = {
     sc18: ms(18),
     sc20: ms(20),
     sc24: ms(24),
-    sc32: ms(32),
     sc28: ms(28),
+    sc32: ms(32),
+    sc36: ms(36),
     sc40: ms(40),
     sc46: ms(46),
     sc48: ms(48),
