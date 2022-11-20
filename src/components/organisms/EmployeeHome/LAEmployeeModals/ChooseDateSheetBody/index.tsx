@@ -89,11 +89,23 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
         setHolidays(holiday);
     };
 
+    const getPrevSelectedRange = () => {
+        if (formik.values.startDate) {
+            setRange({
+                startDate: formik.values.startDate,
+                endDate: formik.values.endDate,
+            });
+        }
+    };
+
     const handleDayPress = (day: DateData) => {
+        const currentDate = new Date(range.startDate);
+        const clickedDate = new Date(day.dateString);
         if (
             range.startDate &&
             !range.endDate &&
-            range.startDate !== day.dateString
+            range.startDate !== day.dateString &&
+            currentDate.getTime() < clickedDate.getTime()
         ) {
             const newRange = { ...range, ...{ endDate: day.dateString } };
             setRange(newRange);
@@ -117,6 +129,7 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
 
     useEffect(() => {
         getAllHolidaysForMonth(new Date().valueOf());
+        getPrevSelectedRange();
     }, []);
 
     return (

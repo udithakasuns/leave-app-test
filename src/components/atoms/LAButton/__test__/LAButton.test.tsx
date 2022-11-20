@@ -158,7 +158,6 @@ describe('Testing button atom', () => {
             color: theme.colors.secondaryLabel,
         });
         expect(queryByTestId(TEST_ID_BUTTON)).toHaveStyle({
-            backgroundColor: theme.colors.secondaryColor,
             borderColor: theme.colors.primaryColor,
         });
     });
