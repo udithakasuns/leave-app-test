@@ -43,6 +43,10 @@ const RootNavigator = () => {
     };
 
     useEffect(() => {
+        getCurrentAuthUser();
+    }, []);
+
+    useEffect(() => {
         /* Hub is listened to all events related to authentication */
         Hub.listen('auth', ({ payload: { event, data } }) => {
             switch (event) {
