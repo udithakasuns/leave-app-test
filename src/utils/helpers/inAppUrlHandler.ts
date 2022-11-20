@@ -7,7 +7,7 @@ const inAppUrlHandler = async (url: string, redirectUrl: string) => {
         url,
         redirectUrl,
         {
-            showTitle: false,
+            showTitle: true,
             enableUrlBarHiding: true,
             enableDefaultShare: false,
             ephemeralWebSession: false,

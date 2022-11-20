@@ -34,7 +34,7 @@ export const localGetUserTokenByType = async (
             const tokens = JSON.parse(userTokens);
             return tokens[tokenType];
         }
-        console.log('User tokens undefined');
+        // console.log('User tokens undefined');
         return '';
     } catch (error) {
         console.log('User Token cannot get from encrypted storage: ', error);
@@ -53,7 +53,7 @@ export const localGetAllUserTokens = async (): Promise<{
             const tokens = JSON.parse(userTokens);
             return tokens;
         }
-        console.log('User tokens undefined');
+
         return null;
     } catch (error) {
         console.log(

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import axios from 'axios';
 import { API_BASE_URL } from 'src/configs';
 import { axiosConfig } from 'src/utils/helpers/axiosApiUtil';
@@ -10,7 +11,22 @@ export const getHttpEntitlements = async () => {
         `${API_BASE_URL}/v1/leaves/entitlements`,
         apiConfig,
     );
+
     return res.data.results;
+};
+
+export const getHttpEmployee = async () => {
+    const apiConfig = await axiosConfig('accessToken');
+    try {
+        const res = await axios.get(
+            `${API_BASE_URL}/v1/employees/me`,
+            apiConfig,
+        );
+
+        return res.data;
+    } catch (err) {
+        console.log('Error:', err);
+    }
 };
 
 export const getHttpLeaveRequest = async (
@@ -19,6 +35,7 @@ export const getHttpLeaveRequest = async (
     const apiConfig = await axiosConfig('accessToken', params);
 
     const res = await axios.get(`${API_BASE_URL}/v1/leaves`, apiConfig);
+    // console.log('**** res: ', res.data);
     return res.data.results;
 };
 

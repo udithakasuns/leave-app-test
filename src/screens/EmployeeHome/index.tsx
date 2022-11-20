@@ -34,6 +34,7 @@ import {
 } from 'src/utils/types';
 import { deleteHttpApplyLeave, postHttpApplyLeave } from 'src/services/http';
 import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
+import { useUserStore } from 'src/store';
 import { styles } from './styles';
 import { useFormik } from '../../utils/hooks/useFormik';
 
@@ -52,6 +53,7 @@ const sortByButtons: MultiButtonProps[] = [
 ];
 
 const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
+    const { employee } = useUserStore();
     const [requestsParams, setRequestsParams] = useState<LeaveRequestParams>({
         sortKey: 'creationDate',
     });
@@ -241,7 +243,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 />
                 <Spacer />
                 <Text type='H1Bold'>
-                    Hey Thiran {'\n'}
+                    Hey {employee.name?.split(' ')[0]} {'\n'}
                     {getGreetingsByTime()}
                 </Text>
                 <Spacer height={8} />
