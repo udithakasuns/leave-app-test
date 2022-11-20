@@ -13,6 +13,7 @@ import {
 } from 'src/components/atoms';
 import { Modal } from 'src/components/molecules';
 import { DrawerScreenNavigationProp } from 'src/navigators/types';
+import { useUserStore } from 'src/store';
 import theme from 'src/utils/theme';
 import { RoleSheetBody } from './RoleSheetBody';
 import { styles } from './styles';
@@ -35,6 +36,7 @@ export type SelectedProperties = {
 const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
     const navigation = useNavigation<DrawerScreenNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const { employee } = useUserStore();
 
     const appBarProperties = (): SelectedProperties => {
         if (currentScreen === 'employee') {
@@ -60,9 +62,7 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
                     }}>
                     <Avatar
                         size={AvatarSize.large}
-                        source={{
-                            uri: 'https://media-exp1.licdn.com/dms/image/C5603AQFhv3P5Hi9edw/profile-displayphoto-shrink_200_200/0/1662391665576?e=2147483647&v=beta&t=ztjb2j-8sRnHl3u2LhygEJIPtLnRhOfhgGBwDfm8z6g',
-                        }}
+                        source={{ uri: employee.authPic }}
                     />
                 </Pressable>
                 <Spacer width={5} />

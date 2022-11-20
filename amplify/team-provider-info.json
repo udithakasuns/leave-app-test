@@ -10,6 +10,11 @@
       "StackName": "amplify-leaveapp-dev-175417",
       "StackId": "arn:aws:cloudformation:us-east-1:870758173097:stack/amplify-leaveapp-dev-175417/9ac14830-65a9-11ed-b5c9-0ea4e0e637e5",
       "AmplifyAppId": "d20c5hyqdk0hvi"
+    },
+    "categories": {
+      "auth": {
+        "leaveappadd850dd": {}
+      }
     }
   }
 }
