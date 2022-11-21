@@ -1,1 +1,2 @@
-export type AmplifyDependentResourcesAttributes = {}
+/* eslint-disable @typescript-eslint/ban-types */
+export type AmplifyDependentResourcesAttributes = {};
