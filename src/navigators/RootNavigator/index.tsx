@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import Login from 'screens/Login';
-import Splash from 'screens/Splash';
 import { Auth, Hub } from 'aws-amplify';
 import { SigninPayload } from 'services/aws/types';
 import {
@@ -69,17 +68,13 @@ const RootNavigator = () => {
                 barStyle={Platform.OS === 'ios' ? 'dark-content' : 'default'}
             />
             <StackNav.Navigator
-                // initialRouteName='Auth'
                 screenOptions={{
                     headerShown: false,
                 }}>
                 {isAutherized ? (
                     <StackNav.Screen name='Auth' component={AuthNavigator} />
                 ) : (
-                    <>
-                        {/* <StackNav.Screen name='Splash' component={Splash} /> */}
-                        <StackNav.Screen name='Login' component={Login} />
-                    </>
+                    <StackNav.Screen name='Login' component={Login} />
                 )}
             </StackNav.Navigator>
         </SafeAreaView>
