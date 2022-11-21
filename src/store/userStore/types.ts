@@ -1,13 +1,15 @@
-export type State = {
-    userId: number;
-    username: string;
-    email: string;
-    active: boolean;
+import { EmployeeType } from 'utils/types';
+
+export interface State {
+    employee: EmployeeType;
+    isAutherized: boolean;
     loading: boolean;
-};
+    error: string;
+}
 
 export type Actions = {
-    saveUser: (user: State) => void;
+    saveUser: () => void;
     removeUser: () => void;
     setLoading: (state: boolean) => void;
+    setIsAutherized: (isAutherized: boolean) => void;
 };

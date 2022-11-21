@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import Login from 'screens/Login';
 import Splash from 'screens/Splash';
@@ -8,7 +8,6 @@ import { Auth, Hub } from 'aws-amplify';
 import { SigninPayload } from 'services/aws/types';
 import {
     localDeleteAllUserTokens,
-    localGetUserTokenByType,
     localSaveUserTokens,
 } from 'src/services/local';
 import { useUserStore } from 'src/store';
@@ -20,72 +19,48 @@ const StackNav = createNativeStackNavigator<RootScreensParamsList>();
 
 /* Root navigator contains the screens before authentication */
 const RootNavigator = () => {
-    const [token, setToken] = useState<string>('');
-    const { loading, setLoading } = useUserStore();
-
-    const getAccessToken = async () => {
-        const accessToken = await localGetUserTokenByType('accessToken');
-        setToken(accessToken);
-    };
+    const { saveUser, setIsAutherized, isAutherized } = useUserStore();
 
     const removeUserTokens = async () => {
         await localDeleteAllUserTokens();
     };
 
+    const getCurrentAuthUser = async () => {
+        const payload: SigninPayload = await Auth.currentAuthenticatedUser();
+        if (payload) {
+            const { accessToken, idToken, refreshToken } =
+                payload.signInUserSession;
+
+            /* Tokens will be saved to the local storage to use in axios calls */
+            await localSaveUserTokens({
+                accessToken: accessToken.jwtToken,
+                idToken: idToken.jwtToken,
+                refreshToken: refreshToken.token,
+            });
+            saveUser();
+            setIsAutherized(true);
+        }
+    };
+
     useEffect(() => {
-        getAccessToken();
+        getCurrentAuthUser();
     }, []);
 
-    const getUser = () =>
-        Auth.currentAuthenticatedUser()
-            .then(async (payload: SigninPayload) => {
-                // const { name, email, picture } = payload.attributes;
-                const { accessToken, idToken, refreshToken } =
-                    payload.signInUserSession;
-
-                setToken(accessToken.jwtToken);
-
-                await localSaveUserTokens({
-                    accessToken: accessToken.jwtToken,
-                    idToken: idToken.jwtToken,
-                    refreshToken: refreshToken.token,
-                });
-            })
-            .catch(err => {
-                // Need to handle auth error
-            });
-
     useEffect(() => {
+        /* Hub is listened to all events related to authentication */
         Hub.listen('auth', ({ payload: { event, data } }) => {
-            console.log({ event });
             switch (event) {
-                case 'signIn':
-                    // console.log('Signi in .....');
-                    setLoading(false);
-                    break;
                 case 'cognitoHostedUI':
-                    getUser();
-                    // console.log('cognitoHostedUI');
+                    getCurrentAuthUser();
                     break;
                 case 'signOut':
                     removeUserTokens();
-                    setToken('');
-                    // console.log('Signi out .....');
-                    break;
-                case 'signIn_failure':
-                    console.log('signIn_failure');
-                    break;
-                case 'cognitoHostedUI_failure':
-                    // console.log('cognitoHostedUI_failure');
-                    // removeUserTokens();
+                    setIsAutherized(false);
                     break;
                 default:
                     break;
-                // removeUserTokens();
             }
         });
-
-        // getUser().then(userData => setUser(userData));
     }, []);
 
     return (
@@ -98,7 +73,7 @@ const RootNavigator = () => {
                 screenOptions={{
                     headerShown: false,
                 }}>
-                {token ? (
+                {isAutherized ? (
                     <StackNav.Screen name='Auth' component={AuthNavigator} />
                 ) : (
                     <>

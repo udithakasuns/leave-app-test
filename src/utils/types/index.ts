@@ -111,9 +111,9 @@ export type LeaveSate = keyof typeof States;
 
 export type EmployeeType = {
     employeeId: string;
-    name?: string | null;
-    designation?: string | null;
-    authPic?: string | null;
+    name: string | null;
+    designation: string | null;
+    authPic: string | null;
 };
 
 export type LeaveRequestType = {

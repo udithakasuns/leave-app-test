@@ -1,18 +1,35 @@
 import create from 'zustand';
+import { EmployeeType } from 'utils/types';
+import { getHttpEmployee } from 'services/http';
 import { State, Actions } from './types';
 
+const employee: EmployeeType = {
+    employeeId: '',
+    authPic: '',
+    designation: '',
+    name: '',
+};
+
 const initialState: State = {
-    userId: -1,
-    username: '',
-    email: '',
-    active: false,
+    employee,
+    isAutherized: false,
     loading: false,
+    error: '',
 };
 
 const userStore = create<State & Actions>(set => ({
     ...initialState,
-    saveUser: (user: State) => set(() => ({ ...user })),
-    removeUser: () => set(state => ({ ...state, ...initialState })),
+    saveUser: () =>
+        getHttpEmployee()
+            .then(res => {
+                const employeeData: EmployeeType = res.results[0];
+                set(state => ({ ...state, employee: employeeData }));
+            })
+            .catch(err => {
+                set(state => ({ ...state, error: err }));
+            }),
+    setIsAutherized: isAutherized => set(state => ({ ...state, isAutherized })),
+    removeUser: () => set(state => ({ ...state, ...employee })),
     setLoading: loading => set(state => ({ ...state, loading })),
 }));
 
