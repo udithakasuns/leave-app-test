@@ -1,19 +1,16 @@
 import React from 'react';
-import { View, Text } from 'react-native';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { ErrorPopup } from 'components/organisms';
 
 const NetworkError = () => {
     const { isConnected } = useNetInfo();
 
-    if (isConnected) {
+    if (isConnected || isConnected === null) {
         return null;
     }
 
-    return (
-        <View>
-            <Text>Network Error</Text>
-        </View>
-    );
+    // Need to add secondary button on press to navigate to help pages
+    return <ErrorPopup visible type='network' onClose={() => {}} />;
 };
 
 export default NetworkError;
