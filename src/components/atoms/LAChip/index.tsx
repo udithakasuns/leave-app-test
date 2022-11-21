@@ -8,8 +8,8 @@ import {
     TextStyle,
 } from 'react-native';
 import theme from 'src/utils/theme';
-import { AtLeast, TestProps, TextTypeProps } from 'utils/types';
-import LAIcon, { IconLibrary } from '../LAIcon';
+import { AtLeast, IconLibrary, TestProps, TextTypeProps } from 'utils/types';
+import LAIcon from '../LAIcon';
 import LAText from '../LAText';
 import chipStyles from './styles';
 

@@ -1,16 +1,26 @@
 import { FormikProps } from 'formik';
 import React, { useState } from 'react';
-import { Modal } from 'src/components/molecules';
-import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
+import { Divider, Spacer, Text } from 'src/components/atoms';
+import { ButtonDock, Modal, SelectionButton } from 'src/components/molecules';
+import theme from 'src/utils/theme';
+import {
+    ApplyFormValues,
+    EmployeeModal,
+    LeaveRequestType,
+    TestProps,
+} from 'src/utils/types';
 import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
 import ChooseDateSheetBody from './ChooseDateSheetBody';
 import { styles } from './styles';
 
 export type ModalProps = {
     modalType: EmployeeModal;
+    leaveRequest: LeaveRequestType;
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
+
+const { colors } = theme;
 
 interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     onClose: () => void;
@@ -69,6 +79,50 @@ const LAEmployeeModals = ({
                             formik={formik}
                             onBackPress={onBackPress}
                         />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.PENDING_LEAVE_MODAL && (
+                <Modal
+                    onClose={onClose}
+                    isVisible
+                    header='Pending leave status'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <>
+                            <Spacer height={5} />
+                            <Text color={colors.gray700}>
+                                Your leave request is still pending approval
+                                from your supervisor to be booked. You can
+                                cancel your leave if you no longer want to. You
+                                can nudge your supervisor if you want to remind
+                                them again.
+                            </Text>
+                            <Spacer />
+                            <Divider />
+                            <SelectionButton
+                                buttonStyle={{ backgroundColor: colors.white }}
+                                label='View More Details'
+                                onPress={() => {}}
+                            />
+                            <Divider />
+                            <Spacer />
+                            <ButtonDock
+                                primaryButton={{
+                                    label: 'Nudge Supervisor',
+                                    icon: 'notification',
+                                    mode: 'outlined',
+                                    iconLibrary: 'svg',
+                                    onPress: () => formik.handleSubmit(),
+                                }}
+                                secondaryButton={{
+                                    label: 'Cancel Leave',
+                                    mode: 'outlined-error',
+                                    onPress: onCancellation,
+                                }}
+                            />
+                            <Spacer height={10} />
+                        </>
                     }
                 />
             )}

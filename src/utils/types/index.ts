@@ -14,6 +14,7 @@ export type Colors = {
     disabledColor: string;
     errorLabel: string;
     secondaryGray: string;
+    gray700: string;
     gray600: string;
     gray300: string;
     tertiaryLabel: string;
@@ -23,6 +24,7 @@ export type Colors = {
     pending: string;
     green700: string;
     gray400: string;
+    red900: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -60,6 +62,8 @@ export type TextTypeProps =
     | 'ParaXSBold';
 
 export type UserTokenType = 'idToken' | 'accessToken' | 'refreshToken';
+
+export type IconLibrary = 'material' | 'community' | 'svg';
 
 export type UserTokens = {
     idToken: string;

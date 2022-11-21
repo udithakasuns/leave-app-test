@@ -166,25 +166,24 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     const handleRequestItemPress = (item: LeaveRequestType) => {
+        let selectedModal: EmployeeModal = EmployeeModal.CANCEL_REQUEST_MODAL;
         switch (item.status) {
             case 'PENDING':
-                setEmployeeModal({
-                    modalType: EmployeeModal.PENDING_LEAVE_MODAL,
-                });
+                selectedModal = EmployeeModal.PENDING_LEAVE_MODAL;
                 break;
             case 'APPROVED':
-                setEmployeeModal({
-                    modalType: EmployeeModal.APPROVED_LEAVE_MODAL,
-                });
+                selectedModal = EmployeeModal.CHOSE_DATE_MODAL;
                 break;
             case 'DENIED':
-                setEmployeeModal({
-                    modalType: EmployeeModal.DENIED_LEAVE_MODAL,
-                });
+                selectedModal = EmployeeModal.DENIED_LEAVE_MODAL;
                 break;
             default:
                 break;
         }
+        setEmployeeModal({
+            leaveRequest: item,
+            modalType: selectedModal,
+        });
     };
 
     const handleDateModalPress = () =>
@@ -289,6 +288,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             </View>
             <LAEmployeeModals
                 modalType={employeeModal?.modalType}
+                leaveRequest={employeeModal?.leaveRequest}
                 onClose={() => setEmployeeModal(undefined)}
                 formik={formik}
                 onPressSelectDate={handleDateModalPress}

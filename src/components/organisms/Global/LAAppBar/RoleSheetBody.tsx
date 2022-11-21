@@ -2,8 +2,11 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Button, Spacer } from 'src/components/atoms';
+import theme from 'src/utils/theme';
 import { CurrentScreen, SelectedProperties } from '.';
 import { styles } from './styles';
+
+const { colors } = theme;
 
 export const RoleSheetBody = ({
     appBarProperties,
@@ -25,7 +28,8 @@ export const RoleSheetBody = ({
         <Button
             label='Manager View'
             mode={appBarProperties.managerMode}
-            icon='admin-panel-settings'
+            icon='manager'
+            iconLibrary='svg'
             labelStyle={styles.labelStyle}
             onPress={() => onPress('manager')}
         />
