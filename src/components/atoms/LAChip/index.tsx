@@ -6,6 +6,7 @@ import {
     ColorValue,
     ViewStyle,
     TextStyle,
+    StyleProp,
 } from 'react-native';
 import theme from 'src/utils/theme';
 import { AtLeast, IconLibrary, TestProps, TextTypeProps } from 'utils/types';
@@ -26,7 +27,7 @@ export interface Props extends TestProps {
     outlineColor: ColorValue;
     backgroundColor: ColorValue;
     pressableContainerStyle: ViewStyle;
-    containerStyle: ViewStyle;
+    containerStyle: StyleProp<ViewStyle>;
     contentStyle: TextStyle;
     disabled: boolean;
     leftIconName: string;

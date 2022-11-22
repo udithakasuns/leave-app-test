@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API_BASE_URL } from 'src/configs';
 import { axiosConfig } from 'src/utils/helpers/axiosApiUtil';
 import { ApplyFormValues } from 'src/utils/types';
+import { number } from 'yup';
 
 export const postHttpApplyLeave = async (
     values: Omit<ApplyFormValues, 'entitlements'>,
@@ -14,4 +15,15 @@ export const postHttpApplyLeave = async (
         apiConfig,
     );
     return res.data.results;
+};
+
+export const postHttpNudge = async (requestId: number) => {
+    const apiConfig = await axiosConfig('accessToken');
+
+    const res = await axios.post(
+        `${API_BASE_URL}/v1/notifications/nudge/1`,
+        {},
+        apiConfig,
+    );
+    return res;
 };

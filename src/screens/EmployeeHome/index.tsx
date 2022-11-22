@@ -32,9 +32,15 @@ import {
     RequestDetails,
     Section,
 } from 'src/utils/types';
-import { deleteHttpApplyLeave, postHttpApplyLeave } from 'src/services/http';
+import {
+    deleteHttpApplyLeave,
+    postHttpApplyLeave,
+    postHttpNudge,
+} from 'src/services/http';
 import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
 import { useUserStore } from 'src/store';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from 'src/utils/alerts';
 import { styles } from './styles';
 import { useFormik } from '../../utils/hooks/useFormik';
 
@@ -84,6 +90,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             {
                 employeeId: '',
                 name: 'Kalana',
+                designation: '',
                 authPic:
                     'https://media-exp1.licdn.com/dms/image/C5603AQGxMAXX8F3o3Q/profile-displayphoto-shrink_800_800/0/1660713820771?e=2147483647&v=beta&t=VSvPFV6_n8DNd85moQHh2f1DaftBJ4XFxu6at9SUW7g',
             },
@@ -110,6 +117,25 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         deleteHttpApplyLeave,
         {
             onSuccess: handleDeleteOnSuccess,
+        },
+    );
+
+    const handleNudgeOnSuccess = () => {
+        setEmployeeModal({ modalType: undefined });
+        Toast.show({
+            type: 'successToast',
+            props: {
+                title: 'You have nudged your supervisor',
+                content: 'Kalana was sent a reminder',
+            },
+        });
+    };
+
+    const { mutate: nudgeMutate } = useMutation(
+        ['nudgeManger'],
+        postHttpNudge,
+        {
+            onSuccess: handleNudgeOnSuccess,
         },
     );
 
@@ -174,7 +200,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 selectedModal = EmployeeModal.PENDING_LEAVE_MODAL;
                 break;
             case 'APPROVED':
-                selectedModal = EmployeeModal.CHOSE_DATE_MODAL;
+                selectedModal = EmployeeModal.APPROVED_LEAVE_MODAL;
                 break;
             case 'DENIED':
                 selectedModal = EmployeeModal.DENIED_LEAVE_MODAL;
@@ -182,8 +208,23 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             default:
                 break;
         }
+        const tempDetails: RequestDetails = {
+            durationDays: '1 Day',
+            leaveRequest: undefined,
+        };
+        tempDetails.leaveRequest = item;
+        tempDetails.recipient = [
+            {
+                employeeId: '',
+                name: 'Kalana',
+                designation: '',
+                authPic:
+                    'https://media-exp1.licdn.com/dms/image/C5603AQGxMAXX8F3o3Q/profile-displayphoto-shrink_800_800/0/1660713820771?e=2147483647&v=beta&t=VSvPFV6_n8DNd85moQHh2f1DaftBJ4XFxu6at9SUW7g',
+            },
+        ];
         setEmployeeModal({
             leaveRequest: item,
+            requestDetails: tempDetails,
             modalType: selectedModal,
         });
     };
@@ -202,12 +243,30 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     modalType: EmployeeModal.APPLY_LEAVE_MODAL,
                 });
                 break;
+            case EmployeeModal.PENDING_LEAVE_MODAL:
+                setEmployeeModal({
+                    ...employeeModal,
+                    modalType: EmployeeModal.PENDING_LEAVE_MODAL,
+                });
+                break;
             default:
                 setEmployeeModal({
-                    modalType: EmployeeModal.LEAVE_INFORMATION,
+                    modalType: undefined,
                 });
                 break;
         }
+    };
+
+    const handleNudgeManager = (isDisable: boolean) => {
+        if (employeeModal?.leaveRequest?.leaveRequestId) {
+            nudgeMutate(employeeModal.leaveRequest.leaveRequestId);
+        }
+    };
+    const handleViewMoreDetails = () => {
+        setEmployeeModal({
+            ...employeeModal,
+            modalType: EmployeeModal.LEAVE_INFORMATION,
+        });
     };
 
     useEffect(() => {
@@ -291,10 +350,13 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             <LAEmployeeModals
                 modalType={employeeModal?.modalType}
                 leaveRequest={employeeModal?.leaveRequest}
+                requestDetails={employeeModal?.requestDetails}
                 onClose={() => setEmployeeModal(undefined)}
                 formik={formik}
                 onPressSelectDate={handleDateModalPress}
                 onBackPress={handleDateModalBackPress}
+                onPressNudge={handleNudgeManager}
+                onPressViewMoreDetails={handleViewMoreDetails}
             />
             <LAEmployeePopUp
                 modalType={employeePopup?.modalType}
@@ -313,6 +375,12 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     formik.setFieldValue('entitlements', entitlements);
                     refetch();
                 }}
+            />
+            <Toast
+                config={toastConfig}
+                position='bottom'
+                bottomOffset={30}
+                autoHide
             />
         </View>
     );

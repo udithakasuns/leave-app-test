@@ -1,9 +1,12 @@
 import { StyleSheet } from 'react-native';
 import theme from 'src/utils/theme';
 
+const { scale } = theme;
+
 export const styles = StyleSheet.create({
     itemRow: {
         flexDirection: 'row',
+        marginVertical: scale.vsc4,
     },
     itemText: { alignSelf: 'center' },
     chipContainer: {
@@ -19,7 +22,4 @@ export const styles = StyleSheet.create({
         flexWrap: 'wrap',
     },
     durationChip: { marginVertical: 3 },
-    statusContainer: {
-        backgroundColor: theme.colors.tertiaryColor,
-    },
 });

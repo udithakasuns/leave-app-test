@@ -6,7 +6,7 @@ import { Chip, Spacer, Text } from 'src/components/atoms';
 import { getCalendarRangeDate } from 'src/utils/helpers/dateHandler';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import { RequestDetails, TestProps } from 'src/utils/types';
-import { AvatarChip } from '..';
+import { AvatarChip, StatusChip } from '..';
 import { styles } from './styles';
 
 interface Props extends Partial<TestProps> {
@@ -51,6 +51,24 @@ const LARequestDetailsSection = ({ requestDetails }: Props) => (
                     </>
                 }
             />
+        )}
+        {requestDetails.leaveRequest?.status && (
+            <>
+                <Spacer />
+                <ItemRow
+                    title='Status :'
+                    child={
+                        <>
+                            <Spacer />
+                            <StatusChip
+                                status={requestDetails.leaveRequest?.status}
+                                containerStyle={styles.statusContainer}
+                                onPress={() => {}}
+                            />
+                        </>
+                    }
+                />
+            </>
         )}
         <Spacer height={8} />
         {requestDetails.leaveRequest?.startDate && (

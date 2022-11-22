@@ -1,12 +1,23 @@
+/* eslint-disable react/no-unstable-nested-components */
 import { FormikProps } from 'formik';
 import React, { useState } from 'react';
-import { Divider, Spacer, Text } from 'src/components/atoms';
-import { ButtonDock, Modal, SelectionButton } from 'src/components/molecules';
+import { View } from 'react-native';
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+import { Divider, Input, Spacer, Text } from 'src/components/atoms';
+import {
+    ButtonDock,
+    LeaveInformationSection,
+    Modal,
+    RequestDetailsSection,
+    SelectionButton,
+} from 'src/components/molecules';
+import { leaveRequests } from 'src/screens/EmployeeHome/dummy';
 import theme from 'src/utils/theme';
 import {
     ApplyFormValues,
     EmployeeModal,
     LeaveRequestType,
+    RequestDetails,
     TestProps,
 } from 'src/utils/types';
 import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
@@ -16,6 +27,7 @@ import { styles } from './styles';
 export type ModalProps = {
     modalType: EmployeeModal;
     leaveRequest: LeaveRequestType;
+    requestDetails: RequestDetails;
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
@@ -27,6 +39,8 @@ interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     formik: FormikProps<ApplyFormValues>;
     onPressSelectDate: () => void;
     onBackPress: (modalType: EmployeeModal) => void;
+    onPressNudge: (isDisable: boolean) => void;
+    onPressViewMoreDetails: () => void;
 }
 
 const LAEmployeeModals = ({
@@ -35,6 +49,9 @@ const LAEmployeeModals = ({
     formik,
     onBackPress,
     onPressSelectDate,
+    onPressNudge,
+    onPressViewMoreDetails,
+    requestDetails,
 }: Props) => {
     const [isHalfSelected, setIsHalfSelected] = useState(false);
     const onCancellation = () => {
@@ -98,12 +115,17 @@ const LAEmployeeModals = ({
                                 can nudge your supervisor if you want to remind
                                 them again.
                             </Text>
+                            {requestDetails && (
+                                <RequestDetailsSection
+                                    requestDetails={requestDetails}
+                                />
+                            )}
                             <Spacer />
                             <Divider />
                             <SelectionButton
                                 buttonStyle={{ backgroundColor: colors.white }}
                                 label='View More Details'
-                                onPress={() => {}}
+                                onPress={onPressViewMoreDetails}
                             />
                             <Divider />
                             <Spacer />
@@ -113,7 +135,9 @@ const LAEmployeeModals = ({
                                     icon: 'notification',
                                     mode: 'outlined',
                                     iconLibrary: 'svg',
-                                    onPress: () => formik.handleSubmit(),
+                                    onPress: () => {
+                                        onPressNudge(true);
+                                    },
                                 }}
                                 secondaryButton={{
                                     label: 'Cancel Leave',
@@ -122,6 +146,44 @@ const LAEmployeeModals = ({
                                 }}
                             />
                             <Spacer height={10} />
+                        </>
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.LEAVE_INFORMATION && (
+                <Modal
+                    onClose={() =>
+                        onBackPress(EmployeeModal.PENDING_LEAVE_MODAL)
+                    }
+                    isVisible
+                    header='Leave Information'
+                    headerIcon='arrow-back'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <>
+                            <Spacer height={5} />
+                            <LeaveInformationSection
+                                leaveInfo={[
+                                    {
+                                        infoId: 1,
+                                        label: 'Date Applied',
+                                        element: '12th Jan',
+                                    },
+                                ]}
+                            />
+                            <Spacer height={2} />
+                            <Input
+                                placeholder={
+                                    requestDetails?.leaveRequest?.requestDesc ??
+                                    ''
+                                }
+                                label='Reason'
+                                type='COMMENT'
+                                containerStyle={{ margin: 0 }}
+                                editable={false}
+                                placeholderColor={colors.gray600}
+                            />
+                            <Spacer />
                         </>
                     }
                 />
