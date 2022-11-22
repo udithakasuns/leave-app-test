@@ -59,7 +59,9 @@ const sortByButtons: MultiButtonProps[] = [
 ];
 
 const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
-    const { employee } = useUserStore();
+    const {
+        user: { firstName },
+    } = useUserStore();
     const [requestsParams, setRequestsParams] = useState<LeaveRequestParams>({
         sortKey: 'creationDate',
     });
@@ -301,7 +303,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 />
                 <Spacer />
                 <Text type='H1Bold'>
-                    Hey {employee.name?.split(' ')[0]} {'\n'}
+                    Hey {firstName} {'\n'}
                     {getGreetingsByTime()}
                 </Text>
                 <Spacer height={8} />

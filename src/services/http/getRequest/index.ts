@@ -14,6 +14,7 @@ export const getHttpEntitlements = async () => {
     return res.data.results;
 };
 
+// eslint-disable-next-line consistent-return
 export const getHttpEmployee = async () => {
     const apiConfig = await axiosConfig('accessToken');
     try {

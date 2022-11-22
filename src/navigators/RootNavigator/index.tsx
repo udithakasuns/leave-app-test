@@ -1,16 +1,17 @@
-/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/naming-convention */
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import Login from 'screens/Login';
-import Splash from 'screens/Splash';
 import { Auth, Hub } from 'aws-amplify';
-import { SigninPayload } from 'services/aws/types';
+import { AccessTokenPayload, SigninPayload } from 'services/aws/types';
 import {
     localDeleteAllUserTokens,
     localSaveUserTokens,
 } from 'src/services/local';
 import { useUserStore } from 'src/store';
+import jwtDecode from 'jwt-decode';
+import { UserRole } from 'src/utils/types';
 import AuthNavigator from '../AuthNavigator';
 import { RootScreensParamsList } from '../types';
 import { styles } from './styles';
@@ -19,7 +20,8 @@ const StackNav = createNativeStackNavigator<RootScreensParamsList>();
 
 /* Root navigator contains the screens before authentication */
 const RootNavigator = () => {
-    const { saveUser, setIsAutherized, isAutherized } = useUserStore();
+    const { saveUser, updateUser, setIsAutherized, isAutherized } =
+        useUserStore();
 
     const removeUserTokens = async () => {
         await localDeleteAllUserTokens();
@@ -28,8 +30,24 @@ const RootNavigator = () => {
     const getCurrentAuthUser = async () => {
         const payload: SigninPayload = await Auth.currentAuthenticatedUser();
         if (payload) {
-            const { accessToken, idToken, refreshToken } =
-                payload.signInUserSession;
+            const {
+                attributes: { email, name, family_name, picture },
+                signInUserSession: { accessToken, idToken, refreshToken },
+            } = payload;
+
+            const decodedAccesToken: AccessTokenPayload = jwtDecode(
+                accessToken.jwtToken,
+            );
+
+            const cognitoUserGroups = decodedAccesToken['cognito:groups'];
+
+            let userRole: UserRole = 'employee';
+            if (
+                cognitoUserGroups &&
+                cognitoUserGroups.find(user => user === 'managers')
+            ) {
+                userRole = 'manager';
+            }
 
             /* Tokens will be saved to the local storage to use in axios calls */
             await localSaveUserTokens({
@@ -37,7 +55,8 @@ const RootNavigator = () => {
                 idToken: idToken.jwtToken,
                 refreshToken: refreshToken.token,
             });
-            saveUser();
+            saveUser(email, name, family_name, picture, userRole);
+            await updateUser();
             setIsAutherized(true);
         }
     };
@@ -69,17 +88,13 @@ const RootNavigator = () => {
                 barStyle={Platform.OS === 'ios' ? 'dark-content' : 'default'}
             />
             <StackNav.Navigator
-                // initialRouteName='Auth'
                 screenOptions={{
                     headerShown: false,
                 }}>
                 {isAutherized ? (
                     <StackNav.Screen name='Auth' component={AuthNavigator} />
                 ) : (
-                    <>
-                        {/* <StackNav.Screen name='Splash' component={Splash} /> */}
-                        <StackNav.Screen name='Login' component={Login} />
-                    </>
+                    <StackNav.Screen name='Login' component={Login} />
                 )}
             </StackNav.Navigator>
         </SafeAreaView>
