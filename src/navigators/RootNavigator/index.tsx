@@ -26,6 +26,7 @@ const RootNavigator = () => {
 
     const getCurrentAuthUser = async () => {
         const payload: SigninPayload = await Auth.currentAuthenticatedUser();
+        console.log({ payload });
         if (payload) {
             const { accessToken, idToken, refreshToken } =
                 payload.signInUserSession;
