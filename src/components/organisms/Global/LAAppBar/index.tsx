@@ -36,7 +36,9 @@ export type SelectedProperties = {
 const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
     const navigation = useNavigation<DrawerScreenNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
-    const { employee } = useUserStore();
+    const {
+        user: { profilePic },
+    } = useUserStore();
 
     const appBarProperties = (): SelectedProperties => {
         if (currentScreen === 'employee') {
@@ -62,7 +64,7 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
                     }}>
                     <Avatar
                         size={AvatarSize.large}
-                        source={{ uri: employee.authPic }}
+                        source={{ uri: profilePic }}
                     />
                 </Pressable>
                 <Spacer width={5} />

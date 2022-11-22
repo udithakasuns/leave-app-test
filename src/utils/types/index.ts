@@ -112,6 +112,18 @@ export type EmployeeType = {
     authPic: string | null;
 };
 
+export type UserRole = 'employee' | 'manager';
+
+export type UserType = {
+    userId: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    profilePic: string;
+    designation: string;
+    role: UserRole;
+};
+
 export type LeaveRequestType = {
     leaveRequestId: number;
     startDate: string;
