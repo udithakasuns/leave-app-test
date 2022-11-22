@@ -1,35 +1,61 @@
 import create from 'zustand';
-import { EmployeeType } from 'utils/types';
+import { EmployeeType, UserType, UserRole } from 'utils/types';
 import { getHttpEmployee } from 'services/http';
 import { State, Actions } from './types';
 
-const employee: EmployeeType = {
-    employeeId: '',
-    authPic: '',
+const initialUser: UserType = {
+    userId: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    profilePic: '',
     designation: '',
-    name: '',
+    role: 'manager',
 };
 
 const initialState: State = {
-    employee,
+    user: initialUser,
     isAutherized: false,
     loading: false,
     error: '',
 };
 
+/* Note that, Only the userId & designation will be updated by an API, other rest of the data will be captured from AWS(AccessToken) */
+
 const userStore = create<State & Actions>(set => ({
     ...initialState,
-    saveUser: () =>
-        getHttpEmployee()
-            .then(res => {
-                const employeeData: EmployeeType = res.results[0];
-                set(state => ({ ...state, employee: employeeData }));
-            })
-            .catch(err => {
-                set(state => ({ ...state, error: err }));
-            }),
+    saveUser: (
+        email: string,
+        firstName: string,
+        lastName: string,
+        profilePic: string,
+        role: UserRole,
+    ) =>
+        set(state => ({
+            ...state,
+            user: {
+                ...state.user,
+                email,
+                firstName,
+                lastName,
+                profilePic,
+                role,
+            },
+        })),
+    updateUser: async () => {
+        const res = await getHttpEmployee();
+        const employee: EmployeeType = res.results[0];
+        set(state => ({
+            ...state,
+            user: {
+                ...state.user,
+                userId: employee.employeeId,
+                designation: employee.designation || '',
+            },
+        }));
+    },
     setIsAutherized: isAutherized => set(state => ({ ...state, isAutherized })),
-    removeUser: () => set(state => ({ ...state, ...employee })),
+    removeUser: () => set(state => ({ ...state, user: initialUser })),
     setLoading: loading => set(state => ({ ...state, loading })),
 }));
 

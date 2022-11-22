@@ -45,3 +45,19 @@ export type SigninPayload = {
     userDataKey: string;
     username: string;
 };
+
+export type AccessTokenPayload = {
+    auth_time: number;
+    client_id: string;
+    'cognito:groups': string[];
+    exp: number;
+    iat: number;
+    iss: string;
+    jti: string;
+    origin_jti: string;
+    scope: string;
+    sub: string;
+    token_use: string;
+    username: string;
+    version: number;
+};

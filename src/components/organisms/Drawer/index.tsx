@@ -16,7 +16,7 @@ interface ButtonProps {
 
 const Drawer: React.FC = () => {
     const {
-        employee: { authPic, name, designation },
+        user: { firstName, lastName, profilePic, designation },
     } = useUserStore();
 
     const [buttons] = useState<ButtonProps[]>([
@@ -28,10 +28,10 @@ const Drawer: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <Avatar source={{ uri: authPic || '' }} size={scale.sc96} />
+            <Avatar source={{ uri: profilePic }} size={scale.sc96} />
             <Spacer height={scale.sc6} />
             <Text numberOfLines={1} type='H1Bold'>
-                {name}
+                {firstName} {lastName}
             </Text>
             <Text numberOfLines={1} type='H2' color={colors.gray600}>
                 {designation}
@@ -41,6 +41,7 @@ const Drawer: React.FC = () => {
             <View>
                 {buttons.map(b => (
                     <Button
+                        key={b.label}
                         buttonStyle={styles.buttonStyle}
                         label={b.label}
                         icon={b.icon}
@@ -51,8 +52,6 @@ const Drawer: React.FC = () => {
                     />
                 ))}
             </View>
-
-            {/* <Button  icon='account-circle' label='Account' onPress={() => {}} /> */}
         </View>
     );
 };
