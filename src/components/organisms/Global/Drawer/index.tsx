@@ -31,16 +31,16 @@ const Drawer: React.FC = () => {
             onPress: () => {},
             iconLibrary: 'svg',
         },
-        { label: 'Logout', icon: 'login', onPress: awsOnGoogleSignOut },
+        { label: 'Support', icon: 'help-outline', onPress: awsOnGoogleSignOut },
     ]);
     return (
         <View style={styles.container}>
             <Avatar source={{ uri: profilePic }} size={scale.sc96} />
             <Spacer height={scale.sc6} />
             <Text numberOfLines={1} type='H1Bold'>
-                {firstName} {lastName}
+                {firstName} {lastName} Jognn
             </Text>
-            <Text numberOfLines={2} type='H2' color={colors.gray600}>
+            <Text numberOfLines={2} type='ParaLG' color={colors.gray600}>
                 {designation}
             </Text>
             <Spacer height={scale.sc4} />
@@ -63,12 +63,12 @@ const Drawer: React.FC = () => {
                 </View>
                 <Button
                     buttonStyle={styles.buttonStyle}
-                    label='Support'
-                    icon='help-outline'
+                    label='Logout'
+                    icon='login'
                     mode='contained-gray'
                     iconPosition='right'
                     labelStyle={styles.buttonLabelStyle}
-                    onPress={() => {}}
+                    onPress={awsOnGoogleSignOut}
                 />
             </View>
         </View>
