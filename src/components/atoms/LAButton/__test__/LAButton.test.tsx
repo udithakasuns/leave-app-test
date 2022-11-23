@@ -158,6 +158,7 @@ describe('Testing button atom', () => {
             color: theme.colors.secondaryLabel,
         });
         expect(queryByTestId(TEST_ID_BUTTON)).toHaveStyle({
+            backgroundColor: theme.colors.secondaryBackground,
             borderColor: theme.colors.primaryColor,
         });
     });
@@ -180,7 +181,7 @@ describe('Testing button atom', () => {
             color: theme.colors.errorLabel,
         });
         expect(queryByTestId(TEST_ID_BUTTON)).toHaveStyle({
-            backgroundColor: theme.colors.errorBackground,
+            backgroundColor: theme.colors.red900,
             borderColor: theme.colors.errorLabel,
         });
     });

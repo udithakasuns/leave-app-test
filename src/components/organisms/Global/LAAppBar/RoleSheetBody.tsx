@@ -25,7 +25,8 @@ export const RoleSheetBody = ({
         <Button
             label='Manager View'
             mode={appBarProperties.managerMode}
-            icon='admin-panel-settings'
+            icon='manager'
+            iconLibrary='svg'
             labelStyle={styles.labelStyle}
             onPress={() => onPress('manager')}
         />

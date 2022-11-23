@@ -1,22 +1,41 @@
+/* eslint-disable react/no-unstable-nested-components */
 import { FormikProps } from 'formik';
 import React, { useState } from 'react';
 import { Modal } from 'src/components/molecules';
-import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
+import theme from 'src/utils/theme';
+import {
+    ApplyFormValues,
+    EmployeeModal,
+    LeaveRequestType,
+    RequestDetails,
+    TestProps,
+} from 'src/utils/types';
 import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
+import CancelLeaveSheetBody from './CancelLeaveSheetBody';
 import ChooseDateSheetBody from './ChooseDateSheetBody';
+import LeaveInformationSheetBody from './LeaveInformationSheetBody';
+import PendingSheetBody from './PendingSheetBody';
 import { styles } from './styles';
 
 export type ModalProps = {
     modalType: EmployeeModal;
+    leaveRequest: LeaveRequestType;
+    requestDetails: RequestDetails;
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
+
+const { colors } = theme;
 
 interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     onClose: () => void;
     formik: FormikProps<ApplyFormValues>;
     onPressSelectDate: () => void;
     onBackPress: (modalType: EmployeeModal) => void;
+    onPressNudge: (isDisable: boolean) => void;
+    onPressViewMoreDetails: () => void;
+    onPressCancelLeave: () => void;
+    onNavigateToCancelLeave: () => void;
 }
 
 const LAEmployeeModals = ({
@@ -25,6 +44,11 @@ const LAEmployeeModals = ({
     formik,
     onBackPress,
     onPressSelectDate,
+    onPressNudge,
+    onPressViewMoreDetails,
+    requestDetails,
+    onPressCancelLeave,
+    onNavigateToCancelLeave,
 }: Props) => {
     const [isHalfSelected, setIsHalfSelected] = useState(false);
     const onCancellation = () => {
@@ -68,6 +92,56 @@ const LAEmployeeModals = ({
                         <ChooseDateSheetBody
                             formik={formik}
                             onBackPress={onBackPress}
+                        />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.PENDING_LEAVE_MODAL && (
+                <Modal
+                    onClose={onClose}
+                    isVisible
+                    header='Pending leave status'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <PendingSheetBody
+                            requestDetails={requestDetails}
+                            onPressNudge={onPressNudge}
+                            onPressViewMoreDetails={onPressViewMoreDetails}
+                            onPressCancelLeave={onNavigateToCancelLeave}
+                        />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.LEAVE_INFORMATION && (
+                <Modal
+                    onClose={() =>
+                        onBackPress(EmployeeModal.PENDING_LEAVE_MODAL)
+                    }
+                    isVisible
+                    header='Leave Information'
+                    headerIcon='arrow-back'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <LeaveInformationSheetBody
+                            requestDescription={
+                                requestDetails?.leaveRequest?.requestDesc ?? ''
+                            }
+                        />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.CANCEL_REQUEST_MODAL && (
+                <Modal
+                    onClose={onClose}
+                    isVisible
+                    header='Cancel requested leave'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <CancelLeaveSheetBody
+                            requestDetails={requestDetails}
+                            onPressNudge={onPressNudge}
+                            onPressViewMoreDetails={onPressViewMoreDetails}
+                            onPressCancelLeave={onPressCancelLeave}
                         />
                     }
                 />

@@ -37,7 +37,7 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
     const navigation = useNavigation<DrawerScreenNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const {
-        user: { profilePic },
+        user: { profilePic, role },
     } = useUserStore();
 
     const appBarProperties = (): SelectedProperties => {
@@ -68,18 +68,20 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
                     />
                 </Pressable>
                 <Spacer width={5} />
-                <Chip
-                    content={appBarProperties().label}
-                    rightIconName='arrow-drop-down'
-                    outline
-                    contentColor={colors.black}
-                    onPressChip={() => setModalVisible(state => !state)}
-                    contentTextType='ParaLG'
-                    outlineColor={colors.gray300}
-                    contentStyle={styles.chipContent}
-                    pressableContainerStyle={styles.chipPressContainer}
-                    containerStyle={styles.chipContainer}
-                />
+                {role === 'manager' && (
+                    <Chip
+                        content={appBarProperties().label}
+                        rightIconName='arrow-drop-down'
+                        outline
+                        contentColor={colors.black}
+                        onPressChip={() => setModalVisible(state => !state)}
+                        contentTextType='ParaLG'
+                        outlineColor={colors.gray300}
+                        contentStyle={styles.chipContent}
+                        pressableContainerStyle={styles.chipPressContainer}
+                        containerStyle={styles.chipContainer}
+                    />
+                )}
             </View>
             <Icon
                 name='notifications'

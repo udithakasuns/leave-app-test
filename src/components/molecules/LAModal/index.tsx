@@ -3,7 +3,9 @@ import React, { ReactElement } from 'react';
 import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
 import Modal, { OnSwipeCompleteParams } from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
+import { toastConfig } from 'src/utils/alerts';
 import { PartialBy } from 'src/utils/types';
 
 import styles from './styles';
@@ -45,7 +47,7 @@ const LAModal = ({
         <Modal
             isVisible={isVisible}
             style={container}
-            animationInTiming={400}
+            animationInTiming={250}
             avoidKeyboard
             onSwipeComplete={(params: OnSwipeCompleteParams) => {
                 if (params.swipingDirection === 'down') {
@@ -61,6 +63,12 @@ const LAModal = ({
                     {sheetBody}
                 </ScrollView>
             </View>
+            <Toast
+                config={toastConfig}
+                position='bottom'
+                bottomOffset={30}
+                autoHide
+            />
         </Modal>
     );
 };

@@ -2,7 +2,6 @@ import { StyleSheet } from 'react-native';
 import theme from 'utils/theme';
 
 const { scale, colors } = theme;
-
 export const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -12,10 +11,14 @@ export const styles = StyleSheet.create({
         borderBottomWidth: scale.sc1,
         borderColor: colors.dividerColor,
     },
+    buttonContainer: {
+        flex: 1,
+        justifyContent: 'space-between',
+    },
     buttonStyle: {
         marginTop: scale.sc12,
     },
     buttonLabelStyle: {
-        marginLeft: scale.sc6,
+        marginHorizontal: scale.sc8,
     },
 });

@@ -32,7 +32,7 @@ export const useFormik = (
                 endDate:
                     values.endDate === '' ? values.startDate : values.endDate,
                 requestDesc: values.requestDesc,
-                leaveState: values.leaveState ?? States.FULLDAY,
+                leaveState: States.FULLDAY,
             });
         },
     });

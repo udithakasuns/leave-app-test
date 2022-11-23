@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable prefer-destructuring */
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -32,9 +33,15 @@ import {
     RequestDetails,
     Section,
 } from 'src/utils/types';
-import { deleteHttpApplyLeave, postHttpApplyLeave } from 'src/services/http';
+import {
+    deleteHttpApplyLeave,
+    postHttpApplyLeave,
+    postHttpNudge,
+} from 'src/services/http';
 import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
 import { useUserStore } from 'src/store';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from 'src/utils/alerts';
 import { styles } from './styles';
 import { useFormik } from '../../utils/hooks/useFormik';
 
@@ -67,6 +74,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const {
         data: statusTypes,
         isError: isStatusError,
+        refetch: filterRefetch,
     }: UseQueryResult<FilterTypes[], AxiosError> = useFilterTypesData();
 
     const { data: leaveRequests, refetch }: UseQueryResult<Section[]> =
@@ -76,7 +84,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         setEmployeeModal({
             modalType: undefined,
         });
-        refetch();
+        fetchData();
         const tempDetails: RequestDetails = {
             durationDays: '1 Day',
             leaveRequest: undefined,
@@ -86,6 +94,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             {
                 employeeId: '',
                 name: 'Kalana',
+                designation: '',
                 authPic:
                     'https://media-exp1.licdn.com/dms/image/C5603AQGxMAXX8F3o3Q/profile-displayphoto-shrink_800_800/0/1660713820771?e=2147483647&v=beta&t=VSvPFV6_n8DNd85moQHh2f1DaftBJ4XFxu6at9SUW7g',
             },
@@ -101,6 +110,13 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     });
 
     const handleDeleteOnSuccess = () => {
+        fetchData();
+        if (employeeModal?.modalType === EmployeeModal.CANCEL_REQUEST_MODAL) {
+            setEmployeeModal({
+                modalType: undefined,
+            });
+            return;
+        }
         setEmployeeModal({
             ...employeeModal,
             modalType: EmployeeModal.APPLY_LEAVE_MODAL,
@@ -115,15 +131,38 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         },
     );
 
+    const handleNudgeOnSuccess = () => {
+        setEmployeeModal({ modalType: undefined });
+        Toast.show({
+            type: 'successToast',
+            props: {
+                title: 'You have nudged your supervisor',
+                content: 'Kalana was sent a reminder',
+            },
+        });
+    };
+
+    const { mutate: nudgeMutate } = useMutation(
+        ['nudgeManger'],
+        postHttpNudge,
+        {
+            onSuccess: handleNudgeOnSuccess,
+        },
+    );
+
     const [formik] = useFormik(mutate);
 
-    const { data: entitlements }: UseQueryResult<Entitlement[]> =
-        useEntitlementData((data: Entitlement[]) => {
+    const {
+        data: entitlements,
+        refetch: entitlementsRetch,
+    }: UseQueryResult<Entitlement[]> = useEntitlementData(
+        (data: Entitlement[]) => {
             const entitlementsDeepClone: EntitlementSelection[] = JSON.parse(
                 JSON.stringify(data),
             );
             formik.setFieldValue('entitlements', entitlementsDeepClone);
-        });
+        },
+    );
 
     const handleSortBy = (muiltButtons: MultiButtonProps[]) => {
         const selectedButton = muiltButtons.filter(
@@ -170,25 +209,39 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     const handleRequestItemPress = (item: LeaveRequestType) => {
+        let selectedModal: EmployeeModal = EmployeeModal.CANCEL_REQUEST_MODAL;
         switch (item.status) {
             case 'PENDING':
-                setEmployeeModal({
-                    modalType: EmployeeModal.PENDING_LEAVE_MODAL,
-                });
+                selectedModal = EmployeeModal.PENDING_LEAVE_MODAL;
                 break;
             case 'APPROVED':
-                setEmployeeModal({
-                    modalType: EmployeeModal.APPROVED_LEAVE_MODAL,
-                });
+                selectedModal = EmployeeModal.APPROVED_LEAVE_MODAL;
                 break;
             case 'DENIED':
-                setEmployeeModal({
-                    modalType: EmployeeModal.DENIED_LEAVE_MODAL,
-                });
+                selectedModal = EmployeeModal.DENIED_LEAVE_MODAL;
                 break;
             default:
                 break;
         }
+        const tempDetails: RequestDetails = {
+            durationDays: '1 Day',
+            leaveRequest: undefined,
+        };
+        tempDetails.leaveRequest = item;
+        tempDetails.recipient = [
+            {
+                employeeId: '',
+                name: 'Kalana',
+                designation: '',
+                authPic:
+                    'https://media-exp1.licdn.com/dms/image/C5603AQGxMAXX8F3o3Q/profile-displayphoto-shrink_800_800/0/1660713820771?e=2147483647&v=beta&t=VSvPFV6_n8DNd85moQHh2f1DaftBJ4XFxu6at9SUW7g',
+            },
+        ];
+        setEmployeeModal({
+            leaveRequest: item,
+            requestDetails: tempDetails,
+            modalType: selectedModal,
+        });
     };
 
     const handleDateModalPress = () =>
@@ -205,12 +258,36 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     modalType: EmployeeModal.APPLY_LEAVE_MODAL,
                 });
                 break;
+            case EmployeeModal.PENDING_LEAVE_MODAL:
+                setEmployeeModal({
+                    ...employeeModal,
+                    modalType: EmployeeModal.PENDING_LEAVE_MODAL,
+                });
+                break;
             default:
                 setEmployeeModal({
-                    modalType: EmployeeModal.LEAVE_INFORMATION,
+                    modalType: undefined,
                 });
                 break;
         }
+    };
+
+    const handleNudgeManager = (isDisable: boolean) => {
+        if (employeeModal?.leaveRequest?.leaveRequestId) {
+            nudgeMutate(employeeModal.leaveRequest.leaveRequestId);
+        }
+    };
+    const handleViewMoreDetails = () => {
+        setEmployeeModal({
+            ...employeeModal,
+            modalType: EmployeeModal.LEAVE_INFORMATION,
+        });
+    };
+
+    const fetchData = () => {
+        refetch();
+        entitlementsRetch();
+        filterRefetch();
     };
 
     useEffect(() => {
@@ -293,10 +370,30 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             </View>
             <LAEmployeeModals
                 modalType={employeeModal?.modalType}
+                leaveRequest={employeeModal?.leaveRequest}
+                requestDetails={employeeModal?.requestDetails}
                 onClose={() => setEmployeeModal(undefined)}
                 formik={formik}
                 onPressSelectDate={handleDateModalPress}
                 onBackPress={handleDateModalBackPress}
+                onPressNudge={handleNudgeManager}
+                onPressViewMoreDetails={handleViewMoreDetails}
+                onPressCancelLeave={() => {
+                    setEmployeeModal({
+                        ...employeeModal,
+                        modalType: undefined,
+                    });
+                    deleteMutate(
+                        employeeModal?.requestDetails?.leaveRequest
+                            ?.leaveRequestId ?? 0,
+                    );
+                }}
+                onNavigateToCancelLeave={() => {
+                    setEmployeeModal({
+                        ...employeeModal,
+                        modalType: EmployeeModal.CANCEL_REQUEST_MODAL,
+                    });
+                }}
             />
             <LAEmployeePopUp
                 modalType={employeePopup?.modalType}
@@ -315,6 +412,12 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     formik.setFieldValue('entitlements', entitlements);
                     refetch();
                 }}
+            />
+            <Toast
+                config={toastConfig}
+                position='bottom'
+                bottomOffset={30}
+                autoHide
             />
         </View>
     );

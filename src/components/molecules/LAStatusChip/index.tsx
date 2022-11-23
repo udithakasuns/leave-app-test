@@ -1,7 +1,8 @@
 import React from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import { Chip, ChipProps, IconSize } from 'src/components/atoms';
 import theme from 'src/utils/theme';
-import { AtLeast, StatusType, TestProps } from 'src/utils/types';
+import { AtLeast, PartialBy, StatusType, TestProps } from 'src/utils/types';
 import { styles } from './styles';
 
 const { colors } = theme;
@@ -9,6 +10,7 @@ const { colors } = theme;
 type StatusChipProps = Partial<TestProps> & {
     status: StatusType;
     onPress: () => void;
+    containerStyle: StyleProp<ViewStyle>;
 };
 
 const LAStatusChip = ({
@@ -17,7 +19,8 @@ const LAStatusChip = ({
     testId,
     testIdContent,
     testIdLeftIcon,
-}: StatusChipProps) => {
+    containerStyle,
+}: PartialBy<StatusChipProps, 'containerStyle'>) => {
     let chipProps: AtLeast<
         ChipProps,
         'content' | 'leftIconName' | 'leftIconColor'
@@ -69,7 +72,7 @@ const LAStatusChip = ({
             contentTextType='ParaLG'
             contentStyle={styles.content}
             pressableContainerStyle={styles.pressableContainer}
-            containerStyle={styles.container}
+            containerStyle={[styles.container, containerStyle]}
         />
     );
 };

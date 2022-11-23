@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import axios from 'axios';
 import { API_BASE_URL } from 'src/configs';
 import { axiosConfig } from 'src/utils/helpers/axiosApiUtil';
@@ -26,7 +25,7 @@ export const getHttpEmployee = async () => {
 
         return res.data;
     } catch (err) {
-        console.log('Error:', err);
+        return err;
     }
 };
 

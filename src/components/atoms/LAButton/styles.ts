@@ -26,7 +26,7 @@ export default (
                 };
             case 'outlined-error':
                 return {
-                    background: colors.errorBackground,
+                    background: colors.red900,
                     textIcon: colors.errorLabel,
                     borderColor: colors.errorLabel,
                 };

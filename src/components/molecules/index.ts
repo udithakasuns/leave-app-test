@@ -11,6 +11,7 @@ export { default as SocialButton } from './LASocialButton';
 export { default as SelectionButton } from './LASelectionButton';
 export { default as ButtonDock } from './LAButtonDock';
 export { default as AvatarChip } from './LAAvatarChip';
+export { default as LeaveInformationSection } from './LALeaveInformationSection';
 export { default as RequestDetailsSection } from './LARequestDetailsSection';
 
 export { default as PopUp } from './LAPopUp';

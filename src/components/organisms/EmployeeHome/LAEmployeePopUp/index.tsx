@@ -42,6 +42,7 @@ const LAEmployeePopUp = ({
                         {requestDetails && (
                             <LARequestDetailsSection
                                 requestDetails={requestDetails}
+                                isStatusVisible={false}
                             />
                         )}
                         <ButtonDock
