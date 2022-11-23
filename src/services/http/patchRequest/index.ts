@@ -1,17 +1,9 @@
-import axios from 'axios';
-import { API_BASE_URL } from 'src/configs';
-import { axiosConfig } from 'src/utils/helpers/axiosApiUtil';
+import { axiosInstance } from 'src/utils/helpers/axiosApiUtil';
 import { ApplyFormValues } from 'src/utils/types';
 
 export const postHttpApplyLeave = async (
     values: Omit<ApplyFormValues, 'entitlements' | 'requestDesc'>,
 ) => {
-    const apiConfig = await axiosConfig('accessToken');
-
-    const res = await axios.patch(
-        `${API_BASE_URL}/v1/leaves`,
-        values,
-        apiConfig,
-    );
+    const res = await axiosInstance.patch('/v1/leaves', values);
     return res.data.results;
 };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { awsOnGoogleSignOut } from 'services/aws';
 import { Avatar, Button, Spacer, Text } from 'src/components/atoms';
+import { localDeleteAllUserTokens } from 'src/services/local';
 import { useUserStore } from 'src/store';
 import { IconLibrary } from 'src/utils/types';
 import theme from 'utils/theme';
@@ -17,6 +17,8 @@ interface ButtonProps {
 const Drawer: React.FC = () => {
     const {
         user: { firstName, lastName, profilePic, designation },
+        setIsAutherized,
+        removeUser,
     } = useUserStore();
     const [buttons] = useState<ButtonProps[]>([
         {
@@ -31,14 +33,21 @@ const Drawer: React.FC = () => {
             onPress: () => {},
             iconLibrary: 'svg',
         },
-        { label: 'Support', icon: 'help-outline', onPress: awsOnGoogleSignOut },
+        { label: 'Support', icon: 'help-outline', onPress: () => {} },
     ]);
+
+    const onPressLogout = async () => {
+        await localDeleteAllUserTokens();
+        setIsAutherized(false);
+        removeUser();
+    };
+
     return (
         <View style={styles.container}>
             <Avatar source={{ uri: profilePic }} size={scale.sc96} />
             <Spacer height={scale.sc6} />
             <Text numberOfLines={1} type='H1Bold'>
-                {firstName} {lastName} Jognn
+                {firstName} {lastName}
             </Text>
             <Text numberOfLines={2} type='ParaLG' color={colors.gray600}>
                 {designation}
@@ -68,7 +77,7 @@ const Drawer: React.FC = () => {
                     mode='contained-gray'
                     iconPosition='right'
                     labelStyle={styles.buttonLabelStyle}
-                    onPress={awsOnGoogleSignOut}
+                    onPress={onPressLogout}
                 />
             </View>
         </View>
