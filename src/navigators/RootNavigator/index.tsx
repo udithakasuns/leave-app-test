@@ -20,7 +20,7 @@ const StackNav = createNativeStackNavigator<RootScreensParamsList>();
 
 /* Root navigator contains the screens before authentication */
 const RootNavigator = () => {
-    const { saveUser, updateUser, setIsAutherized, isAutherized } =
+    const { saveUser, updateUser, removeUser, setIsAutherized, isAutherized } =
         useUserStore();
 
     const removeUserTokens = async () => {
@@ -58,6 +58,10 @@ const RootNavigator = () => {
             saveUser(email, name, family_name, picture, userRole);
             await updateUser();
             setIsAutherized(true);
+        } else {
+            removeUserTokens();
+            setIsAutherized(false);
+            removeUser();
         }
     };
 
@@ -75,6 +79,7 @@ const RootNavigator = () => {
                 case 'signOut':
                     removeUserTokens();
                     setIsAutherized(false);
+                    removeUser();
                     break;
                 default:
                     break;

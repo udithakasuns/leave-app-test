@@ -1,11 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
 import Svg, { SvgProps, G, Path, Defs, ClipPath } from 'react-native-svg';
-import theme from 'utils/theme';
 
-const { scale } = theme;
-
-const Google = ({ width = 20, height = 20, ...props }: SvgProps) => (
+const Google = ({ width = 22, height = 22, ...props }: SvgProps) => (
     <Svg
         width={width}
         height={height}
