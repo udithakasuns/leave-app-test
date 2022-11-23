@@ -47,7 +47,7 @@ const LAModal = ({
         <Modal
             isVisible={isVisible}
             style={container}
-            animationInTiming={400}
+            animationInTiming={250}
             avoidKeyboard
             onSwipeComplete={(params: OnSwipeCompleteParams) => {
                 if (params.swipingDirection === 'down') {

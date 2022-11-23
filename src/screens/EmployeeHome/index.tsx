@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable prefer-destructuring */
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -73,6 +74,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const {
         data: statusTypes,
         isError: isStatusError,
+        refetch: filterRefetch,
     }: UseQueryResult<FilterTypes[], AxiosError> = useFilterTypesData();
 
     const { data: leaveRequests, refetch }: UseQueryResult<Section[]> =
@@ -82,7 +84,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         setEmployeeModal({
             modalType: undefined,
         });
-        refetch();
+        fetchData();
         const tempDetails: RequestDetails = {
             durationDays: '1 Day',
             leaveRequest: undefined,
@@ -108,6 +110,13 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     });
 
     const handleDeleteOnSuccess = () => {
+        fetchData();
+        if (employeeModal?.modalType === EmployeeModal.CANCEL_REQUEST_MODAL) {
+            setEmployeeModal({
+                modalType: undefined,
+            });
+            return;
+        }
         setEmployeeModal({
             ...employeeModal,
             modalType: EmployeeModal.APPLY_LEAVE_MODAL,
@@ -143,13 +152,17 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
     const [formik] = useFormik(mutate);
 
-    const { data: entitlements }: UseQueryResult<Entitlement[]> =
-        useEntitlementData((data: Entitlement[]) => {
+    const {
+        data: entitlements,
+        refetch: entitlementsRetch,
+    }: UseQueryResult<Entitlement[]> = useEntitlementData(
+        (data: Entitlement[]) => {
             const entitlementsDeepClone: EntitlementSelection[] = JSON.parse(
                 JSON.stringify(data),
             );
             formik.setFieldValue('entitlements', entitlementsDeepClone);
-        });
+        },
+    );
 
     const handleSortBy = (muiltButtons: MultiButtonProps[]) => {
         const selectedButton = muiltButtons.filter(
@@ -271,6 +284,12 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         });
     };
 
+    const fetchData = () => {
+        refetch();
+        entitlementsRetch();
+        filterRefetch();
+    };
+
     useEffect(() => {
         if (
             statusTypes !== undefined &&
@@ -359,6 +378,22 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 onBackPress={handleDateModalBackPress}
                 onPressNudge={handleNudgeManager}
                 onPressViewMoreDetails={handleViewMoreDetails}
+                onPressCancelLeave={() => {
+                    setEmployeeModal({
+                        ...employeeModal,
+                        modalType: undefined,
+                    });
+                    deleteMutate(
+                        employeeModal?.requestDetails?.leaveRequest
+                            ?.leaveRequestId ?? 0,
+                    );
+                }}
+                onNavigateToCancelLeave={() => {
+                    setEmployeeModal({
+                        ...employeeModal,
+                        modalType: EmployeeModal.CANCEL_REQUEST_MODAL,
+                    });
+                }}
             />
             <LAEmployeePopUp
                 modalType={employeePopup?.modalType}

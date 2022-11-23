@@ -1,17 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { FormikProps } from 'formik';
 import React, { useState } from 'react';
-import { View } from 'react-native';
-import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
-import { Divider, Input, Spacer, Text } from 'src/components/atoms';
-import {
-    ButtonDock,
-    LeaveInformationSection,
-    Modal,
-    RequestDetailsSection,
-    SelectionButton,
-} from 'src/components/molecules';
-import { leaveRequests } from 'src/screens/EmployeeHome/dummy';
+import { Modal } from 'src/components/molecules';
 import theme from 'src/utils/theme';
 import {
     ApplyFormValues,
@@ -21,7 +11,10 @@ import {
     TestProps,
 } from 'src/utils/types';
 import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
+import CancelLeaveSheetBody from './CancelLeaveSheetBody';
 import ChooseDateSheetBody from './ChooseDateSheetBody';
+import LeaveInformationSheetBody from './LeaveInformationSheetBody';
+import PendingSheetBody from './PendingSheetBody';
 import { styles } from './styles';
 
 export type ModalProps = {
@@ -41,6 +34,8 @@ interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     onBackPress: (modalType: EmployeeModal) => void;
     onPressNudge: (isDisable: boolean) => void;
     onPressViewMoreDetails: () => void;
+    onPressCancelLeave: () => void;
+    onNavigateToCancelLeave: () => void;
 }
 
 const LAEmployeeModals = ({
@@ -52,6 +47,8 @@ const LAEmployeeModals = ({
     onPressNudge,
     onPressViewMoreDetails,
     requestDetails,
+    onPressCancelLeave,
+    onNavigateToCancelLeave,
 }: Props) => {
     const [isHalfSelected, setIsHalfSelected] = useState(false);
     const onCancellation = () => {
@@ -106,47 +103,12 @@ const LAEmployeeModals = ({
                     header='Pending leave status'
                     style={styles.commonStyle}
                     sheetBody={
-                        <>
-                            <Spacer height={5} />
-                            <Text color={colors.gray700}>
-                                Your leave request is still pending approval
-                                from your supervisor to be booked. You can
-                                cancel your leave if you no longer want to. You
-                                can nudge your supervisor if you want to remind
-                                them again.
-                            </Text>
-                            {requestDetails && (
-                                <RequestDetailsSection
-                                    requestDetails={requestDetails}
-                                />
-                            )}
-                            <Spacer />
-                            <Divider />
-                            <SelectionButton
-                                buttonStyle={{ backgroundColor: colors.white }}
-                                label='View More Details'
-                                onPress={onPressViewMoreDetails}
-                            />
-                            <Divider />
-                            <Spacer />
-                            <ButtonDock
-                                primaryButton={{
-                                    label: 'Nudge Supervisor',
-                                    icon: 'notification',
-                                    mode: 'outlined',
-                                    iconLibrary: 'svg',
-                                    onPress: () => {
-                                        onPressNudge(true);
-                                    },
-                                }}
-                                secondaryButton={{
-                                    label: 'Cancel Leave',
-                                    mode: 'outlined-error',
-                                    onPress: onCancellation,
-                                }}
-                            />
-                            <Spacer height={10} />
-                        </>
+                        <PendingSheetBody
+                            requestDetails={requestDetails}
+                            onPressNudge={onPressNudge}
+                            onPressViewMoreDetails={onPressViewMoreDetails}
+                            onPressCancelLeave={onNavigateToCancelLeave}
+                        />
                     }
                 />
             )}
@@ -160,31 +122,27 @@ const LAEmployeeModals = ({
                     headerIcon='arrow-back'
                     style={styles.commonStyle}
                     sheetBody={
-                        <>
-                            <Spacer height={5} />
-                            <LeaveInformationSection
-                                leaveInfo={[
-                                    {
-                                        infoId: 1,
-                                        label: 'Date Applied',
-                                        element: '12th Jan',
-                                    },
-                                ]}
-                            />
-                            <Spacer height={2} />
-                            <Input
-                                placeholder={
-                                    requestDetails?.leaveRequest?.requestDesc ??
-                                    ''
-                                }
-                                label='Reason'
-                                type='COMMENT'
-                                containerStyle={{ margin: 0 }}
-                                editable={false}
-                                placeholderColor={colors.gray600}
-                            />
-                            <Spacer />
-                        </>
+                        <LeaveInformationSheetBody
+                            requestDescription={
+                                requestDetails?.leaveRequest?.requestDesc ?? ''
+                            }
+                        />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.CANCEL_REQUEST_MODAL && (
+                <Modal
+                    onClose={onClose}
+                    isVisible
+                    header='Cancel requested leave'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <CancelLeaveSheetBody
+                            requestDetails={requestDetails}
+                            onPressNudge={onPressNudge}
+                            onPressViewMoreDetails={onPressViewMoreDetails}
+                            onPressCancelLeave={onPressCancelLeave}
+                        />
                     }
                 />
             )}

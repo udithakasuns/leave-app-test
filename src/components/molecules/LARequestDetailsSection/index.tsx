@@ -11,6 +11,7 @@ import { styles } from './styles';
 
 interface Props extends Partial<TestProps> {
     requestDetails: RequestDetails;
+    isStatusVisible: boolean;
 }
 
 const ItemRow = ({
@@ -30,7 +31,21 @@ const ItemRow = ({
     </View>
 );
 
-const LARequestDetailsSection = ({ requestDetails }: Props) => (
+const getDays = (durationHours: number) => {
+    const day = durationHours;
+    if (day === 0.5) {
+        return 'Half Day';
+    }
+    if (day === 1) {
+        return '1 Day';
+    }
+    return `${day} Days`;
+};
+
+const LARequestDetailsSection = ({
+    requestDetails,
+    isStatusVisible = false,
+}: Props) => (
     <>
         <Spacer />
         {requestDetails.leaveRequest && (
@@ -52,7 +67,7 @@ const LARequestDetailsSection = ({ requestDetails }: Props) => (
                 }
             />
         )}
-        {requestDetails.leaveRequest?.status && (
+        {requestDetails.leaveRequest?.status && isStatusVisible && (
             <>
                 <Spacer />
                 <ItemRow
@@ -79,11 +94,16 @@ const LARequestDetailsSection = ({ requestDetails }: Props) => (
                     <>
                         <Spacer />
                         <View style={styles.durationContainer}>
-                            <Chip
-                                content={`${requestDetails.durationDays}`}
-                                contentTextType='ParaLG'
-                                containerStyle={styles.durationChip}
-                            />
+                            {requestDetails?.leaveRequest?.durationHours && (
+                                <Chip
+                                    content={`${getDays(
+                                        requestDetails.leaveRequest
+                                            .durationHours / 8,
+                                    )}`}
+                                    contentTextType='ParaLG'
+                                    containerStyle={styles.durationChip}
+                                />
+                            )}
                             <Spacer width={2} height={3} />
                             <Chip
                                 content={getCalendarRangeDate(

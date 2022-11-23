@@ -139,6 +139,7 @@ export type LeaveRequestType = {
     requestDesc?: string | null;
     reviewerComment?: string | null;
     employee: EmployeeType;
+    durationHours: number | null;
 };
 
 export type RequestDetails = {
