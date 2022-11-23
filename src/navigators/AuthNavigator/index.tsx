@@ -5,7 +5,7 @@ import EmployeeHome from 'screens/EmployeeHome';
 import { useUserStore } from 'src/store';
 import { AuthScreensParamList } from '../types';
 
-import Drawer from '../../components/organisms/Drawer';
+import Drawer from '../../components/organisms/Global/Drawer';
 /* Screens */
 
 import ManagerHome from '../../screens/ManagerHome';
@@ -20,20 +20,17 @@ const AuthNavigator = () => {
     } = useUserStore();
     return (
         <DrawerNav.Navigator
+            initialRouteName={
+                role === 'employee' ? 'EmployeeHome' : 'ManagerHome'
+            }
             drawerContent={() => <MemoizedDrawer />}
             screenOptions={{
                 headerShown: false,
                 drawerType: 'front',
                 headerTitle: '',
             }}>
-            {role === 'employee' ? (
-                <DrawerNav.Screen
-                    name='EmployeeHome'
-                    component={EmployeeHome}
-                />
-            ) : (
-                <DrawerNav.Screen name='ManagerHome' component={ManagerHome} />
-            )}
+            <DrawerNav.Screen name='EmployeeHome' component={EmployeeHome} />
+            <DrawerNav.Screen name='ManagerHome' component={ManagerHome} />
         </DrawerNav.Navigator>
     );
 };
