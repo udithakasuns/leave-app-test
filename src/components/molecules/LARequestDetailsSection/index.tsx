@@ -5,13 +5,15 @@ import { StyleProp, TextStyle, View } from 'react-native';
 import { Chip, Spacer, Text } from 'src/components/atoms';
 import { getCalendarRangeDate } from 'src/utils/helpers/dateHandler';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
-import { RequestDetails, TestProps } from 'src/utils/types';
+import { AtLeast, RequestDetails, TestProps } from 'src/utils/types';
 import { AvatarChip, StatusChip } from '..';
 import { styles } from './styles';
 
 interface Props extends Partial<TestProps> {
     requestDetails: RequestDetails;
     isStatusVisible: boolean;
+    isDurationVisible: boolean;
+    isRecipientVisible: boolean;
 }
 
 const ItemRow = ({
@@ -44,8 +46,10 @@ const getDays = (durationHours: number) => {
 
 const LARequestDetailsSection = ({
     requestDetails,
-    isStatusVisible = false,
-}: Props) => (
+    isStatusVisible = true,
+    isDurationVisible = true,
+    isRecipientVisible = true,
+}: AtLeast<Props, 'requestDetails'>) => (
     <>
         <Spacer />
         {requestDetails.leaveRequest && (
@@ -86,7 +90,7 @@ const LARequestDetailsSection = ({
             </>
         )}
         <Spacer height={8} />
-        {requestDetails.leaveRequest?.startDate && (
+        {requestDetails.leaveRequest?.startDate && isDurationVisible && (
             <ItemRow
                 title='Duration :'
                 titleStyle={styles.durationText}
@@ -119,24 +123,28 @@ const LARequestDetailsSection = ({
             />
         )}
         <Spacer height={2} />
-        <ItemRow
-            title='Recipient :'
-            child={
-                <>
-                    <Spacer />
-                    {requestDetails.recipient?.map(item => (
-                        <AvatarChip
-                            key={item.employeeId}
-                            label={item.name ?? ''}
-                            source={{
-                                uri: item.authPic ?? '',
-                            }}
-                        />
-                    ))}
-                </>
-            }
-        />
-        <Spacer />
+        {isRecipientVisible && (
+            <>
+                <ItemRow
+                    title='Recipient :'
+                    child={
+                        <>
+                            <Spacer />
+                            {requestDetails.recipient?.map(item => (
+                                <AvatarChip
+                                    key={item.employeeId}
+                                    label={item.name ?? ''}
+                                    source={{
+                                        uri: item.authPic ?? '',
+                                    }}
+                                />
+                            ))}
+                        </>
+                    }
+                />
+                <Spacer />
+            </>
+        )}
     </>
 );
 

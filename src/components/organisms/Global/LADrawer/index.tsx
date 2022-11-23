@@ -14,7 +14,7 @@ interface ButtonProps {
     onPress: () => void;
     iconLibrary?: IconLibrary;
 }
-const Drawer: React.FC = () => {
+const LADrawer: React.FC = () => {
     const {
         user: { firstName, lastName, profilePic, designation },
     } = useUserStore();
@@ -31,14 +31,14 @@ const Drawer: React.FC = () => {
             onPress: () => {},
             iconLibrary: 'svg',
         },
-        { label: 'Support', icon: 'help-outline', onPress: awsOnGoogleSignOut },
+        { label: 'Support', icon: 'help-outline', onPress: () => {} },
     ]);
     return (
         <View style={styles.container}>
             <Avatar source={{ uri: profilePic }} size={scale.sc96} />
             <Spacer height={scale.sc6} />
             <Text numberOfLines={1} type='H1Bold'>
-                {firstName} {lastName} Jognn
+                {firstName} {lastName}
             </Text>
             <Text numberOfLines={2} type='ParaLG' color={colors.gray600}>
                 {designation}
@@ -74,4 +74,4 @@ const Drawer: React.FC = () => {
         </View>
     );
 };
-export default Drawer;
+export default LADrawer;

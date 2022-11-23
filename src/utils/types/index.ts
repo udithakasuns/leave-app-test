@@ -23,8 +23,12 @@ export type Colors = {
     approved: string;
     pending: string;
     green700: string;
+    green200: string;
     gray400: string;
     red900: string;
+    red500: string;
+    red50: string;
+    lime50: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -138,13 +142,11 @@ export type LeaveRequestType = {
     status: StatusType;
     requestDesc?: string | null;
     reviewerComment?: string | null;
-    employee: EmployeeType;
     durationHours: number | null;
 };
 
 export type RequestDetails = {
     leaveRequest?: AtLeast<LeaveRequestType, 'leaveType'>;
-    durationDays: string;
     recipient?: EmployeeType[];
 };
 
@@ -184,6 +186,7 @@ export enum EmployeeModal {
 export enum EmployeePopup {
     'LEAVE_REQUEST_CONFIRMATION',
     'LEAVE_REQUEST_REVOKE',
+    'LEAVE_REQUEST_CANCELLED',
 }
 
 export type ApplyFormValues = {

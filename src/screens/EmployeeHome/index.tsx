@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable prefer-destructuring */
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
@@ -86,7 +88,6 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         });
         fetchData();
         const tempDetails: RequestDetails = {
-            durationDays: '1 Day',
             leaveRequest: undefined,
         };
         tempDetails.leaveRequest = data[0];
@@ -111,9 +112,19 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
     const handleDeleteOnSuccess = () => {
         fetchData();
-        if (employeeModal?.modalType === EmployeeModal.CANCEL_REQUEST_MODAL) {
+        if (
+            employeeModal?.modalType === EmployeeModal.CANCEL_REQUEST_MODAL &&
+            employeeModal.requestDetails
+        ) {
+            let tempRequestDetails: RequestDetails;
+            tempRequestDetails = employeeModal.requestDetails;
+            tempRequestDetails!.leaveRequest!.status = 'CANCELLED';
             setEmployeeModal({
                 modalType: undefined,
+            });
+            setEmployeePopup({
+                requestDetails: tempRequestDetails,
+                modalType: EmployeePopup.LEAVE_REQUEST_CANCELLED,
             });
             return;
         }
@@ -224,7 +235,6 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 break;
         }
         const tempDetails: RequestDetails = {
-            durationDays: '1 Day',
             leaveRequest: undefined,
         };
         tempDetails.leaveRequest = item;
@@ -412,6 +422,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     formik.setFieldValue('entitlements', entitlements);
                     refetch();
                 }}
+                onCancellationUndoPress={() => {}}
             />
             <Toast
                 config={toastConfig}

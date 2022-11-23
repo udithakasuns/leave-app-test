@@ -28,6 +28,8 @@ const colors: Colors = {
     error: '#DC2626',
     errorLabel: '#7F1D1D',
     errorBackground: '#FEE2E2',
+    red50: '#FEF2F2',
+    red500: '#EF4444',
     red900: '#FECACA',
     disabledColor: '#CFCFCF',
     gray600: '#52525B',
@@ -37,7 +39,9 @@ const colors: Colors = {
     dividerColor: '#D4D4D8',
 
     approved: '#65A30D',
+    green200: '#62B774',
     green700: '#15803D',
+    lime50: '#F7FEE7',
     pending: '#FCD34D',
 };
 

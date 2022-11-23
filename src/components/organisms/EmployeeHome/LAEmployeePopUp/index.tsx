@@ -1,9 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Text } from 'src/components/atoms';
-import { ButtonDock, PopUp } from 'src/components/molecules';
-import LARequestDetailsSection from 'src/components/molecules/LARequestDetailsSection';
+import { PopUp } from 'src/components/molecules';
 import { EmployeePopup, RequestDetails, TestProps } from 'src/utils/types';
+import LeaveCancelledSheetBody from './LeaveCancelledSheetBody';
+import LeaveConfirmationSheetBody from './LeaveConfirmationSheetBody';
 import { styles } from './styles';
 
 export type PopUpProps = {
@@ -17,6 +16,7 @@ interface Props extends Partial<TestProps>, LAEmployeePopUpProps {
     onClose: () => void;
     onConfirmationUndoPress: () => void;
     onConfirmationHomePress: () => void;
+    onCancellationUndoPress: () => void;
 }
 
 const LAEmployeePopUp = ({
@@ -24,6 +24,7 @@ const LAEmployeePopUp = ({
     onClose,
     onConfirmationUndoPress,
     onConfirmationHomePress,
+    onCancellationUndoPress,
     requestDetails,
 }: Props) => (
     <>
@@ -38,38 +39,29 @@ const LAEmployeePopUp = ({
                 }}
                 bodyStyle={styles.containerStyle}
                 bodyChildren={
-                    <>
-                        {requestDetails && (
-                            <LARequestDetailsSection
-                                requestDetails={requestDetails}
-                                isStatusVisible={false}
-                            />
-                        )}
-                        <ButtonDock
-                            iconPosition='left'
-                            primaryButton={{
-                                label: 'Back to home',
-                                icon: 'arrow-forward',
-                                onPress: onConfirmationHomePress,
-                            }}
-                            secondaryButton={{
-                                label: 'Undo request',
-                                icon: 'undo',
-                                onPress: onConfirmationUndoPress,
-                            }}
-                        />
-                    </>
+                    <LeaveConfirmationSheetBody
+                        onConfirmationHomePress={onConfirmationHomePress}
+                        onConfirmationUndoPress={onConfirmationUndoPress}
+                        requestDetails={requestDetails}
+                    />
                 }
             />
         )}
-        {modalType === EmployeePopup.LEAVE_REQUEST_REVOKE && (
+        {modalType === EmployeePopup.LEAVE_REQUEST_CANCELLED && (
             <PopUp
                 onClose={onClose}
                 modalVisible
+                defaultHeader={{
+                    title: 'Leave request cancelled',
+                    subTitle:
+                        'Your leave request was cancelled and your supervisor was informed with your reason.',
+                }}
                 bodyChildren={
-                    <View>
-                        <Text>ss</Text>
-                    </View>
+                    <LeaveCancelledSheetBody
+                        onCancellationUndoPress={onCancellationUndoPress}
+                        onConfirmationHomePress={onConfirmationHomePress}
+                        requestDetails={requestDetails}
+                    />
                 }
             />
         )}

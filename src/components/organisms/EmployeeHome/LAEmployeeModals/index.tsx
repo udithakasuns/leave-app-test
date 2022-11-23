@@ -13,6 +13,7 @@ import {
 import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
 import CancelLeaveSheetBody from './CancelLeaveSheetBody';
 import ChooseDateSheetBody from './ChooseDateSheetBody';
+import DeniedLeaveSheetBody from './DeniedLeaveSheetBody';
 import LeaveInformationSheetBody from './LeaveInformationSheetBody';
 import PendingSheetBody from './PendingSheetBody';
 import { styles } from './styles';
@@ -142,6 +143,20 @@ const LAEmployeeModals = ({
                             onPressNudge={onPressNudge}
                             onPressViewMoreDetails={onPressViewMoreDetails}
                             onPressCancelLeave={onPressCancelLeave}
+                        />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.DENIED_LEAVE_MODAL && (
+                <Modal
+                    onClose={onClose}
+                    isVisible
+                    header='Denied leave status'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <DeniedLeaveSheetBody
+                            requestDetails={requestDetails}
+                            onClose={onClose}
                         />
                     }
                 />
