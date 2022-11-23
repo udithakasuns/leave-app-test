@@ -26,8 +26,6 @@ export const useFormik = (
             entitlements: [],
         },
         onSubmit: values => {
-            console.log(values.startDate);
-            console.log(values.endDate);
             mutate({
                 typeId: values.typeId,
                 startDate: values.startDate,
