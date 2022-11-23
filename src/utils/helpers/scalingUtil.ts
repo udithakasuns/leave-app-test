@@ -5,6 +5,10 @@ const { width, height } = Dimensions.get('window');
 // Guideline sizes are based on mobile prototype
 const guidelineBaseWidth = 428;
 const guidelineBaseHeight = 926;
+
+// const guidelineBaseWidth = 414;
+// const guidelineBaseHeight = 896;
+
 const scale = (size: number) => (width / guidelineBaseWidth) * size;
 const verticalScale = (size: number) => (height / guidelineBaseHeight) * size;
 const moderateScale = (size: number, factor = 0.5) =>
