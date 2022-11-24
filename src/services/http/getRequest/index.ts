@@ -1,4 +1,5 @@
 import { axiosInstance } from 'src/utils/helpers/axiosApiUtil';
+import { LeaveRequestParams } from 'src/utils/types';
 
 export const getHttpEntitlements = async () => {
     const res = await axiosInstance.get('/v1/leaves/entitlements');
@@ -15,8 +16,10 @@ export const getHttpEmployee = async () => {
     }
 };
 
-export const getHttpLeaveRequest = async () => {
-    const res = await axiosInstance.get('/v1/leaves');
+export const getHttpLeaveRequest = async (
+    params?: Partial<LeaveRequestParams>,
+) => {
+    const res = await axiosInstance.get('/v1/leaves', { params });
     return res.data.results;
 };
 
