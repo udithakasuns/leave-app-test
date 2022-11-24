@@ -1,4 +1,4 @@
-export type SigninPayload = {
+export type AuthUserPayload = {
     Session: null;
     attributes: {
         email: string;
