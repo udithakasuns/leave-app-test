@@ -1,13 +1,27 @@
 /* eslint-disable consistent-return */
 import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
-import { localSaveUserTokens } from '../local';
 
 export const awsOnGoogleSignIn = async () =>
     Auth.federatedSignIn({
         provider: CognitoHostedUIIdentityProvider.Google,
     });
 
+/* Used in axios interceptors */
+export const awsGetCurrentAccessToken = async (): Promise<string> => {
+    try {
+        const currentUser = await Auth.currentAuthenticatedUser();
+        const accessToken = (await Auth.userSession(currentUser))
+            .getAccessToken()
+            .getJwtToken();
+
+        return accessToken;
+    } catch (error) {
+        return '';
+    }
+};
+
+/* Used in axios interceptors */
 export const awsGetNewAccessToken = async (): Promise<string | undefined> => {
     try {
         const cognitoUser = await Auth.currentAuthenticatedUser();
@@ -16,17 +30,8 @@ export const awsGetNewAccessToken = async (): Promise<string | undefined> => {
         cognitoUser.refreshSession(
             refreshTokenObject,
             async (err: any, session: any) => {
-                if (session) {
-                    const { idToken, refreshToken, accessToken } = session;
-                    /* New Tokens will be saved to the local storage to use in axios calls */
-                    await localSaveUserTokens({
-                        accessToken: accessToken.jwtToken,
-                        idToken: idToken.jwtToken,
-                        refreshToken: refreshToken.token,
-                    });
-                    return accessToken.jwtToken;
-                }
-                return '';
+                const { accessToken } = session;
+                return accessToken.jwtToken;
             },
         );
     } catch (error) {

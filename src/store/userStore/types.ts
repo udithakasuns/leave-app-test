@@ -2,7 +2,6 @@ import { UserRole, UserType } from 'utils/types';
 
 export interface State {
     user: UserType;
-    isAutherized: boolean;
     loading: boolean;
     error: string;
 }
@@ -18,5 +17,4 @@ export type Actions = {
     updateUser: () => void;
     removeUser: () => void;
     setLoading: (state: boolean) => void;
-    setIsAutherized: (isAutherized: boolean) => void;
 };

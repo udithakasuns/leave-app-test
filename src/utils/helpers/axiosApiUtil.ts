@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { localGetUserTokenByType } from 'src/services/local';
 import axios from 'axios';
-import { awsGetNewAccessToken } from 'src/services/aws';
+import {
+    awsGetNewAccessToken,
+    awsGetCurrentAccessToken,
+} from 'src/services/aws';
 import { API_BASE_URL } from 'src/configs';
 
 const axiosInstance = axios.create({
@@ -11,7 +13,7 @@ const axiosInstance = axios.create({
 // Request interceptor for API calls
 axiosInstance.interceptors.request.use(
     async config => {
-        const accessToken = await localGetUserTokenByType('accessToken');
+        const accessToken = await awsGetCurrentAccessToken();
         config.headers = {
             Authorization: `Bearer ${accessToken}`,
         };
