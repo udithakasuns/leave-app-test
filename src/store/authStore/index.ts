@@ -1,12 +1,7 @@
-import create, { StateCreator } from 'zustand';
-import { persist, PersistOptions } from 'zustand/middleware';
+import create from 'zustand';
+import { persist } from 'zustand/middleware';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { State, Actions } from './types';
-
-type Persist = (
-    config: StateCreator<State & Actions>,
-    options: PersistOptions<State & Actions>,
-) => StateCreator<State & Actions>;
+import { State, Actions, Persist } from './types';
 
 const authStore = create<State & Actions>(
     (persist as Persist)(
