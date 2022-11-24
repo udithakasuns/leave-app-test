@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { awsOnGoogleSignOut } from 'services/aws';
 import { Avatar, Button, Spacer, Text } from 'src/components/atoms';
+import { localDeleteAllUserTokens } from 'src/services/local';
 import { useUserStore } from 'src/store';
 import { IconLibrary } from 'src/utils/types';
 import theme from 'utils/theme';
@@ -17,6 +17,8 @@ interface ButtonProps {
 const LADrawer: React.FC = () => {
     const {
         user: { firstName, lastName, profilePic, designation },
+        setIsAutherized,
+        removeUser,
     } = useUserStore();
     const [buttons] = useState<ButtonProps[]>([
         {
@@ -33,6 +35,13 @@ const LADrawer: React.FC = () => {
         },
         { label: 'Support', icon: 'help-outline', onPress: () => {} },
     ]);
+
+    const onPressLogout = async () => {
+        await localDeleteAllUserTokens();
+        setIsAutherized(false);
+        removeUser();
+    };
+
     return (
         <View style={styles.container}>
             <Avatar source={{ uri: profilePic }} size={scale.sc96} />
@@ -68,7 +77,7 @@ const LADrawer: React.FC = () => {
                     mode='contained-gray'
                     iconPosition='right'
                     labelStyle={styles.buttonLabelStyle}
-                    onPress={awsOnGoogleSignOut}
+                    onPress={onPressLogout}
                 />
             </View>
         </View>
