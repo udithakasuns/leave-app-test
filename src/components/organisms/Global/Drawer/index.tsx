@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Avatar, Button, Spacer, Text } from 'src/components/atoms';
-import { localDeleteAllUserTokens } from 'src/services/local';
-import { useUserStore } from 'src/store';
+import { useAuthStore, useUserStore } from 'src/store';
 import { IconLibrary } from 'src/utils/types';
 import theme from 'utils/theme';
 import { styles } from './styles';
@@ -17,9 +16,10 @@ interface ButtonProps {
 const Drawer: React.FC = () => {
     const {
         user: { firstName, lastName, profilePic, designation },
-        setIsAutherized,
-        removeUser,
     } = useUserStore();
+
+    const { setIsAutherized } = useAuthStore();
+
     const [buttons] = useState<ButtonProps[]>([
         {
             label: 'Account',
@@ -37,9 +37,7 @@ const Drawer: React.FC = () => {
     ]);
 
     const onPressLogout = async () => {
-        await localDeleteAllUserTokens();
         setIsAutherized(false);
-        removeUser();
     };
 
     return (

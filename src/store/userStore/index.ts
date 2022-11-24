@@ -15,7 +15,6 @@ const initialUser: UserType = {
 
 const initialState: State = {
     user: initialUser,
-    isAutherized: false,
     loading: false,
     error: '',
 };
@@ -54,7 +53,6 @@ const userStore = create<State & Actions>(set => ({
             },
         }));
     },
-    setIsAutherized: isAutherized => set(state => ({ ...state, isAutherized })),
     removeUser: () => set(state => ({ ...state, user: initialUser })),
     setLoading: loading => set(state => ({ ...state, loading })),
 }));
