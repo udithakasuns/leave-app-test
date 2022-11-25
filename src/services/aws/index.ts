@@ -11,6 +11,10 @@ export const awsOnSignOut = async () => {
     await Auth.signOut();
 };
 
+export const awsOnGeneralSignIn = (username: string, password: string) => {
+    Auth.signIn({ username, password });
+};
+
 /* Used in axios interceptors */
 export const awsGetCurrentAccessToken = async (): Promise<string> => {
     try {

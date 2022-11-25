@@ -13,7 +13,12 @@
     },
     "categories": {
       "auth": {
-        "leaveappadd850dd": {}
+        "leaveappadd850dd": {
+          "userPoolId": "us-east-1_PbC8Lrm0W",
+          "userPoolName": "CoreModulePool",
+          "webClientId": "6p865fk754cpg72asmv422kqvq",
+          "nativeClientId": "6p865fk754cpg72asmv422kqvq"
+        }
       }
     }
   }
