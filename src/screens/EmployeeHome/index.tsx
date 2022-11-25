@@ -325,7 +325,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     Hey {firstName} {'\n'}
                     {getGreetingsByTime()}
                 </Text>
-                <Spacer height={8} />
+                <Spacer height={5} />
                 {entitlements && (
                     <LAEntitlementGrid
                         entitlements={entitlements as EntitlementSelection[]}

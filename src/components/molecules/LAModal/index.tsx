@@ -1,6 +1,12 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React, { ReactElement } from 'react';
-import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
+import {
+    KeyboardAvoidingView,
+    ScrollView,
+    StyleProp,
+    View,
+    ViewStyle,
+} from 'react-native';
 import Modal, { OnSwipeCompleteParams } from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
@@ -49,6 +55,7 @@ const LAModal = ({
             style={container}
             animationInTiming={250}
             avoidKeyboard
+            propagateSwipe
             onSwipeComplete={(params: OnSwipeCompleteParams) => {
                 if (params.swipingDirection === 'down') {
                     onClose();
@@ -57,6 +64,7 @@ const LAModal = ({
             swipeDirection={['down']}>
             <View style={[bodyContainer, style]}>
                 <ScrollView
+                    automaticallyAdjustKeyboardInsets
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps='handled'>
                     {header && <DefaultHeaderContainer />}

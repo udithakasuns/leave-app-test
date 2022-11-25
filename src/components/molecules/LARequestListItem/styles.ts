@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import theme from 'src/utils/theme';
 
-const { scale, ms, colors } = theme;
+const { scale, pixel, colors } = theme;
 
 export const styles = StyleSheet.create({
     container: {
@@ -9,11 +9,12 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginVertical: scale.vsc12,
-        minWidth: ms(330),
+        minWidth: pixel(330),
     },
     dateContainer: {
         flexDirection: 'row',
-        minWidth: ms(70),
+        maxWidth: pixel(90),
+        minWidth: pixel(90),
     },
     contentStyle: {
         flex: 1,
@@ -22,9 +23,7 @@ export const styles = StyleSheet.create({
     containerStyle: {
         paddingVertical: scale.sc8,
         backgroundColor: colors.white,
-        maxWidth: ms(120),
-        minWidth: ms(120),
-        maxHeight: ms(38),
+        maxWidth: pixel(150),
         justifyContent: 'center',
         alignContent: 'center',
     },
