@@ -61,6 +61,9 @@ const RootNavigator = () => {
                 case 'cognitoHostedUI':
                     getCurrentAuthUser();
                     break;
+                case 'signOut':
+                    setIsAutherized(false);
+                    break;
                 default:
                     break;
             }

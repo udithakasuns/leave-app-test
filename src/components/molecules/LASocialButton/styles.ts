@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import theme from 'src/utils/theme';
 
-const { scale, radius, colors } = theme;
+const { pixel, radius, colors } = theme;
 
 export const styles = StyleSheet.create({
     container: {
@@ -9,9 +9,9 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         backgroundColor: colors.secondaryColor,
-        paddingVertical: scale.vsc20,
+        paddingVertical: pixel(18),
         borderColor: colors.primaryColor,
-        borderWidth: scale.sc1,
+        borderWidth: 1.5,
         borderRadius: radius.rd50,
     },
 });

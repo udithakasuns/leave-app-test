@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Avatar, Button, Spacer, Text } from 'src/components/atoms';
-import { useAuthStore, useUserStore } from 'src/store';
+import { awsOnSignOut } from 'src/services/aws';
+import { useUserStore } from 'src/store';
 import { IconLibrary } from 'src/utils/types';
 import theme from 'utils/theme';
 import { styles } from './styles';
@@ -18,8 +19,6 @@ const Drawer: React.FC = () => {
         user: { firstName, lastName, profilePic, designation },
     } = useUserStore();
 
-    const { setIsAutherized } = useAuthStore();
-
     const [buttons] = useState<ButtonProps[]>([
         {
             label: 'Account',
@@ -35,10 +34,6 @@ const Drawer: React.FC = () => {
         },
         { label: 'Support', icon: 'help-outline', onPress: () => {} },
     ]);
-
-    const onPressLogout = async () => {
-        setIsAutherized(false);
-    };
 
     return (
         <View style={styles.container}>
@@ -75,7 +70,7 @@ const Drawer: React.FC = () => {
                     mode='contained-gray'
                     iconPosition='right'
                     labelStyle={styles.buttonLabelStyle}
-                    onPress={onPressLogout}
+                    onPress={awsOnSignOut}
                 />
             </View>
         </View>

@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     contentStyle: {
-        marginRight: scale.sc4,
+        marginRight: scale.sc2,
     },
     pressableContainerStyle: {
         alignSelf: 'center',

@@ -71,7 +71,7 @@ const styles = ({ type, disabled, focused, value, error }: Props) => {
         inputContainer: {
             flexDirection: 'row',
             alignItems: 'center',
-            borderWidth: disabled || error || focused || value ? scale.vsc1 : 0,
+            borderWidth: disabled || error || focused || value ? 1 : 0,
             shadowColor: focused ? colors.black : 'transparent',
             shadowRadius: focused ? 0.2 : 0,
             shadowOpacity: focused ? 0.2 : 0,

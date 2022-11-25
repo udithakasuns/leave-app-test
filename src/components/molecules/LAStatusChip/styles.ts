@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import theme from 'src/utils/theme';
 
-const { colors, scale, ms } = theme;
+const { colors, scale, pixel } = theme;
 
 export const styles = StyleSheet.create({
     container: {
@@ -9,9 +9,8 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.white,
         justifyContent: 'center',
         alignContent: 'center',
-        maxWidth: ms(120),
-        minWidth: ms(120),
-        maxHeight: ms(38),
+        maxWidth: pixel(145),
+        minWidth: pixel(145),
     },
     content: {
         alignSelf: 'center',

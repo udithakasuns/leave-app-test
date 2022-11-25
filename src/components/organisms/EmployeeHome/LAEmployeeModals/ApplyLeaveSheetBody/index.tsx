@@ -84,16 +84,16 @@ const ApplyLeaveSheetBody = ({
 
     return (
         <View>
-            <Spacer height={scale.vsc8} />
+            <Spacer height={5} />
             <Text type='ParaLG'>Select leave type</Text>
-            <Spacer height={scale.vsc4} />
+            <Spacer height={2} />
             {formik.values.entitlements && (
                 <LAEntitlementGrid
                     entitlements={formik.values.entitlements}
                     onEntitlementPress={handleOnEntitlementPress}
                 />
             )}
-            <Spacer height={scale.vsc10} />
+            <Spacer height={scale.vsc8} />
             <SelectionButton
                 label={
                     formik.values.startDate
@@ -106,7 +106,7 @@ const ApplyLeaveSheetBody = ({
                 isSelected={!!formik.values.startDate}
                 onPress={onPressSelectDate}
             />
-            <Spacer height={scale.vsc10} />
+            <Spacer height={scale.vsc8} />
             {formik.values.endDate === '' && (
                 <>
                     <Text type='ParaLG'>Select leave type</Text>
@@ -156,12 +156,12 @@ const ApplyLeaveSheetBody = ({
                 onChangeText={formik.handleChange('requestDesc')}
                 containerStyle={styles.commentContainerStyle}
             />
-            <Spacer height={scale.vsc12} />
+            <Spacer height={scale.vsc8} />
             <SelectionButton
                 label='Add Attachment (Optional)'
                 onPress={() => {}}
             />
-            <Spacer height={scale.vsc10} />
+            <Spacer height={scale.vsc6} />
             <ButtonDock
                 primaryButton={{
                     label: 'Confirm and Apply',
@@ -172,7 +172,7 @@ const ApplyLeaveSheetBody = ({
                     onPress: onCancellation,
                 }}
             />
-            <Spacer height={scale.vsc10} />
+            <Spacer height={scale.vsc2} />
         </View>
     );
 };

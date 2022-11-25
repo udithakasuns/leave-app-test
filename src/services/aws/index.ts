@@ -7,6 +7,10 @@ export const awsOnGoogleSignIn = async () =>
         provider: CognitoHostedUIIdentityProvider.Google,
     });
 
+export const awsOnSignOut = async () => {
+    await Auth.signOut();
+};
+
 /* Used in axios interceptors */
 export const awsGetCurrentAccessToken = async (): Promise<string> => {
     try {
