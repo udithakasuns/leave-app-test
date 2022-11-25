@@ -10,7 +10,7 @@ const { colors } = theme;
 
 const LoginGeneral = () => {
     const passwordRef: LegacyRef<TextInput> = createRef();
-    const [email, setEmail] = useState<string>('kalanaramesh.dev@gmail.com');
+    const [email, setEmail] = useState<string>('test_mobile_user');
     const [password, setPassword] = useState<string>('Test@1234');
 
     const onChangeEmail = (text: string) => setEmail(text);
