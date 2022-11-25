@@ -2,7 +2,6 @@
 import { FormikProps } from 'formik';
 import React, { useState } from 'react';
 import { Modal } from 'src/components/molecules';
-import theme from 'src/utils/theme';
 import {
     ApplyFormValues,
     EmployeeModal,
@@ -25,8 +24,6 @@ export type ModalProps = {
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
-
-const { colors } = theme;
 
 interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     onClose: () => void;

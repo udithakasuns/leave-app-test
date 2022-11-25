@@ -1,6 +1,12 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React, { ReactElement } from 'react';
-import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
+import {
+    SafeAreaView,
+    ScrollView,
+    StyleProp,
+    View,
+    ViewStyle,
+} from 'react-native';
 import Modal, { OnSwipeCompleteParams } from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
@@ -29,7 +35,8 @@ const LAModal = ({
 }: PartialBy<SheetProps, 'header' | 'headerIcon' | 'style'>) => {
     const insets = useSafeAreaInsets();
 
-    const { container, bodyContainer, headerContainer } = styles(insets);
+    const { container, bodyContainer, headerContainer, safeAreaContainer } =
+        styles(insets);
     const DefaultHeaderContainer = () => (
         <View style={headerContainer}>
             <Icon
@@ -62,13 +69,13 @@ const LAModal = ({
                     {header && <DefaultHeaderContainer />}
                     {sheetBody}
                 </ScrollView>
+                <Toast
+                    config={toastConfig}
+                    position='bottom'
+                    bottomOffset={30}
+                    autoHide
+                />
             </View>
-            <Toast
-                config={toastConfig}
-                position='bottom'
-                bottomOffset={30}
-                autoHide
-            />
         </Modal>
     );
 };

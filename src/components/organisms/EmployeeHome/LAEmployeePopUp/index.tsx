@@ -30,7 +30,7 @@ const LAEmployeePopUp = ({
     <>
         {modalType === EmployeePopup.LEAVE_REQUEST_CONFIRMATION && (
             <PopUp
-                onClose={onClose}
+                onClose={onConfirmationHomePress}
                 modalVisible
                 defaultHeader={{
                     title: 'Leave Request Confirmed',

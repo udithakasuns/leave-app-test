@@ -108,6 +108,16 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
     const { mutate } = useMutation(['applyLeave'], postHttpApplyLeave, {
         onSuccess: handleMutationOnSuccess,
+        onError: error => {
+            const message = error.response.data.results[0].message;
+            Toast.show({
+                type: 'errorToast',
+                props: {
+                    title: 'Opps!',
+                    content: message,
+                },
+            });
+        },
     });
 
     const handleDeleteOnSuccess = () => {
@@ -424,12 +434,14 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 }}
                 onCancellationUndoPress={() => {}}
             />
-            <Toast
-                config={toastConfig}
-                position='bottom'
-                bottomOffset={30}
-                autoHide
-            />
+            {employeeModal?.modalType === undefined && (
+                <Toast
+                    config={toastConfig}
+                    position='bottom'
+                    bottomOffset={30}
+                    autoHide
+                />
+            )}
         </View>
     );
 };

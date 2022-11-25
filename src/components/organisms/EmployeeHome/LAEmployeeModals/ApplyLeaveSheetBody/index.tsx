@@ -109,7 +109,7 @@ const ApplyLeaveSheetBody = ({
             <Spacer height={scale.vsc10} />
             {formik.values.endDate === '' && (
                 <>
-                    <Text type='ParaLG'>Select leave type</Text>
+                    <Text type='ParaLG'>Select duration</Text>
                     <Spacer height={scale.vsc4} />
                     <View style={styles.halfButtonsStyle}>
                         <SelectionButton

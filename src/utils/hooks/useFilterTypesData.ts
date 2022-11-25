@@ -5,6 +5,6 @@ import { FilterTypes } from '../types';
 
 export const useFilterTypesData = () =>
     useQuery<FilterTypes[], AxiosError>(['filterTypes'], getHttpFilterTypes, {
-        staleTime: Infinity,
-        cacheTime: Infinity,
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
     });

@@ -26,13 +26,17 @@ export const useFormik = (
             entitlements: [],
         },
         onSubmit: values => {
+            let leaveState;
+            if (values.endDate === '' && values.leaveState !== undefined) {
+                leaveState = values.leaveState;
+            }
             mutate({
                 typeId: values.typeId,
                 startDate: values.startDate,
                 endDate:
                     values.endDate === '' ? values.startDate : values.endDate,
                 requestDesc: values.requestDesc,
-                leaveState: States.FULLDAY,
+                leaveState: leaveState ?? States.FULLDAY,
             });
         },
     });
