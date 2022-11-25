@@ -67,7 +67,7 @@ describe('Testing chip atom', () => {
             />,
         );
         expect(queryByTestId(TEST_ID_CONTAINER)).toHaveStyle({
-            borderWidth: scale.sc1,
+            borderWidth: 1,
             borderColor: colors.disabledColor,
         });
     });
@@ -83,7 +83,7 @@ describe('Testing chip atom', () => {
             />,
         );
         expect(queryByTestId(TEST_ID_CONTAINER)).toHaveStyle({
-            borderWidth: scale.sc1,
+            borderWidth: 1,
             borderColor: outlineColor,
         });
     });

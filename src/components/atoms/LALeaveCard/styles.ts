@@ -17,7 +17,7 @@ export default (isSelected: boolean, width: number) =>
             borderRadius: radius.rd12,
             borderColor: colors.secondaryOutline,
             borderWidth: isSelected ? 1 : 0,
-            margin: scale.sc4,
+            margin: scale.sc1,
             width,
         },
         leaveContainer: {
