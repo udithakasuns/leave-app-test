@@ -21,7 +21,7 @@ const LALeaveCard = ({
     uniCodeIcon,
     leaveType,
     isSelected = false,
-    width = theme.s(120),
+    width = theme.pixel(120 * 1.15),
     style,
     testId,
 }: PartialBy<Props, 'isSelected' | 'width' | 'style'>) => {

@@ -2,11 +2,11 @@ import { StyleSheet } from 'react-native';
 import { Theme } from 'react-native-calendars/src/types';
 import theme from 'src/utils/theme';
 
-const { ms, scale, radius, fontFamily, colors } = theme;
+const { scale, pixel, radius, fontFamily, colors } = theme;
 
 export const styles = StyleSheet.create({
     fullButtonStyle: {
-        paddingVertical: ms(12),
+        paddingVertical: pixel(12),
         flex: 1,
     },
     calendarStyle: {

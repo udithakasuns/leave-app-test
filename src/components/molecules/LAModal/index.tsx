@@ -1,12 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React, { ReactElement } from 'react';
-import {
-    SafeAreaView,
-    ScrollView,
-    StyleProp,
-    View,
-    ViewStyle,
-} from 'react-native';
+import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
 import Modal, { OnSwipeCompleteParams } from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
@@ -35,8 +29,7 @@ const LAModal = ({
 }: PartialBy<SheetProps, 'header' | 'headerIcon' | 'style'>) => {
     const insets = useSafeAreaInsets();
 
-    const { container, bodyContainer, headerContainer, safeAreaContainer } =
-        styles(insets);
+    const { container, bodyContainer, headerContainer } = styles(insets);
     const DefaultHeaderContainer = () => (
         <View style={headerContainer}>
             <Icon
@@ -56,6 +49,7 @@ const LAModal = ({
             style={container}
             animationInTiming={250}
             avoidKeyboard
+            propagateSwipe
             onSwipeComplete={(params: OnSwipeCompleteParams) => {
                 if (params.swipingDirection === 'down') {
                     onClose();
@@ -64,6 +58,7 @@ const LAModal = ({
             swipeDirection={['down']}>
             <View style={[bodyContainer, style]}>
                 <ScrollView
+                    automaticallyAdjustKeyboardInsets
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps='handled'>
                     {header && <DefaultHeaderContainer />}

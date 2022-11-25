@@ -1,13 +1,14 @@
 import { StyleSheet } from 'react-native';
 import theme from 'src/utils/theme';
 
-const { scale } = theme;
+const { scale, pixel } = theme;
 
 export const styles = StyleSheet.create({
     appBarContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginTop: pixel(8),
     },
     avatarChipContainer: { flexDirection: 'row' },
     chipContent: {
