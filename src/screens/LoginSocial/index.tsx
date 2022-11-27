@@ -10,7 +10,7 @@ import { styles } from './styles';
 
 const { colors } = theme;
 
-const Login: React.FC<LoginScreenProps> = () => (
+const LoginSocial: React.FC<LoginScreenProps> = () => (
     <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollView}>
             <Header description='Log into your Rootcode account using your G-suite account Single Sign on' />
@@ -27,4 +27,4 @@ const Login: React.FC<LoginScreenProps> = () => (
     </View>
 );
 
-export default Login;
+export default LoginSocial;

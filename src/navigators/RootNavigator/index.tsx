@@ -2,7 +2,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
-import Login from 'screens/Login';
+import LoginSocial from 'src/screens/LoginSocial';
 // import LoginGeneral from 'screens/LoginGeneral';
 import { Amplify, Auth, Hub } from 'aws-amplify';
 import {
@@ -143,7 +143,7 @@ const RootNavigator = () => {
                 {visibleAuthNav ? (
                     <StackNav.Screen name='Auth' component={AuthNavigator} />
                 ) : (
-                    <StackNav.Screen name='Login' component={Login} />
+                    <StackNav.Screen name='Login' component={LoginSocial} />
                     // <StackNav.Screen name='Login' component={LoginGeneral} />
                 )}
             </StackNav.Navigator>
