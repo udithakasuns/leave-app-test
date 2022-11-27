@@ -7,9 +7,14 @@ const authStore = create<State & Actions>(
     (persist as Persist)(
         set => ({
             isAutherized: false,
+            authType: '',
             setIsAutherized: isAutherized =>
                 set(() => ({
                     isAutherized,
+                })),
+            setAuthType: authType =>
+                set(() => ({
+                    authType,
                 })),
         }),
         {
