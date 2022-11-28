@@ -25,6 +25,7 @@ import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
 import theme from 'src/utils/theme';
 import {
+    ApplyFormValues,
     EmployeeModal,
     EmployeePopup,
     Entitlement,
@@ -32,6 +33,7 @@ import {
     FilterTypes,
     LeaveRequestParams,
     LeaveRequestType,
+    LeaveUndoProp,
     RequestDetails,
     Section,
 } from 'src/utils/types';
@@ -44,6 +46,7 @@ import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEm
 import { useUserStore } from 'src/store';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from 'src/utils/alerts';
+import { patchHttpApplyLeave } from 'src/services/http/patchRequest';
 import { styles } from './styles';
 import { useFormik } from '../../utils/hooks/useFormik';
 
@@ -119,6 +122,34 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             });
         },
     });
+
+    const handleUndoCancellationSuccess = () => {
+        Toast.show({
+            type: 'successToast',
+            props: {
+                title: 'Cancellation Undone',
+                content: 'Your leave request cancellation was undone',
+            },
+        });
+    };
+
+    const { mutate: undoCancellationMutate } = useMutation(
+        ['undoCancellation'],
+        patchHttpApplyLeave,
+        {
+            onSuccess: handleUndoCancellationSuccess,
+            onError: error => {
+                const message = error.response.data.results[0].message;
+                Toast.show({
+                    type: 'errorToast',
+                    props: {
+                        title: 'Opps!',
+                        content: message,
+                    },
+                });
+            },
+        },
+    );
 
     const handleDeleteOnSuccess = () => {
         fetchData();
@@ -432,7 +463,18 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     formik.setFieldValue('entitlements', entitlements);
                     refetch();
                 }}
-                onCancellationUndoPress={() => {}}
+                onCancellationUndoPress={() => {
+                    const values: Partial<LeaveUndoProp> = {
+                        startDate:
+                            employeePopup?.requestDetails?.leaveRequest
+                                ?.startDate,
+                        endDate:
+                            employeePopup?.requestDetails?.leaveRequest
+                                ?.endDate,
+                        leaveRequestStatus: 'PENDING',
+                    };
+                    undoCancellationMutate(values);
+                }}
             />
             {employeeModal?.modalType === undefined && (
                 <Toast

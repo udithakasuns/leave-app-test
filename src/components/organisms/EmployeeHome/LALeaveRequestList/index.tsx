@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import { ScrollView, SectionList, View } from 'react-native';
-import { Chip, Divider, Spacer } from 'src/components/atoms';
+import { Chip, Divider, Spacer, Text } from 'src/components/atoms';
 import { MonthSection, RequestListItem } from 'src/components/molecules';
 import { getStartEndDate } from 'src/utils/helpers/dateHandler';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
@@ -11,7 +11,7 @@ import { LAFilters } from '../..';
 import { FilterProps } from '../../Global/LAFilters';
 import { styles } from './styles';
 
-const { colors } = theme;
+const { colors, scale, fontSize } = theme;
 
 interface Props extends Partial<TestProps>, FilterProps {
     leaveRequests: Section[];
@@ -51,6 +51,36 @@ const LALeaveRequestList = ({
                 contentContainerStyle={styles.scrollViewContainer}>
                 <SectionList<LeaveRequestType, Section>
                     sections={leaveRequests}
+                    ListEmptyComponent={
+                        <View
+                            style={{
+                                paddingVertical: scale.vsc80,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                            <Text style={{ fontSize: fontSize.fs24 }}>🧐</Text>
+                            <Spacer height={2} />
+                            <View
+                                style={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}>
+                                <Text type='SubHBold'>No leave requests</Text>
+                                <Spacer height={2} />
+                                <Text
+                                    type='ParaSM'
+                                    style={{
+                                        color: colors.primaryGrayLabel,
+                                        textAlign: 'center',
+                                        paddingHorizontal: scale.sc32,
+                                    }}>
+                                    You have not requested leave. When you make
+                                    a leave request, that will show up here.
+                                    Don’t fret!
+                                </Text>
+                            </View>
+                        </View>
+                    }
                     keyExtractor={(item, index) => item.status + index}
                     scrollEnabled={false}
                     renderItem={({ item }) => <Item item={item} />}

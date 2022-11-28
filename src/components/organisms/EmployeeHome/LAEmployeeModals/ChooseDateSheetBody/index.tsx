@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import { Calendar, CalendarUtils, DateData } from 'react-native-calendars';
 import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { MarkedDates } from 'react-native-calendars/src/types';
+import Toast from 'react-native-toast-message';
 import { Spacer } from 'src/components/atoms';
 import { ButtonDock, SelectionButton } from 'src/components/molecules';
 import { getCalendarDate } from 'src/utils/helpers/dateHandler';
@@ -101,6 +102,19 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
     const handleDayPress = (day: DateData) => {
         const currentDate = new Date(range.startDate);
         const clickedDate = new Date(day.dateString);
+        if (clickedDate.getDay() === 0 || clickedDate.getDay() === 6) {
+            setRange({
+                startDate: '',
+            });
+            Toast.show({
+                type: 'errorToast',
+                props: {
+                    title: 'Not working weekends are you?',
+                    content: 'This day is not a working day.',
+                },
+            });
+            return;
+        }
         if (
             range.startDate &&
             !range.endDate &&

@@ -22,7 +22,7 @@ const styles = ({
         : 'transparent';
 
     if (disabled) {
-        containerBorderColor = outline ? colors.disabledColor : 'transparent';
+        containerBorderColor = outline ? colors.secondaryGray : 'transparent';
         containerBackgroundColor = colors.tertiaryColor;
     }
 

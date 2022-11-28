@@ -197,3 +197,10 @@ export type ApplyFormValues = {
     endDate: string;
     entitlements: EntitlementSelection[];
 };
+
+export type LeaveUndoProp = {
+    startDate: string;
+    endDate: string;
+    requestDesc: string;
+    leaveRequestStatus: StatusType;
+};

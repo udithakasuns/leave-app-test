@@ -67,6 +67,7 @@ const LAChipGroup = ({
                             ? colors.secondaryBackground
                             : colors.tertiaryColor
                     }
+                    containerStyle={styles.chipContainer}
                     outlineColor={colors.secondaryOutline}
                     {...rest}
                 />
