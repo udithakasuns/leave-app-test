@@ -35,12 +35,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.rtc_leave_app",
+    package = "com.rootcodelabs.leaveapp",
 )
 
 android_resource(
     name = "res",
-    package = "com.rtc_leave_app",
+    package = "com.rootcodelabs.leaveapp",
     res = "src/main/res",
 )
 

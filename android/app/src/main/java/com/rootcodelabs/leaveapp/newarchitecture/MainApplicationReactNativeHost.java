@@ -1,4 +1,4 @@
-package com.rtc_leave_app.newarchitecture;
+package com.rootcodelabs.leaveapp.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.rtc_leave_app.BuildConfig;
-import com.rtc_leave_app.newarchitecture.components.MainComponentsRegistry;
-import com.rtc_leave_app.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.rootcodelabs.leaveapp.BuildConfig;
+import com.rootcodelabs.leaveapp.newarchitecture.components.MainComponentsRegistry;
+import com.rootcodelabs.leaveapp.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

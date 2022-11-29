@@ -1,4 +1,4 @@
-package com.rtc_leave_app.newarchitecture.modules;
+package com.rootcodelabs.leaveapp.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;
