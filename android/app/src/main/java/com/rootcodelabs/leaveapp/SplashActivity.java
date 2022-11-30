@@ -1,4 +1,4 @@
-package com.rtc_leave_app;
+package com.rootcodelabs.leaveapp;
 
 import android.content.Intent;
 import android.os.Bundle;
