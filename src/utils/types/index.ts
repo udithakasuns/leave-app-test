@@ -194,3 +194,5 @@ export type ApplyFormValues = {
     endDate: string;
     entitlements: EntitlementSelection[];
 };
+
+export type DeviceType = 'ANDROID' | 'IOS';
