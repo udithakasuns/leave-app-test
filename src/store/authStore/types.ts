@@ -6,11 +6,13 @@ type AuthType = 'social' | 'general' | '';
 export type State = {
     isAutherized: boolean;
     authType: AuthType;
+    isDeviceRegistered: boolean; // For notifications
 };
 
 export type Actions = {
     setIsAutherized: (isAutherized: boolean) => void;
     setAuthType: (authType: AuthType) => void;
+    setIsDeviceRegistered: (isDeviceRegistered: boolean) => void; // For notifications
 };
 
 export type Persist = (

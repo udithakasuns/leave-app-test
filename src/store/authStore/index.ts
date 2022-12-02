@@ -8,6 +8,7 @@ const authStore = create<State & Actions>(
         set => ({
             isAutherized: false,
             authType: '',
+            isDeviceRegistered: false,
             setIsAutherized: isAutherized =>
                 set(() => ({
                     isAutherized,
@@ -16,6 +17,8 @@ const authStore = create<State & Actions>(
                 set(() => ({
                     authType,
                 })),
+            setIsDeviceRegistered: isDeviceRegistered =>
+                set(() => ({ isDeviceRegistered })),
         }),
         {
             name: 'auth-storage',

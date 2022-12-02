@@ -1,14 +1,14 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import EmployeeHome from 'screens/EmployeeHome';
 import { useUserStore } from 'src/store';
+
+import ManagerHome from 'screens/ManagerHome';
+import EmployeeHome from 'screens/EmployeeHome';
+import Notifications from 'screens/Notifications';
 import { AuthScreensParamList } from '../types';
 
 import Drawer from '../../components/organisms/Global/Drawer';
-/* Screens */
-
-import ManagerHome from '../../screens/ManagerHome';
 
 const DrawerNav = createDrawerNavigator<AuthScreensParamList>();
 
@@ -31,6 +31,7 @@ const AuthNavigator = () => {
             }}>
             <DrawerNav.Screen name='EmployeeHome' component={EmployeeHome} />
             <DrawerNav.Screen name='ManagerHome' component={ManagerHome} />
+            <DrawerNav.Screen name='Notifications' component={Notifications} />
         </DrawerNav.Navigator>
     );
 };

@@ -5,6 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 export type AuthScreensParamList = {
     EmployeeHome: undefined;
     ManagerHome: undefined;
+    Notifications: undefined;
 };
 
 export type RootScreensParamsList = {
@@ -30,6 +31,11 @@ export type EmployeeHomeScreensProps = NativeStackScreenProps<
 export type ManagerHomeScreensProps = NativeStackScreenProps<
     AuthScreensParamList,
     'ManagerHome'
+>;
+
+export type NotificationsScreensProps = NativeStackScreenProps<
+    AuthScreensParamList,
+    'Notifications'
 >;
 
 export type DrawerScreenNavigationProp = DrawerNavigationProp<

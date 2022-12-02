@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Pressable, View } from 'react-native';
 import {
     Avatar,
@@ -10,10 +10,11 @@ import {
     Icon,
     IconSize,
     Spacer,
+    Text,
 } from 'src/components/atoms';
 import { Modal } from 'src/components/molecules';
 import { DrawerScreenNavigationProp } from 'src/navigators/types';
-import { useUserStore } from 'src/store';
+import { useNotificationStore, useUserStore } from 'src/store';
 import theme from 'src/utils/theme';
 import { RoleSheetBody } from './RoleSheetBody';
 import { styles } from './styles';
@@ -34,6 +35,7 @@ export type SelectedProperties = {
 };
 
 const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
+    const { count } = useNotificationStore();
     const navigation = useNavigation<DrawerScreenNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const {
@@ -54,6 +56,13 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
             employeeMode: 'contained-gray',
         };
     };
+
+    const notificationCount = useMemo<string>(() => {
+        if (count && count > 0) {
+            return count > 100 ? '99' : count.toString();
+        }
+        return '';
+    }, [count]);
 
     return (
         <View style={styles.appBarContainer}>
@@ -83,11 +92,20 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
                     />
                 )}
             </View>
-            <Icon
-                name='notifications'
-                onPress={onPressNotification}
-                size={IconSize.xLarge}
-            />
+            <Pressable onPress={() => navigation.navigate('Notifications')}>
+                <Icon
+                    name='notifications'
+                    onPress={onPressNotification}
+                    size={IconSize.xLarge}
+                />
+                {notificationCount && (
+                    <View style={styles.notificationCountContainer}>
+                        <Text type='ParaXS' color={colors.white}>
+                            {notificationCount}
+                        </Text>
+                    </View>
+                )}
+            </Pressable>
             <Modal
                 onClose={() => setModalVisible(state => !state)}
                 isVisible={modalVisible}

@@ -29,3 +29,8 @@ export const getHttpFilterTypes = async () => {
     });
     return res.data.results;
 };
+
+export const getHttpNotificationCount = async () => {
+    const res = await axiosInstance.get('v1/notifications/count');
+    return res;
+};
