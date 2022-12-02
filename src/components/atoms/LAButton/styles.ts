@@ -30,6 +30,12 @@ export default (
                     textIcon: colors.errorLabel,
                     borderColor: colors.errorLabel,
                 };
+            case 'outlined-light-error':
+                return {
+                    background: colors.red50,
+                    textIcon: colors.error,
+                    borderColor: colors.error,
+                };
             default:
                 return {
                     background: colors.primaryColor,
@@ -39,7 +45,11 @@ export default (
     };
 
     const getBorderWidth = () =>
-        mode === 'outlined' || mode === 'outlined-error' ? 1 : 0;
+        mode === 'outlined' ||
+        mode === 'outlined-error' ||
+        mode === 'outlined-light-error'
+            ? 1
+            : 0;
 
     return StyleSheet.create({
         buttonContainer: {
