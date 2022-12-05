@@ -1,13 +1,16 @@
 import { FormikProps } from 'formik';
 import React from 'react';
 import { View } from 'react-native';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { Input, Spacer, Text } from 'src/components/atoms';
 import {
     ButtonDock,
     HalfButton,
     SelectionButton,
 } from 'src/components/molecules';
+import { showErrorToast } from 'src/utils/alerts';
 import { getCalendarRangeDate } from 'src/utils/helpers/dateHandler';
+import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import theme from 'src/utils/theme';
 import {
     ApplyFormValues,
@@ -26,7 +29,7 @@ interface Props extends Partial<TestProps> {
     onCancellation: () => void;
 }
 
-const { scale } = theme;
+const { scale, colors } = theme;
 
 const ApplyLeaveSheetBody = ({
     formik,
@@ -36,6 +39,14 @@ const ApplyLeaveSheetBody = ({
     onCancellation,
 }: Props) => {
     const handleOnEntitlementPress = (selected: EntitlementSelection) => {
+        if (selected.balanceInDays === 0) {
+            showErrorToast(
+                ErrorCodes.UNAVAILABLE_LEAVE_ENTITLEMENTS,
+                selected.leaveType.name,
+            );
+            return;
+        }
+
         const entitlementsDeepClone = formik.values.entitlements.map(item => {
             const tempEntitlement = item;
             if (item.entitlementId === selected.entitlementId) {
@@ -47,6 +58,7 @@ const ApplyLeaveSheetBody = ({
         });
         formik.setFieldValue('entitlements', entitlementsDeepClone);
         formik.setFieldValue('typeId', selected.leaveType.typeId);
+        formik.setFieldValue('selectedLeaveBalance', selected.balanceInDays);
     };
 
     const handleOnInitialHalfDayPress = () => {
@@ -91,10 +103,12 @@ const ApplyLeaveSheetBody = ({
                 <LAEntitlementGrid
                     entitlements={formik.values.entitlements}
                     onEntitlementPress={handleOnEntitlementPress}
+                    isError={formik.errors.typeId !== undefined}
                 />
             )}
             <Spacer height={scale.vsc8} />
             <SelectionButton
+                isError={formik.errors.startDate !== undefined}
                 label={
                     formik.values.startDate
                         ? getCalendarRangeDate(
@@ -115,14 +129,19 @@ const ApplyLeaveSheetBody = ({
                         <SelectionButton
                             label='Full Day'
                             isSelected={getStateValidation(States.FULLDAY)}
+                            isError={formik.errors.leaveState !== undefined}
                             onPress={onFullDayPress}
                             icon=''
                             buttonStyle={styles.fullButtonStyle}
+                            isDisable={
+                                formik.values.selectedLeaveBalance === 0.5
+                            }
                         />
                         <Spacer width={scale.sc4} />
                         <HalfButton
                             label='Half Day'
                             icon='arrow-forward'
+                            isError={formik.errors.leaveState !== undefined}
                             isHalfSelected={
                                 getStateValidation(States.HALFDAY_EVENING) ||
                                 getStateValidation(States.HALFDAY_MORNING) ||

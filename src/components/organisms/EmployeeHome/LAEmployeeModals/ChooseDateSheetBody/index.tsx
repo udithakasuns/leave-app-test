@@ -8,7 +8,9 @@ import { MarkedDates } from 'react-native-calendars/src/types';
 import Toast from 'react-native-toast-message';
 import { Spacer } from 'src/components/atoms';
 import { ButtonDock, SelectionButton } from 'src/components/molecules';
+import { showErrorToast } from 'src/utils/alerts';
 import { getCalendarDate } from 'src/utils/helpers/dateHandler';
+import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import theme from 'src/utils/theme';
 import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
 import { calendarTheme, styles } from './styles';
@@ -61,7 +63,6 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
 
     const getAllHolidaysForMonth = (timeStamp: number) => {
         const holidayMarker: MarkingProps = {
-            disableTouchEvent: true,
             selected: true,
             selectedColor: colors.secondaryColor,
             selectedTextColor: colors.pending,
@@ -106,13 +107,7 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
             setRange({
                 startDate: '',
             });
-            Toast.show({
-                type: 'errorToast',
-                props: {
-                    title: 'Not working weekends are you?',
-                    content: 'This day is not a working day.',
-                },
-            });
+            showErrorToast(ErrorCodes.ERROR_OCCURRED);
             return;
         }
         if (
@@ -138,6 +133,8 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                 range.endDate === undefined ? '' : range.endDate,
             );
             onBackPress(EmployeeModal.CHOSE_DATE_MODAL);
+        } else {
+            showErrorToast(ErrorCodes.APPLY_CONFIRMATION_DATE);
         }
     };
 

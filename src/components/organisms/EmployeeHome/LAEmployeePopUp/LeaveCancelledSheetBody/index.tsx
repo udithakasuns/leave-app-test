@@ -1,6 +1,6 @@
 import React from 'react';
 import { ButtonDock } from 'src/components/molecules';
-import LARequestDetailsSection from 'src/components/molecules/LARequestDetailsSection';
+import LARequestDetailsSection from 'src/components/molecules/LAEmployeeRequestDetails';
 import { PartialBy, RequestDetails, TestProps } from 'src/utils/types';
 
 interface Props extends Partial<TestProps> {

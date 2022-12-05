@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { EmployeeHomeScreensProps } from 'navigators/types';
+import {
+    DrawerScreenNavigationProp,
+    EmployeeViewAllScreensProps,
+} from 'navigators/types';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { Button, Spacer, Text } from 'src/components/atoms';
+import { Button, Icon, IconSize, Spacer, Text } from 'src/components/atoms';
 import {
-    LAAppBar,
     LAEmployeeModals,
     LAEmployeePopUp,
-    LAEntitlementGrid,
     LALeaveRequestList,
 } from 'src/components/organisms';
 import { LAEmployeeModalProps } from 'src/components/organisms/EmployeeHome/LAEmployeeModals';
@@ -26,10 +27,8 @@ import {
     useEmployeeFilterStore,
     useEmployeeStore,
     useRecipientStore,
-    useUserStore,
 } from 'src/store';
 import { showErrorToast, toastConfig } from 'src/utils/alerts';
-import { getGreetingsByTime } from 'src/utils/helpers/dateHandler';
 import {
     filterChipsEmployee,
     sortByButtonsEmployee,
@@ -49,11 +48,11 @@ import {
     Section,
 } from 'src/utils/types';
 import { useFormik } from '../../utils/hooks/useFormik';
-import { handleOnApplyLeaveError } from './helpers/errorHandlers';
+import { handleOnApplyLeaveError } from '../EmployeeHome/helpers/errorHandlers';
 import {
     getHandleDateModal,
     getHandleRequestSelectedModal,
-} from './helpers/modalHandlers';
+} from '../EmployeeHome/helpers/modalHandlers';
 import {
     handleApplyMutationSuccess,
     handleOnDeleteSuccess,
@@ -61,18 +60,18 @@ import {
     handleOnLeaveRequestSuccess,
     handleOnNudgeSuccess,
     handleOnUndoCancellationSuccess,
-} from './helpers/successHandlers';
+} from '../EmployeeHome/helpers/successHandlers';
+
 import { styles } from './styles';
 
-const { scale } = theme;
+const { scale, pixel } = theme;
 
-const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
-    const {
-        user: { firstName },
-    } = useUserStore();
+const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
+    const navigation = useNavigation<DrawerScreenNavigationProp>();
+
     const {
         params,
-        setSortByButtons,
+        resetFiltersParams,
         setFilterChips,
         filterChips,
         setEmptyFilterUtils,
@@ -84,8 +83,6 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
     const { employeeRequest, setLeaveRequest, setLeaveRequestByID } =
         useEmployeeStore();
-
-    const isFocused = useIsFocused();
 
     const { managers } = useRecipientStore();
 
@@ -100,9 +97,10 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const {
         data: leaveRequests,
         refetch,
+        isLoading: loadingLeaveRequests,
     }: UseQueryResult<Section<LeaveRequestType[]>[]> = useLeaveRequestData(
         params,
-        true,
+        false,
         (data: Section<LeaveRequestType[]>[]) =>
             handleOnLeaveRequestSuccess(
                 data,
@@ -178,31 +176,6 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         },
     );
 
-    const handleEntitlementPress = (entitlement: EntitlementSelection) => {
-        if (entitlement.balanceInDays === 0) {
-            showErrorToast(
-                ErrorCodes.UNAVAILABLE_LEAVE_ENTITLEMENTS,
-                entitlement.leaveType.name,
-            );
-            return;
-        }
-        const entitlementsDeepClone: EntitlementSelection[] = JSON.parse(
-            JSON.stringify(entitlements),
-        );
-        entitlementsDeepClone.map(item => {
-            const tempEntitlement = item;
-            if (item.entitlementId === entitlement.entitlementId) {
-                tempEntitlement.isSelected = true;
-            }
-            return tempEntitlement;
-        });
-        formik.setFieldValue('entitlements', entitlementsDeepClone);
-        formik.setFieldValue('typeId', entitlement.leaveType.typeId);
-        setEmployeeModal({
-            modalType: EmployeeModal.APPLY_LEAVE_MODAL,
-        });
-    };
-
     const handleRequestItemPress = (item: LeaveRequestType) => {
         setLeaveRequestByID(item.leaveRequestId);
         setEmployeeModal({
@@ -242,64 +215,43 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         filterRefetch();
     };
 
-    useEffect(() => {
-        if (isFocused) {
-            setSortByButtons(sortByButtonsEmployee);
-            setFilterChips(filterChipsEmployee);
-            refetchAllData();
-        }
-    }, [isFocused]);
+    const backAction = () => {
+        resetFiltersParams();
+        navigation.jumpTo('EmployeeHome');
+        return true;
+    };
 
     return (
         <View style={styles.innerContainer}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <LAAppBar
-                    currentScreen='employee'
-                    onPressNotification={() => {}}
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: pixel(8),
+                }}>
+                <Icon
+                    name='arrow-back'
+                    enableBackground
+                    size={IconSize.medium}
+                    increasePadding={1}
+                    onPress={backAction}
                 />
                 <Spacer />
-                <Text type='H1Bold'>
-                    Hey {firstName} {'\n'}
-                    {getGreetingsByTime()}
+                <Text>Home</Text>
+            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <Spacer />
+                <Text type='SubHBold' style={{ marginHorizontal: scale.sc5 }}>
+                    Leave Requests
                 </Text>
-                <Spacer height={5} />
-                {entitlements && (
-                    <LAEntitlementGrid
-                        entitlements={entitlements as EntitlementSelection[]}
-                        onEntitlementPress={handleEntitlementPress}
-                        isError={false}
+                {!loadingLeaveRequests && (
+                    <LALeaveRequestList
+                        leaveRequests={leaveRequests}
+                        onPressRequestItem={handleRequestItemPress}
+                        isViewAllPage
                     />
                 )}
-                <Spacer />
-                <Text type='SubHBold'>Leave Requests</Text>
-                {leaveRequests && (
-                    <>
-                        <LALeaveRequestList
-                            leaveRequests={leaveRequests}
-                            onPressRequestItem={handleRequestItemPress}
-                            isViewAllPage={false}
-                        />
-                        <View
-                            style={{
-                                marginBottom: scale.sc80 * leaveRequests.length,
-                            }}
-                        />
-                    </>
-                )}
             </ScrollView>
-            <View style={styles.buttonContainer}>
-                <Button
-                    label='Apply Leave'
-                    icon='arrow-forward'
-                    iconPosition='left'
-                    onPress={() =>
-                        setEmployeeModal({
-                            ...employeeModal,
-                            modalType: EmployeeModal.APPLY_LEAVE_MODAL,
-                        })
-                    }
-                />
-            </View>
             <LAEmployeeModals
                 modalType={employeeModal?.modalType}
                 onBackPressType={employeeModal?.onBackPressType}
@@ -373,4 +325,4 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     );
 };
 
-export default EmployeeHome;
+export default EmployeeHomeViewAll;

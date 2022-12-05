@@ -1,22 +1,24 @@
 import React from 'react';
-import { Button, Divider, Input, Spacer } from 'src/components/atoms';
-import { RequestDetailsSection } from 'src/components/molecules';
+import { View } from 'react-native';
+import { Button, Divider, Input, Spacer, Text } from 'src/components/atoms';
+import { AvatarChip, RequestDetailsSection } from 'src/components/molecules';
 import theme from 'src/utils/theme';
 import { PartialBy, RequestDetails, TestProps } from 'src/utils/types';
+import { styles } from './styles';
 
 interface Props extends Partial<TestProps> {
     requestDetails: RequestDetails;
     onClose: () => void;
 }
 
-const { colors } = theme;
+const { colors, scale } = theme;
 
 const DeniedLeaveSheetBody = ({
     requestDetails,
     onClose,
 }: PartialBy<Props, 'requestDetails'>) => (
     <>
-        {requestDetails && (
+        {requestDetails?.leaveRequest && (
             <RequestDetailsSection
                 requestDetails={requestDetails}
                 isRecipientVisible={false}
@@ -26,20 +28,35 @@ const DeniedLeaveSheetBody = ({
             placeholder={requestDetails?.leaveRequest?.requestDesc ?? ''}
             label='Reason'
             type='COMMENT'
-            containerStyle={{ margin: 0 }}
             editable={false}
             placeholderColor={colors.gray600}
+            containerStyle={styles.inputContainerStyle}
+            inputContainerStyle={styles.inputTextStyle}
         />
         <Spacer />
         <Divider />
+        <Spacer />
+        <View style={styles.itemRow}>
+            <Text type='ParaLG' style={{ alignSelf: 'center' }}>
+                Denied by :
+            </Text>
+            <AvatarChip
+                containerStyle={{ marginLeft: 10 }}
+                label={requestDetails?.leaveRequest?.reviewer?.name ?? ''}
+                source={{
+                    uri: requestDetails?.leaveRequest?.reviewer?.authPic ?? '',
+                }}
+            />
+        </View>
         <Spacer />
         <Input
             placeholder={requestDetails?.leaveRequest?.reviewerComment ?? ''}
             label='Reason for denial'
             type='COMMENT'
-            containerStyle={{ margin: 0 }}
             editable={false}
             placeholderColor={colors.gray600}
+            containerStyle={styles.inputContainerStyle}
+            inputContainerStyle={styles.inputTextStyle}
         />
         <Spacer />
         <Button
