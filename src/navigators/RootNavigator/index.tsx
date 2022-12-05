@@ -53,7 +53,6 @@ const RootNavigator = () => {
                 saveUser(email, name, family_name, picture, userRole);
                 await updateUser();
                 updateRecipients();
-                setAuthType('social');
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
             } else {
@@ -86,7 +85,6 @@ const RootNavigator = () => {
                 saveUser(email, name, '', '', userRole);
                 await updateUser(); // This will returns an error (Need to fix from backend)
                 updateRecipients();
-                setAuthType('general');
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
             }
@@ -113,27 +111,29 @@ const RootNavigator = () => {
 
     useEffect(() => {
         /* Hub is listened to all events related to authentication */
-        const unsubscribe = Hub.listen('auth', ({ payload: { event } }) => {
-            switch (event) {
-                /* Social Signin event */
-                case 'cognitoHostedUI':
-                    getCurrentSocialAuthUser();
-                    break;
-
-                /* General Signin event */
-                // case 'signIn':
-                //     getCurrentGeneralAuthUser();
-                //     break;
-                case 'signOut':
-                    setIsAutherized(false);
-                    break;
-                default:
-                    break;
-            }
-        });
-
-        return () => unsubscribe();
-    }, []);
+        if (authType) {
+            const unsubscribe = Hub.listen('auth', ({ payload: { event } }) => {
+                switch (event) {
+                    /* Log the user based on auth type */
+                    case 'signIn':
+                        if (authType === 'social') {
+                            getCurrentSocialAuthUser();
+                        } else if (authType === 'general') {
+                            getCurrentGeneralAuthUser();
+                        }
+                        break;
+                    case 'signOut':
+                        setIsAutherized(false);
+                        setAuthType('');
+                        break;
+                    default:
+                        break;
+                }
+            });
+            return () => unsubscribe();
+        }
+        return () => {};
+    }, [authType]);
 
     return (
         <SafeAreaView style={styles.container}>

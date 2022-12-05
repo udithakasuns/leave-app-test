@@ -1,2 +1,2 @@
 json_key_file "key.json"
-package_name("com.rtc_leave_app") # e.g. com.krausefx.app
+package_name("com.rootcodelabs.leaveapp") # e.g. com.krausefx.app

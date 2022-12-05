@@ -1,4 +1,4 @@
-package com.rtc_leave_app;
+package com.rootcodelabs.leaveapp;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
