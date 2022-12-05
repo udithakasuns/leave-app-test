@@ -1,6 +1,5 @@
-import { MultiChipProps } from 'src/components/molecules';
-import { FilterChipsProps } from 'src/components/organisms/Global/LAFilters';
-import { Status } from '../types';
+import { MultiButtonProps, MultiChipProps } from 'src/components/molecules';
+import { FilterChipsProps, FilterDates, Status } from '../types';
 
 const leaveStatusChips: MultiChipProps[] = [
     {
@@ -20,10 +19,54 @@ const leaveStatusChips: MultiChipProps[] = [
     },
 ];
 
-export const filterChips: FilterChipsProps[] = [
+const dateChips: MultiChipProps[] = [
+    {
+        chipId: 1,
+        content: 'Today',
+        chipInfo: FilterDates.TODAY,
+    },
+    {
+        chipId: 2,
+        content: 'This week',
+        chipInfo: FilterDates.WEEK,
+    },
+    {
+        chipId: 3,
+        content: 'This month',
+        chipInfo: FilterDates.MONTH,
+    },
+];
+
+export const filterChipsEmployee: FilterChipsProps[] = [
     {
         id: 1,
         title: 'Leave Status',
         chips: leaveStatusChips,
+    },
+];
+
+export const filterChipsManager: FilterChipsProps[] = [
+    {
+        id: 1,
+        title: 'Leave Status',
+        chips: leaveStatusChips,
+    },
+    {
+        id: 3,
+        title: 'Date',
+        chips: dateChips,
+        singleSelection: true,
+    },
+];
+
+export const sortByButtonsEmployee: MultiButtonProps[] = [
+    {
+        buttonId: 1,
+        label: 'Date Requested',
+        selected: true,
+    },
+    {
+        buttonId: 2,
+        label: 'Leave Date',
     },
 ];

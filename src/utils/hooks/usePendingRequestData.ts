@@ -1,32 +1,32 @@
 import { useQuery } from '@tanstack/react-query';
-import { getHttpLeaveRequest } from 'src/services/http';
+import { getHttpPendingRequest } from 'src/services/http';
 import { getFormattedMonth } from '../helpers/dateHandler';
-import { LeaveRequestParams, LeaveRequestType, Section } from '../types';
+import { LeaveRequestParams, PendingRequestType, Section } from '../types';
 
-export const useLeaveRequestData = (
+export const usePendingRequestData = (
     params?: LeaveRequestParams,
     limit?: boolean,
-    onSuccessCallback?: (data: Section<LeaveRequestType[]>[]) => void,
+    onSuccess?: (data: Section<PendingRequestType[]>[]) => void,
 ) =>
-    useQuery(['leaveRequests', params], () => getHttpLeaveRequest(params), {
+    useQuery(['pendingRequests', params], () => getHttpPendingRequest(params), {
         refetchOnMount: true,
         refetchOnWindowFocus: true,
-        onSuccess: onSuccessCallback,
+        onSuccess,
         select: json => {
             let isViewAllVisible = true;
-            let requestItems: LeaveRequestType[] = json[0].items;
+            let requestItems: PendingRequestType[] = json[0].items;
             if (requestItems.length < 5) isViewAllVisible = false;
             if (limit) requestItems = requestItems.slice(0, 5);
             let monthTitles: string[] = requestItems.map(item =>
                 getFormattedMonth(item.startDate),
             );
-            let leaveRequestsData: Section<LeaveRequestType[]>[];
+            let leaveRequestsData: Section<PendingRequestType[]>[];
             if (params?.sortKey === 'startDate') {
                 monthTitles = monthTitles.filter(
                     (item, pos) => monthTitles.indexOf(item) === pos,
                 );
                 leaveRequestsData = monthTitles.map(
-                    (item: string): Section<LeaveRequestType[]> => ({
+                    (item: string): Section<PendingRequestType[]> => ({
                         title: item,
                         isViewAllVisible,
                         data: requestItems.filter(
@@ -37,27 +37,16 @@ export const useLeaveRequestData = (
                 );
             } else {
                 leaveRequestsData = requestItems.map(
-                    (item: LeaveRequestType): Section<LeaveRequestType[]> => ({
+                    (
+                        item: PendingRequestType,
+                    ): Section<PendingRequestType[]> => ({
                         title: getFormattedMonth(item.startDate),
                         isViewAllVisible,
                         data: requestItems.filter(state => state === item),
                     }),
                 );
             }
-            // monthTitles = monthTitles.filter(
-            //     (item, pos) => monthTitles.indexOf(item) === pos,
-            // );
-            // const leaveRequestsData: Section<LeaveRequestType[]>[] =
-            //     monthTitles.map(
-            //         (item: string): Section<LeaveRequestType[]> => ({
-            //             title: item,
-            //             isViewAllVisible: true,
-            //             data: requestItems.filter(
-            //                 state =>
-            //                     getFormattedMonth(state.startDate) === item,
-            //             ),
-            //         }),
-            //     );
+
             return leaveRequestsData;
         },
     });

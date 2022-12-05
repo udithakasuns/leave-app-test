@@ -1,25 +1,20 @@
-import { useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { ManagerHomeScreensProps } from 'navigators/types';
-import React, { useEffect, useState } from 'react';
+import {
+    DrawerScreenNavigationProp,
+    ManagerViewAllScreensProps,
+} from 'navigators/types';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Spacer, Text } from 'src/components/atoms';
-import { MultiButtonProps, MultiChipProps } from 'src/components/molecules';
-import { LAAppBar, LAManagerModals } from 'src/components/organisms';
+import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
+import { MultiChipProps } from 'src/components/molecules';
+import { LAManagerModals, LAManagerPopUp } from 'src/components/organisms';
 import { LAManagerModalProps } from 'src/components/organisms/ManagerHome/LAManagerModals';
-import LAManagerPopUp, {
-    LAManagerPopUpProps,
-} from 'src/components/organisms/ManagerHome/LAManagerPopUp';
+import { LAManagerPopUpProps } from 'src/components/organisms/ManagerHome/LAManagerPopUp';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
 import { patchHttpManagerLeave } from 'src/services/http/patchRequest';
-import {
-    useManagerFilterStore,
-    useManagerStore,
-    useUserStore,
-} from 'src/store';
-import { getGreetingsByTime } from 'src/utils/helpers/dateHandler';
-import { filterChipsManager } from 'src/utils/helpers/defaultData';
+import { useManagerFilterStore, useManagerStore } from 'src/store';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
 import theme from 'src/utils/theme';
@@ -33,7 +28,7 @@ import {
     Status,
 } from 'src/utils/types';
 
-const { scale } = theme;
+const { scale, pixel } = theme;
 
 const styles = StyleSheet.create({
     container: {
@@ -43,33 +38,18 @@ const styles = StyleSheet.create({
     },
 });
 
-const sortByButtons: MultiButtonProps[] = [
-    {
-        buttonId: 1,
-        label: 'Date Requested',
-        selected: true,
-    },
-    {
-        buttonId: 2,
-        label: 'Urgency',
-    },
-];
+const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
+    const navigation = useNavigation<DrawerScreenNavigationProp>();
 
-const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const [managerModal, setManagerModal] = useState<LAManagerModalProps>();
     const [managerPopup, setManagerPopup] = useState<LAManagerPopUpProps>();
-
-    const {
-        user: { firstName },
-    } = useUserStore();
-    const isFocused = useIsFocused();
 
     const { managerRequest, setPendingRequestByID, setPendingRequest } =
         useManagerStore();
     const {
         params,
         filterChips,
-        setSortByButtons,
+        resetFiltersParams,
         setFilterChips,
         setEmptyFilterUtils,
         resetFilterUtils,
@@ -78,9 +58,10 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const {
         data: leaveRequests,
         refetch: refetchLeaveRequests,
+        isLoading: loadingLeaveRequests,
     }: UseQueryResult<Section<PendingRequestType[]>[]> = usePendingRequestData(
         params,
-        true,
+        false,
         (data: Section<PendingRequestType[]>[]) => {
             if (data?.length === 0 || data === undefined) {
                 setEmptyFilterUtils();
@@ -171,34 +152,42 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         setPendingRequestByID(item.leaveRequestId);
     };
 
-    useEffect(() => {
-        if (isFocused) {
-            setSortByButtons(sortByButtons);
-            setFilterChips(filterChipsManager);
-            refetchLeaveRequests();
-            statusTypesRefetch();
-        }
-    }, [isFocused]);
+    const backAction = () => {
+        resetFiltersParams();
+        navigation.jumpTo('ManagerHome');
+        return true;
+    };
 
     return (
         <View style={styles.container}>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: pixel(8),
+                }}>
+                <Icon
+                    name='arrow-back'
+                    enableBackground
+                    size={IconSize.medium}
+                    increasePadding={1}
+                    onPress={backAction}
+                />
+                <Spacer />
+                <Text>Home</Text>
+            </View>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <LAAppBar
-                    currentScreen='manager'
-                    onPressNotification={() => {}}
-                />
                 <Spacer />
-                <Text type='H1Bold'>
-                    Hey {firstName} {'\n'}
-                    {getGreetingsByTime()}
+                <Text type='H1Bold' style={{ marginHorizontal: scale.sc5 }}>
+                    Leave Requests
                 </Text>
-                <Spacer />
-                <Text type='SubHBold'>Pending requests</Text>
-                <LAPendingRequestList
-                    leaveRequests={leaveRequests}
-                    onPressRequestItem={handleRequestItemPress}
-                    isViewAllPage={false}
-                />
+                {!loadingLeaveRequests && (
+                    <LAPendingRequestList
+                        leaveRequests={leaveRequests}
+                        onPressRequestItem={handleRequestItemPress}
+                        isViewAllPage
+                    />
+                )}
             </ScrollView>
             <LAManagerModals
                 onClose={() => setManagerModal({ modalType: undefined })}
@@ -251,4 +240,4 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     );
 };
 
-export default ManagerHome;
+export default ManagerViewAll;

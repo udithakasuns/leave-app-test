@@ -9,7 +9,7 @@ import {
     AuthGeneralUserPayload,
     AuthSocialUserPayload,
 } from 'services/aws/types';
-import { useAuthStore, useUserStore } from 'src/store';
+import { useAuthStore, useRecipientStore, useUserStore } from 'src/store';
 import { getCurrentUserRoleFromToken } from 'src/utils/helpers/gettersUtil';
 import amplifiConfig from 'src/aws-exports';
 import inAppUrlHandler from 'src/utils/helpers/inAppUrlHandler';
@@ -30,6 +30,7 @@ const StackNav = createNativeStackNavigator<RootScreensParamsList>();
 /* Root navigator contains the screens before authentication */
 const RootNavigator = () => {
     const { saveUser, updateUser, removeUser } = useUserStore();
+    const { updateRecipients, removeUserRecipients } = useRecipientStore();
     const { isAutherized, setIsAutherized, authType, setAuthType } =
         useAuthStore();
     const [visibleAuthNav, setVisibleAuthNav] = useState<boolean>(false);
@@ -51,12 +52,14 @@ const RootNavigator = () => {
 
                 saveUser(email, name, family_name, picture, userRole);
                 await updateUser();
+                updateRecipients();
                 setAuthType('social');
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
             } else {
                 setVisibleAuthNav(false);
                 removeUser();
+                removeUserRecipients();
             }
         } catch (error) {
             // Error needs to be handled here
@@ -82,6 +85,7 @@ const RootNavigator = () => {
 
                 saveUser(email, name, '', '', userRole);
                 await updateUser(); // This will returns an error (Need to fix from backend)
+                updateRecipients();
                 setAuthType('general');
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
@@ -117,9 +121,9 @@ const RootNavigator = () => {
                     break;
 
                 /* General Signin event */
-                case 'signIn':
-                    getCurrentGeneralAuthUser();
-                    break;
+                // case 'signIn':
+                //     getCurrentGeneralAuthUser();
+                //     break;
                 case 'signOut':
                     setIsAutherized(false);
                     break;

@@ -3,6 +3,8 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import EmployeeHome from 'screens/EmployeeHome';
 import { useUserStore } from 'src/store';
+import ManagerViewAll from 'src/screens/ManagerViewAll';
+import EmployeeViewAll from 'src/screens/EmployeeViewAll';
 import { AuthScreensParamList } from '../types';
 
 import LADrawer from '../../components/organisms/Global/LADrawer';
@@ -30,6 +32,14 @@ const AuthNavigator = () => {
                 headerTitle: '',
             }}>
             <DrawerNav.Screen name='EmployeeHome' component={EmployeeHome} />
+            <DrawerNav.Screen
+                name='EmployeeViewAll'
+                component={EmployeeViewAll}
+            />
+            <DrawerNav.Screen
+                name='ManagerViewAll'
+                component={ManagerViewAll}
+            />
             <DrawerNav.Screen name='ManagerHome' component={ManagerHome} />
         </DrawerNav.Navigator>
     );
