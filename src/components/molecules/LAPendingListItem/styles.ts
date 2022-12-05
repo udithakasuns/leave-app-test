@@ -13,16 +13,17 @@ export const styles = StyleSheet.create({
     },
     dateContainer: {
         flexDirection: 'row',
+        marginLeft: scale.sc4,
         maxWidth: pixel(90),
         minWidth: pixel(90),
     },
     contentStyle: {
         flex: 1,
-        marginHorizontal: scale.sc6,
+        marginHorizontal: scale.sc4,
     },
     containerStyle: {
         paddingVertical: scale.sc8,
-        maxWidth: pixel(150),
+        maxWidth: pixel(135),
         justifyContent: 'center',
         alignContent: 'center',
     },

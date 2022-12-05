@@ -3,7 +3,10 @@
 import React, { ReactNode } from 'react';
 import { StyleProp, TextStyle, View } from 'react-native';
 import { Chip, Spacer, Text } from 'src/components/atoms';
-import { getCalendarRangeDate } from 'src/utils/helpers/dateHandler';
+import {
+    getCalendarRangeDate,
+    getLeaveDurationDays,
+} from 'src/utils/helpers/dateHandler';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import { AtLeast, RequestDetails, TestProps } from 'src/utils/types';
 import { AvatarChip, StatusChip } from '..';
@@ -33,17 +36,6 @@ const ItemRow = ({
     </View>
 );
 
-const getDays = (durationHours: number) => {
-    const day = durationHours;
-    if (day === 0.5) {
-        return 'Half Day';
-    }
-    if (day === 1) {
-        return '1 Day';
-    }
-    return `${day} Days`;
-};
-
 const LARequestDetailsSection = ({
     requestDetails,
     isStatusVisible = true,
@@ -52,7 +44,7 @@ const LARequestDetailsSection = ({
 }: AtLeast<Props, 'requestDetails'>) => (
     <>
         <Spacer />
-        {requestDetails.leaveRequest && (
+        {requestDetails?.leaveRequest?.leaveType && (
             <ItemRow
                 title='Type :'
                 child={
@@ -71,7 +63,7 @@ const LARequestDetailsSection = ({
                 }
             />
         )}
-        {requestDetails.leaveRequest?.status && isStatusVisible && (
+        {requestDetails?.leaveRequest?.status && isStatusVisible && (
             <>
                 <Spacer />
                 <ItemRow
@@ -90,7 +82,7 @@ const LARequestDetailsSection = ({
             </>
         )}
         <Spacer height={8} />
-        {requestDetails.leaveRequest?.startDate && isDurationVisible && (
+        {isDurationVisible && requestDetails?.leaveRequest && (
             <ItemRow
                 title='Duration :'
                 titleStyle={styles.durationText}
@@ -98,52 +90,57 @@ const LARequestDetailsSection = ({
                     <>
                         <Spacer />
                         <View style={styles.durationContainer}>
-                            {requestDetails?.leaveRequest?.durationHours && (
+                            <Chip
+                                content={`${getLeaveDurationDays(
+                                    requestDetails?.leaveRequest
+                                        ?.durationDays ?? 0,
+                                )}`}
+                                contentTextType='ParaLG'
+                                containerStyle={styles.durationChip}
+                            />
+                            <Spacer width={2} height={3} />
+                            {requestDetails?.leaveRequest?.startDate && (
                                 <Chip
-                                    content={`${getDays(
-                                        requestDetails.leaveRequest
-                                            .durationHours / 8,
-                                    )}`}
+                                    content={getCalendarRangeDate(
+                                        requestDetails.leaveRequest?.startDate,
+                                        requestDetails.leaveRequest?.endDate,
+                                    )}
                                     contentTextType='ParaLG'
                                     containerStyle={styles.durationChip}
                                 />
                             )}
-                            <Spacer width={2} height={3} />
-                            <Chip
-                                content={getCalendarRangeDate(
-                                    requestDetails.leaveRequest?.startDate,
-                                    requestDetails.leaveRequest?.endDate,
-                                )}
-                                contentTextType='ParaLG'
-                                containerStyle={styles.durationChip}
-                            />
                         </View>
                     </>
                 }
             />
         )}
-        <Spacer height={2} />
-        {isRecipientVisible && (
-            <>
-                <ItemRow
-                    title='Recipient :'
-                    child={
-                        <>
-                            <Spacer />
-                            {requestDetails.recipient?.map(item => (
-                                <AvatarChip
-                                    key={item.employeeId}
-                                    label={item.name ?? ''}
-                                    source={{
-                                        uri: item.authPic ?? '',
-                                    }}
-                                />
-                            ))}
-                        </>
-                    }
-                />
-                <Spacer />
-            </>
+        {isRecipientVisible && requestDetails?.recipient && (
+            <ItemRow
+                title='Recipient :'
+                titleStyle={styles.durationText}
+                child={
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                        }}>
+                        <Spacer height={1} />
+                        {requestDetails.recipient?.map(item => (
+                            <AvatarChip
+                                key={item.employeeId}
+                                label={item.name ?? ''}
+                                source={{
+                                    uri: item.authPic ?? '',
+                                }}
+                                containerStyle={{
+                                    justifyContent: 'flex-start',
+                                }}
+                            />
+                        ))}
+                    </View>
+                }
+            />
         )}
     </>
 );
