@@ -1,3 +1,5 @@
+import { MultiButtonProps, MultiChipProps } from 'src/components/molecules';
+
 export type Colors = {
     white: string;
     black: string;
@@ -29,6 +31,7 @@ export type Colors = {
     red500: string;
     red50: string;
     lime50: string;
+    grey600: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -113,6 +116,15 @@ export enum States {
 
 export type LeaveSate = keyof typeof States;
 
+export enum FilterDates {
+    ANY = 'ANY_DAY',
+    TODAY = 'TODAY',
+    WEEK = 'THIS_WEEK',
+    MONTH = 'THIS_MONTH',
+}
+
+export type FilterDatesType = keyof typeof FilterDates;
+
 export type EmployeeType = {
     employeeId: string;
     name: string | null;
@@ -137,22 +149,59 @@ export type LeaveRequestType = {
     startDate: string;
     endDate: string;
     leaveType: LeaveType;
-    reasonForLeave: string | null;
+    // reasonForLeave: string | null;
     leaveState: string;
     status: StatusType;
-    requestDesc?: string | null;
-    reviewerComment?: string | null;
+    // requestDesc?: string | null;
+    // reviewerComment?: string | null;
     durationHours: number | null;
+    durationDays: number | null;
+};
+
+export interface LeaveRequestByID extends LeaveRequestType {
+    reviewerComment: string;
+    requestDesc: string;
+    creationDate: string;
+    reviewedDate: string;
+    employee: EmployeeType;
+    reviewer: EmployeeType;
+}
+
+export type PendingRequestType = {
+    leaveRequestId: number;
+    startDate: string;
+    endDate: string;
+    leaveType: LeaveType;
+    status: StatusType;
+    leaveState: LeaveSate;
+    durationHours: number;
+    durationDays: number;
+    employee: EmployeeType;
+};
+
+export interface PendingRequestByID extends PendingRequestType {
+    reviewerComment: string;
+    requestDesc: string;
+    creationDate: string;
+    reviewedDate: string;
+    reviewer: EmployeeType;
+}
+
+export type UpdateManagerRequest = {
+    requestID: number;
+    status: StatusType;
+    reviewerComment: string;
 };
 
 export type RequestDetails = {
-    leaveRequest?: AtLeast<LeaveRequestType, 'leaveType'>;
+    leaveRequest?: AtLeast<LeaveRequestByID, 'leaveType'>;
     recipient?: EmployeeType[];
 };
 
-export interface Section {
+export interface Section<T> {
     title: string;
-    data: LeaveRequestType[];
+    isViewAllVisible: boolean;
+    data: T;
 }
 
 type RequestParams = {
@@ -180,6 +229,7 @@ export enum EmployeeModal {
     'APPROVED_LEAVE_MODAL',
     'REVOKE_REQUEST_MODAL',
     'CANCEL_REQUEST_MODAL',
+    'CANCELLED_LEAVE_MODAL',
     'LEAVE_INFORMATION',
 }
 
@@ -189,8 +239,23 @@ export enum EmployeePopup {
     'LEAVE_REQUEST_CANCELLED',
 }
 
+export enum ManagerModal {
+    'PENDING_LEAVE_MODAL',
+    'DECLINE_LEAVE_MODAL',
+    'APPROVED_LEAVE_MODAL',
+    'CANCELLED_LEAVE_MODAL',
+    'DENIED_LEAVE_MODAL',
+    'LEAVE_INFORMATION',
+}
+
+export enum ManagerPopup {
+    'LEAVE_REQUEST_APPROVED',
+    'LEAVE_REQUEST_DECLINE',
+}
+
 export type ApplyFormValues = {
     typeId: number;
+    selectedLeaveBalance?: number;
     leaveState?: LeaveSate;
     requestDesc: string;
     startDate: string;
@@ -199,8 +264,23 @@ export type ApplyFormValues = {
 };
 
 export type LeaveUndoProp = {
+    requestID: number;
     startDate: string;
     endDate: string;
     requestDesc: string;
     leaveRequestStatus: StatusType;
+};
+
+export type FilterChipsProps = {
+    id: number;
+    title: string;
+    chips: MultiChipProps[];
+    singleSelection?: boolean;
+};
+
+export type FilterProps = {
+    sortByButtons: MultiButtonProps[];
+    filterChips: FilterChipsProps[];
+    onSortPress: (multiButtons: MultiButtonProps[]) => void;
+    onFilterPress: (multiButtons: FilterChipsProps[]) => void;
 };

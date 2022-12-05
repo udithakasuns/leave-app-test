@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import theme from '../theme';
 
-const { scale, colors, radius } = theme;
+const { scale, colors, radius, pixel } = theme;
 
 export const styles = StyleSheet.create({
     successToastContainer: {
@@ -24,7 +24,8 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.red50,
         padding: scale.sc16,
         paddingHorizontal: scale.vsc20,
-        maxHeight: scale.vsc64,
+        minHeight: scale.vsc64,
+        maxHeight: pixel(78),
     },
     textContainer: {
         width: '85%',

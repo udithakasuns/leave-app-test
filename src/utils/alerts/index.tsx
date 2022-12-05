@@ -2,6 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import Toast, { ToastProps } from 'react-native-toast-message';
 import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
+import { ErrorCodes, getErrorMessage } from '../helpers/errorCodes';
+import { getSuccessMessage, SuccessCodes } from '../helpers/successCodes';
 import theme from '../theme';
 import { styles } from './styles';
 
@@ -52,7 +54,7 @@ export const toastConfig = {
                 <Spacer width={5} />
                 <View>
                     <Text type='ParaSMBold'>{props.title}</Text>
-                    <Spacer height={1} />
+                    <Spacer height={0.1} />
                     <Text type='ParaXS'>{props.content}</Text>
                 </View>
             </View>
@@ -66,4 +68,30 @@ export const toastConfig = {
             </View>
         </View>
     ),
+};
+
+export const showErrorToast = (
+    errorCode: ErrorCodes,
+    patchContent?: string,
+) => {
+    Toast.show({
+        type: 'errorToast',
+        props: {
+            title: getErrorMessage(errorCode, patchContent).title,
+            content: getErrorMessage(errorCode, patchContent).message,
+        },
+    });
+};
+
+export const showSuccessToast = (
+    successCode: SuccessCodes,
+    patchContent?: string,
+) => {
+    Toast.show({
+        type: 'successToast',
+        props: {
+            title: getSuccessMessage(successCode, patchContent).title,
+            content: getSuccessMessage(successCode, patchContent).message,
+        },
+    });
 };

@@ -31,6 +31,7 @@ const colors: Colors = {
     gray700: '#3F3F46',
     gray400: '#A1A1AA',
     gray300: '#E8E8E8',
+    grey600: '#868686',
     dividerColor: '#D4D4D8',
 
     approved: '#65A30D',
@@ -93,6 +94,7 @@ const scale = {
     sc50: pixel(50 * 1.12),
     sc64: pixel(64 * 1.12),
     sc62: pixel(62 * 1.12),
+    sc70: pixel(70 * 1.12),
     sc80: pixel(80 * 1.12),
     sc96: pixel(96 * 1.12),
     sc112: pixel(112 * 1.12),
