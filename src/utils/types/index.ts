@@ -196,3 +196,25 @@ export type ApplyFormValues = {
 };
 
 export type DeviceType = 'ANDROID' | 'IOS';
+
+export type NotificationType = 'NEW_LEAVE_REQUEST' | 'LEAVE_REQUEST_NUDGE';
+
+export type NotificationBody = {
+    image: string;
+    message: string;
+};
+
+export type NotificationPayload = {
+    currentPage: number;
+    totalItems: number;
+    totalPages: number;
+    items: {
+        id: number;
+        createdDate: string;
+        title: string;
+        body: NotificationBody;
+        notificationType: NotificationType;
+        resourceId: string;
+        viewed: boolean;
+    }[];
+};

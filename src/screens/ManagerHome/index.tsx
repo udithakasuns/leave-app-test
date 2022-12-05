@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => (
     <View style={styles.container}>
-        <LAAppBar currentScreen='manager' onPressNotification={() => {}} />
+        <LAAppBar currentScreen='manager' />
         <Spacer height={30} />
     </View>
 );

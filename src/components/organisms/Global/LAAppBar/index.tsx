@@ -25,7 +25,6 @@ export type CurrentScreen = 'employee' | 'manager';
 
 type AppBarProps = {
     currentScreen: CurrentScreen;
-    onPressNotification: () => void;
 };
 
 export type SelectedProperties = {
@@ -34,8 +33,8 @@ export type SelectedProperties = {
     employeeMode: ButtonMode;
 };
 
-const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
-    const { count } = useNotificationStore();
+const LAAppBar = ({ currentScreen }: AppBarProps) => {
+    const { count, setIsPopupVisible } = useNotificationStore();
     const navigation = useNavigation<DrawerScreenNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const {
@@ -63,6 +62,10 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
         }
         return '';
     }, [count]);
+
+    const onPressNotification = () => {
+        setIsPopupVisible(true);
+    };
 
     return (
         <View style={styles.appBarContainer}>
@@ -92,12 +95,8 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
                     />
                 )}
             </View>
-            <Pressable onPress={() => navigation.navigate('Notifications')}>
-                <Icon
-                    name='notifications'
-                    onPress={onPressNotification}
-                    size={IconSize.xLarge}
-                />
+            <Pressable onPress={onPressNotification}>
+                <Icon name='notifications' size={IconSize.xLarge} />
                 {notificationCount && (
                     <View style={styles.notificationCountContainer}>
                         <Text type='ParaXS' color={colors.white}>

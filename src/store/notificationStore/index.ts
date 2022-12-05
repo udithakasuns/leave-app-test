@@ -4,6 +4,7 @@ import { State, Actions } from './types';
 
 const initialState: State = {
     count: '',
+    isPopupVisible: false,
 };
 
 const notificationStore = create<State & Actions>(set => ({
@@ -16,6 +17,8 @@ const notificationStore = create<State & Actions>(set => ({
             count,
         }));
     },
+    setIsPopupVisible: isPopupVisible =>
+        set(state => ({ ...state, isPopupVisible })),
 }));
 
 export default notificationStore;

@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import { DateTime } from 'luxon';
 
 export const getFormattedDate = (date: string): DateTime => {
@@ -89,4 +90,20 @@ export const getCalendarRangeDate = (
     }
 
     return calendarDate;
+};
+
+export const getTimeAgo = (date: string) => {
+    const str = `${
+        DateTime.fromISO(date).toRelativeCalendar() as string
+    } at ${DateTime.fromISO(date).toFormat('h:mm a')}`;
+
+    const strArray = str.split(' ');
+
+    const firstWord =
+        strArray[0].charAt(0).toUpperCase() + strArray[0].slice(1);
+
+    strArray.shift();
+    strArray.unshift(firstWord);
+
+    return strArray.join(' ');
 };

@@ -14,7 +14,7 @@ interface ButtonProps {
     onPress: () => void;
     iconLibrary?: IconLibrary;
 }
-const Drawer: React.FC = () => {
+const LADrawer: React.FC = () => {
     const {
         user: { firstName, lastName, profilePic, designation },
     } = useUserStore();
@@ -76,4 +76,4 @@ const Drawer: React.FC = () => {
         </View>
     );
 };
-export default Drawer;
+export default LADrawer;

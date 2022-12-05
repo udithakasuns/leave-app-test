@@ -316,10 +316,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     return (
         <View style={styles.innerContainer}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                <LAAppBar
-                    currentScreen='employee'
-                    onPressNotification={() => {}}
-                />
+                <LAAppBar currentScreen='employee' />
                 <Spacer />
                 <Text type='H1Bold'>
                     Hey {firstName} {'\n'}

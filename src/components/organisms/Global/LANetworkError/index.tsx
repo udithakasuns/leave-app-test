@@ -2,7 +2,7 @@ import React from 'react';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { ErrorPopup } from 'components/organisms';
 
-const NetworkError = () => {
+const LANetworkError = () => {
     const { isConnected } = useNetInfo();
 
     if (isConnected || isConnected === null) {
@@ -13,4 +13,4 @@ const NetworkError = () => {
     return <ErrorPopup visible type='network' onClose={() => {}} />;
 };
 
-export default NetworkError;
+export default LANetworkError;

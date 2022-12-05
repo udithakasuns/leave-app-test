@@ -34,3 +34,15 @@ export const getHttpNotificationCount = async () => {
     const res = await axiosInstance.get('v1/notifications/count');
     return res;
 };
+
+export const getHttpNotifications = async (
+    page = 0,
+    size = 10,
+    userRole: 'MANAGER' | 'EMPLOYEE' = 'EMPLOYEE',
+    isViewed = false,
+) => {
+    const res = await axiosInstance.get(
+        `v1/notifications?page=${page}&size=${size}&UserRole=${userRole}&isViewed=${isViewed}`,
+    );
+    return res.data.results[0];
+};

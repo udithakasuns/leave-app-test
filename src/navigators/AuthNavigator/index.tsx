@@ -8,13 +8,13 @@ import EmployeeHome from 'screens/EmployeeHome';
 import Notifications from 'screens/Notifications';
 import { AuthScreensParamList } from '../types';
 
-import Drawer from '../../components/organisms/Global/Drawer';
+import LADrawer from '../../components/organisms/Global/LADrawer';
 
 const DrawerNav = createDrawerNavigator<AuthScreensParamList>();
 
 /* Auth navigator contains all the screens after the authtication */
 const AuthNavigator = () => {
-    const MemoizedDrawer = React.useCallback(() => <Drawer />, []);
+    const MemoizedDrawer = React.useCallback(() => <LADrawer />, []);
     const {
         user: { role },
     } = useUserStore();
