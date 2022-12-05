@@ -3,14 +3,14 @@ import { View, TouchableOpacity } from 'react-native';
 import { Button, Icon, Text } from 'src/components/atoms';
 import { WIDTH } from 'src/utils/helpers/scalingUtil';
 import theme from 'src/utils/theme';
+import { NotificationVisibleType } from 'utils/types';
 import { styles } from './styles';
-import { VisibleType } from './types';
 
 const { colors } = theme;
 
 interface Props {
-    visibleType: VisibleType;
-    onChangeVisibleType: (visibleType: VisibleType) => void;
+    visibleType: NotificationVisibleType;
+    onChangeVisibleType: (visibleType: NotificationVisibleType) => void;
     onClose: () => void;
 }
 

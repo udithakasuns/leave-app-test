@@ -13,6 +13,7 @@ interface Props {
     body: NotificationBody | null;
     date: string;
     isViewed: boolean;
+    onPress: () => void;
 }
 
 const LANotificationContent = ({
@@ -20,6 +21,7 @@ const LANotificationContent = ({
     body,
     date,
     isViewed,
+    onPress,
 }: AtLeast<Props, 'type' | 'isViewed'>) => {
     const styles = useStyles({ isViewed });
 
@@ -70,7 +72,7 @@ const LANotificationContent = ({
 
     if (body && date) {
         return (
-            <TouchableOpacity style={styles.container}>
+            <TouchableOpacity onPress={onPress} style={styles.container}>
                 <View style={styles.content}>
                     <Avatar size={scale.sc36} source={{ uri: body.image }} />
                     <View style={styles.rightContainer}>

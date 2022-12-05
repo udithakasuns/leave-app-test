@@ -10,7 +10,8 @@ const initialState: State = {
 const notificationStore = create<State & Actions>(set => ({
     ...initialState,
     getCount: async () => {
-        const res = await getHttpNotificationCount();
+        // Need update the userRole
+        const res = await getHttpNotificationCount('MANAGER');
         const { count }: { count: number } = res.data.results[0];
         set(state => ({
             ...state,

@@ -4,7 +4,8 @@ import { Platform, Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import { postHttpNotificationRegister } from 'src/services/http';
 import PushNotification from 'react-native-push-notification';
-import { useAuthStore, useNotificationStore } from 'src/store';
+import { useAuthStore, useNotificationStore, useUserStore } from 'src/store';
+import uuid from 'react-native-uuid';
 
 type Props = {
     isAuthenticated: boolean;
@@ -25,6 +26,7 @@ PushNotification.createChannel(
 
 export const useNotifications = ({ isAuthenticated }: Props) => {
     const { isDeviceRegistered, setIsDeviceRegistered } = useAuthStore();
+    const { user } = useUserStore();
     const { getCount } = useNotificationStore();
 
     const requestUserPermission = async () => {
@@ -77,9 +79,12 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
         const deviceToken = await messaging().getToken();
         if (deviceToken) {
             const deviceType = Platform.OS === 'ios' ? 'IOS' : 'ANDROID';
+            const deviceUniqueId = `${uuid.v4()}-${deviceType}-${user.userId.toString()}`;
+
             const isRegistered = await postHttpNotificationRegister(
                 deviceToken,
                 deviceType,
+                deviceUniqueId,
             );
             if (isRegistered) {
                 // Update the zustand store.

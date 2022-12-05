@@ -16,10 +16,12 @@ export const postHttpNudge = async () => {
 export const postHttpNotificationRegister = async (
     deviceToken: string,
     deviceType: DeviceType,
+    deviceUniqueId: string,
 ): Promise<boolean> => {
     const payload = {
         deviceToken,
         deviceType,
+        deviceUniqueId,
     };
     try {
         await axiosInstance.post('/v1/notifications/register-device', payload);

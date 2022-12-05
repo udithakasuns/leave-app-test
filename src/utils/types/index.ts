@@ -218,3 +218,5 @@ export type NotificationPayload = {
         viewed: boolean;
     }[];
 };
+
+export type NotificationVisibleType = 'all' | 'unread';

@@ -1,38 +1,47 @@
 import React, { useState } from 'react';
-import { View, ScrollView, Text, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { useNotificationStore } from 'src/store';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'src/components/atoms';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getHttpNotifications } from 'src/services/http';
-import { NotificationPayload } from 'utils/types';
+import { NotificationPayload, NotificationVisibleType } from 'utils/types';
 import { AxiosError } from 'axios';
 import { NotificationContent } from 'src/components/molecules';
+import { patchHttpViewNotification } from 'src/services/http/patchRequest';
 import Header from './Header';
 import { styles } from './styles';
-import { VisibleType } from './types';
 
 const LANotificationPopup = () => {
     const navigation: any = useNavigation();
     const { isPopupVisible, setIsPopupVisible } = useNotificationStore();
-    const [visibleType, setVisibleType] = useState<VisibleType>('all');
+    const [visibleType, setVisibleType] =
+        useState<NotificationVisibleType>('all');
 
     // 1st check the user is in Employee view or Manager View
     // Then check the visible Type
 
-    const { data, error }: UseQueryResult<NotificationPayload, AxiosError> =
-        useQuery(
-            ['allNotifications'],
-            () => getHttpNotifications(1, 8, 'MANAGER', false),
-            {
-                staleTime: Infinity,
-                cacheTime: Infinity,
-            },
-        );
+    const {
+        data,
+        error,
+        refetch: onRefetch,
+    }: UseQueryResult<NotificationPayload, AxiosError> = useQuery(
+        [isPopupVisible, visibleType],
+        () => {
+            if (isPopupVisible) {
+                return getHttpNotifications(1, 8, 'MANAGER', visibleType);
+            }
+            return null;
+        },
+        {
+            staleTime: Infinity,
+            cacheTime: Infinity,
+        },
+    );
 
-    console.log({ error });
-    console.log('totalItems: ', data?.totalItems);
+    // console.log({ error });
+    // console.log('totalItems: ', data?.totalItems);
     // console.log('data: ', data?.items);
 
     const onClosePopup = () => setIsPopupVisible(false);
@@ -40,6 +49,21 @@ const LANotificationPopup = () => {
     const onPressViewAll = () => {
         onClosePopup();
         navigation.navigate('Notifications');
+    };
+
+    // const { mutate: onPressNotification } = useMutation(
+    //     ['nitificationView'],
+    //     patchHttpViewNotification,
+    //     {
+    //         onSuccess: () => console.log('Success'),
+    //         onError: console.log('On Error'),
+    //     },
+    // );
+
+    const onPressNotification = async (notificationId: string) => {
+        // Need to update this functionalities
+        await patchHttpViewNotification(notificationId);
+        onRefetch();
     };
 
     return (
@@ -63,6 +87,9 @@ const LANotificationPopup = () => {
                             body={item.body}
                             date={item.createdDate}
                             isViewed={item.viewed}
+                            onPress={() =>
+                                onPressNotification(item.id.toString())
+                            }
                         />
                     )}
                 />
