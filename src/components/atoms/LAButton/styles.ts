@@ -10,19 +10,22 @@ export default (
     alignContent: AlignType,
     containerPadding: number,
     iconColor?: string,
+    isDisable?: boolean,
 ) => {
     const getColor = (): ColorProp => {
         switch (mode) {
             case 'outlined':
                 return {
                     background: colors.secondaryBackground,
-                    textIcon: colors.secondaryLabel,
+                    textIcon: isDisable
+                        ? colors.grey600
+                        : colors.secondaryLabel,
                     borderColor: colors.primaryColor,
                 };
             case 'contained-gray':
                 return {
                     background: colors.tertiaryColor,
-                    textIcon: colors.tertiaryLabel,
+                    textIcon: isDisable ? colors.grey600 : colors.tertiaryLabel,
                 };
             case 'outlined-error':
                 return {
@@ -47,7 +50,8 @@ export default (
     const getBorderWidth = () =>
         mode === 'outlined' ||
         mode === 'outlined-error' ||
-        mode === 'outlined-light-error'
+        mode === 'outlined-light-error' ||
+        isDisable
             ? 1
             : 0;
 
@@ -61,7 +65,7 @@ export default (
             alignItems: alignContent,
             backgroundColor: getColor().background,
             borderWidth: getBorderWidth(),
-            borderColor: getColor().borderColor,
+            borderColor: isDisable ? colors.gray300 : getColor().borderColor,
         },
         IconLabelContainer: {
             flexDirection: 'row',
