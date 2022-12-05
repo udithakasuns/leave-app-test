@@ -47,7 +47,7 @@ const LAModal = ({
         <Modal
             isVisible={isVisible}
             style={container}
-            animationInTiming={250}
+            useNativeDriver
             avoidKeyboard
             propagateSwipe
             onSwipeComplete={(params: OnSwipeCompleteParams) => {

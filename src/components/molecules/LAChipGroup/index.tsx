@@ -18,11 +18,13 @@ export type MultiChipProps = AtLeast<ChipProps, 'content'> & {
 export type ChipsGroupProps = {
     onPress: (chipProps: MultiChipProps[]) => void;
     chips: MultiChipProps[];
+    singleSelection: boolean;
 };
 
 const LAChipGroup = ({
     onPress,
     chips,
+    singleSelection = false,
     ...rest
 }: AtLeast<ChipsGroupProps, 'chips'>) => {
     const [chipsLocal, setChipsLocal] = useState<MultiChipProps[]>([]);
@@ -32,6 +34,8 @@ const LAChipGroup = ({
             chipsLocal.forEach(chipItem => {
                 if (chipItem.selected && chipItem.chipId === id) {
                     chipItem.selected = false;
+                } else if (singleSelection) {
+                    chipItem.selected = chipItem.chipId === id;
                 } else {
                     chipItem.selected =
                         chipItem.selected || chipItem.chipId === id;

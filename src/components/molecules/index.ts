@@ -11,8 +11,11 @@ export { default as SocialButton } from './LASocialButton';
 export { default as SelectionButton } from './LASelectionButton';
 export { default as ButtonDock } from './LAButtonDock';
 export { default as AvatarChip } from './LAAvatarChip';
+export { default as MoreDetailsButton } from './LAMoreDetailsButton';
 export { default as LeaveInformationSection } from './LALeaveInformationSection';
-export { default as RequestDetailsSection } from './LARequestDetailsSection';
+export { default as RequestDetailsSection } from './LAEmployeeRequestDetails';
+export { default as ManagerRequestDetails } from './LAManagerRequestDetails';
+export { default as PendingListItem } from './LAPendingListItem';
 
 export { default as PopUp } from './LAPopUp';
 export type { MultiChipProps } from './LAChipGroup';
