@@ -88,10 +88,10 @@ describe('Testing half button', () => {
             backgroundColor: colors.tertiaryColor,
         });
         expect(queryByTestId(LEFT_TEST_ID_BUTTON)).not.toBeDisabled();
-        fireEvent.press(
-            screen.getByTestId(LEFT_TEST_ID_BUTTON),
-            pressEventData,
-        );
+        // fireEvent.press(
+        //     screen.getByTestId(LEFT_TEST_ID_BUTTON),
+        //     pressEventData,
+        // );
         expect(queryByTestId(RIGHT_TEST_ID_BUTTON)).not.toBeDisabled();
         fireEvent.press(
             screen.getByTestId(RIGHT_TEST_ID_BUTTON),

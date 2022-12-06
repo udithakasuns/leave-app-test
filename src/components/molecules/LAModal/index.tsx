@@ -55,7 +55,8 @@ const LAModal = ({
                     onClose();
                 }
             }}
-            swipeDirection={['down']}>
+            swipeDirection={['down']}
+            onBackButtonPress={onClose}>
             <View style={[bodyContainer, style]}>
                 <ScrollView
                     automaticallyAdjustKeyboardInsets
