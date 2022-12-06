@@ -14,11 +14,13 @@ const { colors } = theme;
 interface Props extends TextInputProps, TestProps {
     reference: React.LegacyRef<TextInput>;
     placeholder: string;
+    placeholderColor: string;
     containerStyle: ViewStyle;
     inputContainerStyle: ViewStyle;
     type: InputTypes;
     label: string;
     error: boolean;
+    editable: boolean;
     caption: string;
     disabled: boolean;
     leftIconName: string;
@@ -37,6 +39,7 @@ const LAInput = ({
     label,
     placeholder,
     disabled = false,
+    editable,
     error = false,
     value,
     leftIconName,
@@ -53,6 +56,7 @@ const LAInput = ({
     testIdLeftIcon,
     testIdRightIcon,
     testIdCaption,
+    placeholderColor,
     ...rest
 }: AtLeast<Props, 'label' | 'placeholder' | 'value'>) => {
     const [focused, setFocused] = useState<boolean>(false);
@@ -72,7 +76,11 @@ const LAInput = ({
     };
 
     const getPlaceholderTextColor = () =>
-        disabled ? colors.disabledColor : error ? colors.error : colors.gray;
+        disabled
+            ? colors.disabledColor
+            : error
+            ? colors.error
+            : placeholderColor ?? colors.gray;
 
     const getLeftIconColor = () =>
         disabled
@@ -99,7 +107,7 @@ const LAInput = ({
                 style={[styles.container, containerStyle]}>
                 <LAText
                     testID={testIdLabel}
-                    type='SubH'
+                    type='ParaLG'
                     color={styles.label.color}>
                     {label}
                 </LAText>
@@ -112,7 +120,7 @@ const LAInput = ({
                         style={[styles.input, styles.commentInput]}
                         ref={reference}
                         multiline
-                        editable={!disabled}
+                        editable={editable ?? !disabled}
                         placeholder={placeholder}
                         placeholderTextColor={getPlaceholderTextColor()}
                         value={value}
@@ -127,9 +135,14 @@ const LAInput = ({
         <View
             testID={testIdcontainer}
             style={[styles.container, containerStyle]}>
-            <LAText testID={testIdLabel} type='SubH' color={styles.label.color}>
-                {label}
-            </LAText>
+            {label ?? (
+                <LAText
+                    testID={testIdLabel}
+                    type='SubH'
+                    color={styles.label.color}>
+                    {label}
+                </LAText>
+            )}
             <View
                 testID={testIdInputContainer}
                 style={[styles.inputContainer, inputContainerStyle]}>
@@ -145,7 +158,7 @@ const LAInput = ({
                     {...rest}
                     testID={testIdInput}
                     ref={reference}
-                    editable={!disabled}
+                    editable={editable ?? !disabled}
                     style={styles.input}
                     placeholder={placeholder}
                     placeholderTextColor={getPlaceholderTextColor()}

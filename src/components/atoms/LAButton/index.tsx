@@ -10,7 +10,12 @@ import {
 } from 'react-native';
 import { Circle as ProgressBar } from 'react-native-progress';
 import theme from '../../../utils/theme';
-import { AtLeast, TestProps, TextTypeProps } from '../../../utils/types';
+import {
+    AtLeast,
+    IconLibrary,
+    TestProps,
+    TextTypeProps,
+} from '../../../utils/types';
 import LAIcon, { IconSize } from '../LAIcon';
 import LAText from '../LAText';
 import styles from './styles';
@@ -26,6 +31,7 @@ export interface Props extends PressableProps, TestProps {
     mode: ButtonMode;
     size: ButtonSize;
     loading: boolean;
+    isDisable: boolean;
     buttonStyle: StyleProp<ViewStyle>;
     labelStyle: StyleProp<TextStyle>;
     iconLabelContainerStyle: StyleProp<TextStyle>;
@@ -33,6 +39,7 @@ export interface Props extends PressableProps, TestProps {
     iconColor: string;
     iconPosition: 'right' | 'left';
     iconSize: IconSize;
+    iconLibrary: IconLibrary;
     testID: string;
 }
 
@@ -50,6 +57,8 @@ const LAButton = ({
     labelType,
     alignContent = 'center',
     iconLabelContainerStyle,
+    iconLibrary,
+    isDisable = false,
     testID,
     loading,
     testIdLoading,
@@ -86,11 +95,17 @@ const LAButton = ({
         rightIcon,
         leftIcon,
         loadingContainer,
-    } = styles(mode, alignContent, getPropertiesBySize().containerPadding);
+    } = styles(
+        mode,
+        alignContent,
+        getPropertiesBySize().containerPadding,
+        iconColor,
+        isDisable,
+    );
 
     return (
         <Pressable
-            disabled={loading}
+            disabled={loading || isDisable}
             {...rest}
             style={({ pressed }) => [
                 { opacity: pressed ? 0.5 : 1.0 },
@@ -105,7 +120,8 @@ const LAButton = ({
                         <LAIcon
                             name={icon}
                             size={iconSize ?? getPropertiesBySize().iconSize}
-                            color={iconColor}
+                            color={iconColor ?? (rightIcon.color as string)}
+                            library={iconLibrary}
                             style={rightIcon}
                         />
                     )}
@@ -119,7 +135,8 @@ const LAButton = ({
                         <LAIcon
                             name={icon}
                             size={iconSize ?? getPropertiesBySize().iconSize}
-                            color={iconColor}
+                            color={iconColor ?? (leftIcon.color as string)}
+                            library={iconLibrary}
                             style={leftIcon}
                         />
                     )}

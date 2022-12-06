@@ -1,19 +1,41 @@
-import { getUserTokenByType } from 'src/services/local';
-import { UserTokenType } from '../types';
+/* eslint-disable no-param-reassign */
+import axios from 'axios';
+import {
+    awsGetNewAccessToken,
+    awsGetCurrentAccessToken,
+} from 'src/services/aws';
+import { API_BASE_URL } from 'src/configs';
 
-interface AxiosConfigProps {
-    headers: {
-        Authorization: string;
-    };
-}
+const axiosInstance = axios.create({
+    baseURL: API_BASE_URL,
+});
 
-export const axiosConfig = async (
-    tokenType: UserTokenType,
-): Promise<AxiosConfigProps> => {
-    const token = await getUserTokenByType(tokenType);
-    return {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-};
+// Request interceptor for API calls
+axiosInstance.interceptors.request.use(
+    async config => {
+        const accessToken = await awsGetCurrentAccessToken();
+        config.headers = {
+            Authorization: `Bearer ${accessToken}`,
+        };
+        return config;
+    },
+    error => {
+        Promise.reject(error);
+    },
+);
+
+// Response interceptor for API calls
+axiosInstance.interceptors.response.use(
+    response => response,
+    async error => {
+        const status = error.response ? error.response.status : null;
+        if (status === 401) {
+            const newAccessToken = await awsGetNewAccessToken();
+            error.config.headers.Authorization = `Bearer ${newAccessToken}`;
+            return axiosInstance(error.config);
+        }
+        return Promise.reject(error);
+    },
+);
+
+export { axiosInstance };

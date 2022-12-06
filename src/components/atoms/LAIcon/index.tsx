@@ -3,8 +3,9 @@ import React from 'react';
 import { ViewStyle } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SvgIcon } from 'src/assets/icons';
 import theme from '../../../utils/theme';
-import { AtLeast, TestProps } from '../../../utils/types';
+import { AtLeast, IconLibrary, TestProps } from '../../../utils/types';
 import { styles } from './styles';
 
 const { scale, colors } = theme;
@@ -18,9 +19,6 @@ export enum IconSize {
     xLarge = scale.sc28,
     xxLarge = scale.sc32,
 }
-
-export type IconLibrary = 'material' | 'community';
-
 interface Props extends TestProps {
     name: string;
     size: IconSize;
@@ -54,15 +52,15 @@ const LAIcon = ({
         switch (size) {
             case IconSize.xSmall:
                 iconSize = scale.sc8;
-                padding = increasePadding * scale.sc2;
+                padding = increasePadding * scale.sc1;
                 break;
             case IconSize.small:
                 iconSize = scale.sc12;
-                padding = increasePadding * scale.sc2;
+                padding = increasePadding * scale.sc1;
                 break;
             case IconSize.medium:
                 iconSize = scale.sc20;
-                padding = increasePadding * scale.sc2;
+                padding = increasePadding * scale.sc1;
                 break;
             case IconSize.large:
                 iconSize = scale.sc24;
@@ -104,6 +102,8 @@ const LAIcon = ({
                 testID={testId}
             />
         );
+
+    if (library === 'svg') return <SvgIcon name={name} color={color} />;
 
     return (
         <MaterialIcon

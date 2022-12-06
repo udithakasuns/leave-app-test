@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Chip, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import { StatusType, TestProps } from 'src/utils/types';
@@ -12,6 +12,8 @@ interface Props extends Partial<TestProps> {
     date: string;
     entitlement: string;
     status: StatusType;
+    onPress: () => void;
+    chipsColor: string;
 }
 
 const LARequestListItem = ({
@@ -21,8 +23,10 @@ const LARequestListItem = ({
     testIdContent,
     testIdChip,
     testId,
+    onPress,
+    chipsColor,
 }: Props) => (
-    <View style={styles.container}>
+    <Pressable onPress={onPress} style={styles.container}>
         <View style={styles.dateContainer}>
             <Text testID={testIdContent} type='ParaSM'>
                 {date}
@@ -32,14 +36,18 @@ const LARequestListItem = ({
             testIdContent={testIdChip}
             content={entitlement}
             contentColor={colors.gray600}
-            onPressChip={() => {}}
             contentTextType='ParaLG'
             contentStyle={styles.contentStyle}
-            pressableContainerStyle={styles.pressableContainerStyle}
             containerStyle={styles.containerStyle}
+            backgroundColor={chipsColor}
         />
-        <StatusChip testId={testId} status={status} onPress={() => {}} />
-    </View>
+        <StatusChip
+            testId={testId}
+            status={status}
+            containerStyle={{ backgroundColor: chipsColor }}
+            onPress={onPress}
+        />
+    </Pressable>
 );
 
 export default LARequestListItem;

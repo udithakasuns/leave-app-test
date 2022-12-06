@@ -11,6 +11,8 @@ interface Props extends Partial<TestProps> {
     uniCodeIcon: string;
     leaveType: string;
     isSelected: boolean;
+    isError: boolean;
+    isDisable: boolean;
     width: number;
     style: StyleProp<ViewStyle>;
 }
@@ -21,7 +23,9 @@ const LALeaveCard = ({
     uniCodeIcon,
     leaveType,
     isSelected = false,
-    width = theme.s(120),
+    isError = false,
+    isDisable = false,
+    width = theme.pixel(120 * 1.15),
     style,
     testId,
 }: PartialBy<Props, 'isSelected' | 'width' | 'style'>) => {
@@ -31,7 +35,8 @@ const LALeaveCard = ({
         takenLeavesContainer,
         footerContainer,
         totalLeavesContainer,
-    } = styles(isSelected, width);
+        entitlementTextContainer,
+    } = styles(isSelected, width, isError, isDisable);
 
     return (
         <View testID={testId} style={[container, style]}>
@@ -44,7 +49,9 @@ const LALeaveCard = ({
                 </LAText>
             </View>
             <View style={footerContainer}>
-                <LAText type='ParaSM'>{leaveType}</LAText>
+                <LAText type='ParaSM' style={entitlementTextContainer}>
+                    {leaveType}
+                </LAText>
                 <LAText type='ParaSM'>{uniCodeIcon}</LAText>
             </View>
         </View>

@@ -13,7 +13,7 @@ import styles from './styles';
 const { scale } = theme;
 
 export enum AvatarSize {
-    'small' = scale.sc32,
+    'small' = scale.sc36,
     'large' = scale.sc46,
 }
 
@@ -23,7 +23,7 @@ interface Props extends TestProps {
     style?: StyleProp<ViewStyle>;
 }
 
-const LAText = ({
+const LAAvatar = ({
     size = AvatarSize.large,
     source,
     style,
@@ -42,4 +42,4 @@ const LAText = ({
     );
 };
 
-export default LAText;
+export default LAAvatar;

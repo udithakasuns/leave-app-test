@@ -27,12 +27,26 @@ const styles = ({ type, disabled, focused, value, error }: Props) => {
         ? colors.error
         : colors.black;
 
+    const inputContainerComment = disabled
+        ? colors.disabledColor
+        : error
+        ? colors.error
+        : colors.secondaryOutline;
+
     const inputContainerBackgroundColor = disabled
         ? 'transparent'
         : error
         ? colors.errorBackground
         : focused || value
         ? colors.white
+        : colors.tertiaryColor;
+
+    const inputContainerBackgroundColorComment = disabled
+        ? 'transparent'
+        : error
+        ? colors.errorBackground
+        : focused || value
+        ? colors.secondaryBackground
         : colors.tertiaryColor;
 
     const inputColor = disabled
@@ -57,14 +71,20 @@ const styles = ({ type, disabled, focused, value, error }: Props) => {
         inputContainer: {
             flexDirection: 'row',
             alignItems: 'center',
-            borderWidth: disabled || error || focused || value ? scale.vsc1 : 0,
+            borderWidth: disabled || error || focused || value ? 1 : 0,
             shadowColor: focused ? colors.black : 'transparent',
             shadowRadius: focused ? 0.2 : 0,
             shadowOpacity: focused ? 0.2 : 0,
             shadowOffset: { width: focused ? 2 : 0, height: focused ? 2 : 0 },
             elevation: focused ? 5 : 0,
-            borderColor: inputContainerBoarderColor,
-            backgroundColor: inputContainerBackgroundColor,
+            borderColor:
+                type === 'COMMENT'
+                    ? inputContainerComment
+                    : inputContainerBoarderColor,
+            backgroundColor:
+                type === 'COMMENT'
+                    ? inputContainerBackgroundColorComment
+                    : inputContainerBackgroundColor,
             borderRadius: theme.radius.rd8,
             paddingVertical: type === 'SMALL' ? scale.vsc10 : scale.vsc16,
             paddingHorizontal: scale.sc16,
@@ -79,8 +99,9 @@ const styles = ({ type, disabled, focused, value, error }: Props) => {
             padding: 0,
         },
         commentInput: {
-            minHeight: scale.vsc110,
+            minHeight: scale.vsc80,
             textAlignVertical: 'top',
+            color: colors.secondaryLabel,
         },
         caption: {
             color: captionColor,

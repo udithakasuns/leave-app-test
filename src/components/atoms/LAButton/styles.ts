@@ -9,25 +9,35 @@ export default (
     mode: ButtonMode,
     alignContent: AlignType,
     containerPadding: number,
+    iconColor?: string,
+    isDisable?: boolean,
 ) => {
     const getColor = (): ColorProp => {
         switch (mode) {
             case 'outlined':
                 return {
-                    background: colors.secondaryColor,
-                    textIcon: colors.secondaryLabel,
+                    background: colors.secondaryBackground,
+                    textIcon: isDisable
+                        ? colors.grey600
+                        : colors.secondaryLabel,
                     borderColor: colors.primaryColor,
                 };
             case 'contained-gray':
                 return {
                     background: colors.tertiaryColor,
-                    textIcon: colors.tertiaryLabel,
+                    textIcon: isDisable ? colors.grey600 : colors.tertiaryLabel,
                 };
             case 'outlined-error':
                 return {
-                    background: colors.errorBackground,
+                    background: colors.red900,
                     textIcon: colors.errorLabel,
                     borderColor: colors.errorLabel,
+                };
+            case 'outlined-light-error':
+                return {
+                    background: colors.red50,
+                    textIcon: colors.error,
+                    borderColor: colors.error,
                 };
             default:
                 return {
@@ -38,7 +48,12 @@ export default (
     };
 
     const getBorderWidth = () =>
-        mode === 'outlined' || mode === 'outlined-error' ? 1 : 0;
+        mode === 'outlined' ||
+        mode === 'outlined-error' ||
+        mode === 'outlined-light-error' ||
+        isDisable
+            ? 1
+            : 0;
 
     return StyleSheet.create({
         buttonContainer: {
@@ -50,7 +65,7 @@ export default (
             alignItems: alignContent,
             backgroundColor: getColor().background,
             borderWidth: getBorderWidth(),
-            borderColor: getColor().borderColor,
+            borderColor: isDisable ? colors.gray300 : getColor().borderColor,
         },
         IconLabelContainer: {
             flexDirection: 'row',
@@ -58,11 +73,11 @@ export default (
         },
         rightIcon: {
             paddingLeft: scale.sc8,
-            color: getColor().textIcon,
+            color: iconColor ?? getColor().textIcon,
         },
         leftIcon: {
             paddingLeft: scale.sc8,
-            color: getColor().textIcon,
+            color: iconColor ?? getColor().textIcon,
         },
         labelContainer: {
             color: getColor().textIcon,

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Button, Text } from 'src/components/atoms';
-import { TestProps } from 'src/utils/types';
+import { PartialBy, TestProps } from 'src/utils/types';
 import styles from './styles';
 
 export type HalfDayProp = {
@@ -20,25 +21,34 @@ interface Props extends Partial<HalfButtonPropsTest> {
     label: string;
     icon: string;
     isHalfSelected: boolean;
+    isError: boolean;
     onPress: (title: string) => void;
+    onInitialPress: () => void;
     halfDay: Omit<HalfDayProp, 'isRightSelected' | 'isLeftSelected'>;
+    selectedDay: Pick<HalfDayProp, 'isRightSelected' | 'isLeftSelected'>;
 }
 
 const LAHalfButton = ({
     label,
     onPress,
+    onInitialPress,
     icon,
     isHalfSelected = false,
+    isError = false,
     halfDay,
+    selectedDay,
     testId,
     testIdRightButton,
     testIdLeftButton,
-}: Props) => {
+}: PartialBy<Props, 'isError'>) => {
     const [isHalfDay, setIsHalfDay] = useState<boolean>(isHalfSelected);
-    const [selectedHalfDay, setSelectedHalfDay] =
-        useState<Pick<HalfDayProp, 'isRightSelected' | 'isLeftSelected'>>();
+    const [selectedHalfDay, setSelectedHalfDay] = useState<
+        Pick<HalfDayProp, 'isRightSelected' | 'isLeftSelected'> | undefined
+    >(selectedDay);
 
     const onButtonPress = () => {
+        onInitialPress && onInitialPress();
+        setSelectedHalfDay(undefined);
         setIsHalfDay(true);
     };
 
@@ -69,7 +79,12 @@ const LAHalfButton = ({
     } = styles({
         isLeftSelected: selectedHalfDay?.isLeftSelected,
         isRightSelected: selectedHalfDay?.isRightSelected,
+        isError,
     });
+
+    useEffect(() => {
+        setIsHalfDay(isHalfSelected);
+    }, [isHalfSelected]);
 
     if (isHalfDay) {
         return (
@@ -94,7 +109,7 @@ const LAHalfButton = ({
         <Button
             testID={testId}
             label={label}
-            mode='contained-gray'
+            mode={isError ? 'outlined-light-error' : 'contained-gray'}
             icon={icon}
             iconPosition='left'
             iconLabelContainerStyle={initialIconLabelContainer}

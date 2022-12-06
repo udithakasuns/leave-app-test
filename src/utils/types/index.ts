@@ -1,3 +1,5 @@
+import { MultiButtonProps, MultiChipProps } from 'src/components/molecules';
+
 export type Colors = {
     white: string;
     black: string;
@@ -14,6 +16,7 @@ export type Colors = {
     disabledColor: string;
     errorLabel: string;
     secondaryGray: string;
+    gray700: string;
     gray600: string;
     gray300: string;
     tertiaryLabel: string;
@@ -21,6 +24,14 @@ export type Colors = {
     dividerColor: string;
     approved: string;
     pending: string;
+    green700: string;
+    green200: string;
+    gray400: string;
+    red900: string;
+    red500: string;
+    red50: string;
+    lime50: string;
+    grey600: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -59,6 +70,8 @@ export type TextTypeProps =
 
 export type UserTokenType = 'idToken' | 'accessToken' | 'refreshToken';
 
+export type IconLibrary = 'material' | 'community' | 'svg';
+
 export type UserTokens = {
     idToken: string;
     accessToken: string;
@@ -82,28 +95,192 @@ export interface Entitlement {
     balanceInDays: number;
 }
 
-export type StatusType = 'PENDING' | 'APPROVED' | 'DENIED' | 'CANCELLED';
+export type EntitlementSelection = Entitlement & {
+    isSelected: boolean;
+};
+
+export enum Status {
+    PENDING = 'PENDING',
+    APPROVED = 'APPROVED',
+    DENIED = 'DENIED',
+    CANCELLED = 'CANCELLED',
+}
+
+export type StatusType = keyof typeof Status;
+
+export enum States {
+    FULLDAY = 'FULLDAY',
+    HALFDAY_MORNING = 'HALFDAY_MORNING',
+    HALFDAY_EVENING = 'HALFDAY_EVENING',
+}
+
+export type LeaveSate = keyof typeof States;
+
+export enum FilterDates {
+    ANY = 'ANY_DAY',
+    TODAY = 'TODAY',
+    WEEK = 'THIS_WEEK',
+    MONTH = 'THIS_MONTH',
+}
+
+export type FilterDatesType = keyof typeof FilterDates;
 
 export type EmployeeType = {
     employeeId: string;
-    name?: string | null;
-    designation?: string | null;
-    authPic?: string | null;
+    name: string | null;
+    designation: string | null;
+    authPic: string | null;
+};
+
+export type UserRole = 'employee' | 'manager';
+
+export type UserType = {
+    userId: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    profilePic: string;
+    designation: string;
+    role: UserRole;
 };
 
 export type LeaveRequestType = {
-    startDate: number;
-    endDate: number;
+    leaveRequestId: number;
+    startDate: string;
+    endDate: string;
     leaveType: LeaveType;
-    reasonForLeave: string | null;
+    // reasonForLeave: string | null;
     leaveState: string;
     status: StatusType;
-    requestDesc?: string | null;
-    reviewerComment?: null;
+    // requestDesc?: string | null;
+    // reviewerComment?: string | null;
+    durationHours: number | null;
+    durationDays: number | null;
+};
+
+export interface LeaveRequestByID extends LeaveRequestType {
+    reviewerComment: string;
+    requestDesc: string;
+    creationDate: string;
+    reviewedDate: string;
+    employee: EmployeeType;
+    reviewer: EmployeeType;
+}
+
+export type PendingRequestType = {
+    leaveRequestId: number;
+    startDate: string;
+    endDate: string;
+    leaveType: LeaveType;
+    status: StatusType;
+    leaveState: LeaveSate;
+    durationHours: number;
+    durationDays: number;
     employee: EmployeeType;
 };
 
-export interface Section {
-    title: string;
-    data: LeaveRequestType[];
+export interface PendingRequestByID extends PendingRequestType {
+    reviewerComment: string;
+    requestDesc: string;
+    creationDate: string;
+    reviewedDate: string;
+    reviewer: EmployeeType;
 }
+
+export type UpdateManagerRequest = {
+    requestID: number;
+    status: StatusType;
+    reviewerComment: string;
+};
+
+export type RequestDetails = {
+    leaveRequest?: AtLeast<LeaveRequestByID, 'leaveType'>;
+    recipient?: EmployeeType[];
+};
+
+export interface Section<T> {
+    title: string;
+    isViewAllVisible: boolean;
+    data: T;
+}
+
+type RequestParams = {
+    sortKey: 'creationDate' | 'startDate';
+    page: number;
+    size: number;
+    status: string;
+    startDate: string;
+    endDate: string;
+    leaveType: string;
+};
+
+export type LeaveRequestParams = Partial<RequestParams>;
+
+export type FilterTypes = {
+    name: string;
+    typeId: number;
+};
+
+export enum EmployeeModal {
+    'APPLY_LEAVE_MODAL',
+    'CHOSE_DATE_MODAL',
+    'PENDING_LEAVE_MODAL',
+    'DENIED_LEAVE_MODAL',
+    'APPROVED_LEAVE_MODAL',
+    'REVOKE_REQUEST_MODAL',
+    'CANCEL_REQUEST_MODAL',
+    'CANCELLED_LEAVE_MODAL',
+    'LEAVE_INFORMATION',
+}
+
+export enum EmployeePopup {
+    'LEAVE_REQUEST_CONFIRMATION',
+    'LEAVE_REQUEST_REVOKE',
+    'LEAVE_REQUEST_CANCELLED',
+}
+
+export enum ManagerModal {
+    'PENDING_LEAVE_MODAL',
+    'DECLINE_LEAVE_MODAL',
+    'APPROVED_LEAVE_MODAL',
+    'CANCELLED_LEAVE_MODAL',
+    'DENIED_LEAVE_MODAL',
+    'LEAVE_INFORMATION',
+}
+
+export enum ManagerPopup {
+    'LEAVE_REQUEST_APPROVED',
+    'LEAVE_REQUEST_DECLINE',
+}
+
+export type ApplyFormValues = {
+    typeId: number;
+    selectedLeaveBalance?: number;
+    leaveState?: LeaveSate;
+    requestDesc: string;
+    startDate: string;
+    endDate: string;
+    entitlements: EntitlementSelection[];
+};
+
+export type LeaveUndoProp = {
+    requestID: number;
+    startDate: string;
+    endDate: string;
+    requestDesc: string;
+    leaveRequestStatus: StatusType;
+};
+
+export type FilterChipsProps = {
+    id: number;
+    title: string;
+    chips: MultiChipProps[];
+    singleSelection?: boolean;
+};
+
+export type FilterProps = {
+    sortByButtons: MultiButtonProps[];
+    filterChips: FilterChipsProps[];
+    onSortPress: (multiButtons: MultiButtonProps[]) => void;
+    onFilterPress: (multiButtons: FilterChipsProps[]) => void;
+};

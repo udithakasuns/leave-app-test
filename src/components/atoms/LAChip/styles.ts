@@ -22,7 +22,7 @@ const styles = ({
         : 'transparent';
 
     if (disabled) {
-        containerBorderColor = outline ? colors.disabledColor : 'transparent';
+        containerBorderColor = outline ? colors.secondaryGray : 'transparent';
         containerBackgroundColor = colors.tertiaryColor;
     }
 
@@ -32,10 +32,10 @@ const styles = ({
             flexDirection: 'row',
             alignItems: 'center',
             borderRadius: radius.rd64,
-            borderWidth: outline ? scale.sc1 : 0,
+            borderWidth: outline ? 1 : 0,
             borderColor: containerBorderColor,
             backgroundColor: containerBackgroundColor,
-            paddingHorizontal: scale.sc12,
+            paddingHorizontal: scale.sc10,
             paddingVertical: scale.vsc12,
         },
         content: {

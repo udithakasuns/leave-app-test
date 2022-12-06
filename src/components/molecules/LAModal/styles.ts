@@ -4,13 +4,23 @@ import theme from 'src/utils/theme';
 
 export default (insets: EdgeInsets) =>
     StyleSheet.create({
-        container: { flex: 1, justifyContent: 'flex-end', margin: 0 },
+        safeAreaContainer: {
+            backgroundColor: theme.colors.white,
+            borderTopLeftRadius: theme.radius.rd24,
+            borderTopRightRadius: theme.radius.rd24,
+        },
+        container: {
+            justifyContent: 'flex-end',
+            margin: 0,
+            marginTop: 50,
+        },
         bodyContainer: {
+            maxHeight: theme.height(200),
             backgroundColor: theme.colors.white,
             borderTopLeftRadius: theme.radius.rd24,
             borderTopRightRadius: theme.radius.rd24,
             paddingBottom: insets.bottom,
-            marginTop: theme.lineHeight.lh16,
+            marginTop: theme.pixel(3),
             paddingHorizontal: theme.scale.sc20,
         },
         headerContainer: { marginTop: theme.scale.vsc20 },
