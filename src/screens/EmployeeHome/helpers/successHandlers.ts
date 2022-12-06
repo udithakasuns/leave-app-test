@@ -13,7 +13,7 @@ import {
     Section,
 } from 'src/utils/types';
 
-export const handleOnFilterTypesSuccess = (
+export const handleFilterTypesSuccess = (
     data: FilterTypes[],
     filterChips: FilterChipsProps[],
     setFilterChips: (filterChips: FilterChipsProps[]) => void,
@@ -35,7 +35,7 @@ export const handleOnFilterTypesSuccess = (
     ]);
 };
 
-export const handleOnLeaveRequestSuccess = (
+export const handleLeaveRequestSuccess = (
     data: Section<LeaveRequestType[]>[],
     setEmptyFilterUtils: () => void,
     resetFilterUtils: () => void,
@@ -47,12 +47,12 @@ export const handleOnLeaveRequestSuccess = (
     }
 };
 
-export const handleOnUndoCancellationSuccess = (refetchAllData: () => void) => {
+export const handleUndoCancellationSuccess = (refetchAllData: () => void) => {
     showSuccessToast(SuccessCodes.CANCELLATION_UNDONE);
     refetchAllData();
 };
 
-export const handleOnDeleteSuccess = (
+export const handleDeleteSuccess = (
     modalType: EmployeeModal | undefined,
     employeeRequest: LeaveRequestByID,
     employeeModal: Partial<ModalProps> | undefined,
@@ -86,7 +86,7 @@ export const handleOnDeleteSuccess = (
     refetchAllData();
 };
 
-export const handleOnNudgeSuccess = (
+export const handleNudgeSuccess = (
     setEmployeeModal: (
         value: React.SetStateAction<Partial<ModalProps> | undefined>,
     ) => void,

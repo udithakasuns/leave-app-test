@@ -49,18 +49,18 @@ import {
     Section,
 } from 'src/utils/types';
 import { useFormik } from '../../utils/hooks/useFormik';
-import { handleOnApplyLeaveError } from './helpers/errorHandlers';
+import { handleApplyLeaveError } from './helpers/errorHandlers';
 import {
-    getHandleDateModal,
-    getHandleRequestSelectedModal,
+    handleDateModal,
+    handleRequestSelectedModal,
 } from './helpers/modalHandlers';
 import {
     handleApplyMutationSuccess,
-    handleOnDeleteSuccess,
-    handleOnFilterTypesSuccess,
-    handleOnLeaveRequestSuccess,
-    handleOnNudgeSuccess,
-    handleOnUndoCancellationSuccess,
+    handleDeleteSuccess,
+    handleFilterTypesSuccess,
+    handleLeaveRequestSuccess,
+    handleNudgeSuccess,
+    handleUndoCancellationSuccess,
 } from './helpers/successHandlers';
 import { styles } from './styles';
 
@@ -94,7 +94,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     }: UseQueryResult<FilterTypes[], AxiosError> = useFilterTypesData(
         true,
         (data: FilterTypes[]) =>
-            handleOnFilterTypesSuccess(data, filterChips, setFilterChips),
+            handleFilterTypesSuccess(data, filterChips, setFilterChips),
     );
 
     const {
@@ -104,7 +104,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         params,
         true,
         (data: Section<LeaveRequestType[]>[]) =>
-            handleOnLeaveRequestSuccess(
+            handleLeaveRequestSuccess(
                 data,
                 setEmptyFilterUtils,
                 resetFilterUtils,
@@ -123,7 +123,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     setEmployeePopup,
                     refetchAllData,
                 ),
-            onError: handleOnApplyLeaveError,
+            onError: handleApplyLeaveError,
         },
     );
 
@@ -131,7 +131,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         ['undoCancellation'],
         patchHttpApplyLeave,
         {
-            onSuccess: () => handleOnUndoCancellationSuccess(refetchAllData),
+            onSuccess: () => handleUndoCancellationSuccess(refetchAllData),
             onError: () => {
                 showErrorToast(ErrorCodes.ERROR_OCCURRED);
             },
@@ -143,7 +143,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         deleteHttpApplyLeave,
         {
             onSuccess: () =>
-                handleOnDeleteSuccess(
+                handleDeleteSuccess(
                     employeeModal?.modalType,
                     employeeRequest,
                     employeeModal,
@@ -160,7 +160,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         postHttpNudge,
         {
             onSuccess: () =>
-                handleOnNudgeSuccess(setEmployeeModal, managers[0].name ?? ''),
+                handleNudgeSuccess(setEmployeeModal, managers[0].name ?? ''),
         },
     );
 
@@ -206,7 +206,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const handleRequestItemPress = (item: LeaveRequestType) => {
         setLeaveRequestByID(item.leaveRequestId);
         setEmployeeModal({
-            modalType: getHandleRequestSelectedModal(item),
+            modalType: handleRequestSelectedModal(item),
         });
     };
 
@@ -219,7 +219,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const handleDateModalBackPress = (modalType: EmployeeModal) => {
         setEmployeeModal({
             ...employeeModal,
-            modalType: getHandleDateModal(modalType),
+            modalType: handleDateModal(modalType),
         });
     };
 

@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import {
     DrawerScreenNavigationProp,
     EmployeeViewAllScreensProps,
 } from 'navigators/types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { Button, Icon, IconSize, Spacer, Text } from 'src/components/atoms';
+import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
 import {
     LAEmployeeModals,
     LAEmployeePopUp,
@@ -29,10 +29,6 @@ import {
     useRecipientStore,
 } from 'src/store';
 import { showErrorToast, toastConfig } from 'src/utils/alerts';
-import {
-    filterChipsEmployee,
-    sortByButtonsEmployee,
-} from 'src/utils/helpers/defaultData';
 import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import { useEntitlementData } from 'src/utils/hooks/useEntitlementData';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
@@ -48,18 +44,18 @@ import {
     Section,
 } from 'src/utils/types';
 import { useFormik } from '../../utils/hooks/useFormik';
-import { handleOnApplyLeaveError } from '../EmployeeHome/helpers/errorHandlers';
+import { handleApplyLeaveError } from '../EmployeeHome/helpers/errorHandlers';
 import {
-    getHandleDateModal,
-    getHandleRequestSelectedModal,
+    handleDateModal,
+    handleRequestSelectedModal,
 } from '../EmployeeHome/helpers/modalHandlers';
 import {
     handleApplyMutationSuccess,
-    handleOnDeleteSuccess,
-    handleOnFilterTypesSuccess,
-    handleOnLeaveRequestSuccess,
-    handleOnNudgeSuccess,
-    handleOnUndoCancellationSuccess,
+    handleDeleteSuccess,
+    handleFilterTypesSuccess,
+    handleLeaveRequestSuccess,
+    handleNudgeSuccess,
+    handleUndoCancellationSuccess,
 } from '../EmployeeHome/helpers/successHandlers';
 
 import { styles } from './styles';
@@ -91,7 +87,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
     }: UseQueryResult<FilterTypes[], AxiosError> = useFilterTypesData(
         true,
         (data: FilterTypes[]) =>
-            handleOnFilterTypesSuccess(data, filterChips, setFilterChips),
+            handleFilterTypesSuccess(data, filterChips, setFilterChips),
     );
 
     const {
@@ -102,7 +98,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         params,
         false,
         (data: Section<LeaveRequestType[]>[]) =>
-            handleOnLeaveRequestSuccess(
+            handleLeaveRequestSuccess(
                 data,
                 setEmptyFilterUtils,
                 resetFilterUtils,
@@ -121,7 +117,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
                     setEmployeePopup,
                     refetchAllData,
                 ),
-            onError: handleOnApplyLeaveError,
+            onError: handleApplyLeaveError,
         },
     );
 
@@ -129,7 +125,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         ['undoCancellation'],
         patchHttpApplyLeave,
         {
-            onSuccess: () => handleOnUndoCancellationSuccess(refetchAllData),
+            onSuccess: () => handleUndoCancellationSuccess(refetchAllData),
             onError: () => {
                 showErrorToast(ErrorCodes.ERROR_OCCURRED);
             },
@@ -141,7 +137,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         deleteHttpApplyLeave,
         {
             onSuccess: () =>
-                handleOnDeleteSuccess(
+                handleDeleteSuccess(
                     employeeModal?.modalType,
                     employeeRequest,
                     employeeModal,
@@ -158,7 +154,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         postHttpNudge,
         {
             onSuccess: () =>
-                handleOnNudgeSuccess(setEmployeeModal, managers[0].name ?? ''),
+                handleNudgeSuccess(setEmployeeModal, managers[0].name ?? ''),
         },
     );
 
@@ -179,7 +175,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
     const handleRequestItemPress = (item: LeaveRequestType) => {
         setLeaveRequestByID(item.leaveRequestId);
         setEmployeeModal({
-            modalType: getHandleRequestSelectedModal(item),
+            modalType: handleRequestSelectedModal(item),
         });
     };
 
@@ -192,7 +188,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
     const handleDateModalBackPress = (modalType: EmployeeModal) => {
         setEmployeeModal({
             ...employeeModal,
-            modalType: getHandleDateModal(modalType),
+            modalType: handleDateModal(modalType),
         });
     };
 

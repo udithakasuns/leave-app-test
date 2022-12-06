@@ -70,3 +70,15 @@ export const sortByButtonsEmployee: MultiButtonProps[] = [
         label: 'Leave Date',
     },
 ];
+
+export const sortByButtonsManager: MultiButtonProps[] = [
+    {
+        buttonId: 1,
+        label: 'Date Requested',
+        selected: true,
+    },
+    {
+        buttonId: 2,
+        label: 'Leave Date',
+    },
+];

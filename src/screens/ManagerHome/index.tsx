@@ -5,7 +5,7 @@ import { ManagerHomeScreensProps } from 'navigators/types';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Spacer, Text } from 'src/components/atoms';
-import { MultiButtonProps, MultiChipProps } from 'src/components/molecules';
+import { MultiChipProps } from 'src/components/molecules';
 import { LAAppBar, LAManagerModals } from 'src/components/organisms';
 import { LAManagerModalProps } from 'src/components/organisms/ManagerHome/LAManagerModals';
 import LAManagerPopUp, {
@@ -19,7 +19,10 @@ import {
     useUserStore,
 } from 'src/store';
 import { getGreetingsByTime } from 'src/utils/helpers/dateHandler';
-import { filterChipsManager } from 'src/utils/helpers/defaultData';
+import {
+    filterChipsManager,
+    sortByButtonsManager,
+} from 'src/utils/helpers/defaultData';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
 import theme from 'src/utils/theme';
@@ -42,18 +45,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
 });
-
-const sortByButtons: MultiButtonProps[] = [
-    {
-        buttonId: 1,
-        label: 'Date Requested',
-        selected: true,
-    },
-    {
-        buttonId: 2,
-        label: 'Urgency',
-    },
-];
 
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const [managerModal, setManagerModal] = useState<LAManagerModalProps>();
@@ -173,7 +164,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
 
     useEffect(() => {
         if (isFocused) {
-            setSortByButtons(sortByButtons);
+            setSortByButtons(sortByButtonsManager);
             setFilterChips(filterChipsManager);
             refetchLeaveRequests();
             statusTypesRefetch();

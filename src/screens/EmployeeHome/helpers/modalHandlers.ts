@@ -1,6 +1,6 @@
 import { EmployeeModal, LeaveRequestType } from 'src/utils/types';
 
-export const getHandleRequestSelectedModal = (
+export const handleRequestSelectedModal = (
     item: LeaveRequestType,
 ): EmployeeModal | undefined => {
     let selectedModal: EmployeeModal | undefined;
@@ -23,7 +23,7 @@ export const getHandleRequestSelectedModal = (
     return selectedModal;
 };
 
-export const getHandleDateModal = (
+export const handleDateModal = (
     modalType: EmployeeModal,
 ): EmployeeModal | undefined => {
     let modal: EmployeeModal | undefined;
