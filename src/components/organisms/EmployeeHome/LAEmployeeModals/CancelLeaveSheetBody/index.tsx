@@ -1,21 +1,15 @@
 import React from 'react';
-import { Button, Divider, Spacer, Text } from 'src/components/atoms';
-import {
-    ButtonDock,
-    RequestDetailsSection,
-    SelectionButton,
-} from 'src/components/molecules';
+import { Button, Spacer, Text } from 'src/components/atoms';
+import { RequestDetailsSection } from 'src/components/molecules';
 import theme from 'src/utils/theme';
 import { PartialBy, RequestDetails, TestProps } from 'src/utils/types';
 
 interface Props extends Partial<TestProps> {
     requestDetails: RequestDetails;
-    onPressViewMoreDetails: () => void;
-    onPressNudge: (isDisable: boolean) => void;
     onPressCancelLeave: () => void;
 }
 
-const { colors } = theme;
+const { colors, scale } = theme;
 
 const CancelLeaveSheetBody = ({
     requestDetails,
@@ -31,13 +25,16 @@ const CancelLeaveSheetBody = ({
             <RequestDetailsSection
                 requestDetails={requestDetails}
                 isStatusVisible
+                isDurationVisible
             />
         )}
         <Spacer />
         <Button
             mode='outlined-error'
             label='Cancel Leave'
+            icon='close'
             onPress={onPressCancelLeave}
+            labelStyle={{ paddingHorizontal: scale.sc4 }}
         />
         <Spacer height={10} />
     </>

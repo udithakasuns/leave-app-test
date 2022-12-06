@@ -2,30 +2,25 @@
 import { FormikProps } from 'formik';
 import React, { useState } from 'react';
 import { Modal } from 'src/components/molecules';
-import theme from 'src/utils/theme';
-import {
-    ApplyFormValues,
-    EmployeeModal,
-    LeaveRequestType,
-    RequestDetails,
-    TestProps,
-} from 'src/utils/types';
+import { useEmployeeStore, useRecipientStore } from 'src/store';
+import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
 import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
+import ApprovedLeaveSheetBody from './ApprovedLeaveSheetBody';
 import CancelLeaveSheetBody from './CancelLeaveSheetBody';
+import CancelledLeaveSheetBody from './CancelledLeaveSheetBody';
 import ChooseDateSheetBody from './ChooseDateSheetBody';
+import DeniedLeaveSheetBody from './DeniedLeaveSheetBody';
 import LeaveInformationSheetBody from './LeaveInformationSheetBody';
 import PendingSheetBody from './PendingSheetBody';
+import RevokeLeaveSheetBody from './RevokeLeaveSheetBody';
 import { styles } from './styles';
 
 export type ModalProps = {
     modalType: EmployeeModal;
-    leaveRequest: LeaveRequestType;
-    requestDetails: RequestDetails;
+    onBackPressType: EmployeeModal;
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
-
-const { colors } = theme;
 
 interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     onClose: () => void;
@@ -33,24 +28,30 @@ interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     onPressSelectDate: () => void;
     onBackPress: (modalType: EmployeeModal) => void;
     onPressNudge: (isDisable: boolean) => void;
-    onPressViewMoreDetails: () => void;
+    onPressLeaveInformation: (onBackPressModal: EmployeeModal) => void;
+    onPressRevokeLeave: () => void;
     onPressCancelLeave: () => void;
     onNavigateToCancelLeave: () => void;
+    onRevokeLeaveRequest: (revokeComment: string) => void;
 }
 
 const LAEmployeeModals = ({
     modalType,
-    onClose,
+    onBackPressType,
     formik,
+    onClose,
     onBackPress,
     onPressSelectDate,
     onPressNudge,
-    onPressViewMoreDetails,
-    requestDetails,
+    onPressLeaveInformation,
     onPressCancelLeave,
     onNavigateToCancelLeave,
+    onPressRevokeLeave,
+    onRevokeLeaveRequest,
 }: Props) => {
     const [isHalfSelected, setIsHalfSelected] = useState(false);
+    const { employeeRequest } = useEmployeeStore();
+    const { managers } = useRecipientStore();
     const onCancellation = () => {
         setIsHalfSelected(false);
         formik.resetForm();
@@ -104,9 +105,16 @@ const LAEmployeeModals = ({
                     style={styles.commonStyle}
                     sheetBody={
                         <PendingSheetBody
-                            requestDetails={requestDetails}
+                            requestDetails={{
+                                leaveRequest: employeeRequest,
+                                recipient: [managers[0]],
+                            }}
                             onPressNudge={onPressNudge}
-                            onPressViewMoreDetails={onPressViewMoreDetails}
+                            onPressViewMoreDetails={() =>
+                                onPressLeaveInformation(
+                                    EmployeeModal.PENDING_LEAVE_MODAL,
+                                )
+                            }
                             onPressCancelLeave={onNavigateToCancelLeave}
                         />
                     }
@@ -114,18 +122,19 @@ const LAEmployeeModals = ({
             )}
             {modalType === EmployeeModal.LEAVE_INFORMATION && (
                 <Modal
-                    onClose={() =>
-                        onBackPress(EmployeeModal.PENDING_LEAVE_MODAL)
-                    }
+                    onClose={() => {
+                        onBackPress(
+                            onBackPressType ??
+                                EmployeeModal.APPROVED_LEAVE_MODAL,
+                        );
+                    }}
                     isVisible
                     header='Leave Information'
                     headerIcon='arrow-back'
                     style={styles.commonStyle}
                     sheetBody={
                         <LeaveInformationSheetBody
-                            requestDescription={
-                                requestDetails?.leaveRequest?.requestDesc ?? ''
-                            }
+                            requestDetails={employeeRequest}
                         />
                     }
                 />
@@ -138,10 +147,84 @@ const LAEmployeeModals = ({
                     style={styles.commonStyle}
                     sheetBody={
                         <CancelLeaveSheetBody
-                            requestDetails={requestDetails}
-                            onPressNudge={onPressNudge}
-                            onPressViewMoreDetails={onPressViewMoreDetails}
+                            requestDetails={{
+                                leaveRequest: employeeRequest,
+                                recipient: [managers[0]],
+                            }}
                             onPressCancelLeave={onPressCancelLeave}
+                        />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.CANCELLED_LEAVE_MODAL && (
+                <Modal
+                    onClose={onClose}
+                    isVisible
+                    header='Cancelled leave status'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <CancelledLeaveSheetBody
+                            requestDetails={{
+                                leaveRequest: employeeRequest,
+                                recipient: [managers[0]],
+                            }}
+                            onClose={onClose}
+                        />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.DENIED_LEAVE_MODAL && (
+                <Modal
+                    onClose={onClose}
+                    isVisible
+                    header='Denied leave status'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <DeniedLeaveSheetBody
+                            requestDetails={{
+                                leaveRequest: employeeRequest,
+                                recipient: [managers[0]],
+                            }}
+                            onClose={onClose}
+                        />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.APPROVED_LEAVE_MODAL && (
+                <Modal
+                    onClose={onClose}
+                    isVisible
+                    header='Approved leave status'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <ApprovedLeaveSheetBody
+                            requestDetails={{
+                                leaveRequest: employeeRequest,
+                                recipient: [managers[0]],
+                            }}
+                            onPressRevokeLeave={onPressRevokeLeave}
+                            onPressViewMoreDetails={() => {
+                                onPressLeaveInformation(
+                                    EmployeeModal.APPROVED_LEAVE_MODAL,
+                                );
+                            }}
+                        />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.REVOKE_REQUEST_MODAL && (
+                <Modal
+                    onClose={onClose}
+                    isVisible
+                    header='Revoke requested leave'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <RevokeLeaveSheetBody
+                            requestDetails={{
+                                leaveRequest: employeeRequest,
+                                recipient: [managers[0]],
+                            }}
+                            onRevokeLeaveRequest={onRevokeLeaveRequest}
                         />
                     }
                 />

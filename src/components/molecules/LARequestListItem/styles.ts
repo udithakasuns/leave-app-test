@@ -22,7 +22,6 @@ export const styles = StyleSheet.create({
     },
     containerStyle: {
         paddingVertical: scale.sc8,
-        backgroundColor: colors.white,
         maxWidth: pixel(150),
         justifyContent: 'center',
         alignContent: 'center',

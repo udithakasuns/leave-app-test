@@ -11,14 +11,21 @@ interface Props extends Partial<TestProps> {
     sortBy: string;
     onPressSortBy: () => void;
     onPressFilter: () => void;
+    disabled: boolean;
 }
 
-const LAFilterButtons = ({ sortBy, onPressSortBy, onPressFilter }: Props) => (
+const LAFilterButtons = ({
+    sortBy,
+    onPressSortBy,
+    onPressFilter,
+    disabled,
+}: Props) => (
     <View style={styles.container}>
         <Chip
             content={`Sort by : ${sortBy}`}
             rightIconName='arrow-drop-down'
             outline
+            disabled={disabled}
             contentColor={colors.black}
             onPressChip={onPressSortBy}
             contentTextType='ParaLG'
@@ -31,6 +38,7 @@ const LAFilterButtons = ({ sortBy, onPressSortBy, onPressFilter }: Props) => (
             content='Filter'
             rightIconName='tune'
             outline
+            disabled={disabled}
             contentColor={colors.black}
             onPressChip={onPressFilter}
             contentTextType='ParaLG'

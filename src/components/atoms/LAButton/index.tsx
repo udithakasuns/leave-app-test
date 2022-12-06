@@ -31,6 +31,7 @@ export interface Props extends PressableProps, TestProps {
     mode: ButtonMode;
     size: ButtonSize;
     loading: boolean;
+    isDisable: boolean;
     buttonStyle: StyleProp<ViewStyle>;
     labelStyle: StyleProp<TextStyle>;
     iconLabelContainerStyle: StyleProp<TextStyle>;
@@ -57,6 +58,7 @@ const LAButton = ({
     alignContent = 'center',
     iconLabelContainerStyle,
     iconLibrary,
+    isDisable = false,
     testID,
     loading,
     testIdLoading,
@@ -98,11 +100,12 @@ const LAButton = ({
         alignContent,
         getPropertiesBySize().containerPadding,
         iconColor,
+        isDisable,
     );
 
     return (
         <Pressable
-            disabled={loading}
+            disabled={loading || isDisable}
             {...rest}
             style={({ pressed }) => [
                 { opacity: pressed ? 0.5 : 1.0 },

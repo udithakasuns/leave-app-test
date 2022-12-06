@@ -1,9 +1,9 @@
 import React from 'react';
-import { Divider, Spacer, Text } from 'src/components/atoms';
+import { Spacer, Text } from 'src/components/atoms';
 import {
     ButtonDock,
+    MoreDetailsButton,
     RequestDetailsSection,
-    SelectionButton,
 } from 'src/components/molecules';
 import theme from 'src/utils/theme';
 import { PartialBy, RequestDetails, TestProps } from 'src/utils/types';
@@ -36,14 +36,8 @@ const PendingSheetBody = ({
                 isStatusVisible
             />
         )}
-        <Spacer />
-        <Divider />
-        <SelectionButton
-            buttonStyle={{ backgroundColor: colors.white }}
-            label='View More Details'
-            onPress={onPressViewMoreDetails}
-        />
-        <Divider />
+        <Spacer height={1} />
+        <MoreDetailsButton onPress={onPressViewMoreDetails} />
         <Spacer />
         <ButtonDock
             primaryButton={{

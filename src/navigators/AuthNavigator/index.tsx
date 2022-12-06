@@ -3,9 +3,11 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import EmployeeHome from 'screens/EmployeeHome';
 import { useUserStore } from 'src/store';
+import ManagerViewAll from 'src/screens/ManagerViewAll';
+import EmployeeViewAll from 'src/screens/EmployeeViewAll';
 import { AuthScreensParamList } from '../types';
 
-import Drawer from '../../components/organisms/Global/Drawer';
+import LADrawer from '../../components/organisms/Global/LADrawer';
 /* Screens */
 
 import ManagerHome from '../../screens/ManagerHome';
@@ -14,7 +16,7 @@ const DrawerNav = createDrawerNavigator<AuthScreensParamList>();
 
 /* Auth navigator contains all the screens after the authtication */
 const AuthNavigator = () => {
-    const MemoizedDrawer = React.useCallback(() => <Drawer />, []);
+    const MemoizedDrawer = React.useCallback(() => <LADrawer />, []);
     const {
         user: { role },
     } = useUserStore();
@@ -30,6 +32,14 @@ const AuthNavigator = () => {
                 headerTitle: '',
             }}>
             <DrawerNav.Screen name='EmployeeHome' component={EmployeeHome} />
+            <DrawerNav.Screen
+                name='EmployeeViewAll'
+                component={EmployeeViewAll}
+            />
+            <DrawerNav.Screen
+                name='ManagerViewAll'
+                component={ManagerViewAll}
+            />
             <DrawerNav.Screen name='ManagerHome' component={ManagerHome} />
         </DrawerNav.Navigator>
     );

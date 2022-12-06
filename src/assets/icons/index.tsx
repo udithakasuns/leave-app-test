@@ -2,6 +2,7 @@
 import React from 'react';
 import { SvgProps } from 'react-native-svg';
 import AccountCircle from './AccountCircle';
+import File from './File';
 import Filter from './Filter';
 import Google from './Google';
 import Manager from './Manager';
@@ -28,6 +29,8 @@ export const SvgIcon = ({ name, ...props }: Props) => {
             return <AccountCircle {...props} />;
         case 'settings':
             return <Settings {...props} />;
+        case 'file':
+            return <File {...props} />;
         default:
             return null;
     }
