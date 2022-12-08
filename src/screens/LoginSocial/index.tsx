@@ -6,13 +6,13 @@ import { Spacer, Text } from 'components/atoms';
 import theme from 'src/utils/theme';
 import { SocialButton } from 'components/molecules';
 import Header from 'src/components/organisms/Login/Header';
-import { useAuthStore } from 'src/store';
+import { usePersistStore } from 'src/store';
 import { styles } from './styles';
 
 const { colors } = theme;
 
 const LoginSocial: React.FC<LoginScreenProps> = () => {
-    const { setAuthType } = useAuthStore();
+    const { setAuthType } = usePersistStore();
 
     const onPressGoogleSignin = () => {
         setAuthType('social');

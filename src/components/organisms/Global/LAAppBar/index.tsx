@@ -34,7 +34,7 @@ export type SelectedProperties = {
 };
 
 const LAAppBar = ({ currentScreen }: AppBarProps) => {
-    const { count, setIsPopupVisible } = useNotificationStore();
+    const notificationStore = useNotificationStore();
     const navigation = useNavigation<DrawerScreenNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const {
@@ -57,14 +57,15 @@ const LAAppBar = ({ currentScreen }: AppBarProps) => {
     };
 
     const notificationCount = useMemo<string>(() => {
+        const { count } = notificationStore;
         if (count && count > 0) {
             return count > 100 ? '99' : count.toString();
         }
         return '';
-    }, [count]);
+    }, [notificationStore.count]);
 
     const onPressNotification = () => {
-        setIsPopupVisible(true);
+        notificationStore.setIsPopupVisible(true);
     };
 
     return (
@@ -117,11 +118,13 @@ const LAAppBar = ({ currentScreen }: AppBarProps) => {
                                 selected === 'employee' &&
                                 selected !== currentScreen
                             ) {
+                                notificationStore.getCount('EMPLOYEE');
                                 navigation.navigate('EmployeeHome');
                             } else if (
                                 selected === 'manager' &&
                                 selected !== currentScreen
                             ) {
+                                notificationStore.getCount('MANAGER');
                                 navigation.navigate('ManagerHome');
                             }
                             setModalVisible(state => !state);

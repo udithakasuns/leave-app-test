@@ -4,7 +4,7 @@ import { Platform, Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import { postHttpNotificationRegister } from 'src/services/http';
 import PushNotification from 'react-native-push-notification';
-import { useAuthStore, useNotificationStore, useUserStore } from 'src/store';
+import { usePersistStore, useNotificationStore, useUserStore } from 'src/store';
 import uuid from 'react-native-uuid';
 
 type Props = {
@@ -25,9 +25,9 @@ PushNotification.createChannel(
 );
 
 export const useNotifications = ({ isAuthenticated }: Props) => {
-    const { isDeviceRegistered, setIsDeviceRegistered } = useAuthStore();
+    const persistStore = usePersistStore();
+    const notificationStore = useNotificationStore();
     const { user } = useUserStore();
-    const { getCount } = useNotificationStore();
 
     const requestUserPermission = async () => {
         console.log('requestUserPermission');
@@ -41,6 +41,14 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
         } else {
             Alert.alert('PERMISSIONS', 'Enable permissions');
             // Show a popup to request permisions for notifications
+        }
+    };
+
+    const getNotificationCountByUserRole = () => {
+        if (user.role === 'manager') {
+            notificationStore.getCount('MANAGER');
+        } else {
+            notificationStore.getCount('EMPLOYEE');
         }
     };
 
@@ -58,26 +66,26 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
                 channelId: 'channel-id',
                 vibrate: true,
             });
+            notificationStore.getCount(notificationStore.notifyUserRole);
         });
 
         /* 
             Following event is being listened to the notifications when the user in
             foreground mode(focus in to the app). If new notification comes, it will 
-            trigger the notification count API.  
+            trigger the notification count API based on the currently selected user.  
         */
         const unsubscribe = messaging().onMessage(() => {
-            getCount();
+            notificationStore.getCount(notificationStore.notifyUserRole);
         });
 
         return unsubscribe;
     }, []);
 
     const getNotificationToken = async () => {
-        /*
-            Each device will generate an uniqe token and it will be passed to the backend.
-        */
+        // Each device will generate an uniqe token and it will be passed to the backend.
         const deviceToken = await messaging().getToken();
         if (deviceToken) {
+            // An unique id will be created for every device, which allows backend identify devices seperately.
             const deviceType = Platform.OS === 'ios' ? 'IOS' : 'ANDROID';
             const deviceUniqueId = `${uuid.v4()}-${deviceType}-${user.userId.toString()}`;
 
@@ -87,9 +95,9 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
                 deviceUniqueId,
             );
             if (isRegistered) {
-                // Update the zustand store.
-                setIsDeviceRegistered(true);
-                getCount();
+                // Save device unique to the zustand persist store for future usage.
+                persistStore.setDeviceUniqueId(deviceUniqueId);
+                getNotificationCountByUserRole();
             } else {
                 // Handle the error here
             }
@@ -101,8 +109,8 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
     useEffect(() => {
         /* Only authenticated users can register for the notification device token unless the user has already registered */
         if (isAuthenticated) {
-            if (isDeviceRegistered) {
-                getCount();
+            if (persistStore.deviceUniqueId) {
+                getNotificationCountByUserRole();
             } else {
                 getNotificationToken();
             }

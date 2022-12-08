@@ -5,10 +5,9 @@ import {
     AuthGeneralUserPayload,
     AuthSocialUserPayload,
 } from 'src/services/aws/types';
-import { useAuthStore, useUserStore } from 'src/store';
+import { usePersistStore, useUserStore } from 'src/store';
 import amplifiConfig from 'src/aws-exports';
-import { Platform } from 'react-native';
-import { postHttpNotificationRegister } from 'src/services/http';
+import { deleteHttpNotificationDevice } from 'src/services/http';
 import { getCurrentUserRoleFromToken } from '../helpers/gettersUtil';
 import inAppUrlHandler from '../helpers/inAppUrlHandler';
 
@@ -31,8 +30,9 @@ export const useAuthentication = (): ReturnProps => {
         setIsAutherized,
         authType,
         setAuthType,
-        setIsDeviceRegistered,
-    } = useAuthStore();
+        setDeviceUniqueId,
+        deviceUniqueId,
+    } = usePersistStore();
     const [visibleAuthNav, setVisibleAuthNav] = useState<boolean>(false);
 
     const getCurrentSocialAuthUser = async () => {
@@ -111,10 +111,10 @@ export const useAuthentication = (): ReturnProps => {
             When signout, device of the user will be deregistered from the backend,
             otherwise, notifications will be recieved even the user has signed out
         */
-        const deviceType = Platform.OS === 'ios' ? 'IOS' : 'ANDROID';
-        const deviceToken = ''; // Pass device token as empty
-        await postHttpNotificationRegister(deviceToken, deviceType);
-        setIsDeviceRegistered(false); // Update the zustand store status about device registration.
+        if (deviceUniqueId) {
+            await deleteHttpNotificationDevice(deviceUniqueId);
+            setDeviceUniqueId(null);
+        }
         return true;
     };
 

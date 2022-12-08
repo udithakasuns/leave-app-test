@@ -35,7 +35,7 @@ export const useStyles = ({ isViewed }: Props) =>
             position: 'absolute',
             width: '100%',
             height: '100%',
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+            backgroundColor: 'rgba(255, 255, 255, 0.6)',
         },
         indicator: {
             width: scale.sc10,
@@ -45,7 +45,7 @@ export const useStyles = ({ isViewed }: Props) =>
             marginBottom: scale.sc2,
         },
         date: {
-            color: colors.secondaryOutline,
+            color: isViewed ? colors.gray400 : colors.secondaryOutline,
         },
         devider: {
             marginTop: scale.sc16,
