@@ -52,15 +52,15 @@ const LAIcon = ({
         switch (size) {
             case IconSize.xSmall:
                 iconSize = scale.sc8;
-                padding = increasePadding * scale.sc2;
+                padding = increasePadding * scale.sc1;
                 break;
             case IconSize.small:
                 iconSize = scale.sc12;
-                padding = increasePadding * scale.sc2;
+                padding = increasePadding * scale.sc1;
                 break;
             case IconSize.medium:
                 iconSize = scale.sc20;
-                padding = increasePadding * scale.sc2;
+                padding = increasePadding * scale.sc1;
                 break;
             case IconSize.large:
                 iconSize = scale.sc24;

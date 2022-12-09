@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Button, Text } from 'src/components/atoms';
-import { States, TestProps } from 'src/utils/types';
+import { PartialBy, TestProps } from 'src/utils/types';
 import styles from './styles';
 
 export type HalfDayProp = {
@@ -21,6 +21,7 @@ interface Props extends Partial<HalfButtonPropsTest> {
     label: string;
     icon: string;
     isHalfSelected: boolean;
+    isError: boolean;
     onPress: (title: string) => void;
     onInitialPress: () => void;
     halfDay: Omit<HalfDayProp, 'isRightSelected' | 'isLeftSelected'>;
@@ -33,12 +34,13 @@ const LAHalfButton = ({
     onInitialPress,
     icon,
     isHalfSelected = false,
+    isError = false,
     halfDay,
     selectedDay,
     testId,
     testIdRightButton,
     testIdLeftButton,
-}: Props) => {
+}: PartialBy<Props, 'isError'>) => {
     const [isHalfDay, setIsHalfDay] = useState<boolean>(isHalfSelected);
     const [selectedHalfDay, setSelectedHalfDay] = useState<
         Pick<HalfDayProp, 'isRightSelected' | 'isLeftSelected'> | undefined
@@ -77,6 +79,7 @@ const LAHalfButton = ({
     } = styles({
         isLeftSelected: selectedHalfDay?.isLeftSelected,
         isRightSelected: selectedHalfDay?.isRightSelected,
+        isError,
     });
 
     useEffect(() => {
@@ -106,7 +109,7 @@ const LAHalfButton = ({
         <Button
             testID={testId}
             label={label}
-            mode='contained-gray'
+            mode={isError ? 'outlined-light-error' : 'contained-gray'}
             icon={icon}
             iconPosition='left'
             iconLabelContainerStyle={initialIconLabelContainer}

@@ -16,9 +16,10 @@ type ColorProp = {
 type StyleProp = {
     isRightSelected?: boolean;
     isLeftSelected?: boolean;
+    isError?: boolean;
 };
 
-export default ({ isLeftSelected, isRightSelected }: StyleProp) => {
+export default ({ isLeftSelected, isRightSelected, isError }: StyleProp) => {
     const getColor = (): Partial<ColorProp> => {
         if (isLeftSelected) {
             return {
@@ -33,6 +34,17 @@ export default ({ isLeftSelected, isRightSelected }: StyleProp) => {
                 rightBackground: colors.secondaryBackground,
                 rightLabel: colors.secondaryLabel,
                 leftLabel: colors.gray600,
+            };
+        }
+        if (isError) {
+            return {
+                rightBorder: colors.error,
+                rightBackground: colors.red50,
+                rightLabel: colors.error,
+                leftLabel: colors.error,
+                leftBorder: colors.error,
+                leftBackground: colors.red50,
+                divider: colors.error,
             };
         }
         return {

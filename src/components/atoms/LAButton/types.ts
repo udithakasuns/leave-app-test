@@ -5,6 +5,7 @@ import { IconSize } from '../LAIcon';
 export type ButtonMode =
     | 'outlined'
     | 'outlined-error'
+    | 'outlined-light-error'
     | 'contained'
     | 'contained-gray';
 

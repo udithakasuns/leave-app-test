@@ -4,6 +4,11 @@ import theme from 'src/utils/theme';
 
 export default (insets: EdgeInsets) =>
     StyleSheet.create({
+        safeAreaContainer: {
+            backgroundColor: theme.colors.white,
+            borderTopLeftRadius: theme.radius.rd24,
+            borderTopRightRadius: theme.radius.rd24,
+        },
         container: {
             justifyContent: 'flex-end',
             margin: 0,

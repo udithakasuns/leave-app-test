@@ -6,6 +6,8 @@ import {
     MultiButtonProps,
     MultiChipProps,
 } from 'src/components/molecules';
+import { useManagerFilterStore } from 'src/store';
+import { FilterUtils } from 'src/store/managerFilterStore/types';
 import FilterSheetBody from './FilterSheetBody';
 import SortSheetBody from './SortSheetBody';
 
@@ -13,13 +15,16 @@ export type FilterChipsProps = {
     id: number;
     title: string;
     chips: MultiChipProps[];
+    singleSelection?: boolean;
 };
 
 export type FilterProps = {
     sortByButtons: MultiButtonProps[];
     filterChips: FilterChipsProps[];
-    onSortPress: (multiButtons: MultiButtonProps[]) => void;
-    onFilterPress: (multiButtons: FilterChipsProps[]) => void;
+    updateSortByParams: (multiButtons: MultiButtonProps[]) => void;
+    updateFilterParams: (multiButtons: FilterChipsProps[]) => void;
+    filterUtils: FilterUtils;
+    resetFiltersParams: () => void;
 };
 
 export type ResetOptions = {
@@ -27,12 +32,16 @@ export type ResetOptions = {
     resetData: boolean;
 };
 
-const LAFilters = ({
-    sortByButtons,
-    filterChips,
-    onSortPress,
-    onFilterPress,
-}: FilterProps) => {
+const LAManagerFilters = () => {
+    const {
+        filterChips,
+        sortByButtons,
+        updateSortByParams,
+        updateFilterParams,
+        filterUtils,
+        resetFiltersParams,
+    } = useManagerFilterStore();
+
     const [isSortModalVisible, setIsSortModalVisible] =
         useState<boolean>(false);
 
@@ -52,23 +61,25 @@ const LAFilters = ({
         const selectedButton = sortByButtons.filter(
             btn => btn.selected === true,
         )[0];
-        return selectedButton.label;
+        return selectedButton?.label;
     };
 
     useEffect(() => {
-        const chipsDeepClone = JSON.parse(JSON.stringify(filterChips));
-        setFilterChipsLocal(chipsDeepClone);
-        const isChipSelected = filterChips.every(item => {
-            if (item.chips.filter(chip => chip.selected).length > 0) {
-                return false;
-            }
-            return true;
-        });
-        setRestOption({
-            ...resetOption,
-            resetEnable: !isChipSelected,
-        });
-    }, [isFilterModalVisible]);
+        if (filterChips) {
+            const chipsDeepClone = JSON.parse(JSON.stringify(filterChips));
+            setFilterChipsLocal([...chipsDeepClone]);
+            const isChipSelected = filterChips.every(item => {
+                if (item.chips.filter(chip => chip.selected).length > 0) {
+                    return false;
+                }
+                return true;
+            });
+            setRestOption({
+                ...resetOption,
+                resetEnable: !isChipSelected,
+            });
+        }
+    }, [isFilterModalVisible, filterChips]);
 
     useEffect(() => {
         if (resetOption.resetData) {
@@ -85,12 +96,15 @@ const LAFilters = ({
                 ...resetOption,
                 resetData: false,
             });
+            resetFiltersParams();
+            setIsFilterModalVisible(false);
         }
     }, [resetOption.resetData]);
 
     return (
         <>
             <FilterButtons
+                disabled={!filterUtils.isFilterButtonsVisible}
                 sortBy={getSortByLabel()}
                 onPressSortBy={() => setIsSortModalVisible(state => !state)}
                 onPressFilter={() => setIsFilterModalVisible(state => !state)}
@@ -103,22 +117,27 @@ const LAFilters = ({
                     <SortSheetBody
                         sortByButtons={sortByButtons}
                         onPress={multiButtons => {
-                            onSortPress(multiButtons);
+                            updateSortByParams(multiButtons);
                             setIsSortModalVisible(state => !state);
                         }}
                     />
                 }
             />
             <Modal
-                onClose={() => setIsFilterModalVisible(state => !state)}
+                onClose={() => {
+                    setIsFilterModalVisible(state => !state);
+                }}
                 isVisible={isFilterModalVisible}
                 header='Filter by:'
                 sheetBody={
                     <FilterSheetBody
                         filterChipsLocal={filterChipsLocal}
-                        onFilterPress={onFilterPress}
+                        onFilterPress={(multiButtons: FilterChipsProps[]) => {
+                            setFilterChipsLocal([]);
+                            updateFilterParams(multiButtons);
+                            setIsFilterModalVisible(state => !state);
+                        }}
                         resetOption={resetOption}
-                        setIsFilterModalVisible={setIsFilterModalVisible}
                         setRestOption={setRestOption}
                     />
                 }
@@ -127,4 +146,4 @@ const LAFilters = ({
     );
 };
 
-export default LAFilters;
+export default LAManagerFilters;

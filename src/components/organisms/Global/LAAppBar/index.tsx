@@ -14,7 +14,12 @@ import {
 } from 'src/components/atoms';
 import { Modal } from 'src/components/molecules';
 import { DrawerScreenNavigationProp } from 'src/navigators/types';
-import { useNotificationStore, useUserStore } from 'src/store';
+import {
+    useEmployeeFilterStore,
+    useManagerFilterStore,
+    useUserStore,
+    useNotificationStore,
+} from 'src/store';
 import theme from 'src/utils/theme';
 import { RoleSheetBody } from './RoleSheetBody';
 import { styles } from './styles';
@@ -37,6 +42,9 @@ const LAAppBar = ({ currentScreen }: AppBarProps) => {
     const notificationStore = useNotificationStore();
     const navigation = useNavigation<DrawerScreenNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const { resetFiltersParams: resetEmployeeFilters } =
+        useEmployeeFilterStore();
+    const { resetFiltersParams: resetManagerFilters } = useManagerFilterStore();
     const {
         user: { profilePic, role },
     } = useUserStore();
@@ -119,12 +127,14 @@ const LAAppBar = ({ currentScreen }: AppBarProps) => {
                                 selected !== currentScreen
                             ) {
                                 notificationStore.getCount('EMPLOYEE');
+                                resetManagerFilters();
                                 navigation.navigate('EmployeeHome');
                             } else if (
                                 selected === 'manager' &&
                                 selected !== currentScreen
                             ) {
                                 notificationStore.getCount('MANAGER');
+                                resetEmployeeFilters();
                                 navigation.navigate('ManagerHome');
                             }
                             setModalVisible(state => !state);

@@ -35,6 +35,7 @@ const LAAvatarChip = ({
         <View style={[container, containerStyle]}>
             <Avatar source={source} size={size} />
             <Text
+                numberOfLines={1}
                 type={size === AvatarSize.large ? 'ParaLG' : 'ParaSM'}
                 color={textColor}
                 style={[textContainer, labelStyle]}>

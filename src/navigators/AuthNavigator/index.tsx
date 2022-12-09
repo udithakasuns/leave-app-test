@@ -6,9 +6,12 @@ import { useUserStore } from 'src/store';
 import ManagerHome from 'screens/ManagerHome';
 import EmployeeHome from 'screens/EmployeeHome';
 import Notifications from 'screens/Notifications';
+import ManagerViewAll from 'src/screens/ManagerViewAll';
+import EmployeeViewAll from 'src/screens/EmployeeViewAll';
 import { AuthScreensParamList } from '../types';
 
 import LADrawer from '../../components/organisms/Global/LADrawer';
+/* Screens */
 
 const DrawerNav = createDrawerNavigator<AuthScreensParamList>();
 
@@ -30,6 +33,14 @@ const AuthNavigator = () => {
                 headerTitle: '',
             }}>
             <DrawerNav.Screen name='EmployeeHome' component={EmployeeHome} />
+            <DrawerNav.Screen
+                name='EmployeeViewAll'
+                component={EmployeeViewAll}
+            />
+            <DrawerNav.Screen
+                name='ManagerViewAll'
+                component={ManagerViewAll}
+            />
             <DrawerNav.Screen name='ManagerHome' component={ManagerHome} />
             <DrawerNav.Screen name='Notifications' component={Notifications} />
         </DrawerNav.Navigator>

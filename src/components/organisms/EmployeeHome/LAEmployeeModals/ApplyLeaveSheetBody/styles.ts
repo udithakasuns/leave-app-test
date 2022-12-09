@@ -1,12 +1,13 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import theme from 'src/utils/theme';
+
+const { height } = Dimensions.get('window');
 
 const { scale } = theme;
 
 export const styles = StyleSheet.create({
     fullButtonStyle: {
         paddingVertical: scale.vsc6,
-        flex: 1,
         width: '30%',
     },
     commentInputContainerStyle: {
@@ -18,5 +19,6 @@ export const styles = StyleSheet.create({
     halfButtonsStyle: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        maxHeight: height * 0.08,
     },
 });

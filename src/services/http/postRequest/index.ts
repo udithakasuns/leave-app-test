@@ -8,8 +8,11 @@ export const postHttpApplyLeave = async (
     return res.data.results;
 };
 
-export const postHttpNudge = async () => {
-    const res = await axiosInstance.post('/v1/notifications/nudge/1', {});
+export const postHttpNudge = async (requiredId: number) => {
+    const res = await axiosInstance.post(
+        `/v1/notifications/nudge/${requiredId}`,
+        {},
+    );
     return res;
 };
 

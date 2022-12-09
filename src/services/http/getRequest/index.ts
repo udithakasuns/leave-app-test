@@ -16,6 +16,16 @@ export const getHttpEmployee = async () => {
     }
 };
 
+export const getHttpRecipients = async () => {
+    try {
+        const res = await axiosInstance.get('/v1/employees/me/managers');
+
+        return res.data;
+    } catch (err) {
+        return err;
+    }
+};
+
 export const getHttpLeaveRequest = async (
     params?: Partial<LeaveRequestParams>,
 ) => {
@@ -23,9 +33,30 @@ export const getHttpLeaveRequest = async (
     return res.data.results;
 };
 
-export const getHttpFilterTypes = async () => {
+export const getHttpLeaveRequestByID = async (requestID: number) => {
+    const res = await axiosInstance.get(`/v1/leaves/${requestID}`);
+    return res.data.results;
+};
+
+export const getHttpPendingRequest = async (
+    params?: Partial<LeaveRequestParams>,
+) => {
+    const res = await axiosInstance.get('/v1/managers/leaves', { params });
+    return res.data.results;
+};
+
+export const getHttpPendingRequestByID = async (requestID: number) => {
+    try {
+        const res = await axiosInstance.get(`/v1/managers/leaves/${requestID}`);
+        return res.data.results;
+    } catch (err) {
+        return err;
+    }
+};
+
+export const getHttpFilterTypes = async (filterByInUse: boolean) => {
     const res = await axiosInstance.get('/v1/leaves/types', {
-        params: { filterByInUse: true },
+        params: { filterByInUse },
     });
     return res.data.results;
 };

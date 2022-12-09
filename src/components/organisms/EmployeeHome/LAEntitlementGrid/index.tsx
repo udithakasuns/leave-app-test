@@ -8,9 +8,14 @@ import { styles } from './styles';
 interface Props extends Partial<TestProps> {
     entitlements: EntitlementSelection[];
     onEntitlementPress: (item: EntitlementSelection) => void;
+    isError: boolean;
 }
 
-const LAEntitlementGrid = ({ entitlements, onEntitlementPress }: Props) => {
+const LAEntitlementGrid = ({
+    entitlements,
+    onEntitlementPress,
+    isError,
+}: Props) => {
     const renderItem = ({ item }: { item: EntitlementSelection }) => (
         <Pressable onPress={() => onEntitlementPress(item)}>
             <LeaveCard
@@ -19,6 +24,8 @@ const LAEntitlementGrid = ({ entitlements, onEntitlementPress }: Props) => {
                 totalLeaves={item.totalDaysAllocated.toString()}
                 uniCodeIcon={getLeaveUnicode(item.leaveType)}
                 leaveType={item.leaveType.name}
+                isDisable={item.balanceInDays === 0}
+                isError={isError}
             />
         </Pressable>
     );

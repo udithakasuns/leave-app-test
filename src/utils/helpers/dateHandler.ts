@@ -21,6 +21,8 @@ export const getFormattedDay = (date: string): string => {
         case 3:
         case 23:
             return `${day}rd`;
+        case 31:
+            return `${day}st`;
         default:
             return `${day}th`;
     }
@@ -69,7 +71,6 @@ export const getCalendarRangeDate = (
     endDate?: string,
 ): string => {
     const startDateFormate = new Date(startDate);
-
     let calendarDate = DateTime.fromISO(
         startDateFormate.toISOString(),
     ).toFormat('MMM');
@@ -83,6 +84,9 @@ export const getCalendarRangeDate = (
         const endCalendarDate = DateTime.fromISO(
             endDateFormate.toISOString(),
         ).toFormat('MMM');
+        if (calendarDate.split(' ')[1] === endCalendarDate) {
+            calendarDate = calendarDate.split(' ')[0].toString();
+        }
         const endDateString = `${getFormattedDay(
             endDateFormate.toDateString(),
         )} ${endCalendarDate}`;
@@ -106,4 +110,15 @@ export const getTimeAgo = (date: string) => {
     strArray.unshift(firstWord);
 
     return strArray.join(' ');
+};
+
+export const getLeaveDurationDays = (durationHours: number | undefined) => {
+    const day = durationHours;
+    if (day === 0.5) {
+        return 'Half Day';
+    }
+    if (day === 1) {
+        return '1 Day';
+    }
+    return `${day} Days`;
 };

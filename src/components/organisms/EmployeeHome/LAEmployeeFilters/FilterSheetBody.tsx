@@ -3,19 +3,18 @@ import React from 'react';
 import { View } from 'react-native';
 import { Button, Spacer, Text } from 'src/components/atoms';
 import { ChipGroup } from 'src/components/molecules';
-import { FilterChipsProps, ResetOptions } from '.';
+import { FilterChipsProps } from 'src/utils/types';
+import { ResetOptions } from '.';
 import { styles } from './styles';
 
 const FilterSheetBody = ({
     resetOption,
     filterChipsLocal,
-    setIsFilterModalVisible,
     onFilterPress,
     setRestOption,
 }: {
     resetOption: ResetOptions;
     filterChipsLocal: FilterChipsProps[];
-    setIsFilterModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
     onFilterPress: (multiButtons: FilterChipsProps[]) => void;
     setRestOption: React.Dispatch<React.SetStateAction<ResetOptions>>;
 }) => (
@@ -32,6 +31,7 @@ const FilterSheetBody = ({
                     <Spacer height={5} />
                     <ChipGroup
                         chips={item.chips}
+                        singleSelection={item.singleSelection}
                         onPress={chips => {
                             filterChipsLocal.map(mapChip => {
                                 const selectedChip = mapChip;
@@ -55,7 +55,6 @@ const FilterSheetBody = ({
             mode='outlined'
             labelStyle={styles.commonPadding}
             onPress={() => {
-                setIsFilterModalVisible(state => !state);
                 onFilterPress(filterChipsLocal);
             }}
         />

@@ -135,9 +135,14 @@ const LAInput = ({
         <View
             testID={testIdcontainer}
             style={[styles.container, containerStyle]}>
-            <LAText testID={testIdLabel} type='SubH' color={styles.label.color}>
-                {label}
-            </LAText>
+            {label ?? (
+                <LAText
+                    testID={testIdLabel}
+                    type='SubH'
+                    color={styles.label.color}>
+                    {label}
+                </LAText>
+            )}
             <View
                 testID={testIdInputContainer}
                 style={[styles.inputContainer, inputContainerStyle]}>

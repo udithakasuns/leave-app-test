@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable prefer-destructuring */
+import { useIsFocused } from '@react-navigation/native';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { EmployeeHomeScreensProps } from 'navigators/types';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { Button, Spacer, Text } from 'src/components/atoms';
-import { MultiButtonProps, MultiChipProps } from 'src/components/molecules';
 import {
     LAAppBar,
     LAEmployeeModals,
@@ -15,142 +15,156 @@ import {
     LALeaveRequestList,
 } from 'src/components/organisms';
 import { LAEmployeeModalProps } from 'src/components/organisms/EmployeeHome/LAEmployeeModals';
-import { FilterChipsProps } from 'src/components/organisms/Global/LAFilters';
+import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
+import {
+    deleteHttpApplyLeave,
+    postHttpApplyLeave,
+    postHttpNudge,
+} from 'src/services/http';
+import { patchHttpApplyLeave } from 'src/services/http/patchRequest';
+import {
+    useEmployeeFilterStore,
+    useEmployeeStore,
+    useRecipientStore,
+    useUserStore,
+} from 'src/store';
+import { showErrorToast, toastConfig } from 'src/utils/alerts';
 import { getGreetingsByTime } from 'src/utils/helpers/dateHandler';
-import { filterChips } from 'src/utils/helpers/defaultData';
+import {
+    filterChipsEmployee,
+    sortByButtonsEmployee,
+} from 'src/utils/helpers/defaultData';
+import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import { useEntitlementData } from 'src/utils/hooks/useEntitlementData';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
 import theme from 'src/utils/theme';
 import {
     EmployeeModal,
-    EmployeePopup,
     Entitlement,
     EntitlementSelection,
     FilterTypes,
-    LeaveRequestParams,
     LeaveRequestType,
-    RequestDetails,
+    LeaveUndoProp,
     Section,
 } from 'src/utils/types';
-import {
-    deleteHttpApplyLeave,
-    postHttpApplyLeave,
-    postHttpNudge,
-} from 'src/services/http';
-import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
-import { useUserStore } from 'src/store';
-import Toast from 'react-native-toast-message';
-import { toastConfig } from 'src/utils/alerts';
-import { styles } from './styles';
 import { useFormik } from '../../utils/hooks/useFormik';
+import { handleApplyLeaveError } from './helpers/errorHandlers';
+import {
+    handleDateModal,
+    handleRequestSelectedModal,
+} from './helpers/modalHandlers';
+import {
+    handleApplyMutationSuccess,
+    handleDeleteSuccess,
+    handleFilterTypesSuccess,
+    handleLeaveRequestSuccess,
+    handleNudgeSuccess,
+    handleUndoCancellationSuccess,
+} from './helpers/successHandlers';
+import { styles } from './styles';
 
 const { scale } = theme;
-
-const sortByButtons: MultiButtonProps[] = [
-    {
-        buttonId: 1,
-        label: 'Date Requested',
-        selected: true,
-    },
-    {
-        buttonId: 2,
-        label: 'Leave Date',
-    },
-];
 
 const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const {
         user: { firstName },
     } = useUserStore();
-    const [requestsParams, setRequestsParams] = useState<LeaveRequestParams>({
-        sortKey: 'creationDate',
-    });
-    const [filterChipsLocal, setFilterChipsLocal] =
-        useState<FilterChipsProps[]>(filterChips);
+    const {
+        params,
+        setSortByButtons,
+        setFilterChips,
+        filterChips,
+        setEmptyFilterUtils,
+        resetFilterUtils,
+    } = useEmployeeFilterStore();
+
     const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
     const [employeePopup, setEmployeePopup] = useState<LAEmployeePopUpProps>();
 
+    const { employeeRequest, setLeaveRequest, setLeaveRequestByID } =
+        useEmployeeStore();
+
+    const isFocused = useIsFocused();
+
+    const { managers } = useRecipientStore();
+
     const {
-        data: statusTypes,
-        isError: isStatusError,
         refetch: filterRefetch,
-    }: UseQueryResult<FilterTypes[], AxiosError> = useFilterTypesData();
+    }: UseQueryResult<FilterTypes[], AxiosError> = useFilterTypesData(
+        true,
+        (data: FilterTypes[]) =>
+            handleFilterTypesSuccess(data, filterChips, setFilterChips),
+    );
 
-    const { data: leaveRequests, refetch }: UseQueryResult<Section[]> =
-        useLeaveRequestData(requestsParams, true);
+    const {
+        data: leaveRequests,
+        refetch,
+    }: UseQueryResult<Section<LeaveRequestType[]>[]> = useLeaveRequestData(
+        params,
+        true,
+        (data: Section<LeaveRequestType[]>[]) =>
+            handleLeaveRequestSuccess(
+                data,
+                setEmptyFilterUtils,
+                resetFilterUtils,
+            ),
+    );
 
-    const handleMutationOnSuccess = (data: any) => {
-        setEmployeeModal({
-            modalType: undefined,
-        });
-        fetchData();
-        const tempDetails: RequestDetails = {
-            durationDays: '1 Day',
-            leaveRequest: undefined,
-        };
-        tempDetails.leaveRequest = data[0];
-        tempDetails.recipient = [
-            {
-                employeeId: '',
-                name: 'Kalana',
-                designation: '',
-                authPic:
-                    'https://media-exp1.licdn.com/dms/image/C5603AQGxMAXX8F3o3Q/profile-displayphoto-shrink_800_800/0/1660713820771?e=2147483647&v=beta&t=VSvPFV6_n8DNd85moQHh2f1DaftBJ4XFxu6at9SUW7g',
+    const { mutate: applyLeaveMutate } = useMutation(
+        ['applyLeave'],
+        postHttpApplyLeave,
+        {
+            onSuccess: (data: any) =>
+                handleApplyMutationSuccess(
+                    data,
+                    setEmployeeModal,
+                    setLeaveRequestByID,
+                    setEmployeePopup,
+                    refetchAllData,
+                ),
+            onError: handleApplyLeaveError,
+        },
+    );
+
+    const { mutate: undoCancellationMutate } = useMutation(
+        ['undoCancellation'],
+        patchHttpApplyLeave,
+        {
+            onSuccess: () => handleUndoCancellationSuccess(refetchAllData),
+            onError: () => {
+                showErrorToast(ErrorCodes.ERROR_OCCURRED);
             },
-        ];
-        setEmployeePopup({
-            requestDetails: tempDetails,
-            modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
-        });
-    };
-
-    const { mutate } = useMutation(['applyLeave'], postHttpApplyLeave, {
-        onSuccess: handleMutationOnSuccess,
-    });
-
-    const handleDeleteOnSuccess = () => {
-        fetchData();
-        if (employeeModal?.modalType === EmployeeModal.CANCEL_REQUEST_MODAL) {
-            setEmployeeModal({
-                modalType: undefined,
-            });
-            return;
-        }
-        setEmployeeModal({
-            ...employeeModal,
-            modalType: EmployeeModal.APPLY_LEAVE_MODAL,
-        });
-    };
+        },
+    );
 
     const { mutate: deleteMutate } = useMutation(
         ['applyLeaveDelete'],
         deleteHttpApplyLeave,
         {
-            onSuccess: handleDeleteOnSuccess,
+            onSuccess: () =>
+                handleDeleteSuccess(
+                    employeeModal?.modalType,
+                    employeeRequest,
+                    employeeModal,
+                    setLeaveRequest,
+                    setEmployeeModal,
+                    setEmployeePopup,
+                    refetchAllData,
+                ),
         },
     );
-
-    const handleNudgeOnSuccess = () => {
-        setEmployeeModal({ modalType: undefined });
-        Toast.show({
-            type: 'successToast',
-            props: {
-                title: 'You have nudged your supervisor',
-                content: 'Kalana was sent a reminder',
-            },
-        });
-    };
 
     const { mutate: nudgeMutate } = useMutation(
         ['nudgeManger'],
         postHttpNudge,
         {
-            onSuccess: handleNudgeOnSuccess,
+            onSuccess: () =>
+                handleNudgeSuccess(setEmployeeModal, managers[0].name ?? ''),
         },
     );
 
-    const [formik] = useFormik(mutate);
+    const [formik] = useFormik(applyLeaveMutate);
 
     const {
         data: entitlements,
@@ -164,33 +178,14 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         },
     );
 
-    const handleSortBy = (muiltButtons: MultiButtonProps[]) => {
-        const selectedButton = muiltButtons.filter(
-            btn => btn.selected === true,
-        )[0];
-        const sortKey =
-            selectedButton.buttonId === 1 ? 'creationDate' : 'startDate';
-        setRequestsParams({ ...requestsParams, sortKey });
-    };
-
-    const handleFilter = (chips: FilterChipsProps[]) => {
-        const leaveStatusChipsData = chips.filter(item => item.id === 1);
-        const leaveTypeChipsData = chips.filter(item => item.id === 2);
-        const selectedLeaveStatus = leaveStatusChipsData[0].chips
-            .filter(item => item.selected)
-            .map(item => item.chipInfo);
-        const selectedLeaveTypes = leaveTypeChipsData[0].chips
-            .filter(item => item.selected)
-            .map(item => item.chipId);
-        setRequestsParams({
-            ...requestsParams,
-            status: selectedLeaveStatus.toString(),
-            leaveType: selectedLeaveTypes.toString(),
-        });
-        setFilterChipsLocal(chips);
-    };
-
     const handleEntitlementPress = (entitlement: EntitlementSelection) => {
+        if (entitlement.balanceInDays === 0) {
+            showErrorToast(
+                ErrorCodes.UNAVAILABLE_LEAVE_ENTITLEMENTS,
+                entitlement.leaveType.name,
+            );
+            return;
+        }
         const entitlementsDeepClone: EntitlementSelection[] = JSON.parse(
             JSON.stringify(entitlements),
         );
@@ -209,38 +204,9 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     const handleRequestItemPress = (item: LeaveRequestType) => {
-        let selectedModal: EmployeeModal = EmployeeModal.CANCEL_REQUEST_MODAL;
-        switch (item.status) {
-            case 'PENDING':
-                selectedModal = EmployeeModal.PENDING_LEAVE_MODAL;
-                break;
-            case 'APPROVED':
-                selectedModal = EmployeeModal.APPROVED_LEAVE_MODAL;
-                break;
-            case 'DENIED':
-                selectedModal = EmployeeModal.DENIED_LEAVE_MODAL;
-                break;
-            default:
-                break;
-        }
-        const tempDetails: RequestDetails = {
-            durationDays: '1 Day',
-            leaveRequest: undefined,
-        };
-        tempDetails.leaveRequest = item;
-        tempDetails.recipient = [
-            {
-                employeeId: '',
-                name: 'Kalana',
-                designation: '',
-                authPic:
-                    'https://media-exp1.licdn.com/dms/image/C5603AQGxMAXX8F3o3Q/profile-displayphoto-shrink_800_800/0/1660713820771?e=2147483647&v=beta&t=VSvPFV6_n8DNd85moQHh2f1DaftBJ4XFxu6at9SUW7g',
-            },
-        ];
+        setLeaveRequestByID(item.leaveRequestId);
         setEmployeeModal({
-            leaveRequest: item,
-            requestDetails: tempDetails,
-            modalType: selectedModal,
+            modalType: handleRequestSelectedModal(item),
         });
     };
 
@@ -251,67 +217,38 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         });
 
     const handleDateModalBackPress = (modalType: EmployeeModal) => {
-        switch (modalType) {
-            case EmployeeModal.CHOSE_DATE_MODAL:
-                setEmployeeModal({
-                    ...employeeModal,
-                    modalType: EmployeeModal.APPLY_LEAVE_MODAL,
-                });
-                break;
-            case EmployeeModal.PENDING_LEAVE_MODAL:
-                setEmployeeModal({
-                    ...employeeModal,
-                    modalType: EmployeeModal.PENDING_LEAVE_MODAL,
-                });
-                break;
-            default:
-                setEmployeeModal({
-                    modalType: undefined,
-                });
-                break;
-        }
-    };
-
-    const handleNudgeManager = (isDisable: boolean) => {
-        if (employeeModal?.leaveRequest?.leaveRequestId) {
-            nudgeMutate(employeeModal.leaveRequest.leaveRequestId);
-        }
-    };
-    const handleViewMoreDetails = () => {
         setEmployeeModal({
             ...employeeModal,
+            modalType: handleDateModal(modalType),
+        });
+    };
+
+    const handleNudgeManager = () => {
+        if (employeeRequest.leaveRequestId) {
+            nudgeMutate(employeeRequest.leaveRequestId);
+        }
+    };
+    const handleViewMoreDetails = (onBackPressModal: EmployeeModal) => {
+        setEmployeeModal({
+            ...employeeModal,
+            onBackPressType: onBackPressModal,
             modalType: EmployeeModal.LEAVE_INFORMATION,
         });
     };
 
-    const fetchData = () => {
+    const refetchAllData = () => {
         refetch();
         entitlementsRetch();
         filterRefetch();
     };
 
     useEffect(() => {
-        if (
-            statusTypes !== undefined &&
-            filterChipsLocal.length < 2 &&
-            !isStatusError
-        ) {
-            const chipProps: MultiChipProps[] = statusTypes?.map(
-                (item): MultiChipProps => ({
-                    chipId: item.typeId,
-                    content: item.name,
-                }),
-            );
-            setFilterChipsLocal(state => [
-                ...state,
-                {
-                    id: 2,
-                    title: 'Leave Type',
-                    chips: chipProps,
-                },
-            ]);
+        if (isFocused) {
+            setSortByButtons(sortByButtonsEmployee);
+            setFilterChips(filterChipsEmployee);
+            refetchAllData();
         }
-    }, [statusTypes]);
+    }, [isFocused]);
 
     return (
         <View style={styles.innerContainer}>
@@ -327,6 +264,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     <LAEntitlementGrid
                         entitlements={entitlements as EntitlementSelection[]}
                         onEntitlementPress={handleEntitlementPress}
+                        isError={false}
                     />
                 )}
                 <Spacer />
@@ -335,18 +273,12 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     <>
                         <LALeaveRequestList
                             leaveRequests={leaveRequests}
-                            sortByButtons={sortByButtons}
-                            onSortPress={handleSortBy}
-                            onFilterPress={handleFilter}
                             onPressRequestItem={handleRequestItemPress}
-                            filterChips={JSON.parse(
-                                JSON.stringify(filterChipsLocal),
-                            )}
+                            isViewAllPage={false}
                         />
                         <View
                             style={{
-                                marginBottom:
-                                    scale.vsc40 * leaveRequests.length,
+                                marginBottom: scale.sc80 * leaveRequests.length,
                             }}
                         />
                     </>
@@ -367,29 +299,38 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             </View>
             <LAEmployeeModals
                 modalType={employeeModal?.modalType}
-                leaveRequest={employeeModal?.leaveRequest}
-                requestDetails={employeeModal?.requestDetails}
+                onBackPressType={employeeModal?.onBackPressType}
                 onClose={() => setEmployeeModal(undefined)}
                 formik={formik}
                 onPressSelectDate={handleDateModalPress}
                 onBackPress={handleDateModalBackPress}
                 onPressNudge={handleNudgeManager}
-                onPressViewMoreDetails={handleViewMoreDetails}
+                onPressLeaveInformation={handleViewMoreDetails}
                 onPressCancelLeave={() => {
                     setEmployeeModal({
                         ...employeeModal,
                         modalType: undefined,
                     });
-                    deleteMutate(
-                        employeeModal?.requestDetails?.leaveRequest
-                            ?.leaveRequestId ?? 0,
-                    );
+                    deleteMutate(employeeRequest.leaveRequestId);
                 }}
                 onNavigateToCancelLeave={() => {
                     setEmployeeModal({
                         ...employeeModal,
                         modalType: EmployeeModal.CANCEL_REQUEST_MODAL,
                     });
+                }}
+                onPressRevokeLeave={() => {
+                    setEmployeeModal({
+                        ...employeeModal,
+                        modalType: EmployeeModal.REVOKE_REQUEST_MODAL,
+                    });
+                }}
+                onRevokeLeaveRequest={(revokeComment: string) => {
+                    setEmployeeModal({
+                        ...employeeModal,
+                        modalType: undefined,
+                    });
+                    // TODO:  Make API Call for Revoke Request
                 }}
             />
             <LAEmployeePopUp
@@ -398,10 +339,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 requestDetails={employeePopup?.requestDetails}
                 onConfirmationUndoPress={() => {
                     setEmployeePopup(undefined);
-                    deleteMutate(
-                        employeePopup?.requestDetails?.leaveRequest
-                            ?.leaveRequestId ?? 0,
-                    );
+                    deleteMutate(employeeRequest.leaveRequestId);
                 }}
                 onConfirmationHomePress={() => {
                     setEmployeePopup(undefined);
@@ -409,13 +347,25 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     formik.setFieldValue('entitlements', entitlements);
                     refetch();
                 }}
+                onCancellationUndoPress={() => {
+                    const values: Partial<LeaveUndoProp> = {
+                        requestID: employeeRequest.leaveRequestId,
+                        startDate: employeeRequest?.startDate,
+                        endDate: employeeRequest?.endDate,
+                        leaveRequestStatus: 'PENDING',
+                    };
+                    setEmployeePopup({ modalType: undefined });
+                    undoCancellationMutate(values);
+                }}
             />
-            <Toast
-                config={toastConfig}
-                position='bottom'
-                bottomOffset={30}
-                autoHide
-            />
+            {employeeModal?.modalType === undefined && (
+                <Toast
+                    config={toastConfig}
+                    position='bottom'
+                    bottomOffset={30}
+                    autoHide
+                />
+            )}
         </View>
     );
 };
