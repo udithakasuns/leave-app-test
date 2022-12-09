@@ -6,8 +6,5 @@ export const deleteHttpApplyLeave = async (requestId: number) => {
 };
 
 export const deleteHttpNotificationDevice = async (deviceUniqueId: string) => {
-    const res = await axiosInstance.delete(
-        `/v1/notifications/token/${deviceUniqueId}`,
-    );
-    return res.data.results;
+    await axiosInstance.delete(`/v1/notifications/token/${deviceUniqueId}`);
 };

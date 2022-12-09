@@ -32,8 +32,8 @@ export const useAuthentication = (): ReturnProps => {
         authType,
         setAuthType,
         setDeviceUniqueId,
-        deviceUniqueId,
     } = usePersistStore();
+
     const [visibleAuthNav, setVisibleAuthNav] = useState<boolean>(false);
 
     const getCurrentSocialAuthUser = async () => {
@@ -110,20 +110,8 @@ export const useAuthentication = (): ReturnProps => {
         }
     }, [isAutherized]);
 
-    const onDeRegisterDeviceForNotifications = async (): Promise<boolean> => {
-        /* 
-            When signout, device of the user will be deregistered from the backend,
-            otherwise, notifications will be recieved even the user has signed out
-        */
-        if (deviceUniqueId) {
-            await deleteHttpNotificationDevice(deviceUniqueId);
-            setDeviceUniqueId(null);
-        }
-        return true;
-    };
-
     const onSignout = async () => {
-        await onDeRegisterDeviceForNotifications();
+        setDeviceUniqueId(null);
         setIsAutherized(false);
         setAuthType('');
     };
