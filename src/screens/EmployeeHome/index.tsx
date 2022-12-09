@@ -18,6 +18,7 @@ import { LAEmployeeModalProps } from 'src/components/organisms/EmployeeHome/LAEm
 import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
 import {
     deleteHttpApplyLeave,
+    getHttpNudgeVisibility,
     postHttpApplyLeave,
     postHttpNudge,
 } from 'src/services/http';
@@ -164,6 +165,21 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         },
     );
 
+    const { mutate: nudgeVisibilityMutate } = useMutation(
+        ['nudgeVisibilityManger'],
+        getHttpNudgeVisibility,
+        {
+            onSuccess: (data: any) => {
+                const isAlreadyNudge = data[0].nudge;
+                setEmployeeModal({
+                    ...employeeModal,
+                    modalType: EmployeeModal.PENDING_LEAVE_MODAL,
+                    isNudgeVisble: !isAlreadyNudge,
+                });
+            },
+        },
+    );
+
     const [formik] = useFormik(applyLeaveMutate);
 
     const {
@@ -205,8 +221,14 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
     const handleRequestItemPress = (item: LeaveRequestType) => {
         setLeaveRequestByID(item.leaveRequestId);
+        const selectedModalType = handleRequestSelectedModal(item);
+        if (selectedModalType === EmployeeModal.PENDING_LEAVE_MODAL) {
+            nudgeVisibilityMutate(item.leaveRequestId);
+            return;
+        }
+
         setEmployeeModal({
-            modalType: handleRequestSelectedModal(item),
+            modalType: selectedModalType,
         });
     };
 
@@ -298,6 +320,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 />
             </View>
             <LAEmployeeModals
+                isNudgeVisble={employeeModal?.isNudgeVisble}
                 modalType={employeeModal?.modalType}
                 onBackPressType={employeeModal?.onBackPressType}
                 onClose={() => setEmployeeModal(undefined)}

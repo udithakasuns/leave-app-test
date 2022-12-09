@@ -18,6 +18,7 @@ import { styles } from './styles';
 export type ModalProps = {
     modalType: EmployeeModal;
     onBackPressType: EmployeeModal;
+    isNudgeVisble: boolean;
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
@@ -39,6 +40,7 @@ const LAEmployeeModals = ({
     modalType,
     onBackPressType,
     formik,
+    isNudgeVisble,
     onClose,
     onBackPress,
     onPressSelectDate,
@@ -52,6 +54,7 @@ const LAEmployeeModals = ({
     const [isHalfSelected, setIsHalfSelected] = useState(false);
     const { employeeRequest } = useEmployeeStore();
     const { managers } = useRecipientStore();
+
     const onCancellation = () => {
         setIsHalfSelected(false);
         formik.resetForm();
@@ -105,6 +108,7 @@ const LAEmployeeModals = ({
                     style={styles.commonStyle}
                     sheetBody={
                         <PendingSheetBody
+                            isNudgeVisble={isNudgeVisble || false}
                             requestDetails={{
                                 leaveRequest: employeeRequest,
                                 recipient: [managers[0]],

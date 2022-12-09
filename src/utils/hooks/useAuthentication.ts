@@ -5,7 +5,7 @@ import {
     AuthGeneralUserPayload,
     AuthSocialUserPayload,
 } from 'src/services/aws/types';
-import { usePersistStore, useUserStore } from 'src/store';
+import { usePersistStore, useRecipientStore, useUserStore } from 'src/store';
 import amplifiConfig from 'src/aws-exports';
 import { deleteHttpNotificationDevice } from 'src/services/http';
 import { getCurrentUserRoleFromToken } from '../helpers/gettersUtil';
@@ -25,6 +25,7 @@ type ReturnProps = {
 
 export const useAuthentication = (): ReturnProps => {
     const { saveUser, updateUser, removeUser } = useUserStore();
+    const { updateRecipients, removeUserRecipients } = useRecipientStore();
     const {
         isAutherized,
         setIsAutherized,
@@ -52,11 +53,13 @@ export const useAuthentication = (): ReturnProps => {
 
                 saveUser(email, name, family_name, picture, userRole);
                 await updateUser();
+                updateRecipients();
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
             } else {
                 setVisibleAuthNav(false);
                 removeUser();
+                removeUserRecipients();
             }
         } catch (error) {
             // Error needs to be handled here
@@ -82,6 +85,7 @@ export const useAuthentication = (): ReturnProps => {
 
                 saveUser(email, name, '', '', userRole);
                 await updateUser(); // This will returns an error (Need to fix from backend)
+                updateRecipients();
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
             }

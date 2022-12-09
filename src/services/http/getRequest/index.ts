@@ -83,3 +83,8 @@ export const getHttpNotifications = async (
     const res = await axiosInstance.get(url);
     return res.data.results[0];
 };
+
+export const getHttpNudgeVisibility = async (requestID: number) => {
+    const res = await axiosInstance.get(`/v1/notifications/nudge/${requestID}`);
+    return res.data.results;
+};
