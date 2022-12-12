@@ -12,6 +12,7 @@ export enum ErrorCodes {
     APPLY_CONFIRMATION_WEEKENDS = 'APPLY_CONFIRMATION_WEEKENDS',
     UNAVAILABLE_LEAVE_ENTITLEMENTS = 'UNAVAILABLE_LEAVE_ENTITLEMENTS',
     ERROR_OCCURRED = 'ERROR_OCCURRED',
+    REQUEST_ALREADY_NUDGE = 'REQUEST_ALREADY_NUDGE',
 }
 
 type ErrorProp = {
@@ -108,6 +109,13 @@ export const getErrorMessage = (
             errorCodeMessage = {
                 title: 'Not working weekends are you?',
                 message: 'This day is not a working day.',
+            };
+            break;
+        case 'REQUEST_ALREADY_NUDGE':
+            errorCodeMessage = {
+                title: 'Supervisor already nudged',
+                message:
+                    'A reminder has been sent to your supervisor.\nThe assigned supervisor will respond to your request.',
             };
             break;
         default:

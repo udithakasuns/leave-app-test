@@ -50,7 +50,10 @@ import {
     Section,
 } from 'src/utils/types';
 import { useFormik } from '../../utils/hooks/useFormik';
-import { handleApplyLeaveError } from './helpers/errorHandlers';
+import {
+    handleAlreadyNudgeError,
+    handleApplyLeaveError,
+} from './helpers/errorHandlers';
 import {
     handleDateModal,
     handleRequestSelectedModal,
@@ -246,8 +249,12 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     const handleNudgeManager = () => {
-        if (employeeRequest.leaveRequestId) {
-            nudgeMutate(employeeRequest.leaveRequestId);
+        if (employeeModal?.isNudgeVisble) {
+            if (employeeRequest.leaveRequestId) {
+                nudgeMutate(employeeRequest.leaveRequestId);
+            }
+        } else {
+            handleAlreadyNudgeError();
         }
     };
     const handleViewMoreDetails = (onBackPressModal: EmployeeModal) => {

@@ -15,7 +15,8 @@ import { styles } from './styles';
 
 const LANotificationPopup = () => {
     const navigation: any = useNavigation();
-    const { isPopupVisible, setIsPopupVisible } = useNotificationStore();
+    const { isPopupVisible, setIsPopupVisible, notifyUserRole } =
+        useNotificationStore();
     const [visibleType, setVisibleType] =
         useState<NotificationVisibleType>('all');
 
@@ -27,10 +28,10 @@ const LANotificationPopup = () => {
         error,
         refetch: onRefetch,
     }: UseQueryResult<NotificationPayload, AxiosError> = useQuery(
-        [isPopupVisible, visibleType],
+        [isPopupVisible, notifyUserRole, visibleType],
         () => {
             if (isPopupVisible) {
-                return getHttpNotifications(1, 8, 'MANAGER', visibleType);
+                return getHttpNotifications(0, 5, notifyUserRole, visibleType);
             }
             return null;
         },

@@ -29,6 +29,8 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
     const notificationStore = useNotificationStore();
     const { user } = useUserStore();
 
+    console.log('NotifyUser:', notificationStore.notifyUserRole);
+
     const requestUserPermission = async () => {
         console.log('requestUserPermission');
         const authStatus = await messaging().requestPermission();
@@ -56,11 +58,13 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
         /* 
             Following will be triggered When user is in background mode or user has quite from the app.
         */
-        messaging().setBackgroundMessageHandler(async remoteMessage => {
+        messaging().setBackgroundMessageHandler(async (remoteMessage: any) => {
             console.log('Message handled from background', remoteMessage);
+
             PushNotification.localNotification({
                 title: remoteMessage.notification?.title,
-                message: remoteMessage.notification?.body || '',
+                message:
+                    JSON.parse(remoteMessage.notification?.body).message || '',
                 bigPictureUrl: remoteMessage.notification?.android?.imageUrl, // Handle this to IOS,
                 smallIcon: remoteMessage.notification?.android?.imageUrl, // Handle this to IOS,
                 channelId: 'channel-id',
@@ -74,12 +78,13 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
             foreground mode(focus in to the app). If new notification comes, it will 
             trigger the notification count API based on the currently selected user.  
         */
-        const unsubscribe = messaging().onMessage(() => {
+        const unsubscribe = messaging().onMessage(message => {
+            console.log({ message });
             notificationStore.getCount(notificationStore.notifyUserRole);
         });
 
         return unsubscribe;
-    }, []);
+    }, [notificationStore.notifyUserRole]);
 
     const getNotificationToken = async () => {
         // Each device will generate an uniqe token and it will be passed to the backend.

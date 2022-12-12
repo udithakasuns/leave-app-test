@@ -58,16 +58,20 @@ const LANotificationContent = ({
     };
 
     const getMessage = (message: string) => {
-        const words = message.split(' ');
-        return (
-            <View style={styles.messageContainer}>
-                {words.map((word, index) => (
-                    <Text type={getTextTypeByLeaveType(index, words.length)}>
-                        {word}{' '}
-                    </Text>
-                ))}
-            </View>
-        );
+        if (message) {
+            const words = message.split(' ');
+            return (
+                <View style={styles.messageContainer}>
+                    {words.map((word, index) => (
+                        <Text
+                            type={getTextTypeByLeaveType(index, words.length)}>
+                            {word}{' '}
+                        </Text>
+                    ))}
+                </View>
+            );
+        }
+        return null;
     };
 
     if (body && date) {
@@ -77,7 +81,7 @@ const LANotificationContent = ({
                     <Avatar size={scale.sc36} source={{ uri: body.image }} />
                     <View style={styles.rightContainer}>
                         <View style={styles.rightContent}>
-                            {getMessage(body.message)}
+                            {getMessage(body?.message)}
                             <View style={styles.indicator} />
                             {isViewed && <View style={styles.overlay} />}
                         </View>
