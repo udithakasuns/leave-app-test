@@ -29,8 +29,6 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
     const notificationStore = useNotificationStore();
     const { user } = useUserStore();
 
-    console.log('NotifyUser:', notificationStore.notifyUserRole);
-
     const requestUserPermission = async () => {
         console.log('requestUserPermission');
         const authStatus = await messaging().requestPermission();
