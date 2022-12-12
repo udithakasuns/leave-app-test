@@ -6,10 +6,6 @@ const { colors, scale, radius } = theme;
 export const styles = StyleSheet.create({
     modal: {
         justifyContent: 'flex-start',
-        margin: scale.sc20,
-        backgroundColor: colors.white,
-        padding: scale.sc20,
-        borderRadius: radius.rd24,
     },
     titleContainer: {
         flexDirection: 'row',
@@ -29,7 +25,16 @@ export const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: colors.dividerColor,
     },
+    safeArea: {
+        flex: 1,
+    },
     container: {
+        flex: 1,
+        backgroundColor: colors.white,
+        padding: scale.sc20,
+        borderRadius: radius.rd24,
+    },
+    content: {
         flex: 1,
         justifyContent: 'space-between',
     },

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, SafeAreaView } from 'react-native';
 import { useNotificationStore } from 'src/store';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
@@ -72,35 +72,39 @@ const LANotificationPopup = () => {
             useNativeDriver
             style={styles.modal}
             isVisible={isPopupVisible}>
-            <Header
-                visibleType={visibleType}
-                onChangeVisibleType={type => setVisibleType(type)}
-                onClose={onClosePopup}
-            />
-            <View style={styles.container}>
-                <FlatList
-                    data={data?.items}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <NotificationContent
-                            type={item.notificationType}
-                            body={item.body}
-                            date={item.createdDate}
-                            isViewed={item.viewed}
-                            onPress={() =>
-                                onPressNotification(item.id.toString())
-                            }
+            <SafeAreaView style={styles.safeArea}>
+                <View style={styles.container}>
+                    <Header
+                        visibleType={visibleType}
+                        onChangeVisibleType={type => setVisibleType(type)}
+                        onClose={onClosePopup}
+                    />
+                    <View style={styles.content}>
+                        <FlatList
+                            data={data?.items}
+                            keyExtractor={item => item.id.toString()}
+                            renderItem={({ item }) => (
+                                <NotificationContent
+                                    type={item.notificationType}
+                                    body={item.body}
+                                    date={item.createdDate}
+                                    isViewed={item.viewed}
+                                    onPress={() =>
+                                        onPressNotification(item.id.toString())
+                                    }
+                                />
+                            )}
                         />
-                    )}
-                />
-                <Button
-                    mode='contained-gray'
-                    label='View all notifications'
-                    onPress={onPressViewAll}
-                    icon='arrow-forward'
-                    iconPosition='left'
-                />
-            </View>
+                        <Button
+                            mode='contained-gray'
+                            label='View all notifications'
+                            onPress={onPressViewAll}
+                            icon='arrow-forward'
+                            iconPosition='left'
+                        />
+                    </View>
+                </View>
+            </SafeAreaView>
         </Modal>
     );
 };
