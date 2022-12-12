@@ -181,7 +181,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                     {getGreetingsByTime()}
                 </Text>
                 <Spacer />
-                <Text type='SubHBold'>Pending requests</Text>
+                <Text type='SubHBold'>Leave requests</Text>
                 <LAPendingRequestList
                     leaveRequests={leaveRequests}
                     onPressRequestItem={handleRequestItemPress}
