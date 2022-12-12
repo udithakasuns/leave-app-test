@@ -29,12 +29,12 @@ const LoginSocial: React.FC<LoginScreenProps> = () => {
                     onPress={onPressGoogleSignin}
                 />
                 <Spacer height={8} />
-                <Text
+                {/* <Text
                     type='SubH'
                     style={styles.bottomText}
                     color={colors.gray600}>
                     Sign in with email and password
-                </Text>
+                </Text> */}
             </ScrollView>
         </View>
     );
