@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, SafeAreaView } from 'react-native';
 import { useManagerStore, useNotificationStore } from 'src/store';
 import Modal from 'react-native-modal';
@@ -15,8 +15,13 @@ import { styles } from './styles';
 
 const LANotificationPopup = () => {
     const navigation: any = useNavigation();
-    const { isPopupVisible, setIsPopupVisible, notifyUserRole, getCount } =
-        useNotificationStore();
+    const {
+        isPopupVisible,
+        setIsPopupVisible,
+        notifyUserRole,
+        getCount,
+        count,
+    } = useNotificationStore();
     const [visibleType, setVisibleType] =
         useState<NotificationVisibleType>('all');
 
@@ -30,7 +35,7 @@ const LANotificationPopup = () => {
         error,
         refetch: onRefetch,
     }: UseQueryResult<NotificationPayload, AxiosError> = useQuery(
-        [isPopupVisible, notifyUserRole, visibleType],
+        ['notifications'],
         () => {
             if (isPopupVisible) {
                 return getHttpNotifications(0, 5, notifyUserRole, visibleType);
@@ -40,6 +45,7 @@ const LANotificationPopup = () => {
         {
             staleTime: Infinity,
             cacheTime: Infinity,
+            enabled: false,
         },
     );
 
@@ -69,7 +75,6 @@ const LANotificationPopup = () => {
     ) => {
         // Need to update this functionalities
         await patchHttpViewNotification(notificationId);
-        onRefetch();
         getCount(notifyUserRole);
         onClosePopup();
         setTimeout(() => {
@@ -78,6 +83,12 @@ const LANotificationPopup = () => {
             }
         }, 1000);
     };
+
+    useEffect(() => {
+        if (isPopupVisible) {
+            onRefetch();
+        }
+    }, [isPopupVisible, notifyUserRole, visibleType, count]);
 
     return (
         <Modal
@@ -94,6 +105,7 @@ const LANotificationPopup = () => {
                     />
                     <View style={styles.content}>
                         <FlatList
+                            showsVerticalScrollIndicator={false}
                             data={data?.items}
                             keyExtractor={item => item.id.toString()}
                             renderItem={({ item }) => (

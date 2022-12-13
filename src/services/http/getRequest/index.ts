@@ -76,9 +76,9 @@ export const getHttpNotifications = async (
     userRole: 'MANAGER' | 'EMPLOYEE' = 'EMPLOYEE',
     viewType: NotificationVisibleType = 'all',
 ) => {
-    let url = `v1/notifications?page=${page}&size=${size}&UserRole=${userRole}&sortOrder=ASC&sortKey=createdDate`;
+    let url = `v1/notifications?page=${page}&size=${size}&UserRole=${userRole}&sortOrder=DESC&sortKey=createdDate`;
     if (viewType === 'unread') {
-        url = `v1/notifications?page=${page}&size=${size}&UserRole=${userRole}&isViewed=${false}&sortOrder=ASC&sortKey=createdDate`;
+        url = `v1/notifications?page=${page}&size=${size}&UserRole=${userRole}&isViewed=${false}&sortOrder=DESC&sortKey=createdDate`;
     }
     const res = await axiosInstance.get(url);
     return res.data.results[0];
