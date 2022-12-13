@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
 });
 
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
-    const [managerModal, setManagerModal] = useState<LAManagerModalProps>();
-    const [managerPopup, setManagerPopup] = useState<LAManagerPopUpProps>();
+    // const [managerModal, setManagerModal] = useState<LAManagerModalProps>();
+    // const [managerPopup, setManagerPopup] = useState<LAManagerPopUpProps>();
 
     const {
         user: { firstName },
@@ -105,60 +105,60 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         },
     );
 
-    const { mutate: updateLeaveMutate } = useMutation(
-        ['updateLeave'],
-        patchHttpManagerLeave,
-        {
-            onSuccess: (data: any) => {
-                const leaveData: PendingRequestByID = data[0];
-                setPendingRequest(leaveData);
-                refetchLeaveRequests();
-                statusTypesRefetch();
-                switch (leaveData.status) {
-                    case Status.APPROVED:
-                        setManagerPopup({
-                            modalType: ManagerPopup.LEAVE_REQUEST_APPROVED,
-                        });
-                        break;
-                    case Status.DENIED:
-                        setManagerPopup({
-                            modalType: ManagerPopup.LEAVE_REQUEST_DECLINE,
-                        });
-                        break;
-                    case Status.PENDING:
-                        setManagerPopup({
-                            modalType: undefined,
-                        });
-                        setManagerModal({
-                            modalType: ManagerModal.PENDING_LEAVE_MODAL,
-                        });
-                        break;
-                    default:
-                        break;
-                }
-            },
-        },
-    );
+    // const { mutate: updateLeaveMutate } = useMutation(
+    //     ['updateLeave'],
+    //     patchHttpManagerLeave,
+    //     {
+    //         onSuccess: (data: any) => {
+    //             const leaveData: PendingRequestByID = data[0];
+    //             setPendingRequest(leaveData);
+    //             refetchLeaveRequests();
+    //             statusTypesRefetch();
+    //             switch (leaveData.status) {
+    //                 case Status.APPROVED:
+    //                     setManagerPopup({
+    //                         modalType: ManagerPopup.LEAVE_REQUEST_APPROVED,
+    //                     });
+    //                     break;
+    //                 case Status.DENIED:
+    //                     setManagerPopup({
+    //                         modalType: ManagerPopup.LEAVE_REQUEST_DECLINE,
+    //                     });
+    //                     break;
+    //                 case Status.PENDING:
+    //                     setManagerPopup({
+    //                         modalType: undefined,
+    //                     });
+    //                     setManagerModal({
+    //                         modalType: ManagerModal.PENDING_LEAVE_MODAL,
+    //                     });
+    //                     break;
+    //                 default:
+    //                     break;
+    //             }
+    //         },
+    //     },
+    // );
 
     const handleRequestItemPress = (item: PendingRequestType) => {
-        let selectedModal: ManagerModal = ManagerModal.APPROVED_LEAVE_MODAL;
-        switch (item.status) {
-            case 'PENDING':
-                selectedModal = ManagerModal.PENDING_LEAVE_MODAL;
-                break;
-            case 'APPROVED':
-                selectedModal = ManagerModal.APPROVED_LEAVE_MODAL;
-                break;
-            case 'DENIED':
-                selectedModal = ManagerModal.DENIED_LEAVE_MODAL;
-                break;
-            case 'CANCELLED':
-                selectedModal = ManagerModal.CANCELLED_LEAVE_MODAL;
-                break;
-            default:
-                break;
-        }
-        setManagerModal({ modalType: selectedModal });
+        // let selectedModal: ManagerModal = ManagerModal.APPROVED_LEAVE_MODAL;
+        // switch (item.status) {
+        //     case 'PENDING':
+        //         selectedModal = ManagerModal.PENDING_LEAVE_MODAL;
+        //         break;
+        //     case 'APPROVED':
+        //         selectedModal = ManagerModal.APPROVED_LEAVE_MODAL;
+        //         break;
+        //     case 'DENIED':
+        //         selectedModal = ManagerModal.DENIED_LEAVE_MODAL;
+        //         break;
+        //     case 'CANCELLED':
+        //         selectedModal = ManagerModal.CANCELLED_LEAVE_MODAL;
+        //         break;
+        //     default:
+        //         break;
+        // }
+        // setManagerModal({ modalType: selectedModal });
         setPendingRequestByID(item.leaveRequestId);
     };
 
@@ -188,7 +188,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                     isViewAllPage={false}
                 />
             </ScrollView>
-            <LAManagerModals
+            {/* <LAManagerModals
                 onClose={() => setManagerModal({ modalType: undefined })}
                 modalType={managerModal?.modalType}
                 onBackPressType={managerModal?.onBackPressType}
@@ -234,7 +234,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                         status: Status.PENDING,
                     });
                 }}
-            />
+            /> */}
         </View>
     );
 };

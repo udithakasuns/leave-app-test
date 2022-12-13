@@ -9,7 +9,7 @@ const initialState: State = {
         startDate: '',
         endDate: '',
         leaveType: { name: '', typeId: 0 },
-        status: 'APPROVED',
+        status: '',
         leaveState: 'FULLDAY',
         requestDesc: '',
         durationHours: 0,

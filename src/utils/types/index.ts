@@ -172,7 +172,7 @@ export type PendingRequestType = {
     startDate: string;
     endDate: string;
     leaveType: LeaveType;
-    status: StatusType;
+    status: StatusType | '';
     leaveState: LeaveSate;
     durationHours: number;
     durationDays: number;
