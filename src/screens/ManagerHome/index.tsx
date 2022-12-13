@@ -1,18 +1,13 @@
 import { useIsFocused } from '@react-navigation/native';
-import { useMutation, UseQueryResult } from '@tanstack/react-query';
+import { UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ManagerHomeScreensProps } from 'navigators/types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Spacer, Text } from 'src/components/atoms';
 import { MultiChipProps } from 'src/components/molecules';
-import { LAAppBar, LAManagerModals } from 'src/components/organisms';
-import { LAManagerModalProps } from 'src/components/organisms/ManagerHome/LAManagerModals';
-import LAManagerPopUp, {
-    LAManagerPopUpProps,
-} from 'src/components/organisms/ManagerHome/LAManagerPopUp';
+import { LAAppBar } from 'src/components/organisms';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
-import { patchHttpManagerLeave } from 'src/services/http/patchRequest';
 import {
     useManagerFilterStore,
     useManagerStore,
@@ -26,15 +21,7 @@ import {
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
 import theme from 'src/utils/theme';
-import {
-    FilterTypes,
-    ManagerModal,
-    ManagerPopup,
-    PendingRequestByID,
-    PendingRequestType,
-    Section,
-    Status,
-} from 'src/utils/types';
+import { FilterTypes, PendingRequestType, Section } from 'src/utils/types';
 
 const { scale } = theme;
 
@@ -47,16 +34,12 @@ const styles = StyleSheet.create({
 });
 
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
-    // const [managerModal, setManagerModal] = useState<LAManagerModalProps>();
-    // const [managerPopup, setManagerPopup] = useState<LAManagerPopUpProps>();
-
     const {
         user: { firstName },
     } = useUserStore();
     const isFocused = useIsFocused();
 
-    const { managerRequest, setPendingRequestByID, setPendingRequest } =
-        useManagerStore();
+    const { getManagerModal } = useManagerStore();
     const {
         params,
         filterChips,
@@ -105,61 +88,8 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         },
     );
 
-    // const { mutate: updateLeaveMutate } = useMutation(
-    //     ['updateLeave'],
-    //     patchHttpManagerLeave,
-    //     {
-    //         onSuccess: (data: any) => {
-    //             const leaveData: PendingRequestByID = data[0];
-    //             setPendingRequest(leaveData);
-    //             refetchLeaveRequests();
-    //             statusTypesRefetch();
-    //             switch (leaveData.status) {
-    //                 case Status.APPROVED:
-    //                     setManagerPopup({
-    //                         modalType: ManagerPopup.LEAVE_REQUEST_APPROVED,
-    //                     });
-    //                     break;
-    //                 case Status.DENIED:
-    //                     setManagerPopup({
-    //                         modalType: ManagerPopup.LEAVE_REQUEST_DECLINE,
-    //                     });
-    //                     break;
-    //                 case Status.PENDING:
-    //                     setManagerPopup({
-    //                         modalType: undefined,
-    //                     });
-    //                     setManagerModal({
-    //                         modalType: ManagerModal.PENDING_LEAVE_MODAL,
-    //                     });
-    //                     break;
-    //                 default:
-    //                     break;
-    //             }
-    //         },
-    //     },
-    // );
-
     const handleRequestItemPress = (item: PendingRequestType) => {
-        // let selectedModal: ManagerModal = ManagerModal.APPROVED_LEAVE_MODAL;
-        // switch (item.status) {
-        //     case 'PENDING':
-        //         selectedModal = ManagerModal.PENDING_LEAVE_MODAL;
-        //         break;
-        //     case 'APPROVED':
-        //         selectedModal = ManagerModal.APPROVED_LEAVE_MODAL;
-        //         break;
-        //     case 'DENIED':
-        //         selectedModal = ManagerModal.DENIED_LEAVE_MODAL;
-        //         break;
-        //     case 'CANCELLED':
-        //         selectedModal = ManagerModal.CANCELLED_LEAVE_MODAL;
-        //         break;
-        //     default:
-        //         break;
-        // }
-        // setManagerModal({ modalType: selectedModal });
-        setPendingRequestByID(item.leaveRequestId);
+        getManagerModal(item.leaveRequestId);
     };
 
     useEffect(() => {
@@ -188,53 +118,6 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                     isViewAllPage={false}
                 />
             </ScrollView>
-            {/* <LAManagerModals
-                onClose={() => setManagerModal({ modalType: undefined })}
-                modalType={managerModal?.modalType}
-                onBackPressType={managerModal?.onBackPressType}
-                onPressApproveLeave={() => {
-                    setManagerModal({ modalType: undefined });
-                    updateLeaveMutate({
-                        requestID: managerRequest.leaveRequestId,
-                        status: Status.APPROVED,
-                    });
-                }}
-                onPressDeclineLeave={() => {
-                    setManagerModal({
-                        modalType: ManagerModal.DECLINE_LEAVE_MODAL,
-                    });
-                }}
-                onPressLeaveInformation={(onBackPressType: ManagerModal) => {
-                    setManagerModal({
-                        modalType: ManagerModal.LEAVE_INFORMATION,
-                        onBackPressType,
-                    });
-                }}
-                onBackPress={(modalType: ManagerModal) => {
-                    setManagerModal(state => ({
-                        ...state,
-                        modalType,
-                    }));
-                }}
-                onDeclineLeaveRequest={(reviewerComment: string) => {
-                    setManagerModal({ modalType: undefined });
-                    updateLeaveMutate({
-                        requestID: managerRequest.leaveRequestId,
-                        status: Status.DENIED,
-                        reviewerComment,
-                    });
-                }}
-            />
-            <LAManagerPopUp
-                modalType={managerPopup?.modalType}
-                onClose={() => setManagerPopup({ modalType: undefined })}
-                onUndoApprovalPress={() => {
-                    updateLeaveMutate({
-                        requestID: managerRequest.leaveRequestId,
-                        status: Status.PENDING,
-                    });
-                }}
-            /> */}
         </View>
     );
 };

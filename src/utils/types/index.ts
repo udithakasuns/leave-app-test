@@ -282,7 +282,7 @@ export type NotificationPayload = {
         title: string;
         body: NotificationBody;
         notificationType: NotificationType;
-        resourceId: string;
+        resourceId: number;
         viewed: boolean;
     }[];
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, FlatList, SafeAreaView } from 'react-native';
-import { useNotificationStore } from 'src/store';
+import { useManagerStore, useNotificationStore } from 'src/store';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'src/components/atoms';
@@ -15,10 +15,12 @@ import { styles } from './styles';
 
 const LANotificationPopup = () => {
     const navigation: any = useNavigation();
-    const { isPopupVisible, setIsPopupVisible, notifyUserRole } =
+    const { isPopupVisible, setIsPopupVisible, notifyUserRole, getCount } =
         useNotificationStore();
     const [visibleType, setVisibleType] =
         useState<NotificationVisibleType>('all');
+
+    const { getManagerModal } = useManagerStore();
 
     // 1st check the user is in Employee view or Manager View
     // Then check the visible Type
@@ -61,10 +63,20 @@ const LANotificationPopup = () => {
     //     },
     // );
 
-    const onPressNotification = async (notificationId: string) => {
+    const onPressNotification = async (
+        notificationId: string,
+        resourceId: number,
+    ) => {
         // Need to update this functionalities
         await patchHttpViewNotification(notificationId);
         onRefetch();
+        getCount(notifyUserRole);
+        onClosePopup();
+        setTimeout(() => {
+            if (notifyUserRole === 'MANAGER') {
+                getManagerModal(resourceId);
+            }
+        }, 1000);
     };
 
     return (
@@ -91,7 +103,10 @@ const LANotificationPopup = () => {
                                     date={item.createdDate}
                                     isViewed={item.viewed}
                                     onPress={() =>
-                                        onPressNotification(item.id.toString())
+                                        onPressNotification(
+                                            item.id.toString(),
+                                            item.resourceId,
+                                        )
                                     }
                                 />
                             )}

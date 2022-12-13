@@ -25,7 +25,7 @@ import LAManagerPopUp, {
 const LAGlobalManager = () => {
     const [managerModal, setManagerModal] = useState<LAManagerModalProps>();
     const [managerPopup, setManagerPopup] = useState<LAManagerPopUpProps>();
-    const { managerRequest, setPendingRequest } = useManagerStore();
+    const { managerRequest, setManagerRequest } = useManagerStore();
     const {
         params,
         filterChips,
@@ -78,7 +78,7 @@ const LAGlobalManager = () => {
         {
             onSuccess: (data: any) => {
                 const leaveData: PendingRequestByID = data[0];
-                setPendingRequest(leaveData);
+                setManagerRequest(leaveData);
                 refetchLeaveRequests();
                 statusTypesRefetch();
                 switch (leaveData.status) {

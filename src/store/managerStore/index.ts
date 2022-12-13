@@ -34,7 +34,7 @@ const initialState: State = {
 
 const managerStore = create<State & Actions>(set => ({
     ...initialState,
-    setPendingRequestByID: async (requestID: number) => {
+    getManagerModal: async (requestID: number) => {
         const res = await getHttpPendingRequestByID(requestID);
         const employee: PendingRequestByID = res[0];
         set(state => ({
@@ -45,7 +45,7 @@ const managerStore = create<State & Actions>(set => ({
             },
         }));
     },
-    setPendingRequest: managerRequest => {
+    setManagerRequest: managerRequest => {
         set(state => ({
             ...state,
             managerRequest: {
