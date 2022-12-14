@@ -1,12 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { getHttpLeaveRequest } from 'src/services/http';
 import { getFormattedMonth } from '../helpers/dateHandler';
-import { LeaveRequestParams, LeaveRequestType, Section } from '../types';
+import {
+    LeaveRequestParams,
+    LeaveRequestType,
+    LeaveRequestWithPageType,
+    Section,
+} from '../types';
 
 export const useLeaveRequestData = (
     params?: LeaveRequestParams,
     limit?: boolean,
-    onSuccessCallback?: (data: Section<LeaveRequestType[]>[]) => void,
+    onSuccessCallback?: (data: LeaveRequestWithPageType) => void,
 ) =>
     useQuery(['leaveRequests', params], () => getHttpLeaveRequest(params), {
         refetchOnMount: true,
@@ -15,6 +20,7 @@ export const useLeaveRequestData = (
         select: json => {
             let isViewAllVisible = true;
             let requestItems: LeaveRequestType[] = json[0].items;
+            const pageNumbers: number = json[0].totalPages;
             if (requestItems.length < 5) isViewAllVisible = false;
             if (limit) requestItems = requestItems.slice(0, 5);
             let monthTitles: string[] = requestItems.map(item =>
@@ -58,6 +64,9 @@ export const useLeaveRequestData = (
             //             ),
             //         }),
             //     );
-            return leaveRequestsData;
+            return {
+                leaveRequestData: leaveRequestsData,
+                pageNumbers: pageNumbers || 0,
+            };
         },
     });

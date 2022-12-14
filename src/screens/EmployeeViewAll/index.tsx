@@ -40,8 +40,8 @@ import {
     EntitlementSelection,
     FilterTypes,
     LeaveRequestType,
+    LeaveRequestWithPageType,
     LeaveUndoProp,
-    Section,
 } from 'src/utils/types';
 import { useFormik } from '../../utils/hooks/useFormik';
 import { handleApplyLeaveError } from '../EmployeeHome/helpers/errorHandlers';
@@ -72,6 +72,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         filterChips,
         setEmptyFilterUtils,
         resetFilterUtils,
+        setParams,
     } = useEmployeeFilterStore();
 
     const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
@@ -94,10 +95,10 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         data: leaveRequests,
         refetch,
         isLoading: loadingLeaveRequests,
-    }: UseQueryResult<Section<LeaveRequestType[]>[]> = useLeaveRequestData(
-        params,
+    }: UseQueryResult<LeaveRequestWithPageType> = useLeaveRequestData(
+        { ...params, size: 200 },
         false,
-        (data: Section<LeaveRequestType[]>[]) =>
+        (data: LeaveRequestWithPageType) =>
             handleLeaveRequestSuccess(
                 data,
                 setEmptyFilterUtils,
@@ -217,6 +218,18 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         return true;
     };
 
+    const callNextPage = () => {
+        if (
+            params.page !== undefined &&
+            leaveRequests &&
+            params.page < leaveRequests.pageNumbers - 1
+        ) {
+            setParams({
+                ...params,
+                page: params.page || params.page === 0 ? params.page + 1 : 0,
+            });
+        }
+    };
     return (
         <View style={styles.innerContainer}>
             <View
@@ -242,7 +255,8 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
                 </Text>
                 {!loadingLeaveRequests && (
                     <LALeaveRequestList
-                        leaveRequests={leaveRequests}
+                        leaveRequests={leaveRequests?.leaveRequestData}
+                        callNextPage={callNextPage}
                         onPressRequestItem={handleRequestItemPress}
                         isViewAllPage
                     />

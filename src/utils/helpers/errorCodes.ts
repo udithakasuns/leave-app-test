@@ -12,6 +12,7 @@ export enum ErrorCodes {
     APPLY_CONFIRMATION_WEEKENDS = 'APPLY_CONFIRMATION_WEEKENDS',
     UNAVAILABLE_LEAVE_ENTITLEMENTS = 'UNAVAILABLE_LEAVE_ENTITLEMENTS',
     ERROR_OCCURRED = 'ERROR_OCCURRED',
+    NO_RECIPIENT = 'NO_RECIPIENT',
 }
 
 type ErrorProp = {
@@ -108,6 +109,13 @@ export const getErrorMessage = (
             errorCodeMessage = {
                 title: 'Not working weekends are you?',
                 message: 'This day is not a working day.',
+            };
+            break;
+        case 'NO_RECIPIENT':
+            errorCodeMessage = {
+                title: 'No supervisor has been assigned',
+                message:
+                    'No supervisor has been assigned to you. Please get in touch with the administrator regarding your request.',
             };
             break;
         default:

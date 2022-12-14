@@ -45,8 +45,8 @@ import {
     EntitlementSelection,
     FilterTypes,
     LeaveRequestType,
+    LeaveRequestWithPageType,
     LeaveUndoProp,
-    Section,
 } from 'src/utils/types';
 import { useFormik } from '../../utils/hooks/useFormik';
 import { handleApplyLeaveError } from './helpers/errorHandlers';
@@ -100,10 +100,10 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const {
         data: leaveRequests,
         refetch,
-    }: UseQueryResult<Section<LeaveRequestType[]>[]> = useLeaveRequestData(
+    }: UseQueryResult<LeaveRequestWithPageType> = useLeaveRequestData(
         params,
         true,
-        (data: Section<LeaveRequestType[]>[]) =>
+        (data: LeaveRequestWithPageType) =>
             handleLeaveRequestSuccess(
                 data,
                 setEmptyFilterUtils,
@@ -252,7 +252,9 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
     return (
         <View style={styles.innerContainer}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                style={styles.scrollContainer}>
                 <LAAppBar
                     currentScreen='employee'
                     onPressNotification={() => {}}
@@ -272,34 +274,38 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 )}
                 <Spacer />
                 <Text type='SubHBold'>Leave Requests</Text>
-                {leaveRequests && (
+                {leaveRequests && leaveRequests.leaveRequestData && (
                     <>
                         <LALeaveRequestList
-                            leaveRequests={leaveRequests}
+                            leaveRequests={leaveRequests.leaveRequestData}
                             onPressRequestItem={handleRequestItemPress}
                             isViewAllPage={false}
                         />
                         <View
                             style={{
-                                marginBottom: scale.sc80 * leaveRequests.length,
+                                marginBottom:
+                                    scale.sc80 *
+                                    leaveRequests.leaveRequestData.length,
                             }}
                         />
                     </>
                 )}
             </ScrollView>
-            <View style={styles.buttonContainer}>
-                <Button
-                    label='Apply Leave'
-                    icon='arrow-forward'
-                    iconPosition='left'
-                    onPress={() =>
-                        setEmployeeModal({
-                            ...employeeModal,
-                            modalType: EmployeeModal.APPLY_LEAVE_MODAL,
-                        })
-                    }
-                />
-            </View>
+            {managers && managers.length > 0 && (
+                <View style={styles.buttonContainer}>
+                    <Button
+                        label='Apply Leave'
+                        icon='arrow-forward'
+                        iconPosition='left'
+                        onPress={() =>
+                            setEmployeeModal({
+                                ...employeeModal,
+                                modalType: EmployeeModal.APPLY_LEAVE_MODAL,
+                            })
+                        }
+                    />
+                </View>
+            )}
             <LAEmployeeModals
                 modalType={employeeModal?.modalType}
                 onBackPressType={employeeModal?.onBackPressType}

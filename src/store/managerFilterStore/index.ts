@@ -33,11 +33,13 @@ const filterStore = create<State & Actions>((set, get) => ({
         )[0];
         const sortKey =
             selectedButton.buttonId === 1 ? 'creationDate' : 'startDate';
+        const sortOrder = selectedButton.buttonId === 1 ? 'DESC' : 'ASC';
         set(state => ({
             ...state,
             params: {
                 ...get().params,
                 sortKey,
+                sortOrder,
             },
         }));
     },

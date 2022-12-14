@@ -1,7 +1,6 @@
 import { FormikProps } from 'formik';
 import React from 'react';
 import { View } from 'react-native';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { Input, Spacer, Text } from 'src/components/atoms';
 import {
     ButtonDock,
@@ -184,7 +183,10 @@ const ApplyLeaveSheetBody = ({
             <ButtonDock
                 primaryButton={{
                     label: 'Confirm and Apply',
-                    onPress: () => formik.handleSubmit(),
+                    onPress: () => {
+                        formik.handleSubmit();
+                        setIsHalfSelected(false);
+                    },
                 }}
                 secondaryButton={{
                     label: 'Cancel',

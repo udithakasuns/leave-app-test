@@ -19,4 +19,5 @@ export const styles = StyleSheet.create({
         width: '100%',
         bottom: 20,
     },
+    scrollContainer: { marginBottom: scale.vsc80 },
 });
