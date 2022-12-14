@@ -56,13 +56,13 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
         /* 
             Following will be triggered When user is in background mode or user has quite from the app.
         */
-        messaging().setBackgroundMessageHandler(async (remoteMessage: any) => {
+        messaging().setBackgroundMessageHandler(async remoteMessage => {
             console.log('Message handled from background', remoteMessage);
 
             PushNotification.localNotification({
                 title: remoteMessage.notification?.title,
-                message:
-                    JSON.parse(remoteMessage.notification?.body).message || '',
+                message: remoteMessage.notification?.body || '',
+                // JSON.parse(remoteMessage.notification?.body).message || '',
                 bigPictureUrl: remoteMessage.notification?.android?.imageUrl, // Handle this to IOS,
                 smallIcon: remoteMessage.notification?.android?.imageUrl, // Handle this to IOS,
                 channelId: 'channel-id',

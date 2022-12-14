@@ -3,7 +3,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { Button, Icon, Text } from 'src/components/atoms';
 import { WIDTH } from 'src/utils/helpers/scalingUtil';
 import theme from 'src/utils/theme';
-import { NotificationVisibleType } from 'utils/types';
+import { AtLeast, NotificationVisibleType } from 'utils/types';
 import { styles } from './styles';
 
 const { colors } = theme;
@@ -14,22 +14,24 @@ interface Props {
     onClose: () => void;
 }
 
-const Header = ({
+const LANotificationFilterHeader = ({
     visibleType = 'all',
     onChangeVisibleType,
     onClose,
-}: Props) => (
+}: AtLeast<Props, 'visibleType' | 'onChangeVisibleType'>) => (
     <View>
         <View style={styles.titleContainer}>
             <Text type='H1Bold'>Notifications</Text>
-            <TouchableOpacity onPress={onClose}>
-                <Icon
-                    size={WIDTH(8)}
-                    name='close-circle-outline'
-                    library='community'
-                    color={colors.gray600}
-                />
-            </TouchableOpacity>
+            {onClose && (
+                <TouchableOpacity onPress={onClose}>
+                    <Icon
+                        size={WIDTH(8)}
+                        name='close-circle-outline'
+                        library='community'
+                        color={colors.gray600}
+                    />
+                </TouchableOpacity>
+            )}
         </View>
         <View style={styles.headerButtonContainer}>
             <Button
@@ -51,4 +53,4 @@ const Header = ({
     </View>
 );
 
-export default Header;
+export default LANotificationFilterHeader;

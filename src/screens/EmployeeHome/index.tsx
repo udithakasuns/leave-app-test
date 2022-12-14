@@ -49,15 +49,15 @@ import {
     LeaveUndoProp,
     Section,
 } from 'src/utils/types';
-import { useFormik } from '../../utils/hooks/useFormik';
 import {
     handleAlreadyNudgeError,
     handleApplyLeaveError,
-} from './helpers/errorHandlers';
+} from 'components/organisms/Global/LAGlobalEmployee/helpers/errorHandlers';
+
 import {
     handleDateModal,
     handleRequestSelectedModal,
-} from './helpers/modalHandlers';
+} from 'components/organisms/Global/LAGlobalEmployee/helpers/modalHandlers';
 import {
     handleApplyMutationSuccess,
     handleDeleteSuccess,
@@ -65,7 +65,8 @@ import {
     handleLeaveRequestSuccess,
     handleNudgeSuccess,
     handleUndoCancellationSuccess,
-} from './helpers/successHandlers';
+} from 'components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
+import { useFormik } from '../../utils/hooks/useFormik';
 import { styles } from './styles';
 
 const { scale } = theme;
@@ -86,7 +87,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
     const [employeePopup, setEmployeePopup] = useState<LAEmployeePopUpProps>();
 
-    const { employeeRequest, setLeaveRequest, setLeaveRequestByID } =
+    const { employeeRequest, setEmployeeRequest, getEmployeeModal } =
         useEmployeeStore();
 
     const isFocused = useIsFocused();
@@ -123,7 +124,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 handleApplyMutationSuccess(
                     data,
                     setEmployeeModal,
-                    setLeaveRequestByID,
+                    getEmployeeModal,
                     setEmployeePopup,
                     refetchAllData,
                 ),
@@ -151,7 +152,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     employeeModal?.modalType,
                     employeeRequest,
                     employeeModal,
-                    setLeaveRequest,
+                    setEmployeeRequest,
                     setEmployeeModal,
                     setEmployeePopup,
                     refetchAllData,
@@ -223,7 +224,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     const handleRequestItemPress = (item: LeaveRequestType) => {
-        setLeaveRequestByID(item.leaveRequestId);
+        getEmployeeModal(item.leaveRequestId);
         const selectedModalType = handleRequestSelectedModal(item);
         if (selectedModalType === EmployeeModal.PENDING_LEAVE_MODAL) {
             nudgeVisibilityMutate(item.leaveRequestId);

@@ -151,7 +151,7 @@ export type LeaveRequestType = {
     leaveType: LeaveType;
     // reasonForLeave: string | null;
     leaveState: string;
-    status: StatusType;
+    status: StatusType | '';
     // requestDesc?: string | null;
     // reviewerComment?: string | null;
     durationHours: number | null;
@@ -265,7 +265,11 @@ export type ApplyFormValues = {
 
 export type DeviceType = 'ANDROID' | 'IOS';
 
-export type NotificationType = 'NEW_LEAVE_REQUEST' | 'LEAVE_REQUEST_NUDGE';
+export type NotificationType =
+    | 'NEW_LEAVE_REQUEST'
+    | 'LEAVE_REQUEST_NUDGE'
+    | 'LEAVE_REQUEST_APPROVED_DENIED'
+    | 'LEAVE_REQUEST_CANCELLED';
 
 export type NotificationBody = {
     image: string;

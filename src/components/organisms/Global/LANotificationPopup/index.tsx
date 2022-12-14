@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, SafeAreaView } from 'react-native';
-import { useManagerStore, useNotificationStore } from 'src/store';
+import {
+    useEmployeeStore,
+    useManagerStore,
+    useNotificationStore,
+} from 'src/store';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from 'src/components/atoms';
@@ -10,8 +14,10 @@ import { NotificationPayload, NotificationVisibleType } from 'utils/types';
 import { AxiosError } from 'axios';
 import { NotificationContent } from 'src/components/molecules';
 import { patchHttpViewNotification } from 'src/services/http/patchRequest';
-import Header from './Header';
+import { NotificationFilterHeader } from 'components/organisms';
 import { styles } from './styles';
+
+const TIMING = 300;
 
 const LANotificationPopup = () => {
     const navigation: any = useNavigation();
@@ -26,6 +32,7 @@ const LANotificationPopup = () => {
         useState<NotificationVisibleType>('all');
 
     const { getManagerModal } = useManagerStore();
+    const { getEmployeeModal } = useEmployeeStore();
 
     // 1st check the user is in Employee view or Manager View
     // Then check the visible Type
@@ -49,15 +56,11 @@ const LANotificationPopup = () => {
         },
     );
 
-    // console.log({ error });
-    // console.log('totalItems: ', data?.totalItems);
-    // console.log('data: ', data?.items);
-
     const onClosePopup = () => setIsPopupVisible(false);
 
     const onPressViewAll = () => {
         onClosePopup();
-        navigation.navigate('Notifications');
+        navigation.navigate('NotificationViewAll');
     };
 
     // const { mutate: onPressNotification } = useMutation(
@@ -73,15 +76,16 @@ const LANotificationPopup = () => {
         notificationId: string,
         resourceId: number,
     ) => {
-        // Need to update this functionalities
         await patchHttpViewNotification(notificationId);
         getCount(notifyUserRole);
         onClosePopup();
         setTimeout(() => {
             if (notifyUserRole === 'MANAGER') {
                 getManagerModal(resourceId);
+            } else if (notifyUserRole === 'EMPLOYEE') {
+                getEmployeeModal(resourceId);
             }
-        }, 1000);
+        }, TIMING);
     };
 
     useEffect(() => {
@@ -95,10 +99,12 @@ const LANotificationPopup = () => {
             onBackButtonPress={onClosePopup}
             useNativeDriver
             style={styles.modal}
-            isVisible={isPopupVisible}>
+            isVisible={isPopupVisible}
+            animationOutTiming={TIMING}
+            animationInTiming={TIMING}>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                    <Header
+                    <NotificationFilterHeader
                         visibleType={visibleType}
                         onChangeVisibleType={type => setVisibleType(type)}
                         onClose={onClosePopup}

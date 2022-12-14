@@ -41,12 +41,27 @@ const LANotificationContent = ({
             ) {
                 return 'ParaLGBold';
             }
-        } else if (type === 'NEW_LEAVE_REQUEST') {
+        }
+        if (type === 'NEW_LEAVE_REQUEST') {
             if (
                 i === 0 ||
                 i === 1 ||
                 i === 3 ||
                 i === 4 ||
+                i === n - 3 || // 3rd last index
+                i === n - 2 || // 2nd last index
+                i === n - 1 // last index
+            ) {
+                return 'ParaLGBold';
+            }
+        }
+        if (
+            type === 'LEAVE_REQUEST_APPROVED_DENIED' ||
+            type === 'LEAVE_REQUEST_CANCELLED'
+        ) {
+            if (
+                i === 0 ||
+                i === 1 ||
                 i === n - 3 || // 3rd last index
                 i === n - 2 || // 2nd last index
                 i === n - 1 // last index
@@ -98,4 +113,4 @@ const LANotificationContent = ({
     return null;
 };
 
-export default LANotificationContent;
+export default React.memo(LANotificationContent);

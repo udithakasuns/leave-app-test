@@ -1,25 +1,14 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { useNavigation } from '@react-navigation/native';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import {
-    DrawerScreenNavigationProp,
-    EmployeeViewAllScreensProps,
-} from 'navigators/types';
-import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
-import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
-import {
-    LAEmployeeModals,
-    LAEmployeePopUp,
-    LALeaveRequestList,
-} from 'src/components/organisms';
+import { LAEmployeeModals, LAEmployeePopUp } from 'src/components/organisms';
 import { LAEmployeeModalProps } from 'src/components/organisms/EmployeeHome/LAEmployeeModals';
 import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
 import {
     deleteHttpApplyLeave,
-    postHttpApplyLeave,
+    getHttpNudgeVisibility,
     postHttpNudge,
 } from 'src/services/http';
 import { patchHttpApplyLeave } from 'src/services/http/patchRequest';
@@ -30,54 +19,42 @@ import {
 } from 'src/store';
 import { showErrorToast, toastConfig } from 'src/utils/alerts';
 import { ErrorCodes } from 'src/utils/helpers/errorCodes';
-import { useEntitlementData } from 'src/utils/hooks/useEntitlementData';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
-import theme from 'src/utils/theme';
 import {
     EmployeeModal,
-    Entitlement,
-    EntitlementSelection,
     FilterTypes,
     LeaveRequestType,
     LeaveUndoProp,
     Section,
 } from 'src/utils/types';
-import { useFormik } from '../../utils/hooks/useFormik';
-import { handleApplyLeaveError } from '../../components/organisms/Global/LAGlobalEmployee/helpers/errorHandlers';
+
+import { handleAlreadyNudgeError } from './helpers/errorHandlers';
 import {
     handleDateModal,
     handleRequestSelectedModal,
-} from '../../components/organisms/Global/LAGlobalEmployee/helpers/modalHandlers';
+} from './helpers/modalHandlers';
 import {
-    handleApplyMutationSuccess,
     handleDeleteSuccess,
     handleFilterTypesSuccess,
     handleLeaveRequestSuccess,
     handleNudgeSuccess,
     handleUndoCancellationSuccess,
-} from '../../components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
+} from './helpers/successHandlers';
 
-import { styles } from './styles';
-
-const { scale, pixel } = theme;
-
-const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
-    const navigation = useNavigation<DrawerScreenNavigationProp>();
+const LAGlobalEmployee = () => {
+    const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
+    const [employeePopup, setEmployeePopup] = useState<LAEmployeePopUpProps>();
 
     const {
         params,
-        resetFiltersParams,
         setFilterChips,
         filterChips,
         setEmptyFilterUtils,
         resetFilterUtils,
     } = useEmployeeFilterStore();
 
-    const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
-    const [employeePopup, setEmployeePopup] = useState<LAEmployeePopUpProps>();
-
-    const { employeeRequest, setLeaveRequest, setLeaveRequestByID } =
+    const { employeeRequest, setEmployeeRequest, getEmployeeModal } =
         useEmployeeStore();
 
     const { managers } = useRecipientStore();
@@ -90,36 +67,17 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
             handleFilterTypesSuccess(data, filterChips, setFilterChips),
     );
 
-    const {
-        data: leaveRequests,
-        refetch,
-        isLoading: loadingLeaveRequests,
-    }: UseQueryResult<Section<LeaveRequestType[]>[]> = useLeaveRequestData(
-        params,
-        false,
-        (data: Section<LeaveRequestType[]>[]) =>
-            handleLeaveRequestSuccess(
-                data,
-                setEmptyFilterUtils,
-                resetFilterUtils,
-            ),
-    );
-
-    const { mutate: applyLeaveMutate } = useMutation(
-        ['applyLeave'],
-        postHttpApplyLeave,
-        {
-            onSuccess: (data: any) =>
-                handleApplyMutationSuccess(
+    const { refetch }: UseQueryResult<Section<LeaveRequestType[]>[]> =
+        useLeaveRequestData(
+            params,
+            true,
+            (data: Section<LeaveRequestType[]>[]) =>
+                handleLeaveRequestSuccess(
                     data,
-                    setEmployeeModal,
-                    setLeaveRequestByID,
-                    setEmployeePopup,
-                    refetchAllData,
+                    setEmptyFilterUtils,
+                    resetFilterUtils,
                 ),
-            onError: handleApplyLeaveError,
-        },
-    );
+        );
 
     const { mutate: undoCancellationMutate } = useMutation(
         ['undoCancellation'],
@@ -141,7 +99,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
                     employeeModal?.modalType,
                     employeeRequest,
                     employeeModal,
-                    setLeaveRequest,
+                    setEmployeeRequest,
                     setEmployeeModal,
                     setEmployeePopup,
                     refetchAllData,
@@ -158,26 +116,20 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         },
     );
 
-    const [formik] = useFormik(applyLeaveMutate);
-
-    const {
-        data: entitlements,
-        refetch: entitlementsRetch,
-    }: UseQueryResult<Entitlement[]> = useEntitlementData(
-        (data: Entitlement[]) => {
-            const entitlementsDeepClone: EntitlementSelection[] = JSON.parse(
-                JSON.stringify(data),
-            );
-            formik.setFieldValue('entitlements', entitlementsDeepClone);
+    const { mutate: nudgeVisibilityMutate } = useMutation(
+        ['nudgeVisibilityManger'],
+        getHttpNudgeVisibility,
+        {
+            onSuccess: (data: any) => {
+                const isAlreadyNudge = data[0].nudge;
+                setEmployeeModal({
+                    ...employeeModal,
+                    modalType: EmployeeModal.PENDING_LEAVE_MODAL,
+                    isNudgeVisble: !isAlreadyNudge,
+                });
+            },
         },
     );
-
-    const handleRequestItemPress = (item: LeaveRequestType) => {
-        setLeaveRequestByID(item.leaveRequestId);
-        setEmployeeModal({
-            modalType: handleRequestSelectedModal(item),
-        });
-    };
 
     const handleDateModalPress = () =>
         setEmployeeModal({
@@ -193,8 +145,12 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
     };
 
     const handleNudgeManager = () => {
-        if (employeeRequest.leaveRequestId) {
-            nudgeMutate(employeeRequest.leaveRequestId);
+        if (employeeModal?.isNudgeVisble) {
+            if (employeeRequest.leaveRequestId) {
+                nudgeMutate(employeeRequest.leaveRequestId);
+            }
+        } else {
+            handleAlreadyNudgeError();
         }
     };
     const handleViewMoreDetails = (onBackPressModal: EmployeeModal) => {
@@ -207,52 +163,33 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
 
     const refetchAllData = () => {
         refetch();
-        entitlementsRetch();
         filterRefetch();
     };
 
-    const backAction = () => {
-        resetFiltersParams();
-        navigation.jumpTo('EmployeeHome');
-        return true;
+    const onOpenModal = () => {
+        getEmployeeModal(employeeRequest.leaveRequestId);
+        const selectedModalType = handleRequestSelectedModal(employeeRequest);
+        if (selectedModalType === EmployeeModal.PENDING_LEAVE_MODAL) {
+            nudgeVisibilityMutate(employeeRequest.leaveRequestId);
+            return;
+        }
+        setEmployeeModal({
+            modalType: selectedModalType,
+        });
     };
 
+    useEffect(() => {
+        onOpenModal();
+    }, [employeeRequest.leaveRequestId]);
+
     return (
-        <View style={styles.innerContainer}>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: pixel(8),
-                }}>
-                <Icon
-                    name='arrow-back'
-                    enableBackground
-                    size={IconSize.medium}
-                    increasePadding={1}
-                    onPress={backAction}
-                />
-                <Spacer />
-                <Text>Home</Text>
-            </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <Spacer />
-                <Text type='SubHBold' style={{ marginHorizontal: scale.sc5 }}>
-                    Leave Requests
-                </Text>
-                {!loadingLeaveRequests && (
-                    <LALeaveRequestList
-                        leaveRequests={leaveRequests}
-                        onPressRequestItem={handleRequestItemPress}
-                        isViewAllPage
-                    />
-                )}
-            </ScrollView>
+        <>
             <LAEmployeeModals
+                isNudgeVisble={employeeModal?.isNudgeVisble}
                 modalType={employeeModal?.modalType}
                 onBackPressType={employeeModal?.onBackPressType}
                 onClose={() => setEmployeeModal(undefined)}
-                formik={formik}
+                formik={undefined}
                 onPressSelectDate={handleDateModalPress}
                 onBackPress={handleDateModalBackPress}
                 onPressNudge={handleNudgeManager}
@@ -294,8 +231,6 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
                 }}
                 onConfirmationHomePress={() => {
                     setEmployeePopup(undefined);
-                    formik.resetForm();
-                    formik.setFieldValue('entitlements', entitlements);
                     refetch();
                 }}
                 onCancellationUndoPress={() => {
@@ -317,8 +252,8 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
                     autoHide
                 />
             )}
-        </View>
+        </>
     );
 };
 
-export default EmployeeHomeViewAll;
+export default LAGlobalEmployee;

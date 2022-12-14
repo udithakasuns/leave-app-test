@@ -5,6 +5,6 @@ export type State = {
 };
 
 export type Actions = {
-    setLeaveRequestByID: (requestedId: number) => void;
-    setLeaveRequest: (managerRequest: LeaveRequestByID) => void;
+    getEmployeeModal: (requestedId: number) => void;
+    setEmployeeRequest: (employeeRequest: LeaveRequestByID) => void;
 };
