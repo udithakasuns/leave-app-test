@@ -8,8 +8,8 @@ import {
     EmployeePopup,
     FilterChipsProps,
     FilterTypes,
+    LeaveRequestByID,
     LeaveRequestWithPageType,
-    LeaveRequestByID, 
 } from 'src/utils/types';
 
 export const handleFilterTypesSuccess = (
