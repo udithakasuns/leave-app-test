@@ -78,6 +78,15 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
         */
         const unsubscribe = messaging().onMessage(message => {
             console.log({ message });
+            PushNotification.localNotification({
+                title: message.notification?.title,
+                message: message.notification?.body || '',
+                // JSON.parse(message.notification?.body).message || '',
+                bigPictureUrl: message.notification?.android?.imageUrl, // Handle this to IOS,
+                smallIcon: message.notification?.android?.imageUrl, // Handle this to IOS,
+                channelId: 'channel-id',
+                vibrate: true,
+            });
             notificationStore.getCount(notificationStore.notifyUserRole);
         });
 

@@ -33,6 +33,7 @@ const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = ({
         data,
         fetchNextPage,
         hasNextPage,
+        refetch,
     }: UseInfiniteQueryResult<NotificationPayload, AxiosError> =
         useInfiniteQuery({
             queryKey: ['allNotifications', visibleType, notifyUserRole],
@@ -66,6 +67,7 @@ const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = ({
     ) => {
         // Need to update this functionalities
         await patchHttpViewNotification(notificationId);
+        refetch();
         getCount(notifyUserRole);
         if (notifyUserRole === 'MANAGER') {
             getManagerModal(resourceId);
