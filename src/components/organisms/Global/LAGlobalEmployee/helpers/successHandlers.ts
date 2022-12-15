@@ -99,11 +99,9 @@ export const handleNudgeSuccess = (
 };
 
 export const handleApplyMutationSuccess = (
-    data: any,
     setEmployeeModal: (
         value: React.SetStateAction<Partial<ModalProps> | undefined>,
     ) => void,
-    getEmployeeModal: (requestedId: number) => void,
     setEmployeePopup: (
         value: React.SetStateAction<Partial<PopUpProps> | undefined>,
     ) => void,
@@ -112,8 +110,6 @@ export const handleApplyMutationSuccess = (
     setEmployeeModal({
         modalType: undefined,
     });
-    const tempLeave: LeaveRequestByID = data[0];
-    getEmployeeModal(tempLeave.leaveRequestId);
     setEmployeePopup({
         modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
     });
