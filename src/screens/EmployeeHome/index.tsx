@@ -54,10 +54,7 @@ import {
     handleApplyLeaveError,
 } from 'components/organisms/Global/LAGlobalEmployee/helpers/errorHandlers';
 
-import {
-    handleDateModal,
-    handleRequestSelectedModal,
-} from 'components/organisms/Global/LAGlobalEmployee/helpers/modalHandlers';
+import { handleDateModal } from 'components/organisms/Global/LAGlobalEmployee/helpers/modalHandlers';
 import {
     handleApplyMutationSuccess,
     handleDeleteSuccess,
@@ -122,9 +119,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         {
             onSuccess: (data: any) =>
                 handleApplyMutationSuccess(
-                    data,
                     setEmployeeModal,
-                    getEmployeeModal,
                     setEmployeePopup,
                     refetchAllData,
                 ),
@@ -225,15 +220,6 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
     const handleRequestItemPress = (item: LeaveRequestType) => {
         getEmployeeModal(item.leaveRequestId);
-        const selectedModalType = handleRequestSelectedModal(item);
-        if (selectedModalType === EmployeeModal.PENDING_LEAVE_MODAL) {
-            nudgeVisibilityMutate(item.leaveRequestId);
-            return;
-        }
-
-        setEmployeeModal({
-            modalType: selectedModalType,
-        });
     };
 
     const handleDateModalPress = () =>
