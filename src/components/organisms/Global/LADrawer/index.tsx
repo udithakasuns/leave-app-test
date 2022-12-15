@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Avatar, Button, Spacer, Text } from 'src/components/atoms';
 import { awsOnSignOut } from 'src/services/aws';
-import { useUserStore } from 'src/store';
+import { deleteHttpNotificationDevice } from 'src/services/http';
+import { usePersistStore, useUserStore } from 'src/store';
 import { IconLibrary } from 'src/utils/types';
 import theme from 'utils/theme';
 import { styles } from './styles';
@@ -18,6 +19,7 @@ const LADrawer: React.FC = () => {
     const {
         user: { firstName, lastName, profilePic, designation },
     } = useUserStore();
+    const persistStore = usePersistStore();
 
     const [buttons] = useState<ButtonProps[]>([
         {
@@ -34,6 +36,13 @@ const LADrawer: React.FC = () => {
         },
         { label: 'Support', icon: 'help-outline', onPress: () => {} },
     ]);
+
+    const onPressSignOut = async () => {
+        if (persistStore.deviceUniqueId) {
+            await deleteHttpNotificationDevice(persistStore.deviceUniqueId);
+        }
+        awsOnSignOut();
+    };
 
     return (
         <View style={styles.container}>
@@ -70,7 +79,7 @@ const LADrawer: React.FC = () => {
                     mode='contained-gray'
                     iconPosition='right'
                     labelStyle={styles.buttonLabelStyle}
-                    onPress={awsOnSignOut}
+                    onPress={onPressSignOut}
                 />
             </View>
         </View>

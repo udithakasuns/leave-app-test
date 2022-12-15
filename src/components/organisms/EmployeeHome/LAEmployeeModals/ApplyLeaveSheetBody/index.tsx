@@ -1,7 +1,6 @@
 import { FormikProps } from 'formik';
 import React from 'react';
 import { View } from 'react-native';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { Input, Spacer, Text } from 'src/components/atoms';
 import {
     ButtonDock,

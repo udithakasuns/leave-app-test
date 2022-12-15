@@ -9,7 +9,7 @@ const initialState: State = {
         startDate: '',
         endDate: '',
         leaveType: { name: '', typeId: 0 },
-        status: 'APPROVED',
+        status: '',
         leaveState: 'FULLDAY',
         requestDesc: '',
         durationHours: 0,
@@ -34,7 +34,7 @@ const initialState: State = {
 
 const employeeStore = create<State & Actions>(set => ({
     ...initialState,
-    setLeaveRequestByID: async (requestID: number) => {
+    getEmployeeModal: async (requestID: number) => {
         const res = await getHttpLeaveRequestByID(requestID);
         const request: LeaveRequestByID = res[0];
         set(state => ({
@@ -45,7 +45,7 @@ const employeeStore = create<State & Actions>(set => ({
             },
         }));
     },
-    setLeaveRequest: managerRequest => {
+    setEmployeeRequest: managerRequest => {
         set(state => ({
             ...state,
             employeeRequest: {

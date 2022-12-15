@@ -3,7 +3,12 @@ import { FormikProps } from 'formik';
 import React, { useState } from 'react';
 import { Modal } from 'src/components/molecules';
 import { useEmployeeStore, useRecipientStore } from 'src/store';
-import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
+import {
+    ApplyFormValues,
+    EmployeeModal,
+    PartialBy,
+    TestProps,
+} from 'src/utils/types';
 import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
 import ApprovedLeaveSheetBody from './ApprovedLeaveSheetBody';
 import CancelLeaveSheetBody from './CancelLeaveSheetBody';
@@ -18,6 +23,7 @@ import { styles } from './styles';
 export type ModalProps = {
     modalType: EmployeeModal;
     onBackPressType: EmployeeModal;
+    isNudgeVisble: boolean;
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
@@ -39,6 +45,7 @@ const LAEmployeeModals = ({
     modalType,
     onBackPressType,
     formik,
+    isNudgeVisble,
     onClose,
     onBackPress,
     onPressSelectDate,
@@ -48,24 +55,25 @@ const LAEmployeeModals = ({
     onNavigateToCancelLeave,
     onPressRevokeLeave,
     onRevokeLeaveRequest,
-}: Props) => {
+}: PartialBy<Props, 'formik'>) => {
     const [isHalfSelected, setIsHalfSelected] = useState(false);
     const { employeeRequest } = useEmployeeStore();
     const { managers } = useRecipientStore();
+
     const onCancellation = () => {
         setIsHalfSelected(false);
-        formik.resetForm();
-        const entitlementsDeepClone = formik.values.entitlements.map(item => {
+        formik?.resetForm();
+        const entitlementsDeepClone = formik?.values.entitlements.map(item => {
             const tempEntitlement = item;
             tempEntitlement.isSelected = false;
             return tempEntitlement;
         });
-        formik.setFieldValue('entitlements', entitlementsDeepClone);
+        formik?.setFieldValue('entitlements', entitlementsDeepClone);
         onClose();
     };
     return (
         <>
-            {modalType === EmployeeModal.APPLY_LEAVE_MODAL && (
+            {modalType === EmployeeModal.APPLY_LEAVE_MODAL && formik && (
                 <Modal
                     onClose={onCancellation}
                     isVisible
@@ -82,7 +90,7 @@ const LAEmployeeModals = ({
                     }
                 />
             )}
-            {modalType === EmployeeModal.CHOSE_DATE_MODAL && (
+            {modalType === EmployeeModal.CHOSE_DATE_MODAL && formik && (
                 <Modal
                     onClose={() => onBackPress(EmployeeModal.CHOSE_DATE_MODAL)}
                     isVisible
@@ -105,6 +113,7 @@ const LAEmployeeModals = ({
                     style={styles.commonStyle}
                     sheetBody={
                         <PendingSheetBody
+                            isNudgeVisble={isNudgeVisble || false}
                             requestDetails={{
                                 leaveRequest: employeeRequest,
                                 recipient: [managers[0]],
