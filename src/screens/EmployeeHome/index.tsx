@@ -18,6 +18,7 @@ import { LAEmployeeModalProps } from 'src/components/organisms/EmployeeHome/LAEm
 import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
 import {
     deleteHttpApplyLeave,
+    getHttpNudgeVisibility,
     postHttpApplyLeave,
     postHttpNudge,
 } from 'src/services/http';
@@ -48,12 +49,15 @@ import {
     LeaveRequestWithPageType,
     LeaveUndoProp,
 } from 'src/utils/types';
-import { useFormik } from '../../utils/hooks/useFormik';
-import { handleApplyLeaveError } from './helpers/errorHandlers';
+import {
+    handleAlreadyNudgeError,
+    handleApplyLeaveError,
+} from 'components/organisms/Global/LAGlobalEmployee/helpers/errorHandlers';
+
 import {
     handleDateModal,
     handleRequestSelectedModal,
-} from './helpers/modalHandlers';
+} from 'components/organisms/Global/LAGlobalEmployee/helpers/modalHandlers';
 import {
     handleApplyMutationSuccess,
     handleDeleteSuccess,
@@ -61,7 +65,8 @@ import {
     handleLeaveRequestSuccess,
     handleNudgeSuccess,
     handleUndoCancellationSuccess,
-} from './helpers/successHandlers';
+} from 'components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
+import { useFormik } from '../../utils/hooks/useFormik';
 import { styles } from './styles';
 
 const { scale } = theme;
@@ -82,7 +87,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
     const [employeePopup, setEmployeePopup] = useState<LAEmployeePopUpProps>();
 
-    const { employeeRequest, setLeaveRequest, setLeaveRequestByID } =
+    const { employeeRequest, setEmployeeRequest, getEmployeeModal } =
         useEmployeeStore();
 
     const isFocused = useIsFocused();
@@ -119,7 +124,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 handleApplyMutationSuccess(
                     data,
                     setEmployeeModal,
-                    setLeaveRequestByID,
+                    getEmployeeModal,
                     setEmployeePopup,
                     refetchAllData,
                 ),
@@ -147,7 +152,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     employeeModal?.modalType,
                     employeeRequest,
                     employeeModal,
-                    setLeaveRequest,
+                    setEmployeeRequest,
                     setEmployeeModal,
                     setEmployeePopup,
                     refetchAllData,
@@ -161,6 +166,21 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         {
             onSuccess: () =>
                 handleNudgeSuccess(setEmployeeModal, managers[0].name ?? ''),
+        },
+    );
+
+    const { mutate: nudgeVisibilityMutate } = useMutation(
+        ['nudgeVisibilityManger'],
+        getHttpNudgeVisibility,
+        {
+            onSuccess: (data: any) => {
+                const isAlreadyNudge = data[0].nudge;
+                setEmployeeModal({
+                    ...employeeModal,
+                    modalType: EmployeeModal.PENDING_LEAVE_MODAL,
+                    isNudgeVisble: !isAlreadyNudge,
+                });
+            },
         },
     );
 
@@ -204,9 +224,15 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     const handleRequestItemPress = (item: LeaveRequestType) => {
-        setLeaveRequestByID(item.leaveRequestId);
+        getEmployeeModal(item.leaveRequestId);
+        const selectedModalType = handleRequestSelectedModal(item);
+        if (selectedModalType === EmployeeModal.PENDING_LEAVE_MODAL) {
+            nudgeVisibilityMutate(item.leaveRequestId);
+            return;
+        }
+
         setEmployeeModal({
-            modalType: handleRequestSelectedModal(item),
+            modalType: selectedModalType,
         });
     };
 
@@ -224,8 +250,12 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     const handleNudgeManager = () => {
-        if (employeeRequest.leaveRequestId) {
-            nudgeMutate(employeeRequest.leaveRequestId);
+        if (employeeModal?.isNudgeVisble) {
+            if (employeeRequest.leaveRequestId) {
+                nudgeMutate(employeeRequest.leaveRequestId);
+            }
+        } else {
+            handleAlreadyNudgeError();
         }
     };
     const handleViewMoreDetails = (onBackPressModal: EmployeeModal) => {
@@ -255,10 +285,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 style={styles.scrollContainer}>
-                <LAAppBar
-                    currentScreen='employee'
-                    onPressNotification={() => {}}
-                />
+                <LAAppBar currentScreen='employee' />
                 <Spacer />
                 <Text type='H1Bold'>
                     Hey {firstName} {'\n'}
@@ -307,6 +334,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 </View>
             )}
             <LAEmployeeModals
+                isNudgeVisble={employeeModal?.isNudgeVisble}
                 modalType={employeeModal?.modalType}
                 onBackPressType={employeeModal?.onBackPressType}
                 onClose={() => setEmployeeModal(undefined)}

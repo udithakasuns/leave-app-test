@@ -13,6 +13,7 @@ export enum ErrorCodes {
     UNAVAILABLE_LEAVE_ENTITLEMENTS = 'UNAVAILABLE_LEAVE_ENTITLEMENTS',
     ERROR_OCCURRED = 'ERROR_OCCURRED',
     NO_RECIPIENT = 'NO_RECIPIENT',
+    REQUEST_ALREADY_NUDGE = 'REQUEST_ALREADY_NUDGE',
 }
 
 type ErrorProp = {
@@ -116,6 +117,13 @@ export const getErrorMessage = (
                 title: 'No supervisor has been assigned',
                 message:
                     'No supervisor has been assigned to you. Please get in touch with the administrator regarding your request.',
+            };
+            break;
+        case 'REQUEST_ALREADY_NUDGE':
+            errorCodeMessage = {
+                title: 'Supervisor already nudged',
+                message:
+                    'A reminder has been sent to your supervisor.\nThe assigned supervisor will respond to your request.',
             };
             break;
         default:

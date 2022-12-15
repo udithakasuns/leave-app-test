@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Pressable, View } from 'react-native';
 import {
     Avatar,
@@ -10,6 +10,7 @@ import {
     Icon,
     IconSize,
     Spacer,
+    Text,
 } from 'src/components/atoms';
 import { Modal } from 'src/components/molecules';
 import { DrawerScreenNavigationProp } from 'src/navigators/types';
@@ -17,6 +18,7 @@ import {
     useEmployeeFilterStore,
     useManagerFilterStore,
     useUserStore,
+    useNotificationStore,
 } from 'src/store';
 import theme from 'src/utils/theme';
 import { RoleSheetBody } from './RoleSheetBody';
@@ -28,7 +30,6 @@ export type CurrentScreen = 'employee' | 'manager';
 
 type AppBarProps = {
     currentScreen: CurrentScreen;
-    onPressNotification: () => void;
 };
 
 export type SelectedProperties = {
@@ -37,7 +38,8 @@ export type SelectedProperties = {
     employeeMode: ButtonMode;
 };
 
-const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
+const LAAppBar = ({ currentScreen }: AppBarProps) => {
+    const notificationStore = useNotificationStore();
     const navigation = useNavigation<DrawerScreenNavigationProp>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const { resetFiltersParams: resetEmployeeFilters } =
@@ -60,6 +62,18 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
             managerMode: 'outlined',
             employeeMode: 'contained-gray',
         };
+    };
+
+    const notificationCount = useMemo<string>(() => {
+        const { count } = notificationStore;
+        if (count && count > 0) {
+            return count > 100 ? '99' : count.toString();
+        }
+        return '';
+    }, [notificationStore.count]);
+
+    const onPressNotification = () => {
+        notificationStore.setIsPopupVisible(true);
     };
 
     return (
@@ -90,11 +104,16 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
                     />
                 )}
             </View>
-            <Icon
-                name='notifications'
-                onPress={onPressNotification}
-                size={IconSize.xLarge}
-            />
+            <Pressable onPress={onPressNotification}>
+                <Icon name='notifications' size={IconSize.xLarge} />
+                {notificationCount && (
+                    <View style={styles.notificationCountContainer}>
+                        <Text type='ParaXS' color={colors.white}>
+                            {notificationCount}
+                        </Text>
+                    </View>
+                )}
+            </Pressable>
             <Modal
                 onClose={() => setModalVisible(state => !state)}
                 isVisible={modalVisible}
@@ -107,12 +126,14 @@ const LAAppBar = ({ currentScreen, onPressNotification }: AppBarProps) => {
                                 selected === 'employee' &&
                                 selected !== currentScreen
                             ) {
+                                notificationStore.getCount('EMPLOYEE');
                                 resetManagerFilters();
                                 navigation.navigate('EmployeeHome');
                             } else if (
                                 selected === 'manager' &&
                                 selected !== currentScreen
                             ) {
+                                notificationStore.getCount('MANAGER');
                                 resetEmployeeFilters();
                                 navigation.navigate('ManagerHome');
                             }
