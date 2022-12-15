@@ -5,7 +5,7 @@ import { ScrollView, SectionList, View } from 'react-native';
 import { Button, Chip, Divider, Spacer, Text } from 'src/components/atoms';
 import { MonthSection, RequestListItem } from 'src/components/molecules';
 import { DrawerScreenNavigationProp } from 'src/navigators/types';
-import { useEmployeeFilterStore } from 'src/store';
+import { useEmployeeFilterStore, useRecipientStore } from 'src/store';
 import { getStartEndDate } from 'src/utils/helpers/dateHandler';
 import { getErrorMessage } from 'src/utils/helpers/errorCodes';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
@@ -25,6 +25,7 @@ const { colors, scale, fontSize } = theme;
 interface Props extends Partial<TestProps>, FilterProps {
     leaveRequests: Section<LeaveRequestType[]>[];
     onPressRequestItem: (item: LeaveRequestType) => void;
+    callNextPage?: () => void;
     isViewAllPage: boolean;
 }
 
@@ -35,7 +36,7 @@ const LALeaveRequestList = ({
 }: AtLeast<Props, 'isViewAllPage' | 'onPressRequestItem'>) => {
     const { filterUtils, resetFiltersParams } = useEmployeeFilterStore();
     const navigation = useNavigation<DrawerScreenNavigationProp>();
-
+    const { managers } = useRecipientStore();
     const {
         container,
         scrollViewContainer,
@@ -60,14 +61,18 @@ const LALeaveRequestList = ({
 
     return (
         <View style={container}>
-            <LAEmployeeFilters />
+            {managers.length > 0 && <LAEmployeeFilters />}
             <ScrollView horizontal contentContainerStyle={scrollViewContainer}>
                 <SectionList<LeaveRequestType, Section<LeaveRequestType[]>>
-                    sections={leaveRequests ?? []}
+                    sections={
+                        leaveRequests && managers.length > 0
+                            ? leaveRequests
+                            : []
+                    }
                     ListEmptyComponent={
                         <View
                             style={{
-                                paddingVertical: scale.vsc80,
+                                paddingVertical: scale.vsc64,
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}>
@@ -81,7 +86,10 @@ const LALeaveRequestList = ({
                                 <Text type='SubHBold'>
                                     {
                                         getErrorMessage(
-                                            filterUtils.isFiltersSelected
+                                            // eslint-disable-next-line no-nested-ternary
+                                            managers.length < 1
+                                                ? 'NO_RECIPIENT'
+                                                : filterUtils.isFiltersSelected
                                                 ? 'EMPTY_FILTERS_REQUEST_LEAVE'
                                                 : 'EMPTY_REQUEST_LEAVE',
                                         ).title
@@ -97,7 +105,10 @@ const LALeaveRequestList = ({
                                     }}>
                                     {
                                         getErrorMessage(
-                                            filterUtils.isFiltersSelected
+                                            // eslint-disable-next-line no-nested-ternary
+                                            managers.length < 1
+                                                ? 'NO_RECIPIENT'
+                                                : filterUtils.isFiltersSelected
                                                 ? 'EMPTY_FILTERS_REQUEST_LEAVE'
                                                 : 'EMPTY_REQUEST_LEAVE',
                                         ).message
@@ -124,6 +135,7 @@ const LALeaveRequestList = ({
                     keyExtractor={(item, index) => item.status + index}
                     scrollEnabled={false}
                     renderItem={({ item }) => <Item item={item} />}
+                    onEndReachedThreshold={0.3}
                     ListFooterComponent={() =>
                         !isViewAllPage ? (
                             <View style={footerContainer}>
@@ -134,7 +146,10 @@ const LALeaveRequestList = ({
                                     content='View All'
                                     rightIconName='arrow-forward'
                                     disabled={
-                                        leaveRequests !== undefined
+                                        // eslint-disable-next-line no-nested-ternary
+                                        managers.length < 1
+                                            ? true
+                                            : leaveRequests !== undefined
                                             ? !leaveRequests[0]
                                                   ?.isViewAllVisible
                                             : true ?? false

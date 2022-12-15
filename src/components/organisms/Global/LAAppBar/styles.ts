@@ -1,7 +1,8 @@
 import { StyleSheet } from 'react-native';
+import { WIDTH } from 'src/utils/helpers/scalingUtil';
 import theme from 'src/utils/theme';
 
-const { scale, pixel } = theme;
+const { scale, pixel, colors, radius } = theme;
 
 export const styles = StyleSheet.create({
     appBarContainer: {
@@ -28,4 +29,17 @@ export const styles = StyleSheet.create({
         marginBottom: theme.scale.vsc40,
     },
     labelStyle: { paddingHorizontal: 10 },
+    notificationCountContainer: {
+        position: 'absolute',
+        top: WIDTH(-2),
+        left: WIDTH(-2),
+        width: WIDTH(6),
+        height: WIDTH(6),
+        alignItems: 'center',
+        justifyContent: 'center',
+        // paddingLeft: 1,
+        // paddingRight: 1,
+        backgroundColor: colors.error,
+        borderRadius: radius.rd50,
+    },
 });
