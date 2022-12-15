@@ -79,6 +79,6 @@ export const sortByButtonsManager: MultiButtonProps[] = [
     },
     {
         buttonId: 2,
-        label: 'Leave Date',
+        label: 'Urgency',
     },
 ];

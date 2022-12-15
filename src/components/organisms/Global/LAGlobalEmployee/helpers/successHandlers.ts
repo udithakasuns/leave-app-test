@@ -9,8 +9,7 @@ import {
     FilterChipsProps,
     FilterTypes,
     LeaveRequestByID,
-    LeaveRequestType,
-    Section,
+    LeaveRequestWithPageType,
 } from 'src/utils/types';
 
 export const handleFilterTypesSuccess = (
@@ -36,11 +35,14 @@ export const handleFilterTypesSuccess = (
 };
 
 export const handleLeaveRequestSuccess = (
-    data: Section<LeaveRequestType[]>[],
+    data: LeaveRequestWithPageType,
     setEmptyFilterUtils: () => void,
     resetFilterUtils: () => void,
 ) => {
-    if (data?.length === 0 || data === undefined) {
+    if (
+        data?.leaveRequestData === undefined ||
+        data?.leaveRequestData?.length === 0
+    ) {
         setEmptyFilterUtils();
     } else {
         resetFilterUtils();
@@ -97,11 +99,9 @@ export const handleNudgeSuccess = (
 };
 
 export const handleApplyMutationSuccess = (
-    data: any,
     setEmployeeModal: (
         value: React.SetStateAction<Partial<ModalProps> | undefined>,
     ) => void,
-    setLeaveRequestByID: (requestedId: number) => void,
     setEmployeePopup: (
         value: React.SetStateAction<Partial<PopUpProps> | undefined>,
     ) => void,
@@ -110,8 +110,6 @@ export const handleApplyMutationSuccess = (
     setEmployeeModal({
         modalType: undefined,
     });
-    const tempLeave: LeaveRequestByID = data[0];
-    setLeaveRequestByID(tempLeave.leaveRequestId);
     setEmployeePopup({
         modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
     });

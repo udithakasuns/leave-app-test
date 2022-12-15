@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "763187060841",
+    "project_id": "leave-module-366611",
+    "storage_bucket": "leave-module-366611.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763187060841:android:8ddbff9ed62f90599802f8",
+        "android_client_info": {
+          "package_name": "com.rootcodelabs.leaveapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "763187060841-ao0u8nr10v6bu9kvi5v8rf6467it4sv2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rootcodelabs.leaveapp",
+            "certificate_hash": "b7c4a4debaeacb04e4eeab84bb1ca8bc25bc4c67"
+          }
+        },
+        {
+          "client_id": "763187060841-aht0aqlbasvcnq4oee76gn7g3kqb636j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDmqs3A_dW7KUFjIbx0xdlCSqtnfnrdrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "763187060841-aht0aqlbasvcnq4oee76gn7g3kqb636j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "763187060841-u4h6a1ipuqmlq2ppv0crq7kqo15rlil9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rtc.leaveapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

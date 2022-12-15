@@ -9,6 +9,7 @@ import theme from 'src/utils/theme';
 import { PartialBy, RequestDetails, TestProps } from 'src/utils/types';
 
 interface Props extends Partial<TestProps> {
+    isNudgeVisble: boolean;
     requestDetails: RequestDetails;
     onPressViewMoreDetails: () => void;
     onPressNudge: (isDisable: boolean) => void;
@@ -19,6 +20,7 @@ const { colors } = theme;
 
 const PendingSheetBody = ({
     requestDetails,
+    isNudgeVisble,
     onPressViewMoreDetails,
     onPressNudge,
     onPressCancelLeave,
@@ -43,10 +45,10 @@ const PendingSheetBody = ({
             primaryButton={{
                 label: 'Nudge Supervisor',
                 icon: 'notification',
-                mode: 'outlined',
+                mode: isNudgeVisble ? 'outlined' : 'contained-gray',
                 iconLibrary: 'svg',
                 onPress: () => {
-                    onPressNudge(true);
+                    onPressNudge(isNudgeVisble);
                 },
             }}
             secondaryButton={{

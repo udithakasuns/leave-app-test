@@ -151,11 +151,16 @@ export type LeaveRequestType = {
     leaveType: LeaveType;
     // reasonForLeave: string | null;
     leaveState: string;
-    status: StatusType;
+    status: StatusType | '';
     // requestDesc?: string | null;
     // reviewerComment?: string | null;
     durationHours: number | null;
     durationDays: number | null;
+};
+
+export type LeaveRequestWithPageType = {
+    leaveRequestData: Section<LeaveRequestType[]>[];
+    pageNumbers: number;
 };
 
 export interface LeaveRequestByID extends LeaveRequestType {
@@ -172,7 +177,7 @@ export type PendingRequestType = {
     startDate: string;
     endDate: string;
     leaveType: LeaveType;
-    status: StatusType;
+    status: StatusType | '';
     leaveState: LeaveSate;
     durationHours: number;
     durationDays: number;
@@ -263,6 +268,35 @@ export type ApplyFormValues = {
     entitlements: EntitlementSelection[];
 };
 
+export type DeviceType = 'ANDROID' | 'IOS';
+
+export type NotificationType =
+    | 'NEW_LEAVE_REQUEST'
+    | 'LEAVE_REQUEST_NUDGE'
+    | 'LEAVE_REQUEST_APPROVED_DENIED'
+    | 'LEAVE_REQUEST_CANCELLED';
+
+export type NotificationBody = {
+    image: string;
+    message: string;
+};
+
+export type NotificationPayload = {
+    currentPage: number;
+    totalItems: number;
+    totalPages: number;
+    items: {
+        id: number;
+        createdDate: string;
+        title: string;
+        body: NotificationBody;
+        notificationType: NotificationType;
+        resourceId: number;
+        viewed: boolean;
+    }[];
+};
+
+export type NotificationVisibleType = 'all' | 'unread';
 export type LeaveUndoProp = {
     requestID: number;
     startDate: string;

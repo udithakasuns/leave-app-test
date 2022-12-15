@@ -7,6 +7,7 @@ export type AuthScreensParamList = {
     ManagerHome: undefined;
     EmployeeViewAll: undefined;
     ManagerViewAll: undefined;
+    NotificationViewAll: undefined;
 };
 
 export type RootScreensParamsList = {
@@ -38,6 +39,11 @@ export type EmployeeViewAllScreensProps = NativeStackScreenProps<
 export type ManagerHomeScreensProps = NativeStackScreenProps<
     AuthScreensParamList,
     'ManagerHome'
+>;
+
+export type NotificationViewAllScreensProps = NativeStackScreenProps<
+    AuthScreensParamList,
+    'NotificationViewAll'
 >;
 
 export type ManagerViewAllScreensProps = NativeStackScreenProps<
