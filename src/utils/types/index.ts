@@ -158,6 +158,11 @@ export type LeaveRequestType = {
     durationDays: number | null;
 };
 
+export type LeaveRequestWithPageType = {
+    leaveRequestData: Section<LeaveRequestType[]>[];
+    pageNumbers: number;
+};
+
 export interface LeaveRequestByID extends LeaveRequestType {
     reviewerComment: string;
     requestDesc: string;

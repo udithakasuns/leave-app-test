@@ -128,10 +128,10 @@ const LARequestDetailsSection = ({
                         <Spacer height={1} />
                         {requestDetails.recipient?.map(item => (
                             <AvatarChip
-                                key={item.employeeId}
-                                label={item.name ?? ''}
+                                key={item?.employeeId}
+                                label={item?.name ?? ''}
                                 source={{
-                                    uri: item.authPic ?? '',
+                                    uri: item?.authPic ?? '',
                                 }}
                                 containerStyle={{
                                     justifyContent: 'flex-start',

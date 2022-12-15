@@ -183,7 +183,10 @@ const ApplyLeaveSheetBody = ({
             <ButtonDock
                 primaryButton={{
                     label: 'Confirm and Apply',
-                    onPress: () => formik.handleSubmit(),
+                    onPress: () => {
+                        formik.handleSubmit();
+                        setIsHalfSelected(false);
+                    },
                 }}
                 secondaryButton={{
                     label: 'Cancel',

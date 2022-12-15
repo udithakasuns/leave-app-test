@@ -12,7 +12,7 @@ import { LALeaveRequestList } from 'src/components/organisms';
 import { useEmployeeFilterStore, useEmployeeStore } from 'src/store';
 import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
 import theme from 'src/utils/theme';
-import { LeaveRequestType, Section } from 'src/utils/types';
+import { LeaveRequestType, LeaveRequestWithPageType } from 'src/utils/types';
 import { handleLeaveRequestSuccess } from '../../components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
 
 import { styles } from './styles';
@@ -26,6 +26,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         resetFiltersParams,
         setEmptyFilterUtils,
         resetFilterUtils,
+        setParams,
     } = useEmployeeFilterStore();
 
     const { getEmployeeModal } = useEmployeeStore();
@@ -33,10 +34,10 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
     const {
         data: leaveRequests,
         isLoading: loadingLeaveRequests,
-    }: UseQueryResult<Section<LeaveRequestType[]>[]> = useLeaveRequestData(
-        params,
+    }: UseQueryResult<LeaveRequestWithPageType> = useLeaveRequestData(
+        { ...params, size: 200 },
         false,
-        (data: Section<LeaveRequestType[]>[]) =>
+        (data: LeaveRequestWithPageType) =>
             handleLeaveRequestSuccess(
                 data,
                 setEmptyFilterUtils,
@@ -54,6 +55,18 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         return true;
     };
 
+    const callNextPage = () => {
+        if (
+            params.page !== undefined &&
+            leaveRequests &&
+            params.page < leaveRequests.pageNumbers - 1
+        ) {
+            setParams({
+                ...params,
+                page: params.page || params.page === 0 ? params.page + 1 : 0,
+            });
+        }
+    };
     return (
         <View style={styles.innerContainer}>
             <View
@@ -79,7 +92,8 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
                 </Text>
                 {!loadingLeaveRequests && (
                     <LALeaveRequestList
-                        leaveRequests={leaveRequests}
+                        leaveRequests={leaveRequests?.leaveRequestData}
+                        callNextPage={callNextPage}
                         onPressRequestItem={handleRequestItemPress}
                         isViewAllPage
                     />
