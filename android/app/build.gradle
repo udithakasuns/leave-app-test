@@ -143,13 +143,8 @@ android {
         applicationId "com.rootcodelabs.leaveapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-<<<<<<< HEAD
-        versionCode 5
-        versionName "0.2.1"
-=======
         versionCode 6
         versionName "0.3.0"
->>>>>>> 8b515d56769054efd535232e7381f0a18375db93
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
