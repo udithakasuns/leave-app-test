@@ -3,7 +3,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { EmployeeHomeScreensProps } from 'navigators/types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { ScrollView, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { Button, ModalLoader, Spacer, Text } from 'src/components/atoms';
@@ -65,11 +65,15 @@ import {
     handleUndoCancellationSuccess,
 } from 'components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
 import { useFormik } from '../../utils/hooks/useFormik';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 const { scale } = theme;
 
 const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
+    const [bottomLayoutHeigt, setBottomLayoutHeight] = useState<number>(0);
+
+    const styles = useStyles({ bottomLayoutHeigt });
+
     const {
         user: { firstName },
     } = useUserStore();
@@ -273,7 +277,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         <View style={styles.innerContainer}>
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                style={styles.scrollContainer}>
+                contentContainerStyle={styles.scrollView}>
                 <LAAppBar currentScreen='employee' />
                 <Spacer />
                 <Text type='H1Bold'>
@@ -291,24 +295,19 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 <Spacer />
                 <Text type='SubHBold'>Leave Requests</Text>
                 {leaveRequests && leaveRequests.leaveRequestData && (
-                    <>
-                        <LALeaveRequestList
-                            leaveRequests={leaveRequests.leaveRequestData}
-                            onPressRequestItem={handleRequestItemPress}
-                            isViewAllPage={false}
-                        />
-                        <View
-                            style={{
-                                marginBottom:
-                                    scale.sc80 *
-                                    leaveRequests.leaveRequestData.length,
-                            }}
-                        />
-                    </>
+                    <LALeaveRequestList
+                        leaveRequests={leaveRequests.leaveRequestData}
+                        onPressRequestItem={handleRequestItemPress}
+                        isViewAllPage={false}
+                    />
                 )}
             </ScrollView>
             {managers && managers.length > 0 && (
-                <View style={styles.buttonContainer}>
+                <View
+                    onLayout={e =>
+                        setBottomLayoutHeight(e.nativeEvent.layout.height)
+                    }
+                    style={styles.buttonContainer}>
                     <Button
                         label='Apply Leave'
                         icon='arrow-forward'
