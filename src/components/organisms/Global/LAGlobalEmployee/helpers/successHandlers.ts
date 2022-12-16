@@ -99,19 +99,19 @@ export const handleNudgeSuccess = (
 };
 
 export const handleApplyMutationSuccess = (
-    setEmployeeModal: (
-        value: React.SetStateAction<Partial<ModalProps> | undefined>,
-    ) => void,
+    leaveRequest: LeaveRequestByID,
+    setEmployeeRequest: (leaveRequest: LeaveRequestByID) => void,
     setEmployeePopup: (
         value: React.SetStateAction<Partial<PopUpProps> | undefined>,
     ) => void,
     refetchAllData: () => void,
 ) => {
-    setEmployeeModal({
-        modalType: undefined,
-    });
-    setEmployeePopup({
-        modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
-    });
-    refetchAllData();
+    setEmployeeRequest(leaveRequest);
+    /* There should be a time out, Otherwise particular modals will not be opened correctly */
+    setTimeout(() => {
+        setEmployeePopup({
+            modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
+        });
+        refetchAllData();
+    }, 500);
 };

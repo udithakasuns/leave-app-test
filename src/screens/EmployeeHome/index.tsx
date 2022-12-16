@@ -6,7 +6,7 @@ import { EmployeeHomeScreensProps } from 'navigators/types';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { Button, Spacer, Text } from 'src/components/atoms';
+import { Button, ModalLoader, Spacer, Text } from 'src/components/atoms';
 import {
     LAAppBar,
     LAEmployeeModals,
@@ -18,7 +18,7 @@ import { LAEmployeeModalProps } from 'src/components/organisms/EmployeeHome/LAEm
 import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
 import {
     deleteHttpApplyLeave,
-    getHttpNudgeVisibility,
+    getHttpLeaveRequestByID,
     postHttpApplyLeave,
     postHttpNudge,
 } from 'src/services/http';
@@ -45,6 +45,7 @@ import {
     Entitlement,
     EntitlementSelection,
     FilterTypes,
+    LeaveRequestByID,
     LeaveRequestType,
     LeaveRequestWithPageType,
     LeaveUndoProp,
@@ -117,9 +118,26 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         ['applyLeave'],
         postHttpApplyLeave,
         {
-            onSuccess: (data: any) =>
+            onSuccess: (data: any) => {
+                leaveRequestByIdMutate(data[0].leaveRequestId);
+                setEmployeeModal({ modalType: undefined });
+            },
+
+            onError: handleApplyLeaveError,
+        },
+    );
+
+    const {
+        isLoading: isLeaveRequestByIdLoading,
+        mutate: leaveRequestByIdMutate,
+    } = useMutation(
+        ['leaveRequestById'],
+        (requestID: number) => getHttpLeaveRequestByID(requestID),
+        {
+            onSuccess: (leaveRequest: LeaveRequestByID[]) =>
                 handleApplyMutationSuccess(
-                    setEmployeeModal,
+                    leaveRequest[0],
+                    setEmployeeRequest,
                     setEmployeePopup,
                     refetchAllData,
                 ),
@@ -161,21 +179,6 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         {
             onSuccess: () =>
                 handleNudgeSuccess(setEmployeeModal, managers[0].name ?? ''),
-        },
-    );
-
-    const { mutate: nudgeVisibilityMutate } = useMutation(
-        ['nudgeVisibilityManger'],
-        getHttpNudgeVisibility,
-        {
-            onSuccess: (data: any) => {
-                const isAlreadyNudge = data[0].nudge;
-                setEmployeeModal({
-                    ...employeeModal,
-                    modalType: EmployeeModal.PENDING_LEAVE_MODAL,
-                    isNudgeVisble: !isAlreadyNudge,
-                });
-            },
         },
     );
 
@@ -319,6 +322,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     />
                 </View>
             )}
+
             <LAEmployeeModals
                 isNudgeVisble={employeeModal?.isNudgeVisble}
                 modalType={employeeModal?.modalType}
@@ -356,6 +360,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     // TODO:  Make API Call for Revoke Request
                 }}
             />
+
             <LAEmployeePopUp
                 modalType={employeePopup?.modalType}
                 onClose={() => setEmployeePopup(undefined)}
@@ -381,6 +386,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     undoCancellationMutate(values);
                 }}
             />
+
             {employeeModal?.modalType === undefined && (
                 <Toast
                     config={toastConfig}
@@ -389,6 +395,10 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     autoHide
                 />
             )}
+            <ModalLoader
+                isVisible={isLeaveRequestByIdLoading}
+                backdropOpacity={0.3}
+            />
         </View>
     );
 };

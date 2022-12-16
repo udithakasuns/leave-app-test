@@ -30,7 +30,6 @@ const AuthNavigator = () => {
             screenOptions={{
                 headerShown: false,
                 drawerType: 'front',
-                headerTitle: '',
             }}>
             <DrawerNav.Screen name='EmployeeHome' component={EmployeeHome} />
             <DrawerNav.Screen
