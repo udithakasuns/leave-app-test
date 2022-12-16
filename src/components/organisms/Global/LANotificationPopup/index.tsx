@@ -7,8 +7,8 @@ import {
 } from 'src/store';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
-import { Button } from 'src/components/atoms';
-import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { Button, Loader } from 'src/components/atoms';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getHttpNotifications } from 'src/services/http';
 import { NotificationPayload, NotificationVisibleType } from 'utils/types';
 import { AxiosError } from 'axios';
@@ -16,6 +16,7 @@ import { NotificationContent } from 'src/components/molecules';
 import { patchHttpViewNotification } from 'src/services/http/patchRequest';
 import { NotificationFilterHeader } from 'components/organisms';
 import { styles } from './styles';
+import LAEmptyError from '../LAEmptyError';
 
 const LANotificationPopup = () => {
     const navigation: any = useNavigation();
@@ -32,12 +33,9 @@ const LANotificationPopup = () => {
     const { getManagerModal } = useManagerStore();
     const { getEmployeeModal } = useEmployeeStore();
 
-    // 1st check the user is in Employee view or Manager View
-    // Then check the visible Type
-
     const {
+        isLoading,
         data,
-        error,
         refetch: onRefetch,
     }: UseQueryResult<NotificationPayload, AxiosError> = useQuery(
         ['notifications'],
@@ -60,15 +58,6 @@ const LANotificationPopup = () => {
         onClosePopup();
         navigation.navigate('NotificationViewAll');
     };
-
-    // const { mutate: onPressNotification } = useMutation(
-    //     ['nitificationView'],
-    //     patchHttpViewNotification,
-    //     {
-    //         onSuccess: () => console.log('Success'),
-    //         onError: console.log('On Error'),
-    //     },
-    // );
 
     const onPressNotification = async (
         notificationId: string,
@@ -126,6 +115,17 @@ const LANotificationPopup = () => {
                                     }
                                 />
                             )}
+                            ListHeaderComponent={
+                                <Loader isVisible={isLoading} />
+                            }
+                            ListEmptyComponent={
+                                !isLoading ? (
+                                    <LAEmptyError
+                                        title='No notifications'
+                                        subTitle='No new notifications available at the moment. When you get new notifications, they will show up here'
+                                    />
+                                ) : null
+                            }
                         />
                         <Button
                             mode='contained-gray'

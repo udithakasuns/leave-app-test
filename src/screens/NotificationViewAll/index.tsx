@@ -5,9 +5,10 @@ import {
 import { AxiosError } from 'axios';
 import React, { useState } from 'react';
 import { View, FlatList } from 'react-native';
-import { Spacer } from 'src/components/atoms';
+import { Loader, Spacer } from 'src/components/atoms';
 import { BackHeader, NotificationContent } from 'src/components/molecules';
 import { NotificationFilterHeader } from 'src/components/organisms';
+import LAEmptyError from 'src/components/organisms/Global/LAEmptyError';
 import { NotificationViewAllScreensProps } from 'src/navigators/types';
 import { getHttpNotifications } from 'src/services/http';
 import { patchHttpViewNotification } from 'src/services/http/patchRequest';
@@ -30,7 +31,9 @@ const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = ({
     const { notifyUserRole, getCount } = useNotificationStore();
 
     const {
+        isLoading,
         data,
+        isFetchingNextPage,
         fetchNextPage,
         hasNextPage,
         refetch,
@@ -111,6 +114,16 @@ const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = ({
                         }
                     />
                 )}
+                ListHeaderComponent={<Loader isVisible={isLoading} />}
+                ListEmptyComponent={
+                    !isLoading ? (
+                        <LAEmptyError
+                            title='No notifications'
+                            subTitle='No new notifications available at the moment. When you get new notifications, they will show up here'
+                        />
+                    ) : null
+                }
+                ListFooterComponent={<Loader isVisible={isFetchingNextPage} />}
             />
         </View>
     );
