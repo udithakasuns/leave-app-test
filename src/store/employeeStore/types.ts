@@ -1,6 +1,7 @@
 import { LeaveRequestByID } from 'utils/types';
 
 export type State = {
+    isEmployeeModalLoading: boolean;
     employeeRequest: LeaveRequestByID;
 };
 

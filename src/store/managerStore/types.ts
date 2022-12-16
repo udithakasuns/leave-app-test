@@ -1,6 +1,7 @@
 import { PendingRequestByID } from 'utils/types';
 
 export type State = {
+    isManagerModalLoading: boolean;
     managerRequest: PendingRequestByID;
 };
 

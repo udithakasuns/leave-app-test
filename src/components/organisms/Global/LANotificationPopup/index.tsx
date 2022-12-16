@@ -17,8 +17,6 @@ import { patchHttpViewNotification } from 'src/services/http/patchRequest';
 import { NotificationFilterHeader } from 'components/organisms';
 import { styles } from './styles';
 
-const TIMING = 300;
-
 const LANotificationPopup = () => {
     const navigation: any = useNavigation();
     const {
@@ -79,13 +77,12 @@ const LANotificationPopup = () => {
         await patchHttpViewNotification(notificationId);
         getCount(notifyUserRole);
         onClosePopup();
-        setTimeout(() => {
-            if (notifyUserRole === 'MANAGER') {
-                getManagerModal(resourceId);
-            } else if (notifyUserRole === 'EMPLOYEE') {
-                getEmployeeModal(resourceId);
-            }
-        }, TIMING);
+
+        if (notifyUserRole === 'MANAGER') {
+            getManagerModal(resourceId);
+        } else if (notifyUserRole === 'EMPLOYEE') {
+            getEmployeeModal(resourceId);
+        }
     };
 
     useEffect(() => {
@@ -100,8 +97,9 @@ const LANotificationPopup = () => {
             useNativeDriver
             style={styles.modal}
             isVisible={isPopupVisible}
-            animationOutTiming={TIMING}
-            animationInTiming={TIMING}>
+            animationOutTiming={1}
+            animationInTiming={300}
+            animationIn='fadeIn'>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
                     <NotificationFilterHeader
