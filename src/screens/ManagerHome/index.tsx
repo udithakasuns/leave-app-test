@@ -21,7 +21,7 @@ import {
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
 
-import { FilterTypes, PendingRequestType, Section } from 'src/utils/types';
+import { FilterTypes, PendingRequestType, Page } from 'src/utils/types';
 import { screenStyles } from 'utils/styles';
 
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
@@ -43,11 +43,15 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const {
         data: leaveRequests,
         refetch: refetchLeaveRequests,
-    }: UseQueryResult<Section<PendingRequestType[]>[]> = usePendingRequestData(
-        params,
-        true,
-        (data: Section<PendingRequestType[]>[]) => {
-            if (data?.length === 0 || data === undefined) {
+    }: UseQueryResult<Page<PendingRequestType[]>> = usePendingRequestData(
+        { ...params, size: 5 },
+        (data: Page<PendingRequestType[]>) => {
+            if (
+                data === undefined ||
+                data?.items === undefined ||
+                data?.items?.length === 0 ||
+                data === undefined
+            ) {
                 setEmptyFilterUtils();
             } else {
                 resetFilterUtils();
@@ -106,9 +110,10 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                 <Spacer />
                 <Text type='SubHBold'>Leave requests</Text>
                 <LAPendingRequestList
-                    leaveRequests={leaveRequests}
+                    leaveRequests={leaveRequests?.items}
                     onPressRequestItem={handleRequestItemPress}
                     isViewAllPage={false}
+                    totalItems={leaveRequests?.totalItems ?? 0}
                 />
             </ScrollView>
         </View>
