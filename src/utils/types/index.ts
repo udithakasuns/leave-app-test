@@ -209,6 +209,13 @@ export interface Section<T> {
     data: T;
 }
 
+export interface Page<T> {
+    currentPage: number;
+    totalItems: number;
+    totalPages: number;
+    items: T;
+}
+
 type RequestParams = {
     sortKey: 'creationDate' | 'startDate';
     page: number;

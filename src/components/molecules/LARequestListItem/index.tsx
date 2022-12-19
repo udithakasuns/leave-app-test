@@ -11,7 +11,7 @@ const { colors } = theme;
 interface Props extends Partial<TestProps> {
     date: string;
     entitlement: string;
-    status: StatusType;
+    status: StatusType | '';
     onPress: () => void;
     chipsColor: string;
 }

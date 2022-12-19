@@ -1,49 +1,38 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { useNavigation } from '@react-navigation/native';
-import { UseQueryResult } from '@tanstack/react-query';
+import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import {
     DrawerScreenNavigationProp,
     EmployeeViewAllScreensProps,
 } from 'navigators/types';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
 import { LALeaveRequestList } from 'src/components/organisms';
 import { useEmployeeFilterStore, useEmployeeStore } from 'src/store';
-import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
+import { useAllLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
 import theme from 'src/utils/theme';
-import { LeaveRequestType, LeaveRequestWithPageType } from 'src/utils/types';
-import { handleLeaveRequestSuccess } from '../../components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
+import { LeaveRequestType, Page } from 'src/utils/types';
 
 import { styles } from './styles';
 
-const { scale, pixel } = theme;
+const { scale, pixel, deviceDimensions } = theme;
 
 const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
     const navigation = useNavigation<DrawerScreenNavigationProp>();
-    const {
-        params,
-        resetFiltersParams,
-        setEmptyFilterUtils,
-        resetFilterUtils,
-        setParams,
-    } = useEmployeeFilterStore();
+    const { params, resetFiltersParams } = useEmployeeFilterStore();
 
     const { getEmployeeModal } = useEmployeeStore();
 
     const {
         data: leaveRequests,
-        isLoading: loadingLeaveRequests,
-    }: UseQueryResult<LeaveRequestWithPageType> = useLeaveRequestData(
-        { ...params, size: 200 },
-        false,
-        (data: LeaveRequestWithPageType) =>
-            handleLeaveRequestSuccess(
-                data,
-                setEmptyFilterUtils,
-                resetFilterUtils,
-            ),
-    );
+        fetchNextPage,
+        hasNextPage,
+        isInitialLoading,
+    }: UseInfiniteQueryResult<
+        Page<LeaveRequestType[]>
+    > = useAllLeaveRequestData(params);
 
     const handleRequestItemPress = (item: LeaveRequestType) => {
         getEmployeeModal(item.leaveRequestId);
@@ -56,15 +45,8 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
     };
 
     const callNextPage = () => {
-        if (
-            params.page !== undefined &&
-            leaveRequests &&
-            params.page < leaveRequests.pageNumbers - 1
-        ) {
-            setParams({
-                ...params,
-                page: params.page || params.page === 0 ? params.page + 1 : 0,
-            });
+        if (hasNextPage) {
+            fetchNextPage();
         }
     };
     return (
@@ -85,20 +67,32 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
                 <Spacer />
                 <Text>Home</Text>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <>
                 <Spacer />
                 <Text type='SubHBold' style={{ marginHorizontal: scale.sc5 }}>
                     Leave Requests
                 </Text>
-                {!loadingLeaveRequests && (
+                {!isInitialLoading && leaveRequests?.pages ? (
                     <LALeaveRequestList
-                        leaveRequests={leaveRequests?.leaveRequestData}
+                        leaveRequests={leaveRequests.pages
+                            .map(page => page.items)
+                            .flat()}
                         callNextPage={callNextPage}
                         onPressRequestItem={handleRequestItemPress}
                         isViewAllPage
                     />
+                ) : (
+                    <SkeletonPlaceholder borderRadius={4}>
+                        <SkeletonPlaceholder.Item
+                            flexDirection='row'
+                            alignItems='center'
+                            height={(4 * deviceDimensions.height) / 5}
+                            width='100%'
+                            marginVertical={scale.sc16}
+                        />
+                    </SkeletonPlaceholder>
                 )}
-            </ScrollView>
+            </>
         </View>
     );
 };
