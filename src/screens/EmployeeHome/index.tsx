@@ -2,9 +2,14 @@
 import { useIsFocused } from '@react-navigation/native';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import {
+    handleAlreadyNudgeError,
+    handleApplyLeaveError,
+} from 'components/organisms/Global/LAGlobalEmployee/helpers/errorHandlers';
 import { EmployeeHomeScreensProps } from 'navigators/types';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import Toast from 'react-native-toast-message';
 import { Button, ModalLoader, Spacer, Text } from 'src/components/atoms';
 import {
@@ -46,13 +51,9 @@ import {
     FilterTypes,
     LeaveRequestByID,
     LeaveRequestType,
-    LeaveRequestWithPageType,
     LeaveUndoProp,
+    Page,
 } from 'src/utils/types';
-import {
-    handleAlreadyNudgeError,
-    handleApplyLeaveError,
-} from 'components/organisms/Global/LAGlobalEmployee/helpers/errorHandlers';
 
 import { handleDateModal } from 'components/organisms/Global/LAGlobalEmployee/helpers/modalHandlers';
 import {
@@ -65,8 +66,11 @@ import {
 } from 'components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
 import { screenStyles } from 'utils/styles';
 import { useFormik } from '../../utils/hooks/useFormik';
+
+import theme from '../../utils/theme';
 import { useStyles } from './styles';
 
+const { scale, deviceDimensions } = theme;
 const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [bottomLayoutHeigt, setBottomLayoutHeight] = useState<number>(0);
 
@@ -105,10 +109,9 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const {
         data: leaveRequests,
         refetch,
-    }: UseQueryResult<LeaveRequestWithPageType> = useLeaveRequestData(
-        params,
-        true,
-        (data: LeaveRequestWithPageType) =>
+    }: UseQueryResult<Page<LeaveRequestType[]>> = useLeaveRequestData(
+        { ...params, size: 5 },
+        (data: Page<LeaveRequestType[]>) =>
             handleLeaveRequestSuccess(
                 data,
                 setEmptyFilterUtils,
@@ -298,12 +301,30 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     )}
                     <Spacer />
                     <Text type='SubHBold'>Leave Requests</Text>
-                    {leaveRequests && leaveRequests.leaveRequestData && (
-                        <LALeaveRequestList
-                            leaveRequests={leaveRequests.leaveRequestData}
-                            onPressRequestItem={handleRequestItemPress}
-                            isViewAllPage={false}
-                        />
+                    {leaveRequests && leaveRequests.items ? (
+                        <>
+                            <LALeaveRequestList
+                                leaveRequests={leaveRequests.items}
+                                onPressRequestItem={handleRequestItemPress}
+                                isViewAllPage={false}
+                                totalItems={leaveRequests.totalItems ?? 0}
+                            />
+                            <View
+                                style={{
+                                    marginBottom:
+                                        scale.sc80 * leaveRequests.items.length,
+                                }}
+                            />
+                        </>
+                    ) : (
+                        <SkeletonPlaceholder borderRadius={4}>
+                            <SkeletonPlaceholder.Item
+                                flexDirection='row'
+                                alignItems='center'
+                                height={deviceDimensions.height / 2}
+                                width='100%'
+                            />
+                        </SkeletonPlaceholder>
                     )}
                 </ScrollView>
                 {managers && managers.length > 0 && (

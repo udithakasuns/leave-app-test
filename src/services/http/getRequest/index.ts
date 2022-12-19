@@ -30,7 +30,7 @@ export const getHttpLeaveRequest = async (
     params?: Partial<LeaveRequestParams>,
 ) => {
     const res = await axiosInstance.get('/v1/leaves', { params });
-    return res.data.results;
+    return res.data.results[0];
 };
 
 export const getHttpLeaveRequestByID = async (requestID: number) => {
@@ -42,7 +42,7 @@ export const getHttpPendingRequest = async (
     params?: Partial<LeaveRequestParams>,
 ) => {
     const res = await axiosInstance.get('/v1/managers/leaves', { params });
-    return res.data.results;
+    return res.data.results[0];
 };
 
 export const getHttpPendingRequestByID = async (requestID: number) => {

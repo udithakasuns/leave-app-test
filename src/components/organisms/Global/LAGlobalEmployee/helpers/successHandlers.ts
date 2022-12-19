@@ -9,7 +9,8 @@ import {
     FilterChipsProps,
     FilterTypes,
     LeaveRequestByID,
-    LeaveRequestWithPageType,
+    LeaveRequestType,
+    Page,
 } from 'src/utils/types';
 
 export const handleFilterTypesSuccess = (
@@ -35,14 +36,11 @@ export const handleFilterTypesSuccess = (
 };
 
 export const handleLeaveRequestSuccess = (
-    data: LeaveRequestWithPageType,
+    data: Page<LeaveRequestType[]>,
     setEmptyFilterUtils: () => void,
     resetFilterUtils: () => void,
 ) => {
-    if (
-        data?.leaveRequestData === undefined ||
-        data?.leaveRequestData?.length === 0
-    ) {
+    if (data.items === undefined || data.items.length === 0) {
         setEmptyFilterUtils();
     } else {
         resetFilterUtils();
