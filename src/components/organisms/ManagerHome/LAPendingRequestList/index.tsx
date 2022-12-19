@@ -119,7 +119,6 @@ const LAPendingRequestList = ({
                         </View>
                     </View>
                 }
-                contentContainerStyle={{ paddingBottom: scale.vsc150 }}
                 keyExtractor={(item, index) => item.status + index}
                 onEndReachedThreshold={0.3}
                 onEndReached={() => {

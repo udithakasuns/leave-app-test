@@ -311,20 +311,12 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     <Spacer />
                     <Text type='SubHBold'>Leave Requests</Text>
                     {leaveRequests && leaveRequests.items ? (
-                        <>
-                            <LALeaveRequestList
-                                leaveRequests={leaveRequests.items}
-                                onPressRequestItem={handleRequestItemPress}
-                                isViewAllPage={false}
-                                totalItems={leaveRequests.totalItems ?? 0}
-                            />
-                            <View
-                                style={{
-                                    marginBottom:
-                                        scale.sc80 * leaveRequests.items.length,
-                                }}
-                            />
-                        </>
+                        <LALeaveRequestList
+                            leaveRequests={leaveRequests.items}
+                            onPressRequestItem={handleRequestItemPress}
+                            isViewAllPage={false}
+                            totalItems={leaveRequests.totalItems ?? 0}
+                        />
                     ) : (
                         <SkeletonPlaceholder borderRadius={4}>
                             <SkeletonPlaceholder.Item
