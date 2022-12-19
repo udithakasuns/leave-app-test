@@ -61,6 +61,7 @@ const LAGlobalEmployee = () => {
         setEmployeeRequest,
         getEmployeeModal,
         isEmployeeModalLoading,
+        setRefreshEmployeeHomeState,
     } = useEmployeeStore();
 
     const { managers } = useRecipientStore();
@@ -192,6 +193,11 @@ const LAGlobalEmployee = () => {
         }
     }, [isEmployeeModalLoading]);
 
+    const onClosePopup = () => {
+        setRefreshEmployeeHomeState(true);
+        setEmployeePopup(undefined);
+    };
+
     if (isEmployeeModalLoading) {
         return <ModalLoader />;
     }
@@ -237,14 +243,14 @@ const LAGlobalEmployee = () => {
             />
             <LAEmployeePopUp
                 modalType={employeePopup?.modalType}
-                onClose={() => setEmployeePopup(undefined)}
+                onClose={onClosePopup}
                 requestDetails={employeePopup?.requestDetails}
                 onConfirmationUndoPress={() => {
-                    setEmployeePopup(undefined);
+                    onClosePopup();
                     deleteMutate(employeeRequest.leaveRequestId);
                 }}
                 onConfirmationHomePress={() => {
-                    setEmployeePopup(undefined);
+                    onClosePopup();
                     refetch();
                 }}
                 onCancellationUndoPress={() => {
@@ -255,6 +261,7 @@ const LAGlobalEmployee = () => {
                         leaveRequestStatus: 'PENDING',
                     };
                     setEmployeePopup({ modalType: undefined });
+                    setRefreshEmployeeHomeState(true);
                     undoCancellationMutate(values);
                 }}
             />

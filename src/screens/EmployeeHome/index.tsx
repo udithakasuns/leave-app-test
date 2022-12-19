@@ -91,8 +91,13 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
     const [employeePopup, setEmployeePopup] = useState<LAEmployeePopUpProps>();
 
-    const { employeeRequest, setEmployeeRequest, getEmployeeModal } =
-        useEmployeeStore();
+    const {
+        employeeRequest,
+        setEmployeeRequest,
+        getEmployeeModal,
+        refreshEmployeeHomeState,
+        setRefreshEmployeeHomeState,
+    } = useEmployeeStore();
 
     const isFocused = useIsFocused();
 
@@ -267,12 +272,16 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     useEffect(() => {
-        if (isFocused) {
+        if (isFocused || refreshEmployeeHomeState) {
             setSortByButtons(sortByButtonsEmployee);
             setFilterChips(filterChipsEmployee);
             refetchAllData();
+
+            if (refreshEmployeeHomeState) {
+                setRefreshEmployeeHomeState(false);
+            }
         }
-    }, [isFocused]);
+    }, [isFocused, refreshEmployeeHomeState]);
 
     return (
         <View style={styles.container}>
@@ -302,20 +311,12 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     <Spacer />
                     <Text type='SubHBold'>Leave Requests</Text>
                     {leaveRequests && leaveRequests.items ? (
-                        <>
-                            <LALeaveRequestList
-                                leaveRequests={leaveRequests.items}
-                                onPressRequestItem={handleRequestItemPress}
-                                isViewAllPage={false}
-                                totalItems={leaveRequests.totalItems ?? 0}
-                            />
-                            <View
-                                style={{
-                                    marginBottom:
-                                        scale.sc80 * leaveRequests.items.length,
-                                }}
-                            />
-                        </>
+                        <LALeaveRequestList
+                            leaveRequests={leaveRequests.items}
+                            onPressRequestItem={handleRequestItemPress}
+                            isViewAllPage={false}
+                            totalItems={leaveRequests.totalItems ?? 0}
+                        />
                     ) : (
                         <SkeletonPlaceholder borderRadius={4}>
                             <SkeletonPlaceholder.Item

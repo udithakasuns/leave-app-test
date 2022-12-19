@@ -4,6 +4,7 @@ import { getHttpLeaveRequestByID } from '../../services/http/getRequest/index';
 import { Actions, State } from './types';
 
 const initialState: State = {
+    refreshEmployeeHomeState: false,
     isEmployeeModalLoading: false,
     employeeRequest: {
         leaveRequestId: 0,
@@ -35,6 +36,8 @@ const initialState: State = {
 
 const employeeStore = create<State & Actions>(set => ({
     ...initialState,
+    setRefreshEmployeeHomeState: refreshEmployeeHomeState =>
+        set(() => ({ refreshEmployeeHomeState })),
     getEmployeeModal: async (requestID: number) => {
         set({
             isEmployeeModalLoading: true,

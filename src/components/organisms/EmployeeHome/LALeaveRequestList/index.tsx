@@ -128,9 +128,6 @@ const LALeaveRequestList = ({
                         </View>
                     </View>
                 }
-                contentContainerStyle={{
-                    paddingBottom: !isViewAllPage ? scale.vsc150 : undefined,
-                }}
                 keyExtractor={(item, index) => item.status + index}
                 renderItem={({ item }) => <Item item={item} />}
                 onEndReachedThreshold={0.3}
