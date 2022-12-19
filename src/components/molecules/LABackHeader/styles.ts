@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
+        paddingBottom: scale.sc10,
     },
     backIconContainer: {
         backgroundColor: colors.gray300,

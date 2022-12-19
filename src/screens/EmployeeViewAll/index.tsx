@@ -8,16 +8,16 @@ import {
 import React from 'react';
 import { View } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
+import { Spacer, Text } from 'src/components/atoms';
+import { BackHeader } from 'src/components/molecules';
 import { LALeaveRequestList } from 'src/components/organisms';
 import { useEmployeeFilterStore, useEmployeeStore } from 'src/store';
 import { useAllLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
 import theme from 'src/utils/theme';
 import { LeaveRequestType, Page } from 'src/utils/types';
+import { screenStyles } from 'utils/styles';
 
-import { styles } from './styles';
-
-const { scale, pixel, deviceDimensions } = theme;
+const { scale, deviceDimensions } = theme;
 
 const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
     const navigation = useNavigation<DrawerScreenNavigationProp>();
@@ -50,23 +50,8 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         }
     };
     return (
-        <View style={styles.innerContainer}>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: pixel(8),
-                }}>
-                <Icon
-                    name='arrow-back'
-                    enableBackground
-                    size={IconSize.medium}
-                    increasePadding={1}
-                    onPress={backAction}
-                />
-                <Spacer />
-                <Text>Home</Text>
-            </View>
+        <View style={screenStyles.container}>
+            <BackHeader title='Home' onBackPress={backAction} />
             <>
                 <Spacer />
                 <Text type='SubHBold' style={{ marginHorizontal: scale.sc5 }}>

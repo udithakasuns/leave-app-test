@@ -3,6 +3,7 @@ import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
+import { ModalLoader } from 'src/components/atoms';
 import { LAEmployeeModals, LAEmployeePopUp } from 'src/components/organisms';
 import { LAEmployeeModalProps } from 'src/components/organisms/EmployeeHome/LAEmployeeModals';
 import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
@@ -25,6 +26,7 @@ import {
     EmployeeModal,
     FilterTypes,
     LeaveRequestType,
+    LeaveRequestWithPageType,
     LeaveUndoProp,
     Section,
 } from 'src/utils/types';
@@ -54,8 +56,12 @@ const LAGlobalEmployee = () => {
         resetFilterUtils,
     } = useEmployeeFilterStore();
 
-    const { employeeRequest, setEmployeeRequest, getEmployeeModal } =
-        useEmployeeStore();
+    const {
+        employeeRequest,
+        setEmployeeRequest,
+        getEmployeeModal,
+        isEmployeeModalLoading,
+    } = useEmployeeStore();
 
     const { managers } = useRecipientStore();
 
@@ -67,17 +73,19 @@ const LAGlobalEmployee = () => {
             handleFilterTypesSuccess(data, filterChips, setFilterChips),
     );
 
-    const { refetch }: UseQueryResult<Section<LeaveRequestType[]>[]> =
-        useLeaveRequestData(
-            params,
-            true,
-            (data: Section<LeaveRequestType[]>[]) =>
-                handleLeaveRequestSuccess(
-                    data,
-                    setEmptyFilterUtils,
-                    resetFilterUtils,
-                ),
-        );
+    const {
+        // data: leaveRequests,
+        refetch,
+    }: UseQueryResult<LeaveRequestWithPageType> = useLeaveRequestData(
+        params,
+        true,
+        (data: LeaveRequestWithPageType) =>
+            handleLeaveRequestSuccess(
+                data,
+                setEmptyFilterUtils,
+                resetFilterUtils,
+            ),
+    );
 
     const { mutate: undoCancellationMutate } = useMutation(
         ['undoCancellation'],
@@ -179,8 +187,14 @@ const LAGlobalEmployee = () => {
     };
 
     useEffect(() => {
-        onOpenModal();
-    }, [employeeRequest.leaveRequestId]);
+        if (isEmployeeModalLoading) {
+            onOpenModal();
+        }
+    }, [isEmployeeModalLoading]);
+
+    if (isEmployeeModalLoading) {
+        return <ModalLoader />;
+    }
 
     return (
         <>

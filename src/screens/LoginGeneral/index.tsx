@@ -3,13 +3,14 @@ import { View, ScrollView, TextInput } from 'react-native';
 import { Button, Input, Spacer, Text } from 'src/components/atoms';
 import Header from 'src/components/organisms/Login/Header';
 import { awsOnGeneralSignIn } from 'src/services/aws';
-import { usePersistStore } from 'src/store';
+import { usePersistStore, useUserStore } from 'src/store';
 import theme from 'src/utils/theme';
 import { styles } from './styles';
 
 const { colors } = theme;
 
 const LoginGeneral = () => {
+    const { setAuthLoading } = useUserStore();
     const { setAuthType } = usePersistStore();
     const passwordRef: LegacyRef<TextInput> = createRef();
     const [email, setEmail] = useState<string>('test_mobile_user');
@@ -24,6 +25,7 @@ const LoginGeneral = () => {
     };
 
     const onLogin = () => {
+        setAuthLoading(true);
         setAuthType('general');
         awsOnGeneralSignIn(email, password);
     };

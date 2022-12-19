@@ -1,7 +1,9 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
+import Loading from 'src/screens/Loading';
 import LoginSocial from 'src/screens/LoginSocial';
 // import LoginGeneral from 'screens/LoginGeneral';
 import { useAuthentication } from 'src/utils/hooks/useAuthentication';
@@ -14,7 +16,7 @@ const StackNav = createNativeStackNavigator<RootScreensParamsList>();
 
 /* Root navigator contains the screens before authentication */
 const RootNavigator = () => {
-    const { isAuthenticated } = useAuthentication();
+    const { isAuthLoading, isAuthenticated } = useAuthentication();
     useNotifications({ isAuthenticated });
 
     return (
@@ -26,7 +28,9 @@ const RootNavigator = () => {
                 screenOptions={{
                     headerShown: false,
                 }}>
-                {isAuthenticated ? (
+                {isAuthLoading ? (
+                    <StackNav.Screen name='Loading' component={Loading} />
+                ) : isAuthenticated ? (
                     <StackNav.Screen name='Auth' component={AuthNavigator} />
                 ) : (
                     <StackNav.Screen name='Login' component={LoginSocial} />

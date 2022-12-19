@@ -4,6 +4,7 @@ import create from 'zustand';
 import { Actions, State } from './types';
 
 const initialState: State = {
+    isManagerModalLoading: false,
     managerRequest: {
         leaveRequestId: 0,
         startDate: '',
@@ -35,15 +36,20 @@ const initialState: State = {
 const managerStore = create<State & Actions>(set => ({
     ...initialState,
     getManagerModal: async (requestID: number) => {
-        const res = await getHttpPendingRequestByID(requestID);
-        const employee: PendingRequestByID = res[0];
-        set(state => ({
-            ...state,
-            managerRequest: {
-                ...state.managerRequest,
-                ...employee,
-            },
-        }));
+        set({ isManagerModalLoading: true });
+        try {
+            const res = await getHttpPendingRequestByID(requestID);
+            const employee: PendingRequestByID = res[0];
+            set(state => ({
+                managerRequest: {
+                    ...state.managerRequest,
+                    ...employee,
+                },
+                isManagerModalLoading: false,
+            }));
+        } catch (err) {
+            set({ isManagerModalLoading: false });
+        }
     },
     setManagerRequest: managerRequest => {
         set(state => ({
