@@ -1,8 +1,8 @@
 import React from 'react';
-import { ActivityIndicator } from 'react-native';
-import Modal from 'react-native-modal';
+import { View, ActivityIndicator } from 'react-native';
 import theme from 'src/utils/theme';
 import { PartialBy } from 'src/utils/types';
+import { useStyles } from './styles';
 
 const { colors } = theme;
 
@@ -18,15 +18,11 @@ const LAModalLoder = ({
     if (!isVisible) {
         return null;
     }
+    const styles = useStyles({ opacity: backdropOpacity });
     return (
-        <Modal
-            useNativeDriver
-            backdropOpacity={backdropOpacity}
-            isVisible={isVisible}
-            animationOutTiming={1}
-            animationOut='fadeOut'>
+        <View style={styles.container}>
             <ActivityIndicator size='large' color={colors.primaryColor} />
-        </Modal>
+        </View>
     );
 };
 

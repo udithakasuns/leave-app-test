@@ -11,9 +11,8 @@ const BUTTON_LAYER_BOTTOM = scale.sc20;
 
 export const useStyles = ({ bottomLayoutHeigt }: Props) =>
     StyleSheet.create({
-        innerContainer: {
-            paddingHorizontal: scale.sc20,
-            backgroundColor: 'white',
+        container: {
+            flex: 1,
         },
         buttonContainer: {
             position: 'absolute',
@@ -22,7 +21,6 @@ export const useStyles = ({ bottomLayoutHeigt }: Props) =>
             bottom: BUTTON_LAYER_BOTTOM,
         },
         scrollView: {
-            flexGrow: 1,
             paddingBottom: bottomLayoutHeigt + BUTTON_LAYER_BOTTOM * 2,
         },
     });

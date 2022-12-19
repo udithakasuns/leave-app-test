@@ -7,17 +7,17 @@ import {
 } from 'navigators/types';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
+import { Spacer, Text } from 'src/components/atoms';
+import { BackHeader } from 'src/components/molecules';
 import { LALeaveRequestList } from 'src/components/organisms';
 import { useEmployeeFilterStore, useEmployeeStore } from 'src/store';
 import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
 import theme from 'src/utils/theme';
 import { LeaveRequestType, LeaveRequestWithPageType } from 'src/utils/types';
+import { screenStyles } from 'utils/styles';
 import { handleLeaveRequestSuccess } from '../../components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
 
-import { styles } from './styles';
-
-const { scale, pixel } = theme;
+const { scale } = theme;
 
 const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
     const navigation = useNavigation<DrawerScreenNavigationProp>();
@@ -68,23 +68,8 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         }
     };
     return (
-        <View style={styles.innerContainer}>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: pixel(8),
-                }}>
-                <Icon
-                    name='arrow-back'
-                    enableBackground
-                    size={IconSize.medium}
-                    increasePadding={1}
-                    onPress={backAction}
-                />
-                <Spacer />
-                <Text>Home</Text>
-            </View>
+        <View style={screenStyles.container}>
+            <BackHeader title='Home' onBackPress={backAction} />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Spacer />
                 <Text type='SubHBold' style={{ marginHorizontal: scale.sc5 }}>

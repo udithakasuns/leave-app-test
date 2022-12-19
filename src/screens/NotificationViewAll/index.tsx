@@ -18,7 +18,7 @@ import {
     useNotificationStore,
 } from 'src/store';
 import { NotificationPayload, NotificationVisibleType } from 'src/utils/types';
-import { styles } from './styles';
+import { screenStyles } from 'utils/styles';
 
 const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = ({
     navigation,
@@ -86,7 +86,7 @@ const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = ({
     };
 
     return (
-        <View style={styles.container}>
+        <View style={screenStyles.container}>
             <BackHeader title='Home' onBackPress={onBackPress} />
             <Spacer />
             <NotificationFilterHeader

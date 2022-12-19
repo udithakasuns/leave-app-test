@@ -108,10 +108,8 @@ export const handleApplyMutationSuccess = (
 ) => {
     setEmployeeRequest(leaveRequest);
     /* There should be a time out, Otherwise particular modals will not be opened correctly */
-    setTimeout(() => {
-        setEmployeePopup({
-            modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
-        });
-        refetchAllData();
-    }, 500);
+    setEmployeePopup({
+        modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
+    });
+    refetchAllData();
 };

@@ -3,7 +3,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { EmployeeHomeScreensProps } from 'navigators/types';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { Button, ModalLoader, Spacer, Text } from 'src/components/atoms';
@@ -39,7 +39,6 @@ import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import { useEntitlementData } from 'src/utils/hooks/useEntitlementData';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
-import theme from 'src/utils/theme';
 import {
     EmployeeModal,
     Entitlement,
@@ -64,10 +63,9 @@ import {
     handleNudgeSuccess,
     handleUndoCancellationSuccess,
 } from 'components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
+import { screenStyles } from 'utils/styles';
 import { useFormik } from '../../utils/hooks/useFormik';
 import { useStyles } from './styles';
-
-const { scale } = theme;
 
 const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [bottomLayoutHeigt, setBottomLayoutHeight] = useState<number>(0);
@@ -274,129 +272,136 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     }, [isFocused]);
 
     return (
-        <View style={styles.innerContainer}>
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.scrollView}>
-                <LAAppBar currentScreen='employee' />
-                <Spacer />
-                <Text type='H1Bold'>
-                    Hey {firstName} {'\n'}
-                    {getGreetingsByTime()}
-                </Text>
-                <Spacer height={5} />
-                {entitlements && (
-                    <LAEntitlementGrid
-                        entitlements={entitlements as EntitlementSelection[]}
-                        onEntitlementPress={handleEntitlementPress}
-                        isError={false}
-                    />
-                )}
-                <Spacer />
-                <Text type='SubHBold'>Leave Requests</Text>
-                {leaveRequests && leaveRequests.leaveRequestData && (
-                    <LALeaveRequestList
-                        leaveRequests={leaveRequests.leaveRequestData}
-                        onPressRequestItem={handleRequestItemPress}
-                        isViewAllPage={false}
-                    />
-                )}
-            </ScrollView>
-            {managers && managers.length > 0 && (
-                <View
-                    onLayout={e =>
-                        setBottomLayoutHeight(e.nativeEvent.layout.height)
-                    }
-                    style={styles.buttonContainer}>
-                    <Button
-                        label='Apply Leave'
-                        icon='arrow-forward'
-                        iconPosition='left'
-                        onPress={() =>
-                            setEmployeeModal({
-                                ...employeeModal,
-                                modalType: EmployeeModal.APPLY_LEAVE_MODAL,
-                            })
+        <View style={styles.container}>
+            <View style={screenStyles.containerScollable}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={[
+                        screenStyles.scrollViewContainer,
+                        styles.scrollView,
+                    ]}>
+                    <LAAppBar currentScreen='employee' />
+                    <Spacer />
+                    <Text type='H1Bold'>
+                        Hey {firstName} {'\n'}
+                        {getGreetingsByTime()}
+                    </Text>
+                    <Spacer height={5} />
+                    {entitlements && (
+                        <LAEntitlementGrid
+                            entitlements={
+                                entitlements as EntitlementSelection[]
+                            }
+                            onEntitlementPress={handleEntitlementPress}
+                            isError={false}
+                        />
+                    )}
+                    <Spacer />
+                    <Text type='SubHBold'>Leave Requests</Text>
+                    {leaveRequests && leaveRequests.leaveRequestData && (
+                        <LALeaveRequestList
+                            leaveRequests={leaveRequests.leaveRequestData}
+                            onPressRequestItem={handleRequestItemPress}
+                            isViewAllPage={false}
+                        />
+                    )}
+                </ScrollView>
+                {managers && managers.length > 0 && (
+                    <View
+                        onLayout={e =>
+                            setBottomLayoutHeight(e.nativeEvent.layout.height)
                         }
-                    />
-                </View>
-            )}
+                        style={styles.buttonContainer}>
+                        <Button
+                            label='Apply Leave'
+                            icon='arrow-forward'
+                            iconPosition='left'
+                            onPress={() =>
+                                setEmployeeModal({
+                                    ...employeeModal,
+                                    modalType: EmployeeModal.APPLY_LEAVE_MODAL,
+                                })
+                            }
+                        />
+                    </View>
+                )}
 
-            <LAEmployeeModals
-                isNudgeVisble={employeeModal?.isNudgeVisble}
-                modalType={employeeModal?.modalType}
-                onBackPressType={employeeModal?.onBackPressType}
-                onClose={() => setEmployeeModal(undefined)}
-                formik={formik}
-                onPressSelectDate={handleDateModalPress}
-                onBackPress={handleDateModalBackPress}
-                onPressNudge={handleNudgeManager}
-                onPressLeaveInformation={handleViewMoreDetails}
-                onPressCancelLeave={() => {
-                    setEmployeeModal({
-                        ...employeeModal,
-                        modalType: undefined,
-                    });
-                    deleteMutate(employeeRequest.leaveRequestId);
-                }}
-                onNavigateToCancelLeave={() => {
-                    setEmployeeModal({
-                        ...employeeModal,
-                        modalType: EmployeeModal.CANCEL_REQUEST_MODAL,
-                    });
-                }}
-                onPressRevokeLeave={() => {
-                    setEmployeeModal({
-                        ...employeeModal,
-                        modalType: EmployeeModal.REVOKE_REQUEST_MODAL,
-                    });
-                }}
-                onRevokeLeaveRequest={(revokeComment: string) => {
-                    setEmployeeModal({
-                        ...employeeModal,
-                        modalType: undefined,
-                    });
-                    // TODO:  Make API Call for Revoke Request
-                }}
-            />
-
-            <LAEmployeePopUp
-                modalType={employeePopup?.modalType}
-                onClose={() => setEmployeePopup(undefined)}
-                requestDetails={employeePopup?.requestDetails}
-                onConfirmationUndoPress={() => {
-                    setEmployeePopup(undefined);
-                    deleteMutate(employeeRequest.leaveRequestId);
-                }}
-                onConfirmationHomePress={() => {
-                    setEmployeePopup(undefined);
-                    formik.resetForm();
-                    formik.setFieldValue('entitlements', entitlements);
-                    refetch();
-                }}
-                onCancellationUndoPress={() => {
-                    const values: Partial<LeaveUndoProp> = {
-                        requestID: employeeRequest.leaveRequestId,
-                        startDate: employeeRequest?.startDate,
-                        endDate: employeeRequest?.endDate,
-                        leaveRequestStatus: 'PENDING',
-                    };
-                    setEmployeePopup({ modalType: undefined });
-                    undoCancellationMutate(values);
-                }}
-            />
-
-            {employeeModal?.modalType === undefined && (
-                <Toast
-                    config={toastConfig}
-                    position='bottom'
-                    bottomOffset={30}
-                    autoHide
+                <LAEmployeeModals
+                    isNudgeVisble={employeeModal?.isNudgeVisble}
+                    modalType={employeeModal?.modalType}
+                    onBackPressType={employeeModal?.onBackPressType}
+                    onClose={() => setEmployeeModal(undefined)}
+                    formik={formik}
+                    onPressSelectDate={handleDateModalPress}
+                    onBackPress={handleDateModalBackPress}
+                    onPressNudge={handleNudgeManager}
+                    onPressLeaveInformation={handleViewMoreDetails}
+                    onPressCancelLeave={() => {
+                        setEmployeeModal({
+                            ...employeeModal,
+                            modalType: undefined,
+                        });
+                        deleteMutate(employeeRequest.leaveRequestId);
+                    }}
+                    onNavigateToCancelLeave={() => {
+                        setEmployeeModal({
+                            ...employeeModal,
+                            modalType: EmployeeModal.CANCEL_REQUEST_MODAL,
+                        });
+                    }}
+                    onPressRevokeLeave={() => {
+                        setEmployeeModal({
+                            ...employeeModal,
+                            modalType: EmployeeModal.REVOKE_REQUEST_MODAL,
+                        });
+                    }}
+                    onRevokeLeaveRequest={(revokeComment: string) => {
+                        setEmployeeModal({
+                            ...employeeModal,
+                            modalType: undefined,
+                        });
+                        // TODO:  Make API Call for Revoke Request
+                    }}
                 />
-            )}
+
+                <LAEmployeePopUp
+                    modalType={employeePopup?.modalType}
+                    onClose={() => setEmployeePopup(undefined)}
+                    requestDetails={employeePopup?.requestDetails}
+                    onConfirmationUndoPress={() => {
+                        setEmployeePopup(undefined);
+                        deleteMutate(employeeRequest.leaveRequestId);
+                    }}
+                    onConfirmationHomePress={() => {
+                        setEmployeePopup(undefined);
+                        formik.resetForm();
+                        formik.setFieldValue('entitlements', entitlements);
+                        refetch();
+                    }}
+                    onCancellationUndoPress={() => {
+                        const values: Partial<LeaveUndoProp> = {
+                            requestID: employeeRequest.leaveRequestId,
+                            startDate: employeeRequest?.startDate,
+                            endDate: employeeRequest?.endDate,
+                            leaveRequestStatus: 'PENDING',
+                        };
+                        setEmployeePopup({ modalType: undefined });
+                        undoCancellationMutate(values);
+                    }}
+                />
+
+                {employeeModal?.modalType === undefined && (
+                    <Toast
+                        config={toastConfig}
+                        position='bottom'
+                        bottomOffset={30}
+                        autoHide
+                    />
+                )}
+            </View>
             <ModalLoader
                 isVisible={isLeaveRequestByIdLoading}
-                backdropOpacity={0.3}
+                backdropOpacity={0.7}
             />
         </View>
     );
