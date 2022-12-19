@@ -11,14 +11,14 @@ export type AuthScreensParamList = {
 };
 
 export type RootScreensParamsList = {
-    Splash: undefined;
+    Loading: undefined;
     Login: undefined;
     Auth: NavigatorScreenParams<AuthScreensParamList>;
 };
 
-export type SplashScreenProps = NativeStackScreenProps<
+export type LoadingScreenProps = NativeStackScreenProps<
     RootScreensParamsList,
-    'Splash'
+    'Loading'
 >;
 
 export type LoginScreenProps = NativeStackScreenProps<

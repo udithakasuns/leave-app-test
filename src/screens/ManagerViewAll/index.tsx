@@ -5,23 +5,17 @@ import {
     ManagerViewAllScreensProps,
 } from 'navigators/types';
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
+import { ScrollView, View } from 'react-native';
+import { Spacer, Text } from 'src/components/atoms';
+import { BackHeader } from 'src/components/molecules';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
 import { useManagerFilterStore, useManagerStore } from 'src/store';
 import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
 import theme from 'src/utils/theme';
 import { PendingRequestType, Section } from 'src/utils/types';
+import { screenStyles } from 'utils/styles';
 
-const { scale, pixel } = theme;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingHorizontal: scale.sc20,
-        backgroundColor: 'white',
-    },
-});
+const { scale } = theme;
 
 const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
     const navigation = useNavigation<DrawerScreenNavigationProp>();
@@ -59,23 +53,8 @@ const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: pixel(8),
-                }}>
-                <Icon
-                    name='arrow-back'
-                    enableBackground
-                    size={IconSize.medium}
-                    increasePadding={1}
-                    onPress={backAction}
-                />
-                <Spacer />
-                <Text>Home</Text>
-            </View>
+        <View style={screenStyles.container}>
+            <BackHeader title='Home' onBackPress={backAction} />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Spacer />
                 <Text type='H1Bold' style={{ marginHorizontal: scale.sc5 }}>

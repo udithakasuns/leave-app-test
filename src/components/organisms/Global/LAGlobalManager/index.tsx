@@ -15,6 +15,7 @@ import { AxiosError } from 'axios';
 import { MultiChipProps } from 'src/components/molecules';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { patchHttpManagerLeave } from 'src/services/http/patchRequest';
+import { ModalLoader } from 'src/components/atoms';
 import LAManagerModals, {
     LAManagerModalProps,
 } from '../../ManagerHome/LAManagerModals';
@@ -25,7 +26,8 @@ import LAManagerPopUp, {
 const LAGlobalManager = () => {
     const [managerModal, setManagerModal] = useState<LAManagerModalProps>();
     const [managerPopup, setManagerPopup] = useState<LAManagerPopUpProps>();
-    const { managerRequest, setManagerRequest } = useManagerStore();
+    const { managerRequest, setManagerRequest, isManagerModalLoading } =
+        useManagerStore();
     const {
         params,
         filterChips,
@@ -129,8 +131,14 @@ const LAGlobalManager = () => {
     };
 
     useEffect(() => {
-        onOpenModalByStatus();
-    }, [managerRequest.leaveRequestId]);
+        if (isManagerModalLoading) {
+            onOpenModalByStatus();
+        }
+    }, [isManagerModalLoading]);
+
+    if (isManagerModalLoading) {
+        return <ModalLoader />;
+    }
 
     return (
         <>
