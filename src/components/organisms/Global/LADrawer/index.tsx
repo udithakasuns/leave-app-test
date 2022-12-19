@@ -18,6 +18,7 @@ interface ButtonProps {
 const LADrawer: React.FC = () => {
     const {
         user: { firstName, lastName, profilePic, designation },
+        setAuthLoading,
     } = useUserStore();
     const persistStore = usePersistStore();
 
@@ -38,6 +39,7 @@ const LADrawer: React.FC = () => {
     ]);
 
     const onPressSignOut = async () => {
+        setAuthLoading(true);
         if (persistStore.deviceUniqueId) {
             await deleteHttpNotificationDevice(persistStore.deviceUniqueId);
         }

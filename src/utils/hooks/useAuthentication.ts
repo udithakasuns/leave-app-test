@@ -105,7 +105,7 @@ export const useAuthentication = (): ReturnProps => {
             Initially check whether the user has already signed in to the application.
             If so, check wheather the authentication type that the user has used.
         */
-        setAuthLoading(true);
+
         if (isAutherized) {
             if (authType === 'social') {
                 getCurrentSocialAuthUser();
@@ -114,6 +114,9 @@ export const useAuthentication = (): ReturnProps => {
             }
         } else {
             setVisibleAuthNav(false);
+            setTimeout(() => {
+                setAuthLoading(false);
+            }, 2000);
         }
     }, [isAutherized]);
 
@@ -121,6 +124,7 @@ export const useAuthentication = (): ReturnProps => {
         setDeviceUniqueId(null);
         setIsAutherized(false);
         setAuthType('');
+        setAuthLoading(false);
     };
 
     useEffect(() => {
