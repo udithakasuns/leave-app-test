@@ -87,8 +87,13 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
     const [employeePopup, setEmployeePopup] = useState<LAEmployeePopUpProps>();
 
-    const { employeeRequest, setEmployeeRequest, getEmployeeModal } =
-        useEmployeeStore();
+    const {
+        employeeRequest,
+        setEmployeeRequest,
+        getEmployeeModal,
+        refreshEmployeeHomeState,
+        setRefreshEmployeeHomeState,
+    } = useEmployeeStore();
 
     const isFocused = useIsFocused();
 
@@ -264,12 +269,16 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     useEffect(() => {
-        if (isFocused) {
+        if (isFocused || refreshEmployeeHomeState) {
             setSortByButtons(sortByButtonsEmployee);
             setFilterChips(filterChipsEmployee);
             refetchAllData();
+
+            if (refreshEmployeeHomeState) {
+                setRefreshEmployeeHomeState(false);
+            }
         }
-    }, [isFocused]);
+    }, [isFocused, refreshEmployeeHomeState]);
 
     return (
         <View style={styles.container}>
