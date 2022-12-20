@@ -247,6 +247,7 @@ const LAGlobalEmployee = () => {
                 }}
             />
             <LAEmployeePopUp
+                employeeRequest={employeeRequest}
                 modalType={employeePopup?.modalType}
                 onClose={onClosePopup}
                 requestDetails={employeePopup?.requestDetails}

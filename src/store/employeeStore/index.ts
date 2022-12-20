@@ -3,7 +3,7 @@ import create from 'zustand';
 import { getHttpLeaveRequestByID } from '../../services/http/getRequest/index';
 import { Actions, State } from './types';
 
-const initialState: State = {
+export const initialState: State = {
     refreshEmployeeHomeState: false,
     isEmployeeModalLoading: false,
     employeeRequest: {

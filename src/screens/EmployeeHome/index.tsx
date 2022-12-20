@@ -69,6 +69,7 @@ import { useFormik } from '../../utils/hooks/useFormik';
 
 import theme from '../../utils/theme';
 import { useStyles } from './styles';
+import { employeeRequestDefault } from './helper';
 
 const { scale, deviceDimensions } = theme;
 const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
@@ -91,9 +92,11 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
     const [employeePopup, setEmployeePopup] = useState<LAEmployeePopUpProps>();
 
+    const [employeeRequest, setEmployeeRequest] = useState<LeaveRequestByID>(
+        employeeRequestDefault,
+    );
+
     const {
-        employeeRequest,
-        setEmployeeRequest,
         getEmployeeModal,
         refreshEmployeeHomeState,
         setRefreshEmployeeHomeState,
@@ -387,6 +390,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 />
 
                 <LAEmployeePopUp
+                    employeeRequest={employeeRequest}
                     modalType={employeePopup?.modalType}
                     onClose={() => setEmployeePopup(undefined)}
                     requestDetails={employeePopup?.requestDetails}
@@ -396,6 +400,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     }}
                     onConfirmationHomePress={() => {
                         setEmployeePopup(undefined);
+                        setEmployeeRequest(employeeRequestDefault);
                         formik.resetForm();
                         formik.setFieldValue('entitlements', entitlements);
                         refetch();
