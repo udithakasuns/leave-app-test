@@ -3,6 +3,7 @@ import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
+import { ModalLoader } from 'src/components/atoms';
 import { LAEmployeeModals, LAEmployeePopUp } from 'src/components/organisms';
 import { LAEmployeeModalProps } from 'src/components/organisms/EmployeeHome/LAEmployeeModals';
 import { LAEmployeePopUpProps } from 'src/components/organisms/EmployeeHome/LAEmployeePopUp';
@@ -26,7 +27,7 @@ import {
     FilterTypes,
     LeaveRequestType,
     LeaveUndoProp,
-    Section,
+    Page,
 } from 'src/utils/types';
 
 import { handleAlreadyNudgeError } from './helpers/errorHandlers';
@@ -54,8 +55,14 @@ const LAGlobalEmployee = () => {
         resetFilterUtils,
     } = useEmployeeFilterStore();
 
-    const { employeeRequest, setEmployeeRequest, getEmployeeModal } =
-        useEmployeeStore();
+    const {
+        employeeRequest,
+        setEmployeeRequest,
+        getEmployeeModal,
+        isEmployeeModalLoading,
+        setRefreshEmployeeHomeState,
+        resetEmployeeRequest,
+    } = useEmployeeStore();
 
     const { managers } = useRecipientStore();
 
@@ -67,11 +74,10 @@ const LAGlobalEmployee = () => {
             handleFilterTypesSuccess(data, filterChips, setFilterChips),
     );
 
-    const { refetch }: UseQueryResult<Section<LeaveRequestType[]>[]> =
+    const { refetch }: UseQueryResult<Page<LeaveRequestType[]>> =
         useLeaveRequestData(
-            params,
-            true,
-            (data: Section<LeaveRequestType[]>[]) =>
+            { ...params, size: 5 },
+            (data: Page<LeaveRequestType[]>) =>
                 handleLeaveRequestSuccess(
                     data,
                     setEmptyFilterUtils,
@@ -167,7 +173,7 @@ const LAGlobalEmployee = () => {
     };
 
     const onOpenModal = () => {
-        getEmployeeModal(employeeRequest.leaveRequestId);
+        // getEmployeeModal(employeeRequest.leaveRequestId);
         const selectedModalType = handleRequestSelectedModal(employeeRequest);
         if (selectedModalType === EmployeeModal.PENDING_LEAVE_MODAL) {
             nudgeVisibilityMutate(employeeRequest.leaveRequestId);
@@ -179,8 +185,27 @@ const LAGlobalEmployee = () => {
     };
 
     useEffect(() => {
-        onOpenModal();
-    }, [employeeRequest.leaveRequestId]);
+        if (!isEmployeeModalLoading && employeeRequest.status) {
+            onOpenModal();
+        }
+    }, [isEmployeeModalLoading, employeeRequest.leaveRequestId]);
+
+    const onCloseModalWithData = () => {
+        setRefreshEmployeeHomeState(true);
+        setEmployeeModal(undefined);
+        setTimeout(() => {
+            resetEmployeeRequest();
+        }, 500);
+    };
+
+    const onClosePopup = () => {
+        setRefreshEmployeeHomeState(true);
+        setEmployeePopup(undefined);
+    };
+
+    if (isEmployeeModalLoading) {
+        return <ModalLoader />;
+    }
 
     return (
         <>
@@ -188,7 +213,7 @@ const LAGlobalEmployee = () => {
                 isNudgeVisble={employeeModal?.isNudgeVisble}
                 modalType={employeeModal?.modalType}
                 onBackPressType={employeeModal?.onBackPressType}
-                onClose={() => setEmployeeModal(undefined)}
+                onClose={onCloseModalWithData}
                 formik={undefined}
                 onPressSelectDate={handleDateModalPress}
                 onBackPress={handleDateModalBackPress}
@@ -223,14 +248,14 @@ const LAGlobalEmployee = () => {
             />
             <LAEmployeePopUp
                 modalType={employeePopup?.modalType}
-                onClose={() => setEmployeePopup(undefined)}
+                onClose={onClosePopup}
                 requestDetails={employeePopup?.requestDetails}
                 onConfirmationUndoPress={() => {
                     setEmployeePopup(undefined);
                     deleteMutate(employeeRequest.leaveRequestId);
                 }}
                 onConfirmationHomePress={() => {
-                    setEmployeePopup(undefined);
+                    onClosePopup();
                     refetch();
                 }}
                 onCancellationUndoPress={() => {
@@ -241,6 +266,7 @@ const LAGlobalEmployee = () => {
                         leaveRequestStatus: 'PENDING',
                     };
                     setEmployeePopup({ modalType: undefined });
+                    setRefreshEmployeeHomeState(true);
                     undoCancellationMutate(values);
                 }}
             />

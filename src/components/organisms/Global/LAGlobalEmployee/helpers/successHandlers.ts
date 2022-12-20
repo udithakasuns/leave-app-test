@@ -9,7 +9,8 @@ import {
     FilterChipsProps,
     FilterTypes,
     LeaveRequestByID,
-    LeaveRequestWithPageType,
+    LeaveRequestType,
+    Page,
 } from 'src/utils/types';
 
 export const handleFilterTypesSuccess = (
@@ -35,14 +36,11 @@ export const handleFilterTypesSuccess = (
 };
 
 export const handleLeaveRequestSuccess = (
-    data: LeaveRequestWithPageType,
+    data: Page<LeaveRequestType[]>,
     setEmptyFilterUtils: () => void,
     resetFilterUtils: () => void,
 ) => {
-    if (
-        data?.leaveRequestData === undefined ||
-        data?.leaveRequestData?.length === 0
-    ) {
+    if (data.items === undefined || data.items.length === 0) {
         setEmptyFilterUtils();
     } else {
         resetFilterUtils();
@@ -99,17 +97,15 @@ export const handleNudgeSuccess = (
 };
 
 export const handleApplyMutationSuccess = (
-    setEmployeeModal: (
-        value: React.SetStateAction<Partial<ModalProps> | undefined>,
-    ) => void,
+    leaveRequest: LeaveRequestByID,
+    setEmployeeRequest: (leaveRequest: LeaveRequestByID) => void,
     setEmployeePopup: (
         value: React.SetStateAction<Partial<PopUpProps> | undefined>,
     ) => void,
     refetchAllData: () => void,
 ) => {
-    setEmployeeModal({
-        modalType: undefined,
-    });
+    setEmployeeRequest(leaveRequest);
+    /* There should be a time out, Otherwise particular modals will not be opened correctly */
     setEmployeePopup({
         modalType: EmployeePopup.LEAVE_REQUEST_CONFIRMATION,
     });
