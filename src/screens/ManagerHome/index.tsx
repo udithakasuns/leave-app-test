@@ -3,7 +3,7 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ManagerHomeScreensProps } from 'navigators/types';
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Spacer, Text } from 'src/components/atoms';
 import { MultiChipProps } from 'src/components/molecules';
 import { LAAppBar } from 'src/components/organisms';
@@ -20,18 +20,9 @@ import {
 } from 'src/utils/helpers/defaultData';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
-import theme from 'src/utils/theme';
-import { FilterTypes, PendingRequestType, Section } from 'src/utils/types';
 
-const { scale } = theme;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingHorizontal: scale.sc20,
-        backgroundColor: 'white',
-    },
-});
+import { FilterTypes, PendingRequestType, Page } from 'src/utils/types';
+import { screenStyles } from 'utils/styles';
 
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const {
@@ -52,11 +43,15 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const {
         data: leaveRequests,
         refetch: refetchLeaveRequests,
-    }: UseQueryResult<Section<PendingRequestType[]>[]> = usePendingRequestData(
-        params,
-        true,
-        (data: Section<PendingRequestType[]>[]) => {
-            if (data?.length === 0 || data === undefined) {
+    }: UseQueryResult<Page<PendingRequestType[]>> = usePendingRequestData(
+        { ...params, size: 5 },
+        (data: Page<PendingRequestType[]>) => {
+            if (
+                data === undefined ||
+                data?.items === undefined ||
+                data?.items?.length === 0 ||
+                data === undefined
+            ) {
                 setEmptyFilterUtils();
             } else {
                 resetFilterUtils();
@@ -102,8 +97,10 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     }, [isFocused]);
 
     return (
-        <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={screenStyles.containerScollable}>
+            <ScrollView
+                contentContainerStyle={screenStyles.scrollViewContainer}
+                showsVerticalScrollIndicator={false}>
                 <LAAppBar currentScreen='manager' />
                 <Spacer />
                 <Text type='H1Bold'>
@@ -113,9 +110,10 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                 <Spacer />
                 <Text type='SubHBold'>Leave requests</Text>
                 <LAPendingRequestList
-                    leaveRequests={leaveRequests}
+                    leaveRequests={leaveRequests?.items}
                     onPressRequestItem={handleRequestItemPress}
                     isViewAllPage={false}
+                    totalItems={leaveRequests?.totalItems ?? 0}
                 />
             </ScrollView>
         </View>

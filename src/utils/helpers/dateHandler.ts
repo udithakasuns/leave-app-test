@@ -9,8 +9,12 @@ export const getFormattedDate = (date: string): DateTime => {
     return dateIOS;
 };
 
-export const getFormattedDay = (date: string): string => {
+export const getFormattedDay = (date: string, numOnly?: boolean): string => {
     const day = getFormattedDate(date).toLocaleString({ day: 'numeric' });
+    if (numOnly) {
+        return day;
+    }
+
     switch (Number(day)) {
         case 1:
         case 21:
@@ -28,16 +32,21 @@ export const getFormattedDay = (date: string): string => {
     }
 };
 
-export const getFormattedMonth = (date: string): string => {
-    const month = getFormattedDate(date).toLocaleString({ month: 'long' });
+export const getFormattedMonth = (date: string, short?: boolean): string => {
+    const month = getFormattedDate(date).toLocaleString({
+        month: short ? 'short' : 'long',
+    });
     return month;
 };
 
 export const getStartEndDate = (start: string, end: string) => {
     if (start === end) {
-        return getFormattedDay(start);
+        return `${getFormattedDay(start)} ${getFormattedMonth(start, true)}`;
     }
-    return `${getFormattedDay(start)} to ${getFormattedDay(end)}`;
+    return `${getFormattedDay(start, true)} ${getFormattedMonth(
+        start,
+        true,
+    )} - ${getFormattedDay(end, true)} ${getFormattedMonth(end, true)}`;
 };
 
 export const getGreetingsByTime = (): string => {

@@ -16,7 +16,7 @@ const LeaveApprovedSheetBody = ({
     <>
         <ManagerRequestDetails
             requestDetails={requestDetails}
-            isRecipientVisible
+            isRecipientVisible={false}
             isStatusVisible
             isMemberVisible
         />

@@ -38,19 +38,19 @@ const LAEntitlementGrid = ({
         </Pressable>
     );
     return (
-        <ScrollView
-            horizontal
-            contentContainerStyle={styles.scrollViewContainer}>
-            <FlatList
-                data={entitlements}
-                renderItem={renderItem}
-                keyExtractor={item => item.entitlementId.toString()}
-                style={styles.flatListContainer}
-                numColumns={3}
-                scrollEnabled={false}
-                columnWrapperStyle={styles.columnWrapperStyle}
-            />
-        </ScrollView>
+        // <ScrollView
+        //     horizontal
+        //     contentContainerStyle={styles.scrollViewContainer}>
+        <FlatList
+            data={entitlements}
+            renderItem={renderItem}
+            keyExtractor={item => item.entitlementId.toString()}
+            style={styles.flatListContainer}
+            numColumns={3}
+            scrollEnabled={false}
+            columnWrapperStyle={styles.columnWrapperStyle}
+        />
+        // </ScrollView>
     );
 };
 

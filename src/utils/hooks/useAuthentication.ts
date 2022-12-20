@@ -7,7 +7,6 @@ import {
 } from 'src/services/aws/types';
 import { usePersistStore, useRecipientStore, useUserStore } from 'src/store';
 import amplifiConfig from 'src/aws-exports';
-import { deleteHttpNotificationDevice } from 'src/services/http';
 import { getCurrentUserRoleFromToken } from '../helpers/gettersUtil';
 import inAppUrlHandler from '../helpers/inAppUrlHandler';
 
@@ -20,11 +19,13 @@ Amplify.configure({
 });
 
 type ReturnProps = {
+    isAuthLoading: boolean;
     isAuthenticated: boolean;
 };
 
 export const useAuthentication = (): ReturnProps => {
-    const { saveUser, updateUser, removeUser } = useUserStore();
+    const { authLoading, saveUser, updateUser, removeUser, setAuthLoading } =
+        useUserStore();
     const { updateRecipients, removeUserRecipients } = useRecipientStore();
     const {
         isAutherized,
@@ -56,12 +57,15 @@ export const useAuthentication = (): ReturnProps => {
                 updateRecipients();
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
+                setAuthLoading(false);
             } else {
                 setVisibleAuthNav(false);
                 removeUser();
                 removeUserRecipients();
+                setAuthLoading(false);
             }
         } catch (error) {
+            setAuthLoading(false);
             // Error needs to be handled here
         }
     };
@@ -88,8 +92,10 @@ export const useAuthentication = (): ReturnProps => {
                 updateRecipients();
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
+                setAuthLoading(false);
             }
         } catch (error) {
+            setAuthLoading(false);
             // Error needs to be handled here
         }
     };
@@ -99,6 +105,7 @@ export const useAuthentication = (): ReturnProps => {
             Initially check whether the user has already signed in to the application.
             If so, check wheather the authentication type that the user has used.
         */
+
         if (isAutherized) {
             if (authType === 'social') {
                 getCurrentSocialAuthUser();
@@ -107,6 +114,9 @@ export const useAuthentication = (): ReturnProps => {
             }
         } else {
             setVisibleAuthNav(false);
+            setTimeout(() => {
+                setAuthLoading(false);
+            }, 2000);
         }
     }, [isAutherized]);
 
@@ -114,10 +124,12 @@ export const useAuthentication = (): ReturnProps => {
         setDeviceUniqueId(null);
         setIsAutherized(false);
         setAuthType('');
+        setAuthLoading(false);
     };
 
     useEffect(() => {
         /* Hub is listened to all events related to authentication */
+
         if (authType) {
             const unsubscribe = Hub.listen('auth', ({ payload: { event } }) => {
                 switch (event) {
@@ -141,5 +153,5 @@ export const useAuthentication = (): ReturnProps => {
         return () => {};
     }, [authType]);
 
-    return { isAuthenticated: visibleAuthNav };
+    return { isAuthenticated: visibleAuthNav, isAuthLoading: authLoading };
 };
