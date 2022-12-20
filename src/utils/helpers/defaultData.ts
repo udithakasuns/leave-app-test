@@ -17,6 +17,11 @@ const leaveStatusChips: MultiChipProps[] = [
         content: 'Denied',
         chipInfo: Status.DENIED,
     },
+    {
+        chipId: 4,
+        content: 'Canceled',
+        chipInfo: Status.CANCELLED,
+    },
 ];
 
 const dateChips: MultiChipProps[] = [
