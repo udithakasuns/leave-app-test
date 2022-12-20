@@ -31,8 +31,8 @@
 		E2E40BC6463C459981CBEA36 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74A734C28F46431C8D68BCE1 /* Poppins-BoldItalic.ttf */; };
 		ECFFC4132FBE47819434C9D5 /* Poppins-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A92FF3B1E4534C2BBC71692E /* Poppins-ExtraBoldItalic.ttf */; };
 		F24A98D9107143F9959BE119 /* Poppins-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4CF75C325B1A4FA4A957EFA5 /* Poppins-LightItalic.ttf */; };
+		F56BCDC2295187EE004418A1 /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5EEF1C3294C5B0A00835320 /* hermes.xcframework */; };
 		F595432E2938CDB000F875CC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F595432D2938CDB000F875CC /* GoogleService-Info.plist */; };
-		F5EEF1C4294C5B0A00835320 /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5EEF1C3294C5B0A00835320 /* hermes.xcframework */; };
 		F700BC20610B41C19ACEDEC9 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0138524B00E64D17BB2DB125 /* Poppins-Thin.ttf */; };
 /* End PBXBuildFile section */
 
@@ -116,7 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5EEF1C4294C5B0A00835320 /* hermes.xcframework in Frameworks */,
+				F56BCDC2295187EE004418A1 /* hermes.xcframework in Frameworks */,
 				6816BBD85A4B8375A821F1FA /* libPods-rtc_leave_app.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -664,6 +664,7 @@
 				CODE_SIGN_ENTITLEMENTS = rtc_leave_app/rtc_leave_app.entitlements;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = A9NB63966S;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = rtc_leave_app/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
