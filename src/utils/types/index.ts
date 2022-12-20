@@ -104,6 +104,7 @@ export enum Status {
     APPROVED = 'APPROVED',
     DENIED = 'DENIED',
     CANCELLED = 'CANCELLED',
+    REVOKED = 'REVOKED',
 }
 
 export type StatusType = keyof typeof Status;
