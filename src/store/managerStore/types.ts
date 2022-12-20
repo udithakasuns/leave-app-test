@@ -8,4 +8,5 @@ export type State = {
 export type Actions = {
     getManagerModal: (requestedId: number) => void;
     setManagerRequest: (managerRequest: PendingRequestByID) => void;
+    resetManagerRequest: () => void;
 };

@@ -10,4 +10,5 @@ export type Actions = {
     setRefreshEmployeeHomeState: (refreshEmployeeHomeState: boolean) => void;
     getEmployeeModal: (requestedId: number) => void;
     setEmployeeRequest: (employeeRequest: LeaveRequestByID) => void;
+    resetEmployeeRequest: () => void;
 };

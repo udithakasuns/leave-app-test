@@ -26,9 +26,8 @@ import {
     EmployeeModal,
     FilterTypes,
     LeaveRequestType,
-    LeaveRequestWithPageType,
     LeaveUndoProp,
-    Section,
+    Page,
 } from 'src/utils/types';
 
 import { handleAlreadyNudgeError } from './helpers/errorHandlers';
@@ -62,6 +61,7 @@ const LAGlobalEmployee = () => {
         getEmployeeModal,
         isEmployeeModalLoading,
         setRefreshEmployeeHomeState,
+        resetEmployeeRequest,
     } = useEmployeeStore();
 
     const { managers } = useRecipientStore();
@@ -74,19 +74,16 @@ const LAGlobalEmployee = () => {
             handleFilterTypesSuccess(data, filterChips, setFilterChips),
     );
 
-    const {
-        // data: leaveRequests,
-        refetch,
-    }: UseQueryResult<LeaveRequestWithPageType> = useLeaveRequestData(
-        params,
-        true,
-        (data: LeaveRequestWithPageType) =>
-            handleLeaveRequestSuccess(
-                data,
-                setEmptyFilterUtils,
-                resetFilterUtils,
-            ),
-    );
+    const { refetch }: UseQueryResult<Page<LeaveRequestType[]>> =
+        useLeaveRequestData(
+            { ...params, size: 5 },
+            (data: Page<LeaveRequestType[]>) =>
+                handleLeaveRequestSuccess(
+                    data,
+                    setEmptyFilterUtils,
+                    resetFilterUtils,
+                ),
+        );
 
     const { mutate: undoCancellationMutate } = useMutation(
         ['undoCancellation'],
@@ -176,7 +173,7 @@ const LAGlobalEmployee = () => {
     };
 
     const onOpenModal = () => {
-        getEmployeeModal(employeeRequest.leaveRequestId);
+        // getEmployeeModal(employeeRequest.leaveRequestId);
         const selectedModalType = handleRequestSelectedModal(employeeRequest);
         if (selectedModalType === EmployeeModal.PENDING_LEAVE_MODAL) {
             nudgeVisibilityMutate(employeeRequest.leaveRequestId);
@@ -188,10 +185,18 @@ const LAGlobalEmployee = () => {
     };
 
     useEffect(() => {
-        if (isEmployeeModalLoading) {
+        if (!isEmployeeModalLoading && employeeRequest.status) {
             onOpenModal();
         }
-    }, [isEmployeeModalLoading]);
+    }, [isEmployeeModalLoading, employeeRequest.leaveRequestId]);
+
+    const onCloseModalWithData = () => {
+        setRefreshEmployeeHomeState(true);
+        setEmployeeModal(undefined);
+        setTimeout(() => {
+            resetEmployeeRequest();
+        }, 500);
+    };
 
     const onClosePopup = () => {
         setRefreshEmployeeHomeState(true);
@@ -208,7 +213,7 @@ const LAGlobalEmployee = () => {
                 isNudgeVisble={employeeModal?.isNudgeVisble}
                 modalType={employeeModal?.modalType}
                 onBackPressType={employeeModal?.onBackPressType}
-                onClose={() => setEmployeeModal(undefined)}
+                onClose={onCloseModalWithData}
                 formik={undefined}
                 onPressSelectDate={handleDateModalPress}
                 onBackPress={handleDateModalBackPress}
@@ -246,7 +251,7 @@ const LAGlobalEmployee = () => {
                 onClose={onClosePopup}
                 requestDetails={employeePopup?.requestDetails}
                 onConfirmationUndoPress={() => {
-                    onClosePopup();
+                    setEmployeePopup(undefined);
                     deleteMutate(employeeRequest.leaveRequestId);
                 }}
                 onConfirmationHomePress={() => {

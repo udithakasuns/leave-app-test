@@ -67,6 +67,11 @@ const employeeStore = create<State & Actions>(set => ({
             },
         }));
     },
+    resetEmployeeRequest: () => {
+        set(() => ({
+            employeeRequest: initialState.employeeRequest,
+        }));
+    },
 }));
 
 export default employeeStore;

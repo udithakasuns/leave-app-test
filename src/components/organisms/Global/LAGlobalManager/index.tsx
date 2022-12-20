@@ -5,9 +5,9 @@ import {
     FilterTypes,
     ManagerModal,
     ManagerPopup,
+    Page,
     PendingRequestByID,
     PendingRequestType,
-    Section,
     Status,
 } from 'src/utils/types';
 import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
@@ -26,8 +26,12 @@ import LAManagerPopUp, {
 const LAGlobalManager = () => {
     const [managerModal, setManagerModal] = useState<LAManagerModalProps>();
     const [managerPopup, setManagerPopup] = useState<LAManagerPopUpProps>();
-    const { managerRequest, setManagerRequest, isManagerModalLoading } =
-        useManagerStore();
+    const {
+        managerRequest,
+        setManagerRequest,
+        isManagerModalLoading,
+        resetManagerRequest,
+    } = useManagerStore();
     const {
         params,
         filterChips,
@@ -38,11 +42,15 @@ const LAGlobalManager = () => {
 
     const {
         refetch: refetchLeaveRequests,
-    }: UseQueryResult<Section<PendingRequestType[]>[]> = usePendingRequestData(
-        params,
-        true,
-        (data: Section<PendingRequestType[]>[]) => {
-            if (data?.length === 0 || data === undefined) {
+    }: UseQueryResult<Page<PendingRequestType[]>> = usePendingRequestData(
+        { ...params, size: 5 },
+        (data: Page<PendingRequestType[]>) => {
+            if (
+                data === undefined ||
+                data?.items === undefined ||
+                data?.items?.length === 0 ||
+                data === undefined
+            ) {
                 setEmptyFilterUtils();
             } else {
                 resetFilterUtils();
@@ -131,10 +139,20 @@ const LAGlobalManager = () => {
     };
 
     useEffect(() => {
-        if (isManagerModalLoading) {
+        if (!isManagerModalLoading && managerRequest) {
             onOpenModalByStatus();
         }
     }, [isManagerModalLoading]);
+
+    const onCloseManagerModal = () => {
+        setManagerModal({ modalType: undefined });
+        resetManagerRequest();
+    };
+
+    const onClosePopup = () => {
+        setManagerPopup({ modalType: undefined });
+        resetManagerRequest();
+    };
 
     if (isManagerModalLoading) {
         return <ModalLoader />;
@@ -143,7 +161,7 @@ const LAGlobalManager = () => {
     return (
         <>
             <LAManagerModals
-                onClose={() => setManagerModal({ modalType: undefined })}
+                onClose={onCloseManagerModal}
                 modalType={managerModal?.modalType}
                 onBackPressType={managerModal?.onBackPressType}
                 onPressApproveLeave={() => {
@@ -181,7 +199,7 @@ const LAGlobalManager = () => {
             />
             <LAManagerPopUp
                 modalType={managerPopup?.modalType}
-                onClose={() => setManagerPopup({ modalType: undefined })}
+                onClose={onClosePopup}
                 onUndoApprovalPress={() => {
                     updateLeaveMutate({
                         requestID: managerRequest.leaveRequestId,

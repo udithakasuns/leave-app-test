@@ -60,6 +60,11 @@ const managerStore = create<State & Actions>(set => ({
             },
         }));
     },
+    resetManagerRequest: () => {
+        set(() => ({
+            managerRequest: initialState.managerRequest,
+        }));
+    },
 }));
 
 export default managerStore;
