@@ -115,32 +115,37 @@ const LARequestDetailsSection = ({
             />
         )}
         {isRecipientVisible && requestDetails?.recipient && (
-            <ItemRow
-                title='Recipient :'
-                titleStyle={styles.durationText}
-                child={
-                    <View
-                        style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                        }}>
-                        <Spacer height={1} />
-                        {requestDetails.recipient?.map(item => (
-                            <AvatarChip
-                                key={item?.employeeId}
-                                label={item?.name ?? ''}
-                                source={{
-                                    uri: item?.authPic ?? '',
-                                }}
-                                containerStyle={{
-                                    justifyContent: 'flex-start',
-                                }}
-                            />
-                        ))}
-                    </View>
-                }
-            />
+            <>
+                <Spacer height={4} />
+                <ItemRow
+                    title='Recipient :'
+                    titleStyle={styles.durationText}
+                    child={
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                // flexWrap: 'wrap',
+                                alignItems: 'center',
+                            }}>
+                            <Spacer height={1} />
+                            {requestDetails.recipient?.map(item => (
+                                <AvatarChip
+                                    key={item?.employeeId}
+                                    label={item?.name ?? ''}
+                                    source={{
+                                        uri: item?.authPic ?? '',
+                                    }}
+                                    containerStyle={{
+                                        justifyContent: 'flex-start',
+                                    }}
+                                />
+                            ))}
+                        </View>
+                    }
+                />
+                <Spacer height={4} />
+            </>
         )}
     </>
 );
