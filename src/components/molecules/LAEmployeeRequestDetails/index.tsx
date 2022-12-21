@@ -144,9 +144,9 @@ const LARequestDetailsSection = ({
                         </View>
                     }
                 />
-                <Spacer height={4} />
             </>
         )}
+        <Spacer height={8} />
     </>
 );
 
