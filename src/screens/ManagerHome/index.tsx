@@ -44,7 +44,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         data: leaveRequests,
         refetch: refetchLeaveRequests,
     }: UseQueryResult<Page<PendingRequestType[]>> = usePendingRequestData(
-        { ...params, size: 5 },
+        params,
         (data: Page<PendingRequestType[]>) => {
             if (
                 data === undefined ||
