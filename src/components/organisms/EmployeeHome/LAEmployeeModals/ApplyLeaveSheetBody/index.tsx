@@ -1,5 +1,5 @@
 import { FormikProps } from 'formik';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { Input, Spacer, Text } from 'src/components/atoms';
 import {
@@ -93,6 +93,19 @@ const ApplyLeaveSheetBody = ({
         );
     };
 
+    useEffect(() => {
+        if (formik.values.startDate) {
+            if (
+                formik.values.selectedLeaveBalance === undefined ||
+                formik.values.selectedLeaveBalance > 0.9
+            ) {
+                formik.setFieldValue('leaveState', States.FULLDAY);
+            } else {
+                setIsHalfSelected(true);
+            }
+        }
+    }, [formik.values.startDate]);
+
     return (
         <View>
             <Spacer height={5} />
@@ -117,7 +130,9 @@ const ApplyLeaveSheetBody = ({
                         : 'Select the leave date'
                 }
                 isSelected={!!formik.values.startDate}
-                onPress={onPressSelectDate}
+                onPress={() => {
+                    onPressSelectDate();
+                }}
             />
             <Spacer height={scale.vsc8} />
             {formik.values.endDate === '' && (
@@ -133,7 +148,9 @@ const ApplyLeaveSheetBody = ({
                             icon=''
                             buttonStyle={styles.fullButtonStyle}
                             isDisable={
-                                formik.values.selectedLeaveBalance === 0.5
+                                formik.values.selectedLeaveBalance !==
+                                    undefined &&
+                                formik.values.selectedLeaveBalance < 1
                             }
                         />
                         <Spacer width={scale.sc4} />
@@ -175,10 +192,10 @@ const ApplyLeaveSheetBody = ({
                 containerStyle={styles.commentContainerStyle}
             />
             <Spacer height={scale.vsc8} />
-            <SelectionButton
+            {/* <SelectionButton
                 label='Add Attachment (Optional)'
                 onPress={() => {}}
-            />
+            /> */}
             <Spacer height={scale.vsc6} />
             <ButtonDock
                 primaryButton={{

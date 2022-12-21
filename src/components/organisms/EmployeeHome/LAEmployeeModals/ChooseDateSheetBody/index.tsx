@@ -1,11 +1,11 @@
 /* eslint-disable no-plusplus */
 import { FormikProps } from 'formik';
+import { DateTime } from 'luxon';
 import React, { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { Calendar, CalendarUtils, DateData } from 'react-native-calendars';
 import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { MarkedDates } from 'react-native-calendars/src/types';
-import Toast from 'react-native-toast-message';
 import { Spacer } from 'src/components/atoms';
 import { ButtonDock, SelectionButton } from 'src/components/molecules';
 import { showErrorToast } from 'src/utils/alerts';
@@ -138,6 +138,10 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
         }
     };
 
+    const isLastYear =
+        DateTime.now().minus({ months: 1 }).toRelativeCalendar() ===
+        'last year';
+
     useEffect(() => {
         getAllHolidaysForMonth(new Date().valueOf());
         getPrevSelectedRange();
@@ -158,6 +162,18 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                 style={styles.calendarStyle}
                 headerStyle={styles.calendarHeaderStyle}
                 theme={calendarTheme}
+                minDate={
+                    isLastYear
+                        ? DateTime.local(DateTime.now().year, 1, 1).toFormat(
+                              'yyyy-MM-dd',
+                          )
+                        : DateTime.now()
+                              .minus({ month: 1 })
+                              .toFormat('yyyy-MM-dd')
+                }
+                maxDate={DateTime.local(DateTime.now().year, 12, 31).toFormat(
+                    'yyyy-MM-dd',
+                )}
             />
             <Spacer height={scale.vsc10} />
             <View style={styles.halfButtonsStyle}>
