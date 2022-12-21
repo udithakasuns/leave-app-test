@@ -123,7 +123,7 @@ const LARequestDetailsSection = ({
                     child={
                         <View
                             style={{
-                                flex: 1,
+                                // flex: 1,
                                 flexDirection: 'row',
                                 // flexWrap: 'wrap',
                                 alignItems: 'center',
