@@ -57,7 +57,6 @@ const LAEmployeeRequestDetails = ({
                             <>
                                 <Spacer />
                                 <AvatarChip
-                                    containerStyle={{ marginLeft: 10 }}
                                     label={requestDetails?.employee.name ?? ''}
                                     source={{
                                         uri:
@@ -144,22 +143,28 @@ const LAEmployeeRequestDetails = ({
             )}
             {isRecipientVisible && requestDetails?.reviewer && (
                 <>
+                    <Spacer height={8} />
                     <ItemRow
                         title='Recipient :'
                         child={
-                            <AvatarChip
-                                containerStyle={{ marginLeft: 10 }}
-                                label={requestDetails?.reviewer?.name ?? ''}
-                                source={{
-                                    uri:
-                                        requestDetails?.reviewer?.authPic ?? '',
-                                }}
-                            />
+                            <>
+                                <Spacer />
+                                <AvatarChip
+                                    // containerStyle={{ marginLeft: 10 }}
+                                    label={requestDetails?.reviewer?.name ?? ''}
+                                    source={{
+                                        uri:
+                                            requestDetails?.reviewer?.authPic ??
+                                            '',
+                                    }}
+                                />
+                            </>
                         }
                     />
                     <Spacer />
                 </>
             )}
+            <Spacer height={8} />
         </>
     );
 };
