@@ -6,11 +6,15 @@ export const usePendingRequestData = (
     params?: LeaveRequestParams,
     onSuccess?: (data: Page<PendingRequestType[]>) => void,
 ) =>
-    useQuery(['pendingRequests', params], () => getHttpPendingRequest(params), {
-        refetchOnMount: true,
-        refetchOnWindowFocus: true,
-        onSuccess,
-    });
+    useQuery(
+        ['pendingRequests', params],
+        () => getHttpPendingRequest({ ...params, size: 6 }),
+        {
+            refetchOnMount: true,
+            refetchOnWindowFocus: true,
+            onSuccess,
+        },
+    );
 
 export const useAllPendingRequestData = (params?: LeaveRequestParams) =>
     useInfiniteQuery({

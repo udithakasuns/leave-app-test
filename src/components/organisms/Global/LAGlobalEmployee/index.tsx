@@ -75,14 +75,12 @@ const LAGlobalEmployee = () => {
     );
 
     const { refetch }: UseQueryResult<Page<LeaveRequestType[]>> =
-        useLeaveRequestData(
-            { ...params, size: 5 },
-            (data: Page<LeaveRequestType[]>) =>
-                handleLeaveRequestSuccess(
-                    data,
-                    setEmptyFilterUtils,
-                    resetFilterUtils,
-                ),
+        useLeaveRequestData(params, (data: Page<LeaveRequestType[]>) =>
+            handleLeaveRequestSuccess(
+                data,
+                setEmptyFilterUtils,
+                resetFilterUtils,
+            ),
         );
 
     const { mutate: undoCancellationMutate } = useMutation(

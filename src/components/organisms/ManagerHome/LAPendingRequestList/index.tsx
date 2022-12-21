@@ -136,7 +136,7 @@ const LAPendingRequestList = ({
                             <Chip
                                 content='View All'
                                 rightIconName='arrow-forward'
-                                disabled={totalItems <= 5}
+                                disabled={totalItems <= 6}
                                 outline
                                 contentColor={colors.black}
                                 onPressChip={() =>
