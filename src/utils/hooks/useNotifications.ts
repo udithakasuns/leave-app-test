@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
-import { useEffect } from 'react';
-import { Platform, Alert } from 'react-native';
+import notifee, { AuthorizationStatus } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
-import { postHttpNotificationRegister } from 'src/services/http';
+import { useEffect } from 'react';
+import { Platform } from 'react-native';
 import PushNotification from 'react-native-push-notification';
-import { usePersistStore, useNotificationStore, useUserStore } from 'src/store';
 import uuid from 'react-native-uuid';
+import { postHttpNotificationRegister } from 'src/services/http';
+import { useNotificationStore, usePersistStore, useUserStore } from 'src/store';
 
 type Props = {
     isAuthenticated: boolean;
@@ -30,17 +31,12 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
     const { user } = useUserStore();
 
     const requestUserPermission = async () => {
-        console.log('requestUserPermission');
-        const authStatus = await messaging().requestPermission();
-        const enabled =
-            authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-            authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+        const settings = await notifee.requestPermission();
 
-        if (enabled) {
-            console.log('Authorization status:', authStatus);
+        if (settings.authorizationStatus >= AuthorizationStatus.AUTHORIZED) {
+            console.log('Permission settings:', settings.ios);
         } else {
-            Alert.alert('PERMISSIONS', 'Enable permissions');
-            // Show a popup to request permisions for notifications
+            console.log('User declined permissions');
         }
     };
 
@@ -59,14 +55,21 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
         messaging().setBackgroundMessageHandler(async remoteMessage => {
             console.log('Message handled from background', remoteMessage);
 
-            PushNotification.localNotification({
+            // Request permissions (required for iOS)
+            await notifee.requestPermission();
+
+            // Create a channel (required for Android)
+            const channelId = await notifee.createChannel({
+                id: 'default',
+                name: 'Default Channel',
+            });
+            await notifee.displayNotification({
                 title: remoteMessage.notification?.title,
-                message: remoteMessage.notification?.body || '',
-                // JSON.parse(remoteMessage.notification?.body).message || '',
-                bigPictureUrl: remoteMessage.notification?.android?.imageUrl, // Handle this to IOS,
-                smallIcon: remoteMessage.notification?.android?.imageUrl, // Handle this to IOS,
-                channelId: 'channel-id',
-                vibrate: true,
+                body: remoteMessage.notification?.body || '',
+                android: {
+                    channelId,
+                    smallIcon: remoteMessage.notification?.android?.imageUrl,
+                },
             });
             notificationStore.getCount(notificationStore.notifyUserRole);
         });
@@ -76,16 +79,22 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
             foreground mode(focus in to the app). If new notification comes, it will 
             trigger the notification count API based on the currently selected user.  
         */
-        const unsubscribe = messaging().onMessage(message => {
+        const unsubscribe = messaging().onMessage(async message => {
             console.log({ message });
-            PushNotification.localNotification({
+            await notifee.requestPermission();
+
+            // Create a channel (required for Android)
+            const channelId = await notifee.createChannel({
+                id: 'default',
+                name: 'Default Channel',
+            });
+            await notifee.displayNotification({
                 title: message.notification?.title,
-                message: message.notification?.body || '',
-                // JSON.parse(message.notification?.body).message || '',
-                bigPictureUrl: message.notification?.android?.imageUrl, // Handle this to IOS,
-                smallIcon: message.notification?.android?.imageUrl, // Handle this to IOS,
-                channelId: 'channel-id',
-                vibrate: true,
+                body: message.notification?.body || '',
+                android: {
+                    channelId,
+                    smallIcon: message.notification?.android?.imageUrl,
+                },
             });
             notificationStore.getCount(notificationStore.notifyUserRole);
         });
@@ -128,4 +137,8 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
             }
         }
     }, [isAuthenticated]);
+
+    useEffect(() => {
+        requestUserPermission();
+    }, []);
 };

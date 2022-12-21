@@ -1,7 +1,12 @@
 import React from 'react';
 import { PopUp } from 'src/components/molecules';
 import { useEmployeeStore, useRecipientStore } from 'src/store';
-import { EmployeePopup, RequestDetails, TestProps } from 'src/utils/types';
+import {
+    EmployeePopup,
+    LeaveRequestByID,
+    RequestDetails,
+    TestProps,
+} from 'src/utils/types';
 import LeaveCancelledSheetBody from './LeaveCancelledSheetBody';
 import LeaveConfirmationSheetBody from './LeaveConfirmationSheetBody';
 import { styles } from './styles';
@@ -14,6 +19,7 @@ export type PopUpProps = {
 export type LAEmployeePopUpProps = Partial<PopUpProps>;
 
 interface Props extends Partial<TestProps>, LAEmployeePopUpProps {
+    employeeRequest: LeaveRequestByID;
     onClose: () => void;
     onConfirmationUndoPress: () => void;
     onConfirmationHomePress: () => void;
@@ -21,13 +27,14 @@ interface Props extends Partial<TestProps>, LAEmployeePopUpProps {
 }
 
 const LAEmployeePopUp = ({
+    employeeRequest,
     modalType,
     onClose,
     onConfirmationUndoPress,
     onConfirmationHomePress,
     onCancellationUndoPress,
 }: Props) => {
-    const { employeeRequest } = useEmployeeStore();
+    // const { employeeRequest } = useEmployeeStore();
     const { managers } = useRecipientStore();
     return (
         <>

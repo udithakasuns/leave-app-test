@@ -43,7 +43,7 @@ const LAGlobalManager = () => {
     const {
         refetch: refetchLeaveRequests,
     }: UseQueryResult<Page<PendingRequestType[]>> = usePendingRequestData(
-        { ...params, size: 5 },
+        params,
         (data: Page<PendingRequestType[]>) => {
             if (
                 data === undefined ||

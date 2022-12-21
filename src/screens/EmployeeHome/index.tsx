@@ -64,13 +64,15 @@ import {
     handleNudgeSuccess,
     handleUndoCancellationSuccess,
 } from 'components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
-import { screenStyles } from 'utils/styles';
+
 import { useFormik } from '../../utils/hooks/useFormik';
 
 import theme from '../../utils/theme';
 import { useStyles } from './styles';
+import { screenStyles } from '../../utils/styles';
+import { employeeRequestDefault } from './helper';
 
-const { scale, deviceDimensions } = theme;
+const { deviceDimensions } = theme;
 const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [bottomLayoutHeigt, setBottomLayoutHeight] = useState<number>(0);
 
@@ -91,9 +93,11 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const [employeeModal, setEmployeeModal] = useState<LAEmployeeModalProps>();
     const [employeePopup, setEmployeePopup] = useState<LAEmployeePopUpProps>();
 
+    const [employeeRequest, setEmployeeRequest] = useState<LeaveRequestByID>(
+        employeeRequestDefault,
+    );
+
     const {
-        employeeRequest,
-        setEmployeeRequest,
         getEmployeeModal,
         refreshEmployeeHomeState,
         setRefreshEmployeeHomeState,
@@ -115,7 +119,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         data: leaveRequests,
         refetch,
     }: UseQueryResult<Page<LeaveRequestType[]>> = useLeaveRequestData(
-        { ...params, size: 5 },
+        params,
         (data: Page<LeaveRequestType[]>) =>
             handleLeaveRequestSuccess(
                 data,
@@ -387,6 +391,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 />
 
                 <LAEmployeePopUp
+                    employeeRequest={employeeRequest}
                     modalType={employeePopup?.modalType}
                     onClose={() => setEmployeePopup(undefined)}
                     requestDetails={employeePopup?.requestDetails}
@@ -396,6 +401,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     }}
                     onConfirmationHomePress={() => {
                         setEmployeePopup(undefined);
+                        setEmployeeRequest(employeeRequestDefault);
                         formik.resetForm();
                         formik.setFieldValue('entitlements', entitlements);
                         refetch();
