@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import {
     ImageSourcePropType,
@@ -6,6 +7,7 @@ import {
     Image,
     View,
 } from 'react-native';
+import { Img } from 'src/assets/images';
 import theme from 'src/utils/theme';
 import { AtLeast, TestProps } from '../../../utils/types';
 import styles from './styles';
@@ -30,13 +32,20 @@ const LAAvatar = ({
     testId,
 }: AtLeast<Props, 'source'>) => {
     const { container, imageContainer } = styles(size);
+
+    let newSource: any = source;
+    if (!newSource.uri) {
+        newSource = Img('user');
+    }
+
     return (
         <View style={[container, style]}>
             <Image
                 testID={testId}
-                source={source}
+                source={newSource}
                 style={imageContainer}
                 accessibilityIgnoresInvertColors
+                defaultSource={Img('user')}
             />
         </View>
     );

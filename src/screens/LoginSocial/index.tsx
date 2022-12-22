@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Platform } from 'react-native';
 import { LoginScreenProps } from 'navigators/types';
-import { awsOnGoogleSignIn } from 'src/services/aws';
+import { awsOnAppleSignIn, awsOnGoogleSignIn } from 'src/services/aws';
 import { Spacer, Text } from 'components/atoms';
 import theme from 'src/utils/theme';
 import { SocialButton } from 'components/molecules';
@@ -21,6 +21,12 @@ const LoginSocial: React.FC<LoginScreenProps> = () => {
         awsOnGoogleSignIn();
     };
 
+    const onPressAppleSignin = () => {
+        setAuthLoading(true);
+        setAuthType('social');
+        awsOnAppleSignIn();
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollView}>
@@ -30,7 +36,18 @@ const LoginSocial: React.FC<LoginScreenProps> = () => {
                     iconName='google'
                     onPress={onPressGoogleSignin}
                 />
-                <Spacer height={8} />
+                {Platform.OS === 'ios' && (
+                    <>
+                        <Spacer />
+                        <SocialButton
+                            label='Sign in with Apple Account '
+                            iconName='apple'
+                            iconType='icon'
+                            onPress={onPressAppleSignin}
+                        />
+                    </>
+                )}
+                {/* <Spacer height={8} /> */}
                 {/* <Text
                     type='SubH'
                     style={styles.bottomText}

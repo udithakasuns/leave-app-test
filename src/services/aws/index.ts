@@ -7,6 +7,9 @@ export const awsOnGoogleSignIn = async () =>
         provider: CognitoHostedUIIdentityProvider.Google,
     });
 
+export const awsOnAppleSignIn = () =>
+    Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Apple });
+
 export const awsOnSignOut = async () => {
     await Auth.signOut();
 };
