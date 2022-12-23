@@ -81,11 +81,10 @@ const LARequestDetailsSection = ({
                 />
             </>
         )}
-        <Spacer height={8} />
+        <Spacer />
         {isDurationVisible && requestDetails?.leaveRequest && (
             <ItemRow
                 title='Duration :'
-                titleStyle={styles.durationText}
                 child={
                     <>
                         <Spacer />
@@ -96,7 +95,6 @@ const LARequestDetailsSection = ({
                                         ?.durationDays ?? 0,
                                 )}`}
                                 contentTextType='ParaLG'
-                                containerStyle={styles.durationChip}
                             />
                             <Spacer width={2} height={3} />
                             {requestDetails?.leaveRequest?.startDate && (
@@ -106,7 +104,6 @@ const LARequestDetailsSection = ({
                                         requestDetails.leaveRequest?.endDate,
                                     )}
                                     contentTextType='ParaLG'
-                                    containerStyle={styles.durationChip}
                                 />
                             )}
                         </View>
@@ -116,28 +113,22 @@ const LARequestDetailsSection = ({
         )}
         {isRecipientVisible && requestDetails?.recipient && (
             <>
-                <Spacer height={4} />
+                <Spacer />
                 <ItemRow
                     title='Recipient :'
-                    titleStyle={styles.durationText}
                     child={
                         <View
                             style={{
-                                // flex: 1,
                                 flexDirection: 'row',
-                                // flexWrap: 'wrap',
                                 alignItems: 'center',
                             }}>
-                            <Spacer height={1} />
+                            <Spacer />
                             {requestDetails.recipient?.map(item => (
                                 <AvatarChip
                                     key={item?.employeeId}
                                     label={item?.name ?? ''}
                                     source={{
                                         uri: item?.authPic ?? '',
-                                    }}
-                                    containerStyle={{
-                                        justifyContent: 'flex-start',
                                     }}
                                 />
                             ))}
@@ -146,7 +137,7 @@ const LARequestDetailsSection = ({
                 />
             </>
         )}
-        <Spacer height={8} />
+        <Spacer />
     </>
 );
 
