@@ -16,6 +16,7 @@ const initialUser: UserType = {
 const initialState: State = {
     user: initialUser,
     authLoading: true,
+    isValidUser: true,
     error: '',
 };
 
@@ -54,6 +55,7 @@ const userStore = create<State & Actions>(set => ({
         }));
     },
     removeUser: () => set(state => ({ ...state, user: initialUser })),
+    setIsValidUser: isValidUser => set(() => ({ isValidUser })),
     setAuthLoading: authLoading => set(() => ({ authLoading })),
 }));
 

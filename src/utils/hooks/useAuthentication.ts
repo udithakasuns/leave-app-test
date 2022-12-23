@@ -35,8 +35,14 @@ const isRootcodeUser = (email: string): boolean => {
 };
 
 export const useAuthentication = (): ReturnProps => {
-    const { authLoading, saveUser, updateUser, removeUser, setAuthLoading } =
-        useUserStore();
+    const {
+        authLoading,
+        saveUser,
+        updateUser,
+        removeUser,
+        setAuthLoading,
+        setIsValidUser,
+    } = useUserStore();
     const { updateRecipients, removeUserRecipients } = useRecipientStore();
     const {
         isAutherized,
@@ -65,10 +71,17 @@ export const useAuthentication = (): ReturnProps => {
                     accessToken.jwtToken,
                 );
 
-                setOpenInvalidUserPopup(!isRootcodeUser(email));
-
                 saveUser(email, name, family_name, picture, userRole);
-                await updateUser();
+
+                const isValidUser = isRootcodeUser(email);
+
+                if (!isValidUser) {
+                    setIsValidUser(false);
+                    setOpenInvalidUserPopup(true);
+                } else {
+                    await updateUser();
+                }
+
                 updateRecipients();
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
@@ -102,10 +115,17 @@ export const useAuthentication = (): ReturnProps => {
                     accessToken.jwtToken,
                 );
 
-                setOpenInvalidUserPopup(!isRootcodeUser(email));
-
                 saveUser(email, name, '', '', userRole);
-                await updateUser(); // This will returns an error (Need to fix from backend)
+
+                const isValidUser = isRootcodeUser(email);
+
+                if (!isValidUser) {
+                    setIsValidUser(false);
+                    setOpenInvalidUserPopup(true);
+                } else {
+                    await updateUser(); // This will returns an error (Need to fix from backend)
+                }
+
                 updateRecipients();
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
