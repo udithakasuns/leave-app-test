@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/no-unstable-nested-components */
 import React, { ReactNode } from 'react';
-import { StyleProp, TextStyle, View } from 'react-native';
+import { StyleProp, TextStyle, View, Platform } from 'react-native';
 import { Chip, Spacer, Text } from 'src/components/atoms';
 import {
     getCalendarRangeDate,
@@ -106,11 +106,10 @@ const LAEmployeeRequestDetails = ({
                     />
                 </>
             )}
-            <Spacer height={8} />
+            <Spacer />
             {requestDetails?.startDate && isDurationVisible && (
                 <ItemRow
                     title={flexEnd ? 'Leave Duration' : 'Duration :'}
-                    titleStyle={styles.durationText}
                     child={
                         <>
                             <Spacer />
@@ -143,14 +142,13 @@ const LAEmployeeRequestDetails = ({
             )}
             {isRecipientVisible && requestDetails?.reviewer && (
                 <>
-                    <Spacer height={8} />
+                    <Spacer />
                     <ItemRow
                         title='Recipient :'
                         child={
                             <>
                                 <Spacer />
                                 <AvatarChip
-                                    // containerStyle={{ marginLeft: 10 }}
                                     label={requestDetails?.reviewer?.name ?? ''}
                                     source={{
                                         uri:
@@ -164,7 +162,7 @@ const LAEmployeeRequestDetails = ({
                     <Spacer />
                 </>
             )}
-            <Spacer height={8} />
+            <Spacer />
         </>
     );
 };

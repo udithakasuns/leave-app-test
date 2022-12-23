@@ -60,8 +60,10 @@ export default ({ isLeftSelected, isRightSelected, isError }: StyleProp) => {
             flexDirection: 'row',
         },
         rightContainer: {
+            flexDirection: 'row',
             flexGrow: 1,
             alignItems: 'center',
+            justifyContent: 'flex-start',
             borderTopLeftRadius: radius.rd8,
             borderBottomLeftRadius: radius.rd8,
             borderBottomColor: getColor().rightBorder ?? colors.tertiaryColor,
@@ -81,8 +83,10 @@ export default ({ isLeftSelected, isRightSelected, isError }: StyleProp) => {
             color: getColor().leftLabel,
         },
         leftContainer: {
+            flexDirection: 'row',
             flexGrow: 1,
             alignItems: 'center',
+            justifyContent: 'flex-start',
             borderBottomWidth: 1,
             borderTopWidth: 1,
             borderRightWidth: 1,

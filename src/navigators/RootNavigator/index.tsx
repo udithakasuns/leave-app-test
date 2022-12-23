@@ -3,10 +3,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
+import LAErrorPopup from 'src/components/organisms/Global/LAErrorPopup';
 import Loading from 'src/screens/Loading';
 import LoginSocial from 'src/screens/LoginSocial';
 // import LoginGeneral from 'screens/LoginGeneral';
 import { useAuthentication } from 'src/utils/hooks/useAuthentication';
+import useLogout from 'src/utils/hooks/useLogout';
 import { useNotifications } from 'src/utils/hooks/useNotifications';
 import AuthNavigator from '../AuthNavigator';
 import { RootScreensParamsList } from '../types';
@@ -16,8 +18,15 @@ const StackNav = createNativeStackNavigator<RootScreensParamsList>();
 
 /* Root navigator contains the screens before authentication */
 const RootNavigator = () => {
-    const { isAuthLoading, isAuthenticated } = useAuthentication();
+    const {
+        isAuthLoading,
+        isAuthenticated,
+        openInvalidUserPopup,
+        onCloseInvalidUserPopup,
+    } = useAuthentication();
     useNotifications({ isAuthenticated });
+
+    const logout = useLogout();
 
     return (
         <SafeAreaView style={styles.container}>
@@ -37,6 +46,21 @@ const RootNavigator = () => {
                     // <StackNav.Screen name='Login' component={LoginGeneral} />
                 )}
             </StackNav.Navigator>
+            <LAErrorPopup
+                type='api'
+                title='Invalid User'
+                subTitle='The app only supports rootcodelabs.com domain. Please logging with your rootcode email. Thank you!'
+                visible={openInvalidUserPopup}
+                onClose={onCloseInvalidUserPopup}
+                primaryIcon='logout'
+                primaryLabel='Logout  '
+                primaryOnPress={() => {
+                    onCloseInvalidUserPopup();
+                    logout();
+                }}
+                secondaryLabel='Proceed'
+                secondaryOnPress={onCloseInvalidUserPopup}
+            />
         </SafeAreaView>
     );
 };

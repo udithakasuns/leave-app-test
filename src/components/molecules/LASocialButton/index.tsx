@@ -12,12 +12,14 @@ const { colors, scale } = theme;
 interface Props extends PressableProps {
     label: string;
     iconName: IconName;
+    iconType: 'svg' | 'icon';
 }
 
 const LASocialButton = ({
     label,
     iconName,
     onPress,
+    iconType = 'svg',
     ...rest
 }: AtLeast<Props, 'label' | 'iconName'>) => (
     <Pressable
@@ -27,7 +29,11 @@ const LASocialButton = ({
             styles.container,
         ]}
         {...rest}>
-        <SvgIcon name={iconName} />
+        {iconType === 'svg' ? (
+            <SvgIcon name={iconName} />
+        ) : (
+            <Icon library='community' name={iconName} size={22} />
+        )}
         <Text type='SubH' color={colors.secondaryLabel}>
             {label}
         </Text>

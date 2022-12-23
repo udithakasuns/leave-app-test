@@ -21,6 +21,17 @@ Amplify.configure({
 type ReturnProps = {
     isAuthLoading: boolean;
     isAuthenticated: boolean;
+    openInvalidUserPopup: boolean;
+    onCloseInvalidUserPopup: () => void;
+};
+
+const isRootcodeUser = (email: string): boolean => {
+    const rootcodeDomain = 'rootcodelabs.com';
+    const emailDomain = email.split('@')[1];
+    if (emailDomain === rootcodeDomain) {
+        return true;
+    }
+    return false;
 };
 
 export const useAuthentication = (): ReturnProps => {
@@ -36,6 +47,8 @@ export const useAuthentication = (): ReturnProps => {
     } = usePersistStore();
 
     const [visibleAuthNav, setVisibleAuthNav] = useState<boolean>(false);
+    const [openInvalidUserPopup, setOpenInvalidUserPopup] =
+        useState<boolean>(false);
 
     const getCurrentSocialAuthUser = async () => {
         try {
@@ -53,7 +66,15 @@ export const useAuthentication = (): ReturnProps => {
                 );
 
                 saveUser(email, name, family_name, picture, userRole);
-                await updateUser();
+
+                const isValidUser = isRootcodeUser(email);
+
+                if (!isValidUser) {
+                    setOpenInvalidUserPopup(true);
+                } else {
+                    await updateUser();
+                }
+
                 updateRecipients();
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
@@ -88,7 +109,15 @@ export const useAuthentication = (): ReturnProps => {
                 );
 
                 saveUser(email, name, '', '', userRole);
-                await updateUser(); // This will returns an error (Need to fix from backend)
+
+                const isValidUser = isRootcodeUser(email);
+
+                if (!isValidUser) {
+                    setOpenInvalidUserPopup(true);
+                } else {
+                    await updateUser(); // This will returns an error (Need to fix from backend)
+                }
+
                 updateRecipients();
                 setIsAutherized(true);
                 setVisibleAuthNav(true);
@@ -153,5 +182,10 @@ export const useAuthentication = (): ReturnProps => {
         return () => {};
     }, [authType]);
 
-    return { isAuthenticated: visibleAuthNav, isAuthLoading: authLoading };
+    return {
+        isAuthenticated: visibleAuthNav,
+        isAuthLoading: authLoading,
+        openInvalidUserPopup,
+        onCloseInvalidUserPopup: () => setOpenInvalidUserPopup(false),
+    };
 };
