@@ -18,6 +18,7 @@ const notificationStore = create<State & Actions>(set => ({
             notifyUserRole: userRole,
         }));
     },
+    resetCount: () => set(() => ({ count: '' })),
     setIsPopupVisible: isPopupVisible => set(() => ({ isPopupVisible })),
 }));
 
