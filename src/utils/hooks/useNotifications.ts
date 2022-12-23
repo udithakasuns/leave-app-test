@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
-import notifee, { AuthorizationStatus } from '@notifee/react-native';
+import notifee, {
+    AuthorizationStatus,
+    AndroidImportance,
+} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
-import PushNotification from 'react-native-push-notification';
 import uuid from 'react-native-uuid';
 import { postHttpNotificationRegister } from 'src/services/http';
 import { useNotificationStore, usePersistStore, useUserStore } from 'src/store';
@@ -11,19 +13,6 @@ import { useNotificationStore, usePersistStore, useUserStore } from 'src/store';
 type Props = {
     isAuthenticated: boolean;
 };
-
-PushNotification.createChannel(
-    {
-        channelId: 'channel-id',
-        channelName: 'Channel Name',
-        channelDescription: 'To hadle the notification comming from firebase',
-        playSound: true,
-        soundName: 'default',
-        importance: 4,
-        vibrate: true,
-    },
-    created => console.log('Notification channel created: ', created),
-);
 
 export const useNotifications = ({ isAuthenticated }: Props) => {
     const persistStore = usePersistStore();
@@ -85,15 +74,29 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
 
             // Create a channel (required for Android)
             const channelId = await notifee.createChannel({
-                id: 'default',
-                name: 'Default Channel',
+                id: 'defualt-channel',
+                name: 'Channel For Notification',
+                vibration: true,
+                vibrationPattern: [300, 500],
+                importance: AndroidImportance.HIGH,
             });
             await notifee.displayNotification({
                 title: message.notification?.title,
                 body: message.notification?.body || '',
                 android: {
                     channelId,
-                    smallIcon: message.notification?.android?.imageUrl,
+                    importance: AndroidImportance.HIGH,
+                    smallIcon: 'ic_launcher_round',
+                    // eslint-disable-next-line global-require
+                    largeIcon: require('../../assets/images/icon.png'),
+                },
+                ios: {
+                    foregroundPresentationOptions: {
+                        sound: true,
+                        banner: true,
+                        list: true,
+                    },
+                    interruptionLevel: 'timeSensitive',
                 },
             });
             notificationStore.getCount(notificationStore.notifyUserRole);
