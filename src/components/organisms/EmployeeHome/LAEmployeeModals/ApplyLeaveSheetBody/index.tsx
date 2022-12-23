@@ -1,5 +1,5 @@
 import { FormikProps } from 'formik';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Input, Spacer, Text } from 'src/components/atoms';
 import {
@@ -37,6 +37,8 @@ const ApplyLeaveSheetBody = ({
     setIsHalfSelected,
     onCancellation,
 }: Props) => {
+    const [fullDayLeaveDisabled, setFullDayLeaveDisabled] = useState(false);
+
     const handleOnEntitlementPress = (selected: EntitlementSelection) => {
         if (selected.balanceInDays === 0) {
             showErrorToast(
@@ -106,6 +108,29 @@ const ApplyLeaveSheetBody = ({
         }
     }, [formik.values.startDate]);
 
+    useEffect(() => {
+        setFullDayLeaveDisabled(
+            formik.values.selectedLeaveBalance !== undefined &&
+                formik.values.selectedLeaveBalance < 1,
+        );
+    }, [formik.values.selectedLeaveBalance]);
+
+    useEffect(() => {
+        const selectedEntitlement = formik.values.entitlements.find(
+            ent => ent.isSelected,
+        );
+        if (selectedEntitlement) {
+            setFullDayLeaveDisabled(selectedEntitlement.balanceInDays < 1);
+            handleOnEntitlementPress(selectedEntitlement);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (fullDayLeaveDisabled) {
+            formik.setFieldValue('leaveState', '');
+        }
+    }, [fullDayLeaveDisabled]);
+
     return (
         <View>
             <Spacer height={5} />
@@ -147,11 +172,7 @@ const ApplyLeaveSheetBody = ({
                             onPress={onFullDayPress}
                             icon=''
                             buttonStyle={styles.fullButtonStyle}
-                            isDisable={
-                                formik.values.selectedLeaveBalance !==
-                                    undefined &&
-                                formik.values.selectedLeaveBalance < 1
-                            }
+                            isDisable={fullDayLeaveDisabled}
                         />
                         <Spacer width={scale.sc4} />
                         <HalfButton
