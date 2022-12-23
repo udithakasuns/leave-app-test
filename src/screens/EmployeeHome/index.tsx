@@ -107,6 +107,8 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
     const { managers } = useRecipientStore();
 
+    const managerAvailable = managers && managers.length > 0;
+
     const {
         refetch: filterRefetch,
     }: UseQueryResult<FilterTypes[], AxiosError> = useFilterTypesData(
@@ -118,6 +120,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     const {
         data: leaveRequests,
         refetch,
+        isLoading,
     }: UseQueryResult<Page<LeaveRequestType[]>> = useLeaveRequestData(
         params,
         (data: Page<LeaveRequestType[]>) =>
@@ -314,14 +317,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     )}
                     <Spacer />
                     <Text type='SubHBold'>Leave Requests</Text>
-                    {leaveRequests && leaveRequests.items ? (
-                        <LALeaveRequestList
-                            leaveRequests={leaveRequests.items}
-                            onPressRequestItem={handleRequestItemPress}
-                            isViewAllPage={false}
-                            totalItems={leaveRequests.totalItems ?? 0}
-                        />
-                    ) : (
+                    {isLoading ? (
                         <SkeletonPlaceholder borderRadius={4}>
                             <SkeletonPlaceholder.Item
                                 flexDirection='row'
@@ -330,9 +326,16 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                                 width='100%'
                             />
                         </SkeletonPlaceholder>
+                    ) : (
+                        <LALeaveRequestList
+                            leaveRequests={leaveRequests?.items ?? []}
+                            onPressRequestItem={handleRequestItemPress}
+                            isViewAllPage={false}
+                            totalItems={leaveRequests?.totalItems ?? 0}
+                        />
                     )}
                 </ScrollView>
-                {managers && managers.length > 0 && (
+                {managerAvailable && entitlements && (
                     <View
                         onLayout={e =>
                             setBottomLayoutHeight(e.nativeEvent.layout.height)
