@@ -58,22 +58,28 @@ const FilterSheetBody = ({
                 onFilterPress(filterChipsLocal);
             }}
         />
-        {resetOption.resetEnable && (
-            <>
-                <Spacer height={5} />
-                <Button
-                    label='Reset Filters'
-                    mode='contained-gray'
-                    labelStyle={styles.commonPadding}
-                    onPress={() =>
-                        setRestOption({
-                            ...resetOption,
-                            resetData: true,
-                        })
-                    }
-                />
-            </>
-        )}
+        {resetOption.resetEnable &&
+            !filterChipsLocal.every(item => {
+                if (item.chips.filter(chip => chip.selected).length > 0) {
+                    return false;
+                }
+                return true;
+            }) && (
+                <>
+                    <Spacer height={5} />
+                    <Button
+                        label='Reset Filters'
+                        mode='contained-gray'
+                        labelStyle={styles.commonPadding}
+                        onPress={() =>
+                            setRestOption({
+                                ...resetOption,
+                                resetData: true,
+                            })
+                        }
+                    />
+                </>
+            )}
     </View>
 );
 
