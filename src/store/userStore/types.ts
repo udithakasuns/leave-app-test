@@ -3,7 +3,6 @@ import { UserRole, UserType } from 'utils/types';
 export interface State {
     user: UserType;
     authLoading: boolean;
-    isValidUser: boolean;
     error: string;
 }
 
@@ -17,6 +16,5 @@ export type Actions = {
     ) => void;
     updateUser: () => void;
     removeUser: () => void;
-    setIsValidUser: (isValidUser: boolean) => void;
     setAuthLoading: (authLoading: boolean) => void;
 };

@@ -35,14 +35,8 @@ const isRootcodeUser = (email: string): boolean => {
 };
 
 export const useAuthentication = (): ReturnProps => {
-    const {
-        authLoading,
-        saveUser,
-        updateUser,
-        removeUser,
-        setAuthLoading,
-        setIsValidUser,
-    } = useUserStore();
+    const { authLoading, saveUser, updateUser, removeUser, setAuthLoading } =
+        useUserStore();
     const { updateRecipients, removeUserRecipients } = useRecipientStore();
     const {
         isAutherized,
@@ -76,7 +70,6 @@ export const useAuthentication = (): ReturnProps => {
                 const isValidUser = isRootcodeUser(email);
 
                 if (!isValidUser) {
-                    setIsValidUser(false);
                     setOpenInvalidUserPopup(true);
                 } else {
                     await updateUser();
@@ -120,7 +113,6 @@ export const useAuthentication = (): ReturnProps => {
                 const isValidUser = isRootcodeUser(email);
 
                 if (!isValidUser) {
-                    setIsValidUser(false);
                     setOpenInvalidUserPopup(true);
                 } else {
                     await updateUser(); // This will returns an error (Need to fix from backend)
