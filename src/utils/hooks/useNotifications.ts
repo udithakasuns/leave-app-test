@@ -44,22 +44,32 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
         messaging().setBackgroundMessageHandler(async remoteMessage => {
             console.log('Message handled from background', remoteMessage);
 
-            // Request permissions (required for iOS)
-            await notifee.requestPermission();
-
             // Create a channel (required for Android)
-            const channelId = await notifee.createChannel({
-                id: 'default',
-                name: 'Default Channel',
-            });
-            await notifee.displayNotification({
-                title: remoteMessage.notification?.title,
-                body: remoteMessage.notification?.body || '',
-                android: {
-                    channelId,
-                    smallIcon: remoteMessage.notification?.android?.imageUrl,
-                },
-            });
+            // const channelId = await notifee.createChannel({
+            //     id: 'defualt-channel',
+            //     name: 'Channel For Notification',
+            //     vibration: true,
+            //     importance: AndroidImportance.HIGH,
+            // });
+            // await notifee.displayNotification({
+            //     title: remoteMessage.notification?.title,
+            //     body: remoteMessage.notification?.body || '',
+            //     android: {
+            //         channelId,
+            //         importance: AndroidImportance.HIGH,
+            //         smallIcon: 'ic_launcher_round',
+            //         // eslint-disable-next-line global-require
+            //         largeIcon: require('../../assets/images/icon.png'),
+            //     },
+            //     ios: {
+            //         foregroundPresentationOptions: {
+            //             sound: true,
+            //             banner: true,
+            //             list: true,
+            //         },
+            //         interruptionLevel: 'timeSensitive',
+            //     },
+            // });
             notificationStore.getCount(notificationStore.notifyUserRole);
         });
 
@@ -70,14 +80,12 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
         */
         const unsubscribe = messaging().onMessage(async message => {
             console.log({ message });
-            await notifee.requestPermission();
 
             // Create a channel (required for Android)
             const channelId = await notifee.createChannel({
                 id: 'defualt-channel',
                 name: 'Channel For Notification',
                 vibration: true,
-                vibrationPattern: [300, 500],
                 importance: AndroidImportance.HIGH,
             });
             await notifee.displayNotification({
