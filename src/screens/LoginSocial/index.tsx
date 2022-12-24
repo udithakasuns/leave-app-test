@@ -32,7 +32,7 @@ const LoginSocial: React.FC<LoginScreenProps> = () => {
             <ScrollView contentContainerStyle={styles.scrollView}>
                 <Header description='Log into your Rootcode account using your G-suite account Single Sign on' />
                 <SocialButton
-                    label='Sign in with Rootcode Gmail'
+                    label='Sign in with Gmail'
                     iconName='google'
                     onPress={onPressGoogleSignin}
                 />
@@ -40,7 +40,7 @@ const LoginSocial: React.FC<LoginScreenProps> = () => {
                     <>
                         <Spacer />
                         <SocialButton
-                            label='Sign in with Apple Account '
+                            label='Sign in with Apple' // Do not change this string (as of apple guide line).
                             iconName='apple'
                             iconType='icon'
                             onPress={onPressAppleSignin}

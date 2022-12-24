@@ -51,7 +51,7 @@ const LADrawer: React.FC = () => {
             <View style={styles.divider} />
             <View style={styles.buttonContainer}>
                 <View>
-                    {buttons.map(b => (
+                    {/* {buttons.map(b => (
                         <Button
                             key={b.label}
                             buttonStyle={styles.buttonStyle}
@@ -63,7 +63,7 @@ const LADrawer: React.FC = () => {
                             labelStyle={styles.buttonLabelStyle}
                             onPress={b.onPress}
                         />
-                    ))}
+                    ))} */}
                 </View>
                 <Button
                     buttonStyle={styles.buttonStyle}
