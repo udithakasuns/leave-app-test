@@ -6,12 +6,15 @@ import { useUserStore } from 'src/store';
 import { BackHeader } from 'src/components/molecules';
 import { Avatar, Spacer, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
+import useBackAction from 'src/utils/hooks/useBackAction';
 import { styles } from './styles';
 import DetailItem from './DetailItem';
 
 const { colors, scale } = theme;
 
-const Account: React.FC<AccountScreensProps> = ({ navigation }) => {
+const Account: React.FC<AccountScreensProps> = () => {
+    const backAction = useBackAction();
+
     const {
         user: { profilePic, firstName, lastName, designation, userId, email },
     } = useUserStore();
@@ -20,10 +23,7 @@ const Account: React.FC<AccountScreensProps> = ({ navigation }) => {
         <View style={screenStyles.containerScollable}>
             <ScrollView
                 contentContainerStyle={screenStyles.scrollViewContainer}>
-                <BackHeader
-                    title='Home'
-                    onBackPress={() => navigation.goBack()}
-                />
+                <BackHeader title='Home' onBackPress={backAction} />
                 <View style={styles.content}>
                     <Avatar source={{ uri: profilePic }} size={scale.sc96} />
                     <Spacer height={scale.sc6} />

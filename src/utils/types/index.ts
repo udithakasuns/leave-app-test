@@ -326,3 +326,31 @@ export type FilterProps = {
     onSortPress: (multiButtons: MultiButtonProps[]) => void;
     onFilterPress: (multiButtons: FilterChipsProps[]) => void;
 };
+
+export type ManagerNotificationSettings = {
+    isNudgeNotificationsEnabled: boolean;
+    isLeaveRequestNotificationsEnabled: boolean;
+    isUpcomingEventsNotificationsEnabled: boolean;
+};
+
+export type EmployeeNotificationSettings = {
+    isLeaveRequestNotificationsEnabled: boolean;
+    isUpcomingEventsNotificationsEnabled: boolean;
+};
+
+export type NotificationSettings = {
+    manager: ManagerNotificationSettings;
+    employee: EmployeeNotificationSettings;
+};
+
+export type Settings = {
+    notifications: NotificationSettings;
+};
+
+export type Me = {
+    userId: number;
+    username: string;
+    email: string;
+    settings: Settings;
+    active: boolean;
+};

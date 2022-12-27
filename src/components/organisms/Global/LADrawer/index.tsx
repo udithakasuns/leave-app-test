@@ -38,7 +38,7 @@ const LADrawer: React.FC<Props> = ({ navigation }) => {
         {
             label: 'Settings',
             icon: 'settings',
-            onPress: () => () => navigation.navigate('Settings'),
+            onPress: () => navigation.navigate('Settings'),
             iconLibrary: 'svg',
         },
         { label: 'Support', icon: 'help-outline', onPress: () => {} },
