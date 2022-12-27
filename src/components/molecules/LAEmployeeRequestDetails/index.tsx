@@ -90,6 +90,7 @@ const LARequestDetailsSection = ({
                         <Spacer />
                         <View style={styles.durationContainer}>
                             <Chip
+                                containerStyle={styles.durationChip}
                                 content={`${getLeaveDurationDays(
                                     requestDetails?.leaveRequest
                                         ?.durationDays ?? 0,
@@ -99,6 +100,7 @@ const LARequestDetailsSection = ({
                             <Spacer width={2} height={3} />
                             {requestDetails?.leaveRequest?.startDate && (
                                 <Chip
+                                    containerStyle={styles.durationChip}
                                     content={getCalendarRangeDate(
                                         requestDetails.leaveRequest?.startDate,
                                         requestDetails.leaveRequest?.endDate,
