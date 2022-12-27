@@ -26,7 +26,7 @@ const Settings: React.FC<SettingsScreensProps> = () => {
                 <Spacer height={scale.sc20} />
                 <LANotificationSetting />
                 <Spacer height={scale.sc20} />
-                <View style={styles.divider} />
+                {/* <View style={styles.divider} /> */}
             </ScrollView>
         </View>
     );

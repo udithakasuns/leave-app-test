@@ -10,6 +10,7 @@ export type AuthScreensParamList = {
     NotificationViewAll: undefined;
     Account: undefined;
     Settings: undefined;
+    Support: undefined;
 };
 
 export type RootScreensParamsList = {
@@ -59,6 +60,11 @@ export type AccountScreensProps = NativeStackScreenProps<
 export type SettingsScreensProps = NativeStackScreenProps<
     AuthScreensParamList,
     'Settings'
+>;
+
+export type SupportScreensProps = NativeStackScreenProps<
+    AuthScreensParamList,
+    'Support'
 >;
 
 export type DrawerScreenNavigationProp = DrawerNavigationProp<

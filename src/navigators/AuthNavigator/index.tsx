@@ -11,6 +11,7 @@ import EmployeeViewAll from 'src/screens/EmployeeViewAll';
 import NotificationViewAll from 'src/screens/NotificationViewAll';
 import Account from 'src/screens/Account';
 import Settings from 'src/screens/Settings';
+import Support from 'src/screens/Support';
 import { AuthScreensParamList } from '../types';
 
 import LADrawer from '../../components/organisms/Global/LADrawer';
@@ -59,6 +60,7 @@ const AuthNavigator = () => {
             />
             <DrawerNav.Screen name='Account' component={Account} />
             <DrawerNav.Screen name='Settings' component={Settings} />
+            <DrawerNav.Screen name='Support' component={Support} />
         </DrawerNav.Navigator>
     );
 };
