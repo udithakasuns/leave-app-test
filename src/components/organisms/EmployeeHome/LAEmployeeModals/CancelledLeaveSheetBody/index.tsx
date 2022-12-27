@@ -40,7 +40,7 @@ const CancelledLeaveSheetBody = ({
         <Spacer />
         <Button
             iconPosition='left'
-            label='Back to home'
+            label='Proceed to home'
             onPress={onClose}
             icon='arrow-forward'
         />

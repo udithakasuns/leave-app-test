@@ -49,7 +49,7 @@ const CancelledSheetBody = ({ requestDetails, onPressBackToHome }: Props) => (
         <Divider />
         <Button
             iconPosition='left'
-            label='Back to home'
+            label='Proceed to home'
             onPress={onPressBackToHome}
             icon='arrow-forward'
         />
