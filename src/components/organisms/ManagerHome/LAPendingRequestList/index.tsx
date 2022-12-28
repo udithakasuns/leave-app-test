@@ -61,7 +61,6 @@ const LAPendingRequestList = ({
     return (
         <View style={container}>
             <LAManagerFilters />
-            {/* <ScrollView horizontal contentContainerStyle={scrollViewContainer}> */}
             <FlatList
                 data={leaveRequests ?? []}
                 ListEmptyComponent={
@@ -122,7 +121,7 @@ const LAPendingRequestList = ({
                     </View>
                 }
                 keyExtractor={(item, index) => item.status + index}
-                onEndReachedThreshold={0.5}
+                onEndReachedThreshold={0.3}
                 showsVerticalScrollIndicator={false}
                 onEndReached={() => {
                     if (callNextPage) {
@@ -155,7 +154,6 @@ const LAPendingRequestList = ({
                     ) : null
                 }
             />
-            {/* </ScrollView> */}
         </View>
     );
 };

@@ -130,7 +130,7 @@ const LALeaveRequestList = ({
                 }
                 keyExtractor={(item, index) => item.status + index}
                 renderItem={({ item }) => <Item item={item} />}
-                onEndReachedThreshold={0.5}
+                onEndReachedThreshold={0.3}
                 onEndReached={() => {
                     if (callNextPage) {
                         callNextPage();
