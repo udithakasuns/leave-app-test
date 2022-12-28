@@ -318,14 +318,17 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     <Spacer />
                     <Text type='SubHBold'>Leave Requests</Text>
                     {isLoading ? (
-                        <SkeletonPlaceholder borderRadius={4}>
-                            <SkeletonPlaceholder.Item
-                                flexDirection='row'
-                                alignItems='center'
-                                height={deviceDimensions.height / 2}
-                                width='100%'
-                            />
-                        </SkeletonPlaceholder>
+                        [...Array(6)].map(() => (
+                            <SkeletonPlaceholder borderRadius={4}>
+                                <SkeletonPlaceholder.Item
+                                    flexDirection='row'
+                                    alignItems='center'
+                                    height={deviceDimensions.height / 16}
+                                    width='100%'
+                                    marginBottom={20}
+                                />
+                            </SkeletonPlaceholder>
+                        ))
                     ) : (
                         <LALeaveRequestList
                             leaveRequests={leaveRequests?.items ?? []}

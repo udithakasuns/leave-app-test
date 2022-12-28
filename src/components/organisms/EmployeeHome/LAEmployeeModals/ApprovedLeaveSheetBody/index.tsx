@@ -36,13 +36,13 @@ const ApprovedLeaveSheetBody = ({
         <Spacer height={1} />
         <MoreDetailsButton onPress={onPressViewMoreDetails} />
         <Spacer />
-        <Button
+        {/* <Button
             mode='outlined-error'
             icon='close'
             label='Revoke Leave'
             onPress={onPressRevokeLeave}
             labelStyle={{ paddingHorizontal: scale.sc4 }}
-        />
+        /> */}
         <Spacer height={10} />
     </>
 );
