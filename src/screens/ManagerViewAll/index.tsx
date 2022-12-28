@@ -1,7 +1,8 @@
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
 import { ManagerViewAllScreensProps } from 'navigators/types';
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { Spacer, Text } from 'src/components/atoms';
 import { BackHeader } from 'src/components/molecules';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
@@ -12,7 +13,7 @@ import theme from 'src/utils/theme';
 import { Page, PendingRequestType } from 'src/utils/types';
 import { screenStyles } from 'utils/styles';
 
-const { scale } = theme;
+const { scale, deviceDimensions } = theme;
 
 const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
     const { getManagerModal } = useManagerStore();
@@ -48,12 +49,12 @@ const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
     return (
         <View style={screenStyles.container}>
             <BackHeader title='Home' onBackPress={onGoBack} />
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <>
                 <Spacer />
                 <Text type='H1Bold' style={{ marginHorizontal: scale.sc5 }}>
                     Leave Requests
                 </Text>
-                {!isInitialLoading && leaveRequests?.pages && (
+                {!isInitialLoading && leaveRequests?.pages ? (
                     <LAPendingRequestList
                         leaveRequests={leaveRequests.pages
                             .map(page => page.items)
@@ -62,8 +63,18 @@ const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
                         isViewAllPage
                         callNextPage={callNextPage}
                     />
+                ) : (
+                    <SkeletonPlaceholder borderRadius={4}>
+                        <SkeletonPlaceholder.Item
+                            flexDirection='row'
+                            alignItems='center'
+                            height={(4 * deviceDimensions.height) / 5}
+                            width='100%'
+                            marginVertical={scale.sc16}
+                        />
+                    </SkeletonPlaceholder>
                 )}
-            </ScrollView>
+            </>
         </View>
     );
 };
