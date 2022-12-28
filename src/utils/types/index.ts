@@ -145,13 +145,15 @@ export type UserType = {
     role: UserRole;
 };
 
+export type LeaveState = 'HALFDAY_MORNING' | 'HALFDAY_EVENING' | 'FULLDAY';
+
 export type LeaveRequestType = {
     leaveRequestId: number;
     startDate: string;
     endDate: string;
     leaveType: LeaveType;
     // reasonForLeave: string | null;
-    leaveState: string;
+    leaveState: LeaveState;
     status: StatusType | '';
     // requestDesc?: string | null;
     // reviewerComment?: string | null;
@@ -325,4 +327,32 @@ export type FilterProps = {
     filterChips: FilterChipsProps[];
     onSortPress: (multiButtons: MultiButtonProps[]) => void;
     onFilterPress: (multiButtons: FilterChipsProps[]) => void;
+};
+
+export type ManagerNotificationSettings = {
+    isNudgeNotificationsEnabled: boolean;
+    isLeaveRequestNotificationsEnabled: boolean;
+    isUpcomingEventsNotificationsEnabled: boolean;
+};
+
+export type EmployeeNotificationSettings = {
+    isLeaveRequestNotificationsEnabled: boolean;
+    isUpcomingEventsNotificationsEnabled: boolean;
+};
+
+export type NotificationSettings = {
+    manager: ManagerNotificationSettings;
+    employee: EmployeeNotificationSettings;
+};
+
+export type Settings = {
+    notifications: NotificationSettings;
+};
+
+export type Me = {
+    userId: number;
+    username: string;
+    email: string;
+    settings: Settings;
+    active: boolean;
 };

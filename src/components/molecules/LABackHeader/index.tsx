@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
 
 import { styles } from './styles';
@@ -10,17 +10,16 @@ interface Props {
 }
 
 const LABackHeader = ({ title, onBackPress }: Props) => (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={onBackPress} hitSlop={10}>
         <Icon
             name='arrow-back'
             enableBackground
             size={IconSize.medium}
             increasePadding={1}
-            onPress={onBackPress}
         />
         <Spacer />
         <Text>{title}</Text>
-    </View>
+    </Pressable>
 );
 
 export default LABackHeader;

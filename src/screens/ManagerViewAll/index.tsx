@@ -1,9 +1,5 @@
-import { useNavigation } from '@react-navigation/native';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
-import {
-    DrawerScreenNavigationProp,
-    ManagerViewAllScreensProps,
-} from 'navigators/types';
+import { ManagerViewAllScreensProps } from 'navigators/types';
 import React from 'react';
 import { View } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -11,6 +7,7 @@ import { Spacer, Text } from 'src/components/atoms';
 import { BackHeader } from 'src/components/molecules';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
 import { useManagerFilterStore, useManagerStore } from 'src/store';
+import useBackAction from 'src/utils/hooks/useBackAction';
 import { useAllPendingRequestData } from 'src/utils/hooks/usePendingRequestData';
 import theme from 'src/utils/theme';
 import { Page, PendingRequestType } from 'src/utils/types';
@@ -19,9 +16,10 @@ import { screenStyles } from 'utils/styles';
 const { scale, deviceDimensions } = theme;
 
 const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
-    const navigation = useNavigation<DrawerScreenNavigationProp>();
     const { getManagerModal } = useManagerStore();
     const { params, resetFiltersParams } = useManagerFilterStore();
+
+    const backAction = useBackAction();
 
     const {
         data: leaveRequests,
@@ -36,9 +34,9 @@ const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
         getManagerModal(item.leaveRequestId);
     };
 
-    const backAction = () => {
+    const onGoBack = () => {
         resetFiltersParams();
-        navigation.jumpTo('ManagerHome');
+        backAction();
         return true;
     };
 
@@ -50,7 +48,7 @@ const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
 
     return (
         <View style={screenStyles.container}>
-            <BackHeader title='Home' onBackPress={backAction} />
+            <BackHeader title='Home' onBackPress={onGoBack} />
             <>
                 <Spacer />
                 <Text type='H1Bold' style={{ marginHorizontal: scale.sc5 }}>
