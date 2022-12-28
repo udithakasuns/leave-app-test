@@ -1,5 +1,6 @@
 /* eslint-disable no-plusplus */
 import { DateTime } from 'luxon';
+import { LeaveSate } from '../types';
 
 export const getFormattedDate = (date: string): DateTime => {
     const dateFormate = new Date(date);
@@ -121,9 +122,18 @@ export const getTimeAgo = (date: string) => {
     return strArray.join(' ');
 };
 
-export const getLeaveDurationDays = (durationHours: number | undefined) => {
+export const getLeaveDurationDays = (
+    durationHours: number | undefined,
+    leaveState: LeaveSate,
+) => {
     const day = durationHours;
     if (day === 0.5) {
+        if (leaveState === 'HALFDAY_MORNING') {
+            return 'Half Day - Morning';
+        }
+        if (leaveState === 'HALFDAY_EVENING') {
+            return 'Half Day - Evening';
+        }
         return 'Half Day';
     }
     if (day === 1) {

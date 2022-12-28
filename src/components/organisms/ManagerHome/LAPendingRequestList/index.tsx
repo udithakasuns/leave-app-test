@@ -45,21 +45,22 @@ const LAPendingRequestList = ({
         <PendingListItem
             date={getStartEndDate(item.startDate, item.endDate)}
             employee={item.employee}
-            entitlement={getEntitlementChipText(
-                item.leaveType,
-                item.leaveType.name,
-            )}
+            // entitlement={getEntitlementChipText(
+            //     item.leaveType,
+            //     item.leaveType.name,
+            // )}
             onPress={() => onPressRequestItem(item)}
-            entitlementChipColor={
-                isViewAllPage ? colors.tertiaryColor : colors.white
-            }
+            // entitlementChipColor={
+            //     isViewAllPage ? colors.tertiaryColor : colors.white
+            // }
+            status={item.status}
+            chipsColor={isViewAllPage ? colors.tertiaryColor : colors.white}
         />
     );
 
     return (
         <View style={container}>
             <LAManagerFilters />
-            {/* <ScrollView horizontal contentContainerStyle={scrollViewContainer}> */}
             <FlatList
                 data={leaveRequests ?? []}
                 ListEmptyComponent={
@@ -121,6 +122,7 @@ const LAPendingRequestList = ({
                 }
                 keyExtractor={(item, index) => item.status + index}
                 onEndReachedThreshold={0.3}
+                showsVerticalScrollIndicator={false}
                 onEndReached={() => {
                     if (callNextPage) {
                         callNextPage();
@@ -152,7 +154,6 @@ const LAPendingRequestList = ({
                     ) : null
                 }
             />
-            {/* </ScrollView> */}
         </View>
     );
 };

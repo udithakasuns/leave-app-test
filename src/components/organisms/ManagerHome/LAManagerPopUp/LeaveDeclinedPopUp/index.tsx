@@ -23,7 +23,7 @@ const LeaveApprovedSheetBody = ({
         <ButtonDock
             iconPosition='left'
             primaryButton={{
-                label: 'Back to home',
+                label: 'Proceed to home',
                 icon: 'arrow-forward',
                 onPress: onConfirmationHomePress,
             }}

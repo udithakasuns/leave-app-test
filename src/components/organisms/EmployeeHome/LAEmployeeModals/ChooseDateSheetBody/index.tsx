@@ -142,6 +142,32 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
         DateTime.now().minus({ months: 1 }).toRelativeCalendar() ===
         'last year';
 
+    const getLastFriday = () => {
+        const lastDate = DateTime.local(DateTime.now().year, 12, 31);
+
+        if (lastDate.weekday === 7) {
+            return lastDate.minus({ days: 2 }).toFormat('yyyy-MM-dd');
+        }
+        if (lastDate.weekday === 6) {
+            return lastDate.minus({ days: 1 }).toFormat('yyyy-MM-dd');
+        }
+
+        return lastDate.toFormat('yyyy-MM-dd');
+    };
+
+    const getFirstMonday = () => {
+        const firstDate = DateTime.local(DateTime.now().year, 1, 1);
+
+        if (firstDate.weekday === 7) {
+            return firstDate.plus({ days: 1 }).toFormat('yyyy-MM-dd');
+        }
+        if (firstDate.weekday === 6) {
+            return firstDate.plus({ days: 2 }).toFormat('yyyy-MM-dd');
+        }
+
+        return firstDate.toFormat('yyyy-MM-dd');
+    };
+
     useEffect(() => {
         getAllHolidaysForMonth(new Date().valueOf());
         getPrevSelectedRange();
@@ -164,16 +190,12 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                 theme={calendarTheme}
                 minDate={
                     isLastYear
-                        ? DateTime.local(DateTime.now().year, 1, 1).toFormat(
-                              'yyyy-MM-dd',
-                          )
+                        ? getFirstMonday()
                         : DateTime.now()
                               .minus({ month: 1 })
                               .toFormat('yyyy-MM-dd')
                 }
-                maxDate={DateTime.local(DateTime.now().year, 12, 31).toFormat(
-                    'yyyy-MM-dd',
-                )}
+                maxDate={getLastFriday()}
             />
             <Spacer height={scale.vsc10} />
             <View style={styles.halfButtonsStyle}>

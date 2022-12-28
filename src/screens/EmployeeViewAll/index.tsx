@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { useNavigation } from '@react-navigation/native';
 import { UseInfiniteQueryResult } from '@tanstack/react-query';
-import {
-    DrawerScreenNavigationProp,
-    EmployeeViewAllScreensProps,
-} from 'navigators/types';
+import { EmployeeViewAllScreensProps } from 'navigators/types';
 import React from 'react';
 import { View } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -12,6 +8,7 @@ import { Spacer, Text } from 'src/components/atoms';
 import { BackHeader } from 'src/components/molecules';
 import { LALeaveRequestList } from 'src/components/organisms';
 import { useEmployeeFilterStore, useEmployeeStore } from 'src/store';
+import useBackAction from 'src/utils/hooks/useBackAction';
 import { useAllLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
 import theme from 'src/utils/theme';
 import { LeaveRequestType, Page } from 'src/utils/types';
@@ -20,10 +17,10 @@ import { screenStyles } from 'utils/styles';
 const { scale, deviceDimensions } = theme;
 
 const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
-    const navigation = useNavigation<DrawerScreenNavigationProp>();
     const { params, resetFiltersParams } = useEmployeeFilterStore();
 
     const { getEmployeeModal } = useEmployeeStore();
+    const backAction = useBackAction();
 
     const {
         data: leaveRequests,
@@ -38,9 +35,9 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         getEmployeeModal(item.leaveRequestId);
     };
 
-    const backAction = () => {
+    const onGoBack = () => {
         resetFiltersParams();
-        navigation.jumpTo('EmployeeHome');
+        backAction();
         return true;
     };
 
@@ -51,7 +48,7 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
     };
     return (
         <View style={screenStyles.container}>
-            <BackHeader title='Home' onBackPress={backAction} />
+            <BackHeader title='Home' onBackPress={onGoBack} />
             <>
                 <Spacer />
                 <Text type='SubHBold' style={{ marginHorizontal: scale.sc5 }}>

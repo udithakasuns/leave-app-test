@@ -9,6 +9,7 @@ export { default as Spacer } from './LASpacer';
 export { default as Divider } from './LADivider';
 export { default as ModalLoader } from './LAModalLoader';
 export { default as Loader } from './LALoader';
+export { default as Toggle } from './LAToggle';
 export type { Props as ChipProps } from './LAChip';
 export type { Props as ButtonProps } from './LAButton';
 export type { ButtonMode } from './LAButton/types';

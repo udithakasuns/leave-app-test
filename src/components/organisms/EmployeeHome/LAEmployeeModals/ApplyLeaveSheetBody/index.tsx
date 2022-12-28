@@ -96,7 +96,7 @@ const ApplyLeaveSheetBody = ({
     };
 
     useEffect(() => {
-        if (formik.values.startDate) {
+        if (formik.values.startDate && !isHalfSelected) {
             if (
                 formik.values.selectedLeaveBalance === undefined ||
                 formik.values.selectedLeaveBalance > 0.9

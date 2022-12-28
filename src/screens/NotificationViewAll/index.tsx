@@ -17,18 +17,19 @@ import {
     useManagerStore,
     useNotificationStore,
 } from 'src/store';
+import useBackAction from 'src/utils/hooks/useBackAction';
 import { NotificationPayload, NotificationVisibleType } from 'src/utils/types';
 import { screenStyles } from 'utils/styles';
 
-const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = ({
-    navigation,
-}) => {
+const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = () => {
     const [visibleType, setVisibleType] =
         useState<NotificationVisibleType>('all');
 
     const { getEmployeeModal } = useEmployeeStore();
     const { getManagerModal } = useManagerStore();
     const { notifyUserRole, getCount } = useNotificationStore();
+
+    const backAction = useBackAction();
 
     const {
         isLoading,
@@ -56,14 +57,6 @@ const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = ({
             },
         });
 
-    const onBackPress = () => {
-        if (notifyUserRole === 'MANAGER') {
-            navigation.navigate('ManagerHome');
-        } else {
-            navigation.navigate('EmployeeHome');
-        }
-    };
-
     const onPressNotification = async (
         notificationId: string,
         resourceId: number,
@@ -87,7 +80,7 @@ const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = ({
 
     return (
         <View style={screenStyles.container}>
-            <BackHeader title='Home' onBackPress={onBackPress} />
+            <BackHeader title='Home' onBackPress={backAction} />
             <Spacer />
             <NotificationFilterHeader
                 visibleType={visibleType}

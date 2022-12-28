@@ -31,11 +31,11 @@ const LAErrorPopup = ({
     title = type === 'network' ? 'Network Error' : 'Error 404',
     subTitle = type === 'network'
         ? 'The system could not be connected to the network. Please check your network and reload.'
-        : 'The page/data you requested could not be found. Please go back to home page, or contact support',
+        : 'The page/data you requested could not be found. Please proceed to home screen, or contact support',
     iconPosition = 'left',
     primaryIcon = type === 'network' ? 'refresh' : 'arrow-forward',
     secondaryIcon = 'arrow-forward',
-    primaryLabel = type === 'network' ? 'Try again' : 'Back to home',
+    primaryLabel = type === 'network' ? 'Try again' : 'Proceed to home',
     secondaryLabel = 'Get help',
     primaryOnPress = () => {},
     secondaryOnPress = () => {},
