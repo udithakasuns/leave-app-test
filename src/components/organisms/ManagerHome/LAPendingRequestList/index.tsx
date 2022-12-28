@@ -120,7 +120,8 @@ const LAPendingRequestList = ({
                     </View>
                 }
                 keyExtractor={(item, index) => item.status + index}
-                onEndReachedThreshold={0.3}
+                onEndReachedThreshold={0.5}
+                showsVerticalScrollIndicator={false}
                 onEndReached={() => {
                     if (callNextPage) {
                         callNextPage();
