@@ -94,6 +94,8 @@ const LARequestDetailsSection = ({
                                 content={`${getLeaveDurationDays(
                                     requestDetails?.leaveRequest
                                         ?.durationDays ?? 0,
+                                    requestDetails?.leaveRequest?.leaveState ??
+                                        'FULLDAY',
                                 )}`}
                                 contentTextType='ParaLG'
                             />

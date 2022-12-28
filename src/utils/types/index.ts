@@ -145,13 +145,15 @@ export type UserType = {
     role: UserRole;
 };
 
+export type LeaveState = 'HALFDAY_MORNING' | 'HALFDAY_EVENING' | 'FULLDAY';
+
 export type LeaveRequestType = {
     leaveRequestId: number;
     startDate: string;
     endDate: string;
     leaveType: LeaveType;
     // reasonForLeave: string | null;
-    leaveState: string;
+    leaveState: LeaveState;
     status: StatusType | '';
     // requestDesc?: string | null;
     // reviewerComment?: string | null;

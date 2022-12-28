@@ -122,6 +122,7 @@ const LAEmployeeRequestDetails = ({
                                 <Chip
                                     content={`${getLeaveDurationDays(
                                         requestDetails.durationDays,
+                                        requestDetails.leaveState,
                                     )}`}
                                     contentTextType='ParaLG'
                                     containerStyle={styles.durationChip}
