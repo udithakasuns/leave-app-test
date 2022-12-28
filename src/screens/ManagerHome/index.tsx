@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import { ManagerHomeScreensProps } from 'navigators/types';
 import React, { useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { Spacer, Text } from 'src/components/atoms';
 import { MultiChipProps } from 'src/components/molecules';
 import { LAAppBar } from 'src/components/organisms';
@@ -23,7 +24,9 @@ import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
 
 import { FilterTypes, PendingRequestType, Page } from 'src/utils/types';
 import { screenStyles } from 'utils/styles';
+import theme from '../../utils/theme';
 
+const { deviceDimensions } = theme;
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const {
         user: { firstName },
@@ -43,6 +46,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const {
         data: leaveRequests,
         refetch: refetchLeaveRequests,
+        isLoading,
     }: UseQueryResult<Page<PendingRequestType[]>> = usePendingRequestData(
         params,
         (data: Page<PendingRequestType[]>) => {
@@ -109,12 +113,26 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                 </Text>
                 <Spacer />
                 <Text type='SubHBold'>Leave requests</Text>
-                <LAPendingRequestList
-                    leaveRequests={leaveRequests?.items}
-                    onPressRequestItem={handleRequestItemPress}
-                    isViewAllPage={false}
-                    totalItems={leaveRequests?.totalItems ?? 0}
-                />
+                {isLoading ? (
+                    [...Array(6)].map(() => (
+                        <SkeletonPlaceholder borderRadius={4}>
+                            <SkeletonPlaceholder.Item
+                                flexDirection='row'
+                                alignItems='center'
+                                height={deviceDimensions.height / 16}
+                                width='100%'
+                                marginBottom={20}
+                            />
+                        </SkeletonPlaceholder>
+                    ))
+                ) : (
+                    <LAPendingRequestList
+                        leaveRequests={leaveRequests?.items}
+                        onPressRequestItem={handleRequestItemPress}
+                        isViewAllPage={false}
+                        totalItems={leaveRequests?.totalItems ?? 0}
+                    />
+                )}
             </ScrollView>
         </View>
     );
