@@ -5,6 +5,7 @@ const { colors, scale, radius } = theme;
 
 export const styles = StyleSheet.create({
     container: {
+        marginTop: scale.sc10,
         flexDirection: 'row',
         alignItems: 'center',
         paddingBottom: scale.sc10,

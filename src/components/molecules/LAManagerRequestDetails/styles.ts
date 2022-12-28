@@ -19,9 +19,9 @@ export const styles = StyleSheet.create({
     },
     durationContainerFlexEnd: {
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'row-reverse',
         flexWrap: 'wrap',
-        justifyContent: 'flex-end',
+        // justifyContent: 'flex-end',
     },
     durationContainer: {
         flex: 1,

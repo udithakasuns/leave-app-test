@@ -2,28 +2,32 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 import { Chip, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
-import { EmployeeType, TestProps } from 'src/utils/types';
-import { AvatarChip } from '..';
+import { EmployeeType, StatusType, TestProps } from 'src/utils/types';
+import { AvatarChip, StatusChip } from '..';
 import { styles } from './styles';
 
 const { colors, pixel, scale } = theme;
 
 interface Props extends Partial<TestProps> {
     date: string;
-    entitlement: string;
+    // entitlement: string;
     employee: EmployeeType;
     onPress: () => void;
-    entitlementChipColor: string;
+    // entitlementChipColor: string;
+    status: StatusType | '';
+    chipsColor: string;
 }
 
 const LAPendingListItem = ({
     date,
     employee,
-    entitlement,
+    // entitlement,
     testIdContent,
-    testIdChip,
+    // testIdChip,
     onPress,
-    entitlementChipColor,
+    // entitlementChipColor,
+    status,
+    chipsColor,
 }: Props) => (
     <Pressable onPress={onPress} style={styles.container}>
         <AvatarChip
@@ -41,7 +45,12 @@ const LAPendingListItem = ({
                 flex: 1,
             }}
         />
-        <Chip
+        <StatusChip
+            status={status}
+            containerStyle={{ backgroundColor: chipsColor }}
+            onPress={onPress}
+        />
+        {/* <Chip
             testIdContent={testIdChip}
             content={entitlement}
             contentColor={colors.gray600}
@@ -49,7 +58,7 @@ const LAPendingListItem = ({
             contentStyle={styles.contentStyle}
             backgroundColor={entitlementChipColor}
             containerStyle={styles.containerStyle}
-        />
+        /> */}
         <View style={styles.dateContainer}>
             <Text testID={testIdContent} type='ParaSM'>
                 {date}

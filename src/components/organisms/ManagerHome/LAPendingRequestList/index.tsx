@@ -45,14 +45,16 @@ const LAPendingRequestList = ({
         <PendingListItem
             date={getStartEndDate(item.startDate, item.endDate)}
             employee={item.employee}
-            entitlement={getEntitlementChipText(
-                item.leaveType,
-                item.leaveType.name,
-            )}
+            // entitlement={getEntitlementChipText(
+            //     item.leaveType,
+            //     item.leaveType.name,
+            // )}
             onPress={() => onPressRequestItem(item)}
-            entitlementChipColor={
-                isViewAllPage ? colors.tertiaryColor : colors.white
-            }
+            // entitlementChipColor={
+            //     isViewAllPage ? colors.tertiaryColor : colors.white
+            // }
+            status={item.status}
+            chipsColor={isViewAllPage ? colors.tertiaryColor : colors.white}
         />
     );
 

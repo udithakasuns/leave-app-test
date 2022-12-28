@@ -14,11 +14,11 @@ export const styles = StyleSheet.create({
         // alignSelf: 'baseline',
     },
     durationContainer: {
-        // flex: 1,
+        flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
     },
-    // durationChip: { marginVertical: 3 },
+    durationChip: { marginVertical: 3 },
     statusContainer: {
         backgroundColor: theme.colors.tertiaryColor,
     },
