@@ -1,7 +1,7 @@
 import { Linking } from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 
-const inAppUrlHandler = async (url: string, redirectUrl: string) => {
+export const inAppAuthUrlHandler = async (url: string, redirectUrl: string) => {
     await InAppBrowser.isAvailable();
     const { type, url: newUrl }: any = await InAppBrowser.openAuth(
         url,
@@ -19,6 +19,11 @@ const inAppUrlHandler = async (url: string, redirectUrl: string) => {
     if (type === 'success') {
         Linking.openURL(newUrl);
     }
+};
+
+export const inAppNormalUrlHandler = async (url: string) => {
+    await InAppBrowser.isAvailable();
+    InAppBrowser.open(url);
 };
 
 // const inAppUrlHandler = async (url: string, redirectUrl: string) => {
@@ -43,5 +48,3 @@ const inAppUrlHandler = async (url: string, redirectUrl: string) => {
 //         }
 //     }
 // };
-
-export default inAppUrlHandler;

@@ -6,19 +6,16 @@ import { SupportScreensProps } from 'navigators/types';
 import { Spacer, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import useBackAction from 'src/utils/hooks/useBackAction';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 import getAppVersion from 'src/utils/helpers/getAppVersion';
+import { inAppNormalUrlHandler } from 'src/utils/helpers/inAppUrlHandler';
+import { SUPPORT_URL } from 'src/configs';
 import { styles } from './styles';
 import DetailItem from './DetailItem';
 
 const { scale } = theme;
 
-const helpUrl = 'https://leaveapplication.rootcode.software/support/questions';
-
 const Support: React.FC<SupportScreensProps> = () => {
     const backAction = useBackAction();
-
-    const onOpenHelpUrl = () => InAppBrowser.open(helpUrl);
 
     return (
         <View style={screenStyles.containerScollable}>
@@ -35,9 +32,9 @@ const Support: React.FC<SupportScreensProps> = () => {
                 <DetailItem label='Email' value='helplineemail@rootcode.io' />
                 <DetailItem
                     label='Help url'
-                    value='www.support.leaveapp.info'
+                    value={SUPPORT_URL}
                     iconName='open-in-new'
-                    onPressIcon={onOpenHelpUrl}
+                    onPressIcon={() => inAppNormalUrlHandler(SUPPORT_URL)}
                 />
                 <Spacer height={scale.sc10} />
                 <View style={styles.divider} />
