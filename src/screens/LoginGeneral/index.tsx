@@ -1,6 +1,7 @@
 import React, { useState, LegacyRef, createRef } from 'react';
 import { View, ScrollView, TextInput } from 'react-native';
 import { Button, Input, Spacer, Text } from 'src/components/atoms';
+import Footer from 'src/components/organisms/Login/Footer';
 import Header from 'src/components/organisms/Login/Header';
 import { awsOnGeneralSignIn } from 'src/services/aws';
 import { usePersistStore, useUserStore } from 'src/store';
@@ -70,6 +71,7 @@ const LoginGeneral = () => {
                     Sign in with email and password
                 </Text>
             </ScrollView>
+            <Footer />
         </View>
     );
 };

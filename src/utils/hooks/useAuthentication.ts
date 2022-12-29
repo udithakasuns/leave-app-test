@@ -8,13 +8,13 @@ import {
 import { usePersistStore, useRecipientStore, useUserStore } from 'src/store';
 import amplifiConfig from 'src/aws-exports';
 import { getCurrentUserRoleFromToken } from '../helpers/gettersUtil';
-import inAppUrlHandler from '../helpers/inAppUrlHandler';
+import { inAppAuthUrlHandler } from '../helpers/inAppUrlHandler';
 
 Amplify.configure({
     ...amplifiConfig,
     oauth: {
         ...amplifiConfig.oauth,
-        urlOpener: inAppUrlHandler,
+        urlOpener: inAppAuthUrlHandler,
     },
 });
 

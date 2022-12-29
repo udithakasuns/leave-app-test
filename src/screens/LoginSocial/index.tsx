@@ -7,6 +7,7 @@ import theme from 'src/utils/theme';
 import { SocialButton } from 'components/molecules';
 import Header from 'src/components/organisms/Login/Header';
 import { usePersistStore, useUserStore } from 'src/store';
+import Footer from 'src/components/organisms/Login/Footer';
 import { styles } from './styles';
 
 const { colors } = theme;
@@ -55,6 +56,7 @@ const LoginSocial: React.FC<LoginScreenProps> = () => {
                     Sign in with email and password
                 </Text> */}
             </ScrollView>
+            <Footer />
         </View>
     );
 };
