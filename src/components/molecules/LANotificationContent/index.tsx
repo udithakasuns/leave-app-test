@@ -84,6 +84,21 @@ const LANotificationContent = ({
                 return 'ParaLGBold';
             }
         }
+        if (type === 'NEW_MULTI_DAY_LEAVE_REQUEST') {
+            if (
+                i === 0 ||
+                i === 1 ||
+                i === 4 ||
+                i === 5 ||
+                i === 7 ||
+                i === 8 ||
+                i === n - 3 || // 3rd last index
+                i === n - 2 || // 2nd last index
+                i === n - 1 // last index
+            ) {
+                return 'ParaLGBold';
+            }
+        }
         return 'ParaLG';
     };
 
