@@ -26,7 +26,7 @@ const DeclineSheetBody = ({ onDeclineLeaveRequest }: Props) => {
             <Input
                 error={showError}
                 placeholder='Add your reason'
-                label='Reason for declination'
+                label='Reason to decline'
                 type='COMMENT'
                 value={reviewerComment}
                 containerStyle={{ margin: 0 }}

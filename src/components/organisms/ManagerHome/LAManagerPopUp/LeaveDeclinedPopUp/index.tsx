@@ -28,7 +28,7 @@ const LeaveApprovedSheetBody = ({
                 onPress: onConfirmationHomePress,
             }}
             secondaryButton={{
-                label: 'Undo cancellation',
+                label: 'Undo decline',
                 icon: 'undo',
                 onPress: onUndoApprovalPress,
             }}

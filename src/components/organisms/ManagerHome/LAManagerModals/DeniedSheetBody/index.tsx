@@ -54,7 +54,7 @@ const DeniedSheetBody = ({
         <Spacer />
         <Input
             placeholder={requestDetails.reviewerComment ?? ''}
-            label='Reason for denial'
+            label='Reason to decline'
             type='COMMENT'
             containerStyle={styles.inputContainerStyle}
             inputContainerStyle={styles.inputTextStyle}
