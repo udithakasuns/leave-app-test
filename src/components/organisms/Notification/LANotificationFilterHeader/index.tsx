@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { Button, Icon, Text } from 'src/components/atoms';
+import { Button, Icon, IconSize, Text } from 'src/components/atoms';
 import { WIDTH } from 'src/utils/helpers/scalingUtil';
 import theme from 'src/utils/theme';
 import { AtLeast, NotificationVisibleType } from 'utils/types';
@@ -25,24 +25,24 @@ const LANotificationFilterHeader = ({
             {onClose && (
                 <TouchableOpacity onPress={onClose}>
                     <Icon
-                        size={WIDTH(8)}
-                        name='close-circle-outline'
-                        library='community'
+                        name='close'
                         color={colors.gray600}
+                        enableBackground
+                        size={IconSize.medium}
                     />
                 </TouchableOpacity>
             )}
         </View>
         <View style={styles.headerButtonContainer}>
             <Button
-                size='small'
+                size='medium'
                 buttonStyle={styles.headerButtonStyle}
                 mode={visibleType === 'all' ? 'outlined' : 'contained-gray'}
                 label='All'
                 onPress={() => onChangeVisibleType('all')}
             />
             <Button
-                size='small'
+                size='medium'
                 buttonStyle={styles.headerButtonStyle}
                 mode={visibleType === 'unread' ? 'outlined' : 'contained-gray'}
                 label='Unread'
