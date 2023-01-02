@@ -31,7 +31,11 @@ const LoginSocial: React.FC<LoginScreenProps> = () => {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollView}>
-                <Header description='Log into your Rootcode account using your G-suite account Single Sign on, or using Apple account.' />
+                {Platform.OS === 'ios' ? (
+                    <Header description='Log into your Rootcode account using your G-suite account Single Sign on, or using Apple account.' />
+                ) : (
+                    <Header description='Log into your Rootcode account using your G-suite account.' />
+                )}
                 <SocialButton
                     label='Sign in with Gmail'
                     iconName='google'
