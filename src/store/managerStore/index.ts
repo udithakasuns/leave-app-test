@@ -4,12 +4,13 @@ import create from 'zustand';
 import { Actions, State } from './types';
 
 const initialState: State = {
+    isManagerModalLoading: false,
     managerRequest: {
         leaveRequestId: 0,
         startDate: '',
         endDate: '',
         leaveType: { name: '', typeId: 0 },
-        status: 'APPROVED',
+        status: '',
         leaveState: 'FULLDAY',
         requestDesc: '',
         durationHours: 0,
@@ -34,24 +35,34 @@ const initialState: State = {
 
 const managerStore = create<State & Actions>(set => ({
     ...initialState,
-    setPendingRequestByID: async (requestID: number) => {
-        const res = await getHttpPendingRequestByID(requestID);
-        const employee: PendingRequestByID = res[0];
-        set(state => ({
-            ...state,
-            managerRequest: {
-                ...state.managerRequest,
-                ...employee,
-            },
-        }));
+    getManagerModal: async (requestID: number) => {
+        set({ isManagerModalLoading: true });
+        try {
+            const res = await getHttpPendingRequestByID(requestID);
+            const employee: PendingRequestByID = res[0];
+            set(state => ({
+                managerRequest: {
+                    ...state.managerRequest,
+                    ...employee,
+                },
+                isManagerModalLoading: false,
+            }));
+        } catch (err) {
+            set({ isManagerModalLoading: false });
+        }
     },
-    setPendingRequest: managerRequest => {
+    setManagerRequest: managerRequest => {
         set(state => ({
             ...state,
             managerRequest: {
                 ...state.managerRequest,
                 ...managerRequest,
             },
+        }));
+    },
+    resetManagerRequest: () => {
+        set(() => ({
+            managerRequest: initialState.managerRequest,
         }));
     },
 }));

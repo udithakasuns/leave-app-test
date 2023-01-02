@@ -2,7 +2,7 @@ import { UserRole, UserType } from 'utils/types';
 
 export interface State {
     user: UserType;
-    loading: boolean;
+    authLoading: boolean;
     error: string;
 }
 
@@ -16,5 +16,5 @@ export type Actions = {
     ) => void;
     updateUser: () => void;
     removeUser: () => void;
-    setLoading: (state: boolean) => void;
+    setAuthLoading: (authLoading: boolean) => void;
 };

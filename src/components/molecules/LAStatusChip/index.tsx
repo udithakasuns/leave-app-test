@@ -8,7 +8,7 @@ import { styles } from './styles';
 const { colors } = theme;
 
 type StatusChipProps = Partial<TestProps> & {
-    status: StatusType;
+    status: StatusType | '';
     onPress: () => void;
     containerStyle: StyleProp<ViewStyle>;
 };

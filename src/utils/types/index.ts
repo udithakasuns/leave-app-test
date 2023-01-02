@@ -104,6 +104,7 @@ export enum Status {
     APPROVED = 'APPROVED',
     DENIED = 'DENIED',
     CANCELLED = 'CANCELLED',
+    REVOKED = 'REVOKED',
 }
 
 export type StatusType = keyof typeof Status;
@@ -144,18 +145,25 @@ export type UserType = {
     role: UserRole;
 };
 
+export type LeaveState = 'HALFDAY_MORNING' | 'HALFDAY_EVENING' | 'FULLDAY';
+
 export type LeaveRequestType = {
     leaveRequestId: number;
     startDate: string;
     endDate: string;
     leaveType: LeaveType;
     // reasonForLeave: string | null;
-    leaveState: string;
-    status: StatusType;
+    leaveState: LeaveState;
+    status: StatusType | '';
     // requestDesc?: string | null;
     // reviewerComment?: string | null;
     durationHours: number | null;
     durationDays: number | null;
+};
+
+export type LeaveRequestWithPageType = {
+    leaveRequestData: Section<LeaveRequestType[]>[];
+    pageNumbers: number;
 };
 
 export interface LeaveRequestByID extends LeaveRequestType {
@@ -172,7 +180,7 @@ export type PendingRequestType = {
     startDate: string;
     endDate: string;
     leaveType: LeaveType;
-    status: StatusType;
+    status: StatusType | '';
     leaveState: LeaveSate;
     durationHours: number;
     durationDays: number;
@@ -202,6 +210,13 @@ export interface Section<T> {
     title: string;
     isViewAllVisible: boolean;
     data: T;
+}
+
+export interface Page<T> {
+    currentPage: number;
+    totalItems: number;
+    totalPages: number;
+    items: T;
 }
 
 type RequestParams = {
@@ -263,6 +278,37 @@ export type ApplyFormValues = {
     entitlements: EntitlementSelection[];
 };
 
+export type DeviceType = 'ANDROID' | 'IOS';
+
+export type NotificationType =
+    | 'NEW_LEAVE_REQUEST'
+    | 'LEAVE_REQUEST_NUDGE'
+    | 'LEAVE_REQUEST_APPROVED_DENIED'
+    | 'LEAVE_REQUEST_CANCELLED'
+    | 'MULTI_DAY_LEAVE_REQUEST_NUDGE'
+    | 'NEW_MULTI_DAY_LEAVE_REQUEST';
+
+export type NotificationBody = {
+    image: string;
+    message: string;
+};
+
+export type NotificationPayload = {
+    currentPage: number;
+    totalItems: number;
+    totalPages: number;
+    items: {
+        id: number;
+        createdDate: string;
+        title: string;
+        body: NotificationBody;
+        notificationType: NotificationType;
+        resourceId: number;
+        viewed: boolean;
+    }[];
+};
+
+export type NotificationVisibleType = 'all' | 'unread';
 export type LeaveUndoProp = {
     requestID: number;
     startDate: string;
@@ -283,4 +329,32 @@ export type FilterProps = {
     filterChips: FilterChipsProps[];
     onSortPress: (multiButtons: MultiButtonProps[]) => void;
     onFilterPress: (multiButtons: FilterChipsProps[]) => void;
+};
+
+export type ManagerNotificationSettings = {
+    isNudgeNotificationsEnabled: boolean;
+    isLeaveRequestNotificationsEnabled: boolean;
+    isUpcomingEventsNotificationsEnabled: boolean;
+};
+
+export type EmployeeNotificationSettings = {
+    isLeaveRequestNotificationsEnabled: boolean;
+    isUpcomingEventsNotificationsEnabled: boolean;
+};
+
+export type NotificationSettings = {
+    manager: ManagerNotificationSettings;
+    employee: EmployeeNotificationSettings;
+};
+
+export type Settings = {
+    notifications: NotificationSettings;
+};
+
+export type Me = {
+    userId: number;
+    username: string;
+    email: string;
+    settings: Settings;
+    active: boolean;
 };

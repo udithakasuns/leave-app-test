@@ -3,13 +3,15 @@ import create from 'zustand';
 import { getHttpLeaveRequestByID } from '../../services/http/getRequest/index';
 import { Actions, State } from './types';
 
-const initialState: State = {
+export const initialState: State = {
+    refreshEmployeeHomeState: false,
+    isEmployeeModalLoading: false,
     employeeRequest: {
         leaveRequestId: 0,
         startDate: '',
         endDate: '',
         leaveType: { name: '', typeId: 0 },
-        status: 'APPROVED',
+        status: '',
         leaveState: 'FULLDAY',
         requestDesc: '',
         durationHours: 0,
@@ -34,24 +36,40 @@ const initialState: State = {
 
 const employeeStore = create<State & Actions>(set => ({
     ...initialState,
-    setLeaveRequestByID: async (requestID: number) => {
-        const res = await getHttpLeaveRequestByID(requestID);
-        const request: LeaveRequestByID = res[0];
-        set(state => ({
-            ...state,
-            employeeRequest: {
-                ...state.employeeRequest,
-                ...request,
-            },
-        }));
+    setRefreshEmployeeHomeState: refreshEmployeeHomeState =>
+        set(() => ({ refreshEmployeeHomeState })),
+    getEmployeeModal: async (requestID: number) => {
+        set({
+            isEmployeeModalLoading: true,
+        });
+        try {
+            const res = await getHttpLeaveRequestByID(requestID);
+            const request: LeaveRequestByID = res[0];
+            set(state => ({
+                employeeRequest: {
+                    ...state.employeeRequest,
+                    ...request,
+                },
+                isEmployeeModalLoading: false,
+            }));
+        } catch (err) {
+            set({
+                isEmployeeModalLoading: false,
+            });
+        }
     },
-    setLeaveRequest: managerRequest => {
+    setEmployeeRequest: managerRequest => {
         set(state => ({
             ...state,
             employeeRequest: {
                 ...state.employeeRequest,
                 ...managerRequest,
             },
+        }));
+    },
+    resetEmployeeRequest: () => {
+        set(() => ({
+            employeeRequest: initialState.employeeRequest,
         }));
     },
 }));

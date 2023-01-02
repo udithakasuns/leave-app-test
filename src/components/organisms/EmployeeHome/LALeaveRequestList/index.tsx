@@ -1,11 +1,11 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { ScrollView, SectionList, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Button, Chip, Divider, Spacer, Text } from 'src/components/atoms';
-import { MonthSection, RequestListItem } from 'src/components/molecules';
+import { RequestListItem } from 'src/components/molecules';
 import { DrawerScreenNavigationProp } from 'src/navigators/types';
-import { useEmployeeFilterStore } from 'src/store';
+import { useEmployeeFilterStore, useRecipientStore } from 'src/store';
 import { getStartEndDate } from 'src/utils/helpers/dateHandler';
 import { getErrorMessage } from 'src/utils/helpers/errorCodes';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
@@ -14,7 +14,6 @@ import {
     AtLeast,
     FilterProps,
     LeaveRequestType,
-    Section,
     TestProps,
 } from 'src/utils/types';
 import LAEmployeeFilters from '../LAEmployeeFilters';
@@ -23,22 +22,25 @@ import styles from './styles';
 const { colors, scale, fontSize } = theme;
 
 interface Props extends Partial<TestProps>, FilterProps {
-    leaveRequests: Section<LeaveRequestType[]>[];
+    leaveRequests: LeaveRequestType[];
     onPressRequestItem: (item: LeaveRequestType) => void;
+    callNextPage?: () => void;
     isViewAllPage: boolean;
+    totalItems: number;
 }
 
 const LALeaveRequestList = ({
     leaveRequests,
     onPressRequestItem,
     isViewAllPage = false,
+    callNextPage,
+    totalItems,
 }: AtLeast<Props, 'isViewAllPage' | 'onPressRequestItem'>) => {
     const { filterUtils, resetFiltersParams } = useEmployeeFilterStore();
     const navigation = useNavigation<DrawerScreenNavigationProp>();
-
+    const { managers } = useRecipientStore();
     const {
         container,
-        scrollViewContainer,
         footerContainer,
         viewAllContainer,
         viewAllContent,
@@ -60,104 +62,112 @@ const LALeaveRequestList = ({
 
     return (
         <View style={container}>
-            <LAEmployeeFilters />
-            <ScrollView horizontal contentContainerStyle={scrollViewContainer}>
-                <SectionList<LeaveRequestType, Section<LeaveRequestType[]>>
-                    sections={leaveRequests ?? []}
-                    ListEmptyComponent={
+            {managers.length > 0 && <LAEmployeeFilters />}
+            <FlatList
+                data={leaveRequests && managers.length > 0 ? leaveRequests : []}
+                ListEmptyComponent={
+                    <View
+                        style={{
+                            paddingVertical: scale.vsc64,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
+                        <Text style={{ fontSize: fontSize.fs24 }}>🧐</Text>
+                        <Spacer height={2} />
                         <View
                             style={{
-                                paddingVertical: scale.vsc80,
                                 justifyContent: 'center',
                                 alignItems: 'center',
                             }}>
-                            <Text style={{ fontSize: fontSize.fs24 }}>🧐</Text>
+                            <Text type='SubHBold'>
+                                {
+                                    getErrorMessage(
+                                        // eslint-disable-next-line no-nested-ternary
+                                        managers.length < 1
+                                            ? 'NO_RECIPIENT'
+                                            : filterUtils.isFiltersSelected
+                                            ? 'EMPTY_FILTERS_REQUEST_LEAVE'
+                                            : 'EMPTY_REQUEST_LEAVE',
+                                    ).title
+                                }
+                            </Text>
                             <Spacer height={2} />
-                            <View
+                            <Text
+                                type='ParaSM'
                                 style={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
+                                    color: colors.primaryGrayLabel,
+                                    textAlign: 'center',
+                                    paddingHorizontal: scale.sc32,
                                 }}>
-                                <Text type='SubHBold'>
-                                    {
-                                        getErrorMessage(
-                                            filterUtils.isFiltersSelected
-                                                ? 'EMPTY_FILTERS_REQUEST_LEAVE'
-                                                : 'EMPTY_REQUEST_LEAVE',
-                                        ).title
-                                    }
-                                </Text>
-                                <Spacer height={2} />
-                                <Text
-                                    type='ParaSM'
-                                    style={{
-                                        color: colors.primaryGrayLabel,
-                                        textAlign: 'center',
-                                        paddingHorizontal: scale.sc32,
-                                    }}>
-                                    {
-                                        getErrorMessage(
-                                            filterUtils.isFiltersSelected
-                                                ? 'EMPTY_FILTERS_REQUEST_LEAVE'
-                                                : 'EMPTY_REQUEST_LEAVE',
-                                        ).message
-                                    }
-                                </Text>
-                                {filterUtils.isFiltersSelected && (
-                                    <>
-                                        <Spacer />
-                                        <Button
-                                            mode='outlined'
-                                            label='Reset Filters'
-                                            icon='restore'
-                                            iconPosition='left'
-                                            buttonStyle={{
-                                                paddingVertical: scale.sc12,
-                                            }}
-                                            onPress={resetFiltersParams}
-                                        />
-                                    </>
-                                )}
-                            </View>
+                                {
+                                    getErrorMessage(
+                                        // eslint-disable-next-line no-nested-ternary
+                                        managers.length < 1
+                                            ? 'NO_RECIPIENT'
+                                            : filterUtils.isFiltersSelected
+                                            ? 'EMPTY_FILTERS_REQUEST_LEAVE'
+                                            : 'EMPTY_REQUEST_LEAVE',
+                                    ).message
+                                }
+                            </Text>
+                            {filterUtils.isFiltersSelected && (
+                                <>
+                                    <Spacer />
+                                    <Button
+                                        mode='outlined'
+                                        label='Reset Filters'
+                                        icon='restore'
+                                        iconPosition='left'
+                                        buttonStyle={{
+                                            paddingVertical: scale.sc12,
+                                        }}
+                                        onPress={resetFiltersParams}
+                                    />
+                                </>
+                            )}
                         </View>
+                    </View>
+                }
+                keyExtractor={(item, index) => item.status + index}
+                renderItem={({ item }) => <Item item={item} />}
+                onEndReachedThreshold={0.3}
+                onEndReached={() => {
+                    if (callNextPage) {
+                        callNextPage();
                     }
-                    keyExtractor={(item, index) => item.status + index}
-                    scrollEnabled={false}
-                    renderItem={({ item }) => <Item item={item} />}
-                    ListFooterComponent={() =>
-                        !isViewAllPage ? (
-                            <View style={footerContainer}>
-                                <Spacer height={6} />
-                                <Divider />
-                                <Spacer height={6} />
-                                <Chip
-                                    content='View All'
-                                    rightIconName='arrow-forward'
-                                    disabled={
-                                        leaveRequests !== undefined
-                                            ? !leaveRequests[0]
-                                                  ?.isViewAllVisible
-                                            : true ?? false
-                                    }
-                                    outline
-                                    contentColor={colors.black}
-                                    onPressChip={() =>
-                                        navigation.navigate('EmployeeViewAll')
-                                    }
-                                    contentTextType='ParaLG'
-                                    outlineColor={colors.gray300}
-                                    contentStyle={viewAllContent}
-                                    pressableContainerStyle={viewAllPress}
-                                    containerStyle={viewAllContainer}
-                                />
-                            </View>
-                        ) : null
-                    }
-                    renderSectionHeader={({ section: { title } }) => (
-                        <MonthSection month={title} />
-                    )}
-                />
-            </ScrollView>
+                }}
+                ListFooterComponent={() =>
+                    !isViewAllPage ? (
+                        <View style={footerContainer}>
+                            <Spacer height={6} />
+                            <Divider />
+                            <Spacer height={6} />
+                            <Chip
+                                content='View All'
+                                rightIconName='arrow-forward'
+                                disabled={
+                                    !(
+                                        managers.length > 0 &&
+                                        totalItems &&
+                                        totalItems > 5
+                                    )
+                                }
+                                outline
+                                contentColor={colors.black}
+                                onPressChip={() =>
+                                    navigation.navigate('EmployeeViewAll')
+                                }
+                                contentTextType='ParaLG'
+                                outlineColor={colors.gray300}
+                                contentStyle={viewAllContent}
+                                pressableContainerStyle={viewAllPress}
+                                containerStyle={viewAllContainer}
+                            />
+                        </View>
+                    ) : null
+                }
+                showsVerticalScrollIndicator={false}
+            />
         </View>
     );
 };

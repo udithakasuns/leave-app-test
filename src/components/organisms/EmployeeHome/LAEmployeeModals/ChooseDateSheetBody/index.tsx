@@ -1,11 +1,11 @@
 /* eslint-disable no-plusplus */
 import { FormikProps } from 'formik';
+import { DateTime } from 'luxon';
 import React, { useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { Calendar, CalendarUtils, DateData } from 'react-native-calendars';
 import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { MarkedDates } from 'react-native-calendars/src/types';
-import Toast from 'react-native-toast-message';
 import { Spacer } from 'src/components/atoms';
 import { ButtonDock, SelectionButton } from 'src/components/molecules';
 import { showErrorToast } from 'src/utils/alerts';
@@ -138,6 +138,36 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
         }
     };
 
+    const isLastYear =
+        DateTime.now().minus({ months: 1 }).toRelativeCalendar() ===
+        'last year';
+
+    const getLastFriday = () => {
+        const lastDate = DateTime.local(DateTime.now().year, 12, 31);
+
+        if (lastDate.weekday === 7) {
+            return lastDate.minus({ days: 2 }).toFormat('yyyy-MM-dd');
+        }
+        if (lastDate.weekday === 6) {
+            return lastDate.minus({ days: 1 }).toFormat('yyyy-MM-dd');
+        }
+
+        return lastDate.toFormat('yyyy-MM-dd');
+    };
+
+    const getFirstMonday = () => {
+        const firstDate = DateTime.local(DateTime.now().year, 1, 1);
+
+        if (firstDate.weekday === 7) {
+            return firstDate.plus({ days: 1 }).toFormat('yyyy-MM-dd');
+        }
+        if (firstDate.weekday === 6) {
+            return firstDate.plus({ days: 2 }).toFormat('yyyy-MM-dd');
+        }
+
+        return firstDate.toFormat('yyyy-MM-dd');
+    };
+
     useEffect(() => {
         getAllHolidaysForMonth(new Date().valueOf());
         getPrevSelectedRange();
@@ -158,6 +188,14 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                 style={styles.calendarStyle}
                 headerStyle={styles.calendarHeaderStyle}
                 theme={calendarTheme}
+                minDate={
+                    isLastYear
+                        ? getFirstMonday()
+                        : DateTime.now()
+                              .minus({ month: 1 })
+                              .toFormat('yyyy-MM-dd')
+                }
+                maxDate={getLastFriday()}
             />
             <Spacer height={scale.vsc10} />
             <View style={styles.halfButtonsStyle}>

@@ -7,17 +7,21 @@ export type AuthScreensParamList = {
     ManagerHome: undefined;
     EmployeeViewAll: undefined;
     ManagerViewAll: undefined;
+    NotificationViewAll: undefined;
+    Account: undefined;
+    Settings: undefined;
+    Support: undefined;
 };
 
 export type RootScreensParamsList = {
-    Splash: undefined;
+    Loading: undefined;
     Login: undefined;
     Auth: NavigatorScreenParams<AuthScreensParamList>;
 };
 
-export type SplashScreenProps = NativeStackScreenProps<
+export type LoadingScreenProps = NativeStackScreenProps<
     RootScreensParamsList,
-    'Splash'
+    'Loading'
 >;
 
 export type LoginScreenProps = NativeStackScreenProps<
@@ -40,9 +44,27 @@ export type ManagerHomeScreensProps = NativeStackScreenProps<
     'ManagerHome'
 >;
 
+export type NotificationViewAllScreensProps = NativeStackScreenProps<
+    AuthScreensParamList,
+    'NotificationViewAll'
+>;
+
 export type ManagerViewAllScreensProps = NativeStackScreenProps<
     AuthScreensParamList,
     'ManagerViewAll'
+>;
+export type AccountScreensProps = NativeStackScreenProps<
+    AuthScreensParamList,
+    'Account'
+>;
+export type SettingsScreensProps = NativeStackScreenProps<
+    AuthScreensParamList,
+    'Settings'
+>;
+
+export type SupportScreensProps = NativeStackScreenProps<
+    AuthScreensParamList,
+    'Support'
 >;
 
 export type DrawerScreenNavigationProp = DrawerNavigationProp<

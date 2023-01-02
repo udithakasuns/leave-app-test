@@ -8,6 +8,7 @@ const initialState: State = {
     filterChips: [],
     params: {
         sortKey: 'creationDate',
+        page: 0,
     },
     filterUtils: {
         isFilterButtonsVisible: true,

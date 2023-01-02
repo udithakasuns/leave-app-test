@@ -1,38 +1,51 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Avatar, Button, Spacer, Text } from 'src/components/atoms';
-import { awsOnSignOut } from 'src/services/aws';
 import { useUserStore } from 'src/store';
+import useLogout from 'src/utils/hooks/useLogout';
 import { IconLibrary } from 'src/utils/types';
 import theme from 'utils/theme';
+import { NavigationProp } from '@react-navigation/native';
+import { AuthScreensParamList } from 'src/navigators/types';
 import { styles } from './styles';
 
 const { scale, colors } = theme;
+
+interface Props {
+    navigation: NavigationProp<AuthScreensParamList>;
+}
+
 interface ButtonProps {
     icon: string;
     label: string;
     onPress: () => void;
     iconLibrary?: IconLibrary;
 }
-const LADrawer: React.FC = () => {
+const LADrawer: React.FC<Props> = ({ navigation }) => {
     const {
         user: { firstName, lastName, profilePic, designation },
     } = useUserStore();
+
+    const logout = useLogout();
 
     const [buttons] = useState<ButtonProps[]>([
         {
             label: 'Account',
             icon: 'account-circle',
-            onPress: () => {},
+            onPress: () => navigation.navigate('Account'),
             iconLibrary: 'svg',
         },
         {
             label: 'Settings',
             icon: 'settings',
-            onPress: () => {},
+            onPress: () => navigation.navigate('Settings'),
             iconLibrary: 'svg',
         },
-        { label: 'Support', icon: 'help-outline', onPress: () => {} },
+        {
+            label: 'Support',
+            icon: 'help-outline',
+            onPress: () => navigation.navigate('Support'),
+        },
     ]);
 
     return (
@@ -70,7 +83,7 @@ const LADrawer: React.FC = () => {
                     mode='contained-gray'
                     iconPosition='right'
                     labelStyle={styles.buttonLabelStyle}
-                    onPress={awsOnSignOut}
+                    onPress={logout}
                 />
             </View>
         </View>

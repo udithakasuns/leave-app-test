@@ -1,7 +1,6 @@
 import { FormikProps } from 'formik';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { Input, Spacer, Text } from 'src/components/atoms';
 import {
     ButtonDock,
@@ -38,6 +37,8 @@ const ApplyLeaveSheetBody = ({
     setIsHalfSelected,
     onCancellation,
 }: Props) => {
+    const [fullDayLeaveDisabled, setFullDayLeaveDisabled] = useState(false);
+
     const handleOnEntitlementPress = (selected: EntitlementSelection) => {
         if (selected.balanceInDays === 0) {
             showErrorToast(
@@ -94,6 +95,42 @@ const ApplyLeaveSheetBody = ({
         );
     };
 
+    useEffect(() => {
+        if (formik.values.startDate && !isHalfSelected) {
+            if (
+                formik.values.selectedLeaveBalance === undefined ||
+                formik.values.selectedLeaveBalance > 0.9
+            ) {
+                formik.setFieldValue('leaveState', States.FULLDAY);
+            } else {
+                setIsHalfSelected(true);
+            }
+        }
+    }, [formik.values.startDate]);
+
+    useEffect(() => {
+        setFullDayLeaveDisabled(
+            formik.values.selectedLeaveBalance !== undefined &&
+                formik.values.selectedLeaveBalance < 1,
+        );
+    }, [formik.values.selectedLeaveBalance]);
+
+    useEffect(() => {
+        const selectedEntitlement = formik.values.entitlements.find(
+            ent => ent.isSelected,
+        );
+        if (selectedEntitlement) {
+            setFullDayLeaveDisabled(selectedEntitlement.balanceInDays < 1);
+            handleOnEntitlementPress(selectedEntitlement);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (fullDayLeaveDisabled) {
+            formik.setFieldValue('leaveState', '');
+        }
+    }, [fullDayLeaveDisabled]);
+
     return (
         <View>
             <Spacer height={5} />
@@ -118,7 +155,9 @@ const ApplyLeaveSheetBody = ({
                         : 'Select the leave date'
                 }
                 isSelected={!!formik.values.startDate}
-                onPress={onPressSelectDate}
+                onPress={() => {
+                    onPressSelectDate();
+                }}
             />
             <Spacer height={scale.vsc8} />
             {formik.values.endDate === '' && (
@@ -133,9 +172,7 @@ const ApplyLeaveSheetBody = ({
                             onPress={onFullDayPress}
                             icon=''
                             buttonStyle={styles.fullButtonStyle}
-                            isDisable={
-                                formik.values.selectedLeaveBalance === 0.5
-                            }
+                            isDisable={fullDayLeaveDisabled}
                         />
                         <Spacer width={scale.sc4} />
                         <HalfButton
@@ -176,15 +213,18 @@ const ApplyLeaveSheetBody = ({
                 containerStyle={styles.commentContainerStyle}
             />
             <Spacer height={scale.vsc8} />
-            <SelectionButton
+            {/* <SelectionButton
                 label='Add Attachment (Optional)'
                 onPress={() => {}}
-            />
+            /> */}
             <Spacer height={scale.vsc6} />
             <ButtonDock
                 primaryButton={{
                     label: 'Confirm and Apply',
-                    onPress: () => formik.handleSubmit(),
+                    onPress: () => {
+                        formik.handleSubmit();
+                        setIsHalfSelected(false);
+                    },
                 }}
                 secondaryButton={{
                     label: 'Cancel',

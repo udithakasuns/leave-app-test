@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Button, Text } from 'src/components/atoms';
 import { PartialBy, TestProps } from 'src/utils/types';
+import theme from '../../../utils/theme';
+import LAIcon, { IconSize } from '../../atoms/LAIcon';
 import styles from './styles';
 
 export type HalfDayProp = {
@@ -41,6 +43,7 @@ const LAHalfButton = ({
     testIdRightButton,
     testIdLeftButton,
 }: PartialBy<Props, 'isError'>) => {
+    const { colors } = theme;
     const [isHalfDay, setIsHalfDay] = useState<boolean>(isHalfSelected);
     const [selectedHalfDay, setSelectedHalfDay] = useState<
         Pick<HalfDayProp, 'isRightSelected' | 'isLeftSelected'> | undefined
@@ -94,12 +97,28 @@ const LAHalfButton = ({
                     onPress={() => onHalfDayPress(1)}
                     style={rightContainer}>
                     <Text color={leftText.color}>{halfDay.rightHalfTitle}</Text>
+                    {selectedHalfDay?.isRightSelected && (
+                        <LAIcon
+                            name='check-circle'
+                            style={{ marginLeft: 5 }}
+                            size={IconSize.small}
+                            color={colors.green700}
+                        />
+                    )}
                 </TouchableOpacity>
                 <TouchableOpacity
                     testID={testIdLeftButton}
                     onPress={() => onHalfDayPress(2)}
                     style={leftContainer}>
                     <Text color={rightText.color}>{halfDay.leftHalfTitle}</Text>
+                    {selectedHalfDay?.isLeftSelected && (
+                        <LAIcon
+                            name='check-circle'
+                            style={{ marginLeft: 5 }}
+                            size={IconSize.small}
+                            color={colors.green700}
+                        />
+                    )}
                 </TouchableOpacity>
             </View>
         );

@@ -81,32 +81,33 @@ const LARequestDetailsSection = ({
                 />
             </>
         )}
-        <Spacer height={8} />
+        <Spacer />
         {isDurationVisible && requestDetails?.leaveRequest && (
             <ItemRow
                 title='Duration :'
-                titleStyle={styles.durationText}
                 child={
                     <>
                         <Spacer />
                         <View style={styles.durationContainer}>
                             <Chip
+                                containerStyle={styles.durationChip}
                                 content={`${getLeaveDurationDays(
                                     requestDetails?.leaveRequest
                                         ?.durationDays ?? 0,
+                                    requestDetails?.leaveRequest?.leaveState ??
+                                        'FULLDAY',
                                 )}`}
                                 contentTextType='ParaLG'
-                                containerStyle={styles.durationChip}
                             />
                             <Spacer width={2} height={3} />
                             {requestDetails?.leaveRequest?.startDate && (
                                 <Chip
+                                    containerStyle={styles.durationChip}
                                     content={getCalendarRangeDate(
                                         requestDetails.leaveRequest?.startDate,
                                         requestDetails.leaveRequest?.endDate,
                                     )}
                                     contentTextType='ParaLG'
-                                    containerStyle={styles.durationChip}
                                 />
                             )}
                         </View>
@@ -115,33 +116,32 @@ const LARequestDetailsSection = ({
             />
         )}
         {isRecipientVisible && requestDetails?.recipient && (
-            <ItemRow
-                title='Recipient :'
-                titleStyle={styles.durationText}
-                child={
-                    <View
-                        style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                        }}>
-                        <Spacer height={1} />
-                        {requestDetails.recipient?.map(item => (
-                            <AvatarChip
-                                key={item.employeeId}
-                                label={item.name ?? ''}
-                                source={{
-                                    uri: item.authPic ?? '',
-                                }}
-                                containerStyle={{
-                                    justifyContent: 'flex-start',
-                                }}
-                            />
-                        ))}
-                    </View>
-                }
-            />
+            <>
+                <Spacer />
+                <ItemRow
+                    title='Recipient :'
+                    child={
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+                            <Spacer />
+                            {requestDetails.recipient?.map(item => (
+                                <AvatarChip
+                                    key={item?.employeeId}
+                                    label={item?.name ?? ''}
+                                    source={{
+                                        uri: item?.authPic ?? '',
+                                    }}
+                                />
+                            ))}
+                        </View>
+                    }
+                />
+            </>
         )}
+        <Spacer />
     </>
 );
 

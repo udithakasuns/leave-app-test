@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     },
     durationText: {
         paddingTop: theme.scale.vsc16,
-        alignSelf: 'baseline',
+        // alignSelf: 'baseline',
     },
     durationContainer: {
         flex: 1,

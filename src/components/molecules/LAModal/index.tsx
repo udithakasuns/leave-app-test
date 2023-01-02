@@ -50,15 +50,17 @@ const LAModal = ({
             useNativeDriver
             avoidKeyboard
             propagateSwipe
-            onSwipeComplete={(params: OnSwipeCompleteParams) => {
-                if (params.swipingDirection === 'down') {
-                    onClose();
-                }
-            }}
-            swipeDirection={['down']}>
+            // commented reason : Following code base helps to close the modal when user slide down the modal, but it affects to the smoothness of the scrolling
+            // onSwipeComplete={(params: OnSwipeCompleteParams) => {
+            //     if (params.swipingDirection === 'down') {
+            //         onClose();
+            //     }
+            // }}
+            // swipeDirection={['down']}
+            onBackButtonPress={onClose}>
             <View style={[bodyContainer, style]}>
                 <ScrollView
-                    automaticallyAdjustKeyboardInsets
+                    // automaticallyAdjustKeyboardInsets // commented reson: This will leads to show extra space in some modals with input(when pressing the input field)
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps='handled'>
                     {header && <DefaultHeaderContainer />}

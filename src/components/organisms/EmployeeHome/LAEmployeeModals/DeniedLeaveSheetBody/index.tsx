@@ -51,7 +51,7 @@ const DeniedLeaveSheetBody = ({
         <Spacer />
         <Input
             placeholder={requestDetails?.leaveRequest?.reviewerComment ?? ''}
-            label='Reason for denial'
+            label='Reason to decline'
             type='COMMENT'
             editable={false}
             placeholderColor={colors.gray600}
@@ -61,7 +61,7 @@ const DeniedLeaveSheetBody = ({
         <Spacer />
         <Button
             iconPosition='left'
-            label='Back to home'
+            label='Proceed to home'
             onPress={onClose}
             icon='arrow-forward'
         />

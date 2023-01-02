@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/no-unstable-nested-components */
 import React, { ReactNode } from 'react';
-import { StyleProp, TextStyle, View } from 'react-native';
+import { StyleProp, TextStyle, View, Platform } from 'react-native';
 import { Chip, Spacer, Text } from 'src/components/atoms';
 import {
     getCalendarRangeDate,
@@ -57,7 +57,6 @@ const LAEmployeeRequestDetails = ({
                             <>
                                 <Spacer />
                                 <AvatarChip
-                                    containerStyle={{ marginLeft: 10 }}
                                     label={requestDetails?.employee.name ?? ''}
                                     source={{
                                         uri:
@@ -107,11 +106,10 @@ const LAEmployeeRequestDetails = ({
                     />
                 </>
             )}
-            <Spacer height={8} />
+            <Spacer />
             {requestDetails?.startDate && isDurationVisible && (
                 <ItemRow
                     title={flexEnd ? 'Leave Duration' : 'Duration :'}
-                    titleStyle={styles.durationText}
                     child={
                         <>
                             <Spacer />
@@ -124,6 +122,7 @@ const LAEmployeeRequestDetails = ({
                                 <Chip
                                     content={`${getLeaveDurationDays(
                                         requestDetails.durationDays,
+                                        requestDetails.leaveState,
                                     )}`}
                                     contentTextType='ParaLG'
                                     containerStyle={styles.durationChip}
@@ -144,22 +143,27 @@ const LAEmployeeRequestDetails = ({
             )}
             {isRecipientVisible && requestDetails?.reviewer && (
                 <>
+                    <Spacer />
                     <ItemRow
                         title='Recipient :'
                         child={
-                            <AvatarChip
-                                containerStyle={{ marginLeft: 10 }}
-                                label={requestDetails?.reviewer?.name ?? ''}
-                                source={{
-                                    uri:
-                                        requestDetails?.reviewer?.authPic ?? '',
-                                }}
-                            />
+                            <>
+                                <Spacer />
+                                <AvatarChip
+                                    label={requestDetails?.reviewer?.name ?? ''}
+                                    source={{
+                                        uri:
+                                            requestDetails?.reviewer?.authPic ??
+                                            '',
+                                    }}
+                                />
+                            </>
                         }
                     />
                     <Spacer />
                 </>
             )}
+            <Spacer />
         </>
     );
 };

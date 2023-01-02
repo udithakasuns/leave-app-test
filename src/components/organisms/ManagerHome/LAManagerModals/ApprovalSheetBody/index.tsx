@@ -46,12 +46,12 @@ const ApprovalSheetBody = ({
             placeholderColor={colors.gray600}
         />
         <Spacer />
-        <SelectionButton
+        {/* <SelectionButton
             label='Upload Attachment'
             icon='file'
             iconLibrary='svg'
             onPress={() => {}}
-        />
+        /> */}
         <Spacer />
         <ButtonDock
             iconPosition='left'

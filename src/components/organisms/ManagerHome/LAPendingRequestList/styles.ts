@@ -6,6 +6,7 @@ const { scale, colors, radius } = theme;
 export default (isViewAllPage = false) =>
     StyleSheet.create({
         container: {
+            flex: isViewAllPage ? 1 : 0,
             backgroundColor: isViewAllPage
                 ? colors.white
                 : colors.tertiaryColor,

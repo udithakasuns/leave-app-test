@@ -9,7 +9,7 @@ import Manager from './Manager';
 import Notification from './Notification';
 import Settings from './Settings';
 
-export type IconName = 'google' | 'filter' | 'notification';
+export type IconName = 'google' | 'filter' | 'notification' | 'apple';
 
 interface Props extends SvgProps {
     name: IconName | string;

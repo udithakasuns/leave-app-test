@@ -45,9 +45,9 @@ const LAManagerPopUp = ({ modalType, onClose, onUndoApprovalPress }: Props) => {
                     onClose={onClose}
                     modalVisible
                     defaultHeader={{
-                        title: 'Leave request declined',
+                        title: 'Leave request denied',
                         subTitle:
-                            ' The leave request of your team member was succesfully declined.',
+                            ' The leave request of your team member was succesfully denied.',
                     }}
                     bodyChildren={
                         <LeaveDeclinedPopUp

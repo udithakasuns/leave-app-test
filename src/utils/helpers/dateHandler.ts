@@ -1,4 +1,6 @@
+/* eslint-disable no-plusplus */
 import { DateTime } from 'luxon';
+import { LeaveSate } from '../types';
 
 export const getFormattedDate = (date: string): DateTime => {
     const dateFormate = new Date(date);
@@ -8,8 +10,12 @@ export const getFormattedDate = (date: string): DateTime => {
     return dateIOS;
 };
 
-export const getFormattedDay = (date: string): string => {
+export const getFormattedDay = (date: string, numOnly?: boolean): string => {
     const day = getFormattedDate(date).toLocaleString({ day: 'numeric' });
+    if (numOnly) {
+        return day;
+    }
+
     switch (Number(day)) {
         case 1:
         case 21:
@@ -27,16 +33,21 @@ export const getFormattedDay = (date: string): string => {
     }
 };
 
-export const getFormattedMonth = (date: string): string => {
-    const month = getFormattedDate(date).toLocaleString({ month: 'long' });
+export const getFormattedMonth = (date: string, short?: boolean): string => {
+    const month = getFormattedDate(date).toLocaleString({
+        month: short ? 'short' : 'long',
+    });
     return month;
 };
 
 export const getStartEndDate = (start: string, end: string) => {
     if (start === end) {
-        return getFormattedDay(start);
+        return `${getFormattedDay(start)} ${getFormattedMonth(start, true)}`;
     }
-    return `${getFormattedDay(start)} to ${getFormattedDay(end)}`;
+    return `${getFormattedDay(start, true)} ${getFormattedMonth(
+        start,
+        true,
+    )} - ${getFormattedDay(end, true)} ${getFormattedMonth(end, true)}`;
 };
 
 export const getGreetingsByTime = (): string => {
@@ -95,9 +106,34 @@ export const getCalendarRangeDate = (
     return calendarDate;
 };
 
-export const getLeaveDurationDays = (durationHours: number | undefined) => {
+export const getTimeAgo = (date: string) => {
+    const str = `${
+        DateTime.fromISO(date).toRelativeCalendar() as string
+    } at ${DateTime.fromISO(date).toFormat('h:mm a')}`;
+
+    const strArray = str.split(' ');
+
+    const firstWord =
+        strArray[0].charAt(0).toUpperCase() + strArray[0].slice(1);
+
+    strArray.shift();
+    strArray.unshift(firstWord);
+
+    return strArray.join(' ');
+};
+
+export const getLeaveDurationDays = (
+    durationHours: number | undefined,
+    leaveState: LeaveSate,
+) => {
     const day = durationHours;
     if (day === 0.5) {
+        if (leaveState === 'HALFDAY_MORNING') {
+            return 'Half Day - Morning';
+        }
+        if (leaveState === 'HALFDAY_EVENING') {
+            return 'Half Day - Evening';
+        }
         return 'Half Day';
     }
     if (day === 1) {

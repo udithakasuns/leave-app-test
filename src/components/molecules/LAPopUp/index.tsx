@@ -62,7 +62,8 @@ const LAPopUp: React.FC<Props> = ({
             <TouchableOpacity
                 style={[styles.popupContainer, popupStyle]}
                 activeOpacity={1}
-                onPressOut={onClose}>
+                // onPressOut={onClose} // User will not be allowed to close popups by clicking outside
+            >
                 <TouchableWithoutFeedback>
                     <KeyboardAvoidingView behavior='position' enabled>
                         <View testID={testId} accessible={false}>
