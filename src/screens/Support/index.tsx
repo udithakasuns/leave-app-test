@@ -28,8 +28,8 @@ const Support: React.FC<SupportScreensProps> = () => {
                 <View style={styles.divider} />
                 <Spacer height={scale.sc20} />
                 <Text type='H2Bold'>Contact us</Text>
-                <DetailItem label='Contact number' value='22-998990' />
-                <DetailItem label='Email' value='helplineemail@rootcode.io' />
+                <DetailItem label='Contact number' value='0112 574 572' />
+                <DetailItem label='Email' value='support@myleave.io' />
                 <DetailItem
                     label='Help url'
                     value={SUPPORT_URL}
