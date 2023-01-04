@@ -13,12 +13,9 @@ import {
     postHttpNudge,
 } from 'src/services/http';
 import { patchHttpApplyLeave } from 'src/services/http/patchRequest';
-import {
-    useEmployeeFilterStore,
-    useEmployeeStore,
-    useRecipientStore,
-} from 'src/store';
+import { useEmployeeFilterStore, useEmployeeStore } from 'src/store';
 import { showErrorToast, toastConfig } from 'src/utils/alerts';
+import { getRemainingTime } from 'src/utils/helpers/dateHandler';
 import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { useLeaveRequestData } from 'src/utils/hooks/useLeaveRequestData';
@@ -58,13 +55,10 @@ const LAGlobalEmployee = () => {
     const {
         employeeRequest,
         setEmployeeRequest,
-        getEmployeeModal,
         isEmployeeModalLoading,
         setRefreshEmployeeHomeState,
         resetEmployeeRequest,
     } = useEmployeeStore();
-
-    const { managers } = useRecipientStore();
 
     const {
         refetch: filterRefetch,
@@ -115,8 +109,7 @@ const LAGlobalEmployee = () => {
         ['nudgeManger'],
         postHttpNudge,
         {
-            onSuccess: () =>
-                handleNudgeSuccess(setEmployeeModal, managers[0].name ?? ''),
+            onSuccess: () => handleNudgeSuccess(setEmployeeModal),
         },
     );
 
@@ -125,11 +118,12 @@ const LAGlobalEmployee = () => {
         getHttpNudgeVisibility,
         {
             onSuccess: (data: any) => {
-                const isAlreadyNudge = data[0].nudge;
+                const { nudge, lastNudgedDateTime } = data[0];
                 setEmployeeModal({
                     ...employeeModal,
                     modalType: EmployeeModal.PENDING_LEAVE_MODAL,
-                    isNudgeVisble: !isAlreadyNudge,
+                    isNudgeVisble: nudge,
+                    lastNudgedDateTime,
                 });
             },
         },
@@ -153,8 +147,12 @@ const LAGlobalEmployee = () => {
             if (employeeRequest.leaveRequestId) {
                 nudgeMutate(employeeRequest.leaveRequestId);
             }
-        } else {
-            handleAlreadyNudgeError();
+        } else if (employeeModal?.lastNudgedDateTime) {
+            const { hours, minutes } = getRemainingTime(
+                employeeModal.lastNudgedDateTime,
+            );
+            const message = `You can nudge again in ${hours} h : ${minutes} m`;
+            handleAlreadyNudgeError(message);
         }
     };
     const handleViewMoreDetails = (onBackPressModal: EmployeeModal) => {
@@ -171,7 +169,6 @@ const LAGlobalEmployee = () => {
     };
 
     const onOpenModal = () => {
-        // getEmployeeModal(employeeRequest.leaveRequestId);
         const selectedModalType = handleRequestSelectedModal(employeeRequest);
         if (selectedModalType === EmployeeModal.PENDING_LEAVE_MODAL) {
             nudgeVisibilityMutate(employeeRequest.leaveRequestId);

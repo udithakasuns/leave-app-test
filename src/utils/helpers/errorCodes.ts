@@ -122,8 +122,7 @@ export const getErrorMessage = (
         case 'REQUEST_ALREADY_NUDGE':
             errorCodeMessage = {
                 title: 'Supervisor already nudged',
-                message:
-                    'A reminder has been sent to your supervisor.\nThe assigned supervisor will respond to your request.',
+                message: patchContent || '',
             };
             break;
         default:

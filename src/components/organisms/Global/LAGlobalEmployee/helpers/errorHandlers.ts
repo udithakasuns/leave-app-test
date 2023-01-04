@@ -12,6 +12,6 @@ export const handleApplyLeaveError = (error: any) => {
     }
 };
 
-export const handleAlreadyNudgeError = () => {
-    showErrorToast(ErrorCodes.REQUEST_ALREADY_NUDGE);
+export const handleAlreadyNudgeError = (message: string) => {
+    showErrorToast(ErrorCodes.REQUEST_ALREADY_NUDGE, message);
 };
