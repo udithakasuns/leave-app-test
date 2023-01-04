@@ -72,9 +72,7 @@ coverage/
 cache/jest/
 package-lock.json
 
-
-amplify/
-
+amplify/backend/types/
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
