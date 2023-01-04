@@ -43,33 +43,6 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
         */
         messaging().setBackgroundMessageHandler(async remoteMessage => {
             console.log('Message handled from background', remoteMessage);
-
-            // Create a channel (required for Android)
-            // const channelId = await notifee.createChannel({
-            //     id: 'defualt-channel',
-            //     name: 'Channel For Notification',
-            //     vibration: true,
-            //     importance: AndroidImportance.HIGH,
-            // });
-            // await notifee.displayNotification({
-            //     title: remoteMessage.notification?.title,
-            //     body: remoteMessage.notification?.body || '',
-            //     android: {
-            //         channelId,
-            //         importance: AndroidImportance.HIGH,
-            //         smallIcon: 'ic_launcher_round',
-            //         // eslint-disable-next-line global-require
-            //         largeIcon: require('../../assets/images/icon.png'),
-            //     },
-            //     ios: {
-            //         foregroundPresentationOptions: {
-            //             sound: true,
-            //             banner: true,
-            //             list: true,
-            //         },
-            //         interruptionLevel: 'timeSensitive',
-            //     },
-            // });
             notificationStore.getCount(notificationStore.notifyUserRole);
         });
 
@@ -94,7 +67,8 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
                 android: {
                     channelId,
                     importance: AndroidImportance.HIGH,
-                    smallIcon: 'ic_launcher_round',
+                    smallIcon: 'ic_small_icon',
+                    color: '#FBBF24',
                     // eslint-disable-next-line global-require
                     largeIcon: require('../../assets/images/icon.png'),
                 },
