@@ -38,15 +38,10 @@ const LANotificationSetting = ({
                 </Text>
                 <Spacer height={scale.sc10} />
                 <ToggleItem
-                    disabled={isManager} // Manager cannot toggle the Leave request notifications
                     label='Leave requests'
                     value={toggles.isLeaveRequestNotificationsEnabled}
                     onChangeValue={() => {
-                        if (!isManager) {
-                            onChangeToggle(
-                                'isLeaveRequestNotificationsEnabled',
-                            );
-                        }
+                        onChangeToggle('isLeaveRequestNotificationsEnabled');
                     }}
                 />
                 <Spacer height={scale.sc10} />

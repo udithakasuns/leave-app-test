@@ -24,6 +24,7 @@ export type ModalProps = {
     modalType: EmployeeModal;
     onBackPressType: EmployeeModal;
     isNudgeVisble: boolean;
+    lastNudgedDateTime: string | null;
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
