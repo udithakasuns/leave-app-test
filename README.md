@@ -2,7 +2,9 @@
 
 # Initialize the Project
 
--   Initialize the project 1st time. - You need to configure the amplify 1st. Read the "Amplify configuration" section below. - Then run the follwing commands.
+-   Initialize the project 1st time. - You need to configure the amplify 1st. Read the "Amplify configuration" section below. - Then run the follwing commands. Following two commands pulls the both amplify dev env and prod env. And this is only for 1st time.
+    $ yarn amplify:dev
+    $ yarn amplify:prod
 
 -   If you want to run the project locally, before that you need to run the fullowing command (This is a must)
     $ yarn dev:int
