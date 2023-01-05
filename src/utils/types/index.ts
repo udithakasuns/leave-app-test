@@ -284,7 +284,9 @@ export type NotificationType =
     | 'NEW_LEAVE_REQUEST'
     | 'LEAVE_REQUEST_NUDGE'
     | 'LEAVE_REQUEST_APPROVED_DENIED'
-    | 'LEAVE_REQUEST_CANCELLED';
+    | 'LEAVE_REQUEST_CANCELLED'
+    | 'MULTI_DAY_LEAVE_REQUEST_NUDGE'
+    | 'NEW_MULTI_DAY_LEAVE_REQUEST';
 
 export type NotificationBody = {
     image: string;

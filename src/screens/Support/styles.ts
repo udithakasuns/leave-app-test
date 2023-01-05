@@ -12,12 +12,13 @@ export const styles = StyleSheet.create({
         marginTop: scale.sc10,
         flexDirection: 'row',
         alignItems: 'flex-start',
-        flexWrap: 'wrap',
     },
-    uriContainer: {
+    urlContainer: {
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
     },
+
     iconStyle: {
         marginLeft: scale.sc10,
     },

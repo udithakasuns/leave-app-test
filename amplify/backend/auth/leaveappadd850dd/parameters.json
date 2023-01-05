@@ -7,7 +7,8 @@
     "email"
   ],
   "authProvidersUserPool": [
-    "Google"
+    "Google",
+    "SignInWithApple"
   ],
   "requiredAttributes": [
     "name",

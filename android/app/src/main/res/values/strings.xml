@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">MyLeave</string>
-    <string name="default_notification_channel_id">YOUR_TEST_CHANNEL_ID</string>
+    <string name="default_notification_channel_id">defualt-channel</string>
 </resources>

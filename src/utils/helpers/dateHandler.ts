@@ -141,3 +141,28 @@ export const getLeaveDurationDays = (
     }
     return `${day} Days`;
 };
+
+export const getRemainingTime = (
+    dateTime: string,
+): {
+    seconds: number;
+    minutes: number;
+    hours: number;
+} => {
+    const inputTime = new Date(dateTime).getTime();
+    const currentTime = new Date().getTime();
+    const differenceTime = currentTime - inputTime;
+    let seconds = Math.ceil(differenceTime / 1000);
+    let minutes = Math.ceil(seconds / 60);
+    let hours = Math.ceil(minutes / 60);
+
+    seconds = 60 - (seconds % 60);
+    minutes = 60 - (minutes % 60);
+    hours = 24 - (hours % 24);
+
+    return {
+        seconds,
+        minutes,
+        hours,
+    };
+};

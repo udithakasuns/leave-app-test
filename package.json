@@ -9,12 +9,15 @@
         "test": "jest",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "lint:fix": "eslint --fix .",
-        "dev:init": "yarn && cd ios && pod deintegrate && pod install && cd ..",
         "prepare": "husky install",
         "cache:clean": "yarn start -- --reset-cache",
         "jest:clean": "jest --clearCache",
         "test:w": "yarn run test --watch",
-        "test:cover": "yarn run test -- --coverage --watchAll=false"
+        "test:cover": "yarn run test -- --coverage --watchAll=false",
+        "amplify:dev": "amplify pull --appId d20c5hyqdk0hvi --envName dev",
+        "amplify:prod": "amplify pull --appId d20c5hyqdk0hvi --envName prod",
+        "dev:init": "yarn && cd ios && pod deintegrate && pod install && cd .. && amplify env checkout dev",
+        "prod:init": "yarn && cd ios && pod deintegrate && pod install && cd .. && amplify env checkout prod"
     },
     "dependencies": {
         "@aws-amplify/auth": "^5.0.1",

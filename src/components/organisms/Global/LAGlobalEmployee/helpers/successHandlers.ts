@@ -90,10 +90,10 @@ export const handleNudgeSuccess = (
     setEmployeeModal: (
         value: React.SetStateAction<Partial<ModalProps> | undefined>,
     ) => void,
-    managerName: string,
 ) => {
     setEmployeeModal({ modalType: undefined });
-    showSuccessToast(SuccessCodes.NUDGED_SUPERVISOR, managerName);
+    const message = `You can nudge again in 23 h : 59 m`;
+    showSuccessToast(SuccessCodes.NUDGED_SUPERVISOR, message);
 };
 
 export const handleApplyMutationSuccess = (

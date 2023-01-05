@@ -23,15 +23,21 @@ const DetailItem = ({
 }: AtLeast<Detail, 'label' | 'value'>) => (
     <View style={styles.detailRow}>
         <Text type='SubH'>{label} : </Text>
-        <Text type='SubH'>{value}</Text>
-        {iconName && (
-            <Icon
-                onPress={onPressIcon}
-                style={styles.iconStyle}
-                name={iconName}
-                color={colors.secondaryOutline}
-                size={scale.sc20}
-            />
+        {iconName ? (
+            <View style={styles.urlContainer}>
+                <Text style={{ flex: 1 }} type='SubH'>
+                    {value}
+                </Text>
+                <Icon
+                    onPress={onPressIcon}
+                    style={styles.iconStyle}
+                    name={iconName}
+                    color={colors.secondaryOutline}
+                    size={scale.sc20}
+                />
+            </View>
+        ) : (
+            <Text type='SubH'>{value}</Text>
         )}
     </View>
 );

@@ -6,19 +6,16 @@ import { SupportScreensProps } from 'navigators/types';
 import { Spacer, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import useBackAction from 'src/utils/hooks/useBackAction';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 import getAppVersion from 'src/utils/helpers/getAppVersion';
+import { inAppNormalUrlHandler } from 'src/utils/helpers/inAppUrlHandler';
+import { SUPPORT_URL } from 'src/configs';
 import { styles } from './styles';
 import DetailItem from './DetailItem';
 
 const { scale } = theme;
 
-const helpUrl = 'https://leaveapplication.rootcode.software/support/questions';
-
 const Support: React.FC<SupportScreensProps> = () => {
     const backAction = useBackAction();
-
-    const onOpenHelpUrl = () => InAppBrowser.open(helpUrl);
 
     return (
         <View style={screenStyles.containerScollable}>
@@ -31,13 +28,13 @@ const Support: React.FC<SupportScreensProps> = () => {
                 <View style={styles.divider} />
                 <Spacer height={scale.sc20} />
                 <Text type='H2Bold'>Contact us</Text>
-                <DetailItem label='Contact number' value='22-998990' />
-                <DetailItem label='Email' value='helplineemail@rootcode.io' />
+                <DetailItem label='Contact number' value='0112 574 572' />
+                <DetailItem label='Email' value='support@myleave.io' />
                 <DetailItem
                     label='Help url'
-                    value='www.support.leaveapp.info'
+                    value={SUPPORT_URL}
                     iconName='open-in-new'
-                    onPressIcon={onOpenHelpUrl}
+                    onPressIcon={() => inAppNormalUrlHandler(SUPPORT_URL)}
                 />
                 <Spacer height={scale.sc10} />
                 <View style={styles.divider} />

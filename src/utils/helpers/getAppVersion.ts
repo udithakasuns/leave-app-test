@@ -1,9 +1,13 @@
 import DeviceInfo from 'react-native-device-info';
-import { deploymentEnv } from 'src/configs';
+import { DEPLOYMENT_ENV } from 'src/configs';
 
 const getAppVersion = () => {
-    const env = deploymentEnv.toLocaleLowerCase();
-    return `${env} v${DeviceInfo.getVersion()} (${DeviceInfo.getBuildNumber()})`;
+    const version = `v${DeviceInfo.getVersion()} (${DeviceInfo.getBuildNumber()})`;
+
+    if (DEPLOYMENT_ENV === 'PROD') {
+        return version;
+    }
+    return `${DEPLOYMENT_ENV} ${version}`;
 };
 
 export default getAppVersion;

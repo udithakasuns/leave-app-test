@@ -1,6 +1,7 @@
 export enum SuccessCodes {
     CANCELLATION_UNDONE = 'CANCELLATION_UNDONE',
     NUDGED_SUPERVISOR = 'NUDGED_SUPERVISOR',
+    NOTIFICATION_SETTINGS_SAVE = 'NOTIFICATION_SETTINGS_SAVE',
 }
 
 type SuccessProp = {
@@ -23,7 +24,13 @@ export const getSuccessMessage = (
         case 'NUDGED_SUPERVISOR':
             successCodeMessage = {
                 title: 'You have nudged your supervisor',
-                message: `${patchContent} was sent a reminder`,
+                message: patchContent || '',
+            };
+            break;
+        case 'NOTIFICATION_SETTINGS_SAVE':
+            successCodeMessage = {
+                title: 'Successfully saved your settings',
+                message: '',
             };
             break;
         default:
