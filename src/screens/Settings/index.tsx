@@ -120,16 +120,21 @@ const Settings: React.FC<SettingsScreensProps> = () => {
         // showSuccessToast(SuccessCodes.NOTIFICATION_SETTINGS_SAVE); //In employee view this toast is not showing
     };
 
-    const onPressCancel = () => {
+    const onCancel = () => {
         onRefetchSettings();
         setVisibleSaveChanges(false);
+    };
+
+    const onPressBack = () => {
+        onCancel();
+        backAction();
     };
 
     return (
         <View style={screenStyles.containerScollable}>
             <ScrollView
                 contentContainerStyle={screenStyles.scrollViewContainer}>
-                <BackHeader title='Home' onBackPress={backAction} />
+                <BackHeader title='Home' onBackPress={onPressBack} />
                 <Spacer height={scale.sc10} />
                 <Text type='H1Bold'>Settings</Text>
                 <Spacer height={scale.sc10} />
@@ -154,7 +159,7 @@ const Settings: React.FC<SettingsScreensProps> = () => {
                     }}
                     secondaryButton={{
                         label: 'Cancel',
-                        onPress: onPressCancel,
+                        onPress: onCancel,
                     }}
                 />
             ) : (

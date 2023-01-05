@@ -1,4 +1,5 @@
 import { FormikProps } from 'formik';
+import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Input, Spacer, Text } from 'src/components/atoms';
@@ -131,6 +132,33 @@ const ApplyLeaveSheetBody = ({
         }
     }, [fullDayLeaveDisabled]);
 
+    const onPressConfirm = () => {
+        if (
+            formik.values.entitlements.find(
+                entitlement => entitlement.isSelected,
+            )?.leaveType.name === 'Casual' &&
+            formik.values.endDate &&
+            formik.values.startDate
+        ) {
+            const startDate = DateTime.fromISO(formik.values.startDate);
+            const endWeekDay = DateTime.fromISO(formik.values.endDate);
+
+            const durationThreshold = startDate.weekday > 3 ? 5 : 3;
+
+            const durationDays = endWeekDay.diff(startDate, ['days']).days;
+
+            if (durationDays < durationThreshold) {
+                formik.handleSubmit();
+                setIsHalfSelected(false);
+            } else {
+                showErrorToast(ErrorCodes.CONSEQUENT_LEAVE_EXCEEDED);
+            }
+        } else {
+            formik.handleSubmit();
+            setIsHalfSelected(false);
+        }
+    };
+
     return (
         <View>
             <Spacer height={5} />
@@ -221,10 +249,7 @@ const ApplyLeaveSheetBody = ({
             <ButtonDock
                 primaryButton={{
                     label: 'Confirm and Apply',
-                    onPress: () => {
-                        formik.handleSubmit();
-                        setIsHalfSelected(false);
-                    },
+                    onPress: onPressConfirm,
                 }}
                 secondaryButton={{
                     label: 'Cancel',

@@ -24,7 +24,7 @@ export const getSuccessMessage = (
         case 'NUDGED_SUPERVISOR':
             successCodeMessage = {
                 title: 'You have nudged your supervisor',
-                message: `${patchContent} was sent a reminder`,
+                message: patchContent || '',
             };
             break;
         case 'NOTIFICATION_SETTINGS_SAVE':
