@@ -11,6 +11,7 @@ export enum ErrorCodes {
     APPLY_CONFIRMATION_LEAVE_TYPE = 'APPLY_CONFIRMATION_LEAVE_TYPE',
     APPLY_CONFIRMATION_WEEKENDS = 'APPLY_CONFIRMATION_WEEKENDS',
     UNAVAILABLE_LEAVE_ENTITLEMENTS = 'UNAVAILABLE_LEAVE_ENTITLEMENTS',
+    CONSEQUENT_LEAVE_EXCEEDED = 'CONSEQUENT_LEAVE_EXCEEDED',
     ERROR_OCCURRED = 'ERROR_OCCURRED',
     NO_RECIPIENT = 'NO_RECIPIENT',
     REQUEST_ALREADY_NUDGE = 'REQUEST_ALREADY_NUDGE',
@@ -123,6 +124,12 @@ export const getErrorMessage = (
             errorCodeMessage = {
                 title: 'Supervisor already nudged',
                 message: patchContent || '',
+            };
+            break;
+        case 'CONSEQUENT_LEAVE_EXCEEDED':
+            errorCodeMessage = {
+                title: 'Consequent leave allocation exceeded',
+                message: 'Cannot apply for more than 3 casual leaves in a row',
             };
             break;
         default:
