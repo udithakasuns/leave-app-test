@@ -11,6 +11,18 @@ export const styles = StyleSheet.create({
         marginVertical: scale.vsc12,
         minWidth: pixel(330),
     },
+    annimationContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginVertical: scale.vsc12,
+        minWidth: pixel(330),
+        borderWidth: 1,
+        borderColor: colors.secondaryOutline,
+        backgroundColor: colors.secondaryBackground,
+        padding: 5,
+        borderRadius: 10,
+    },
     dateContainer: {
         flexDirection: 'row',
         maxWidth: pixel(90),

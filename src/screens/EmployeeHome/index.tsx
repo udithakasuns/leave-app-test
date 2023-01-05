@@ -97,6 +97,8 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         employeeRequestDefault,
     );
 
+    const [latestLeaveRequestID, setLatestLeaveRequestID] = useState(0);
+
     const {
         getEmployeeModal,
         refreshEmployeeHomeState,
@@ -279,6 +281,14 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     useEffect(() => {
+        if (latestLeaveRequestID) {
+            setTimeout(() => {
+                setLatestLeaveRequestID(0);
+            }, 5000);
+        }
+    }, [latestLeaveRequestID]);
+
+    useEffect(() => {
         if (isFocused || refreshEmployeeHomeState) {
             setSortByButtons(sortByButtonsEmployee);
             setFilterChips(filterChipsEmployee);
@@ -332,6 +342,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     ) : (
                         <LALeaveRequestList
                             leaveRequests={leaveRequests?.items ?? []}
+                            latestLeaveRequestID={latestLeaveRequestID}
                             onPressRequestItem={handleRequestItemPress}
                             isViewAllPage={false}
                             totalItems={leaveRequests?.totalItems ?? 0}
@@ -406,6 +417,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                         deleteMutate(employeeRequest.leaveRequestId);
                     }}
                     onConfirmationHomePress={() => {
+                        setLatestLeaveRequestID(employeeRequest.leaveRequestId);
                         setEmployeePopup(undefined);
                         setEmployeeRequest(employeeRequestDefault);
                         formik.resetForm();
