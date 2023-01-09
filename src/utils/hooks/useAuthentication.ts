@@ -26,9 +26,13 @@ type ReturnProps = {
 };
 
 const isRootcodeUser = (email: string): boolean => {
-    const rootcodeDomain = 'rootcodelabs.com';
+    const rootcodeLabsDomain = 'rootcodelabs.com';
+    const rootcodeSoftwareDomain = 'rootcode.software';
     const emailDomain = email.split('@')[1];
-    if (emailDomain === rootcodeDomain) {
+    if (
+        emailDomain === rootcodeLabsDomain ||
+        emailDomain === rootcodeSoftwareDomain
+    ) {
         return true;
     }
     return false;
