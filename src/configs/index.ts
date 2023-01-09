@@ -5,7 +5,7 @@ export type Config = {
     webBaseUrl: string;
 };
 
-export const DEPLOYMENT_ENV: DeploymentEnv = 'PROD'; // Please change only this value when you are going to deploy
+export const DEPLOYMENT_ENV: DeploymentEnv = 'STG'; // Please change only this value when you are going to deploy
 
 const getCofig = (env: DeploymentEnv): Config => {
     // staging config set as default
