@@ -4,6 +4,7 @@ import { useManagerStore } from 'src/store';
 import { ManagerPopup, TestProps } from 'src/utils/types';
 import LeaveApprovedSheetBody from './LeaveApprovedSheetBody';
 import LeaveDeclinedPopUp from './LeaveDeclinedPopUp';
+import LeaveRevokePopUp from './LeaveRevokePopUp';
 import { styles } from './styles';
 
 export type PopUpProps = {
@@ -15,9 +16,15 @@ export type LAManagerPopUpProps = Partial<PopUpProps>;
 interface Props extends Partial<TestProps>, LAManagerPopUpProps {
     onClose: () => void;
     onUndoApprovalPress: () => void;
+    onUndoRevokePress: () => void;
 }
 
-const LAManagerPopUp = ({ modalType, onClose, onUndoApprovalPress }: Props) => {
+const LAManagerPopUp = ({
+    modalType,
+    onClose,
+    onUndoApprovalPress,
+    onUndoRevokePress,
+}: Props) => {
     const { managerRequest } = useManagerStore();
     return (
         <>
@@ -53,6 +60,24 @@ const LAManagerPopUp = ({ modalType, onClose, onUndoApprovalPress }: Props) => {
                         <LeaveDeclinedPopUp
                             onConfirmationHomePress={onClose}
                             onUndoApprovalPress={onUndoApprovalPress}
+                            requestDetails={managerRequest}
+                        />
+                    }
+                />
+            )}
+            {modalType === ManagerPopup.LEAVE_REQUEST_REVOKE && (
+                <PopUp
+                    onClose={onClose}
+                    modalVisible
+                    defaultHeader={{
+                        title: 'Leave revoked',
+                        subTitle:
+                            ' Approved leave request has been revoked successfully. The leave allocation will be updated.',
+                    }}
+                    bodyChildren={
+                        <LeaveRevokePopUp
+                            onConfirmationHomePress={onClose}
+                            onUndoRevokePress={onUndoRevokePress}
                             requestDetails={managerRequest}
                         />
                     }

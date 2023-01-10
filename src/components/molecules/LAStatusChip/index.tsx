@@ -48,6 +48,13 @@ const LAStatusChip = ({
                 leftIconColor: colors.error,
             };
             break;
+        case 'REVOKED':
+            chipProps = {
+                content: 'Revoked',
+                leftIconName: 'circle-outline',
+                leftIconColor: colors.error,
+            };
+            break;
         default:
             chipProps = {
                 content: 'Cancelled',

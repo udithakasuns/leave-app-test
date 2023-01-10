@@ -12,12 +12,14 @@ interface Props extends Partial<TestProps> {
     requestDetails: PendingRequestByID;
     onPressViewMoreDetails: () => void;
     onPressBackToHome: () => void;
+    onPressRevokeLeave: () => void;
 }
 
 const ApprovedSheetBody = ({
     requestDetails,
     onPressViewMoreDetails,
     onPressBackToHome,
+    onPressRevokeLeave,
 }: Props) => (
     <>
         <Spacer height={8} />
@@ -38,11 +40,20 @@ const ApprovedSheetBody = ({
         <MoreDetailsButton onPress={onPressViewMoreDetails} />
         <Spacer />
         <Button
+            mode='outlined-error'
+            icon='close'
+            label='Revoke Leave'
+            onPress={onPressRevokeLeave}
+            labelStyle={{ paddingHorizontal: 4 }}
+        />
+        <Spacer />
+        <Button
             iconPosition='left'
             label='Proceed to home'
             onPress={onPressBackToHome}
             icon='arrow-forward'
         />
+
         <Spacer />
     </>
 );

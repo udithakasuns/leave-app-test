@@ -23,7 +23,7 @@ export const patchHttpManagerLeave = async (
             reviewerComment: values.reviewerComment,
         },
     );
-    return res.data.results;
+    return { result: res.data.results, previousStatus: values.previousStatus };
 };
 
 export const patchHttpViewNotification = async (notificationId: string) => {

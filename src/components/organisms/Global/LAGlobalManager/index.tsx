@@ -87,15 +87,21 @@ const LAGlobalManager = () => {
         patchHttpManagerLeave,
         {
             onSuccess: (data: any) => {
-                const leaveData: PendingRequestByID = data[0];
+                const leaveData: PendingRequestByID = data.result[0];
                 setManagerRequest(leaveData);
                 refetchLeaveRequests();
                 statusTypesRefetch();
                 switch (leaveData.status) {
                     case Status.APPROVED:
-                        setManagerPopup({
-                            modalType: ManagerPopup.LEAVE_REQUEST_APPROVED,
-                        });
+                        if (data.previousStatus === Status.REVOKED) {
+                            setManagerPopup({
+                                modalType: ManagerPopup.LEAVE_REQUEST_APPROVED,
+                            });
+                        } else {
+                            setManagerPopup({
+                                modalType: ManagerPopup.LEAVE_REQUEST_APPROVED,
+                            });
+                        }
                         break;
                     case Status.DENIED:
                         setManagerPopup({
@@ -108,6 +114,11 @@ const LAGlobalManager = () => {
                         });
                         setManagerModal({
                             modalType: ManagerModal.PENDING_LEAVE_MODAL,
+                        });
+                        break;
+                    case Status.REVOKED:
+                        setManagerPopup({
+                            modalType: ManagerPopup.LEAVE_REQUEST_REVOKE,
                         });
                         break;
                     default:
@@ -196,6 +207,19 @@ const LAGlobalManager = () => {
                         reviewerComment,
                     });
                 }}
+                onRevokeLeaveRequest={(reviewerComment: string) => {
+                    setManagerModal({ modalType: undefined });
+                    updateLeaveMutate({
+                        requestID: managerRequest.leaveRequestId,
+                        status: Status.REVOKED,
+                        reviewerComment,
+                    });
+                }}
+                onPressRevokeLeave={() => {
+                    setManagerModal({
+                        modalType: ManagerModal.REVOKE_LEAVE_MODAL,
+                    });
+                }}
             />
             <LAManagerPopUp
                 modalType={managerPopup?.modalType}
@@ -204,6 +228,12 @@ const LAGlobalManager = () => {
                     updateLeaveMutate({
                         requestID: managerRequest.leaveRequestId,
                         status: Status.PENDING,
+                    });
+                }}
+                onUndoRevokePress={() => {
+                    updateLeaveMutate({
+                        requestID: managerRequest.leaveRequestId,
+                        status: Status.APPROVED,
                     });
                 }}
             />

@@ -10,6 +10,7 @@ import CancelledSheetBody from './CancelledSheetBody';
 import DeclineSheetBody from './DeclineSheetBody';
 import DeniedSheetBody from './DeniedSheetBody';
 import LeaveInformationSheetBody from './LeaveInformationSheetBody';
+import RevokeLeaveSheetBody from './RevokeLeaveSheetBody';
 import { styles } from './styles';
 
 export type ModalProps = {
@@ -26,6 +27,8 @@ interface Props extends Partial<TestProps>, LAManagerModalProps {
     onPressLeaveInformation: (onBackPressModal: ManagerModal) => void;
     onBackPress: (modalType: ManagerModal) => void;
     onDeclineLeaveRequest: (reviewerComment: string) => void;
+    onPressRevokeLeave: () => void;
+    onRevokeLeaveRequest: (reviewerComment: string) => void;
 }
 
 const LAManagerModals = ({
@@ -37,6 +40,8 @@ const LAManagerModals = ({
     onPressLeaveInformation,
     onBackPress,
     onDeclineLeaveRequest,
+    onPressRevokeLeave,
+    onRevokeLeaveRequest,
 }: Props) => {
     const { managerRequest } = useManagerStore();
 
@@ -71,6 +76,7 @@ const LAManagerModals = ({
                                     ManagerModal.APPROVED_LEAVE_MODAL,
                                 )
                             }
+                            onPressRevokeLeave={onPressRevokeLeave}
                             onPressBackToHome={onClose}
                         />
                     }
@@ -152,6 +158,22 @@ const LAManagerModals = ({
                         <CancelledSheetBody
                             requestDetails={managerRequest}
                             onPressBackToHome={onClose}
+                        />
+                    }
+                />
+            )}
+            {modalType === ManagerModal.REVOKE_LEAVE_MODAL && (
+                <Modal
+                    onClose={() => {
+                        onBackPress(ManagerModal.APPROVED_LEAVE_MODAL);
+                    }}
+                    isVisible
+                    header='Revoke approved leave'
+                    headerIcon='arrow-back'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <RevokeLeaveSheetBody
+                            onRevokeLeaveRequest={onRevokeLeaveRequest}
                         />
                     }
                 />
