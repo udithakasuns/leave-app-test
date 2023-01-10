@@ -51,7 +51,7 @@
 		00E356F21AD99517003FC87E /* rtc_leave_appTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rtc_leave_appTests.m; sourceTree = "<group>"; };
 		0138524B00E64D17BB2DB125 /* Poppins-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Thin.ttf"; path = "../src/assets/fonts/Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		12CB30A61C074DB0A91F5917 /* Poppins-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraLight.ttf"; path = "../src/assets/fonts/Poppins-ExtraLight.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* rtc_leave_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rtc_leave_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* MyLeave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLeave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = rtc_leave_app/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = rtc_leave_app/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = rtc_leave_app/Images.xcassets; sourceTree = "<group>"; };
@@ -217,7 +217,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* rtc_leave_app.app */,
+				13B07F961A680F5B00A75B9A /* MyLeave.app */,
 				00E356EE1AD99517003FC87E /* rtc_leave_appTests.xctest */,
 			);
 			name = Products;
@@ -302,7 +302,7 @@
 			);
 			name = rtc_leave_app;
 			productName = rtc_leave_app;
-			productReference = 13B07F961A680F5B00A75B9A /* rtc_leave_app.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* MyLeave.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -645,7 +645,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rootcodelabs.leaveapp;
-				PRODUCT_NAME = rtc_leave_app;
+				PRODUCT_NAME = MyLeave;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -675,7 +675,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rootcodelabs.leaveapp;
-				PRODUCT_NAME = rtc_leave_app;
+				PRODUCT_NAME = MyLeave;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
