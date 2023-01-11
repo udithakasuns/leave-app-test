@@ -86,16 +86,17 @@ const LAGlobalManager = () => {
         ['updateLeave'],
         patchHttpManagerLeave,
         {
-            onSuccess: (data: any) => {
-                const leaveData: PendingRequestByID = data.result[0];
+            onSuccess: (data: any, { previousStatus }) => {
+                const leaveData: PendingRequestByID = data[0];
                 setManagerRequest(leaveData);
                 refetchLeaveRequests();
                 statusTypesRefetch();
                 switch (leaveData.status) {
                     case Status.APPROVED:
-                        if (data.previousStatus === Status.REVOKED) {
+                        if (previousStatus === Status.REVOKED) {
                             setManagerPopup({
-                                modalType: ManagerPopup.LEAVE_REQUEST_APPROVED,
+                                modalType:
+                                    ManagerPopup.LEAVE_REQUEST_REVOKE_UNDO,
                             });
                         } else {
                             setManagerPopup({
@@ -141,6 +142,7 @@ const LAGlobalManager = () => {
                 selectedModal = ManagerModal.DENIED_LEAVE_MODAL;
                 break;
             case 'CANCELLED':
+            case 'REVOKED':
                 selectedModal = ManagerModal.CANCELLED_LEAVE_MODAL;
                 break;
             default:
@@ -234,6 +236,7 @@ const LAGlobalManager = () => {
                     updateLeaveMutate({
                         requestID: managerRequest.leaveRequestId,
                         status: Status.APPROVED,
+                        previousStatus: Status.REVOKED,
                     });
                 }}
             />

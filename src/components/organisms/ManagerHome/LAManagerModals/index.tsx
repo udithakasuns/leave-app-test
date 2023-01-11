@@ -152,7 +152,11 @@ const LAManagerModals = ({
                 <Modal
                     onClose={onClose}
                     isVisible
-                    header='Cancelled leave status'
+                    header={
+                        managerRequest.status === 'CANCELLED'
+                            ? 'Cancelled leave status'
+                            : 'Revoked leave status'
+                    }
                     style={styles.commonStyle}
                     sheetBody={
                         <CancelledSheetBody

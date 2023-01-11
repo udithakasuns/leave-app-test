@@ -15,6 +15,7 @@ export const handleRequestSelectedModal = (
             selectedModal = EmployeeModal.DENIED_LEAVE_MODAL;
             break;
         case 'CANCELLED':
+        case 'REVOKED':
             selectedModal = EmployeeModal.CANCELLED_LEAVE_MODAL;
             break;
         default:

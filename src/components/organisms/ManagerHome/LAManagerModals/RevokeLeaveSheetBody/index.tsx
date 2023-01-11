@@ -30,13 +30,6 @@ const RevokeLeaveSheetBody = ({
                 Approved leave will be revoked and notification will be sent to
                 the employee. Leave entitlements will be updated.
             </Text>
-            {/* {requestDetails && (
-                <RequestDetailsSection
-                    requestDetails={requestDetails}
-                    isStatusVisible
-                    isDurationVisible
-                />
-            )} */}
             <Input
                 error={showError}
                 placeholder='Add message'
