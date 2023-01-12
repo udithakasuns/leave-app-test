@@ -131,7 +131,7 @@ const LALeaveRequestList = ({
                         </View>
                     </View>
                 }
-                keyExtractor={(item, index) => item.status + index}
+                keyExtractor={item => item.leaveRequestId.toLocaleString()}
                 renderItem={({ item }) => <Item item={item} />}
                 onEndReachedThreshold={0.3}
                 onEndReached={() => {

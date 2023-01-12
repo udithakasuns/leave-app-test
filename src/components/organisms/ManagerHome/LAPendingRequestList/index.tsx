@@ -8,7 +8,7 @@ import { DrawerScreenNavigationProp } from 'src/navigators/types';
 import { useManagerFilterStore } from 'src/store';
 import { getStartEndDate } from 'src/utils/helpers/dateHandler';
 import { getErrorMessage } from 'src/utils/helpers/errorCodes';
-import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
+// import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import theme from 'src/utils/theme';
 import { AtLeast, PendingRequestType, TestProps } from 'src/utils/types';
 import LAManagerFilters from '../LAManagerFilters';
@@ -120,7 +120,7 @@ const LAPendingRequestList = ({
                         </View>
                     </View>
                 }
-                keyExtractor={(item, index) => item.status + index}
+                keyExtractor={item => item.leaveRequestId.toString()}
                 onEndReachedThreshold={0.3}
                 showsVerticalScrollIndicator={false}
                 onEndReached={() => {

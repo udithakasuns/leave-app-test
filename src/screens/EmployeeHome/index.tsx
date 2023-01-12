@@ -196,8 +196,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         ['nudgeManger'],
         postHttpNudge,
         {
-            onSuccess: () =>
-                handleNudgeSuccess(setEmployeeModal, managers[0].name ?? ''),
+            onSuccess: () => handleNudgeSuccess(setEmployeeModal),
         },
     );
 
@@ -263,7 +262,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 nudgeMutate(employeeRequest.leaveRequestId);
             }
         } else {
-            handleAlreadyNudgeError();
+            handleAlreadyNudgeError('');
         }
     };
     const handleViewMoreDetails = (onBackPressModal: EmployeeModal) => {
