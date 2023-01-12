@@ -18,9 +18,14 @@ const CrashCheck = () => (
             Note that, this feature is only showing in the STG environment to
             ensure that crashlytics are working perfectly.
         </Text>
+        <Spacer height={scale.sc2} />
+        <Text type='ParaSM'>
+            Dev Note: Crashlytics are not working when you are in debuging mode
+            since it is disabled in firebase.json file.
+        </Text>
         <Spacer height={scale.sc5} />
         <Button
-            mode='contained-gray'
+            mode='outlined'
             label='Crash the App'
             onPress={() => crashlytics().crash()}
         />
