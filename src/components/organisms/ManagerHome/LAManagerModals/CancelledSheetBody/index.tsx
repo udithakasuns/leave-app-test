@@ -37,8 +37,16 @@ const CancelledSheetBody = ({ requestDetails, onPressBackToHome }: Props) => (
             isRecipientVisible
         />
         <Input
-            placeholder={requestDetails.requestDesc ?? ''}
-            label='Reason'
+            placeholder={
+                requestDetails.status === 'REVOKED'
+                    ? requestDetails.reviewerComment ?? ''
+                    : requestDetails.requestDesc ?? ''
+            }
+            label={
+                requestDetails.status === 'REVOKED'
+                    ? 'Reviewer comment'
+                    : 'Reason'
+            }
             type='COMMENT'
             containerStyle={styles.inputContainerStyle}
             inputContainerStyle={styles.inputTextStyle}
