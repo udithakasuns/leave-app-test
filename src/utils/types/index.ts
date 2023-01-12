@@ -198,6 +198,7 @@ export interface PendingRequestByID extends PendingRequestType {
 export type UpdateManagerRequest = {
     requestID: number;
     status: StatusType;
+    previousStatus?: StatusType;
     reviewerComment: string;
 };
 
@@ -261,11 +262,14 @@ export enum ManagerModal {
     'CANCELLED_LEAVE_MODAL',
     'DENIED_LEAVE_MODAL',
     'LEAVE_INFORMATION',
+    'REVOKE_LEAVE_MODAL',
 }
 
 export enum ManagerPopup {
     'LEAVE_REQUEST_APPROVED',
     'LEAVE_REQUEST_DECLINE',
+    'LEAVE_REQUEST_REVOKE',
+    'LEAVE_REQUEST_REVOKE_UNDO',
 }
 
 export type ApplyFormValues = {

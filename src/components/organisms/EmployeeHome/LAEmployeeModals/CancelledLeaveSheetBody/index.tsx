@@ -17,9 +17,11 @@ const CancelledLeaveSheetBody = ({
 }: PartialBy<Props, 'requestDetails'>) => (
     <>
         <Spacer height={5} />
-        <Text color={colors.gray700}>
-            You have cancelled this leave request.
-        </Text>
+        {requestDetails?.leaveRequest?.status === 'CANCELLED' && (
+            <Text color={colors.gray700}>
+                You have cancelled this leave request.
+            </Text>
+        )}
         {requestDetails && (
             <RequestDetailsSection
                 requestDetails={requestDetails}
@@ -30,7 +32,11 @@ const CancelledLeaveSheetBody = ({
         )}
         <Input
             placeholder={requestDetails?.leaveRequest?.reviewerComment ?? ''}
-            label='Comment'
+            label={
+                requestDetails?.leaveRequest?.status === 'REVOKED'
+                    ? 'Reviewer comment'
+                    : 'Reason'
+            }
             type='COMMENT'
             containerStyle={{ margin: 0 }}
             inputContainerStyle={{ paddingVertical: scale.sc8 }}
