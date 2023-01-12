@@ -8,9 +8,10 @@ import theme from 'src/utils/theme';
 import useBackAction from 'src/utils/hooks/useBackAction';
 import getAppVersion from 'src/utils/helpers/getAppVersion';
 import { inAppNormalUrlHandler } from 'src/utils/helpers/inAppUrlHandler';
-import { SUPPORT_URL } from 'src/configs';
+import { DEPLOYMENT_ENV, SUPPORT_URL } from 'src/configs';
 import { styles } from './styles';
 import DetailItem from './DetailItem';
+import CrashCheck from './CrashCheck';
 
 const { scale } = theme;
 
@@ -42,6 +43,10 @@ const Support: React.FC<SupportScreensProps> = () => {
                 <Text type='H2Bold'>About</Text>
                 <DetailItem label='Developed by' value='Rootcode pvt ltd' />
                 <DetailItem label='App version' value={getAppVersion()} />
+
+                {/* Crash check functionality is only showing for STG environment */}
+                {DEPLOYMENT_ENV === 'STG' && <CrashCheck />}
+                <Spacer height={scale.sc20} />
             </ScrollView>
         </View>
     );
