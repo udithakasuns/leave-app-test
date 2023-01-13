@@ -17,7 +17,12 @@
         "amplify:dev": "amplify pull --appId d20c5hyqdk0hvi --envName dev",
         "amplify:prod": "amplify pull --appId d20c5hyqdk0hvi --envName prod",
         "dev:init": "yarn && cd ios && pod deintegrate && pod install && cd .. && amplify env checkout dev",
-        "prod:init": "yarn && cd ios && pod deintegrate && pod install && cd .. && amplify env checkout prod"
+        "prod:init": "yarn && cd ios && pod deintegrate && pod install && cd .. && amplify env checkout prod",
+        "amplify:checkout:dev": "amplify env checkout dev",
+        "amplify:checkout:prod": "amplify env checkout prod",
+        "deploy:android:stg": "cd android && bundle exec fastlane android build env:STG",
+        "deploy:android:qa": "cd android && bundle exec fastlane android build env:QA",
+        "deploy:android:prod": "cd android && bundle exec fastlane android build env:PROD"
     },
     "dependencies": {
         "@aws-amplify/auth": "^5.0.1",
