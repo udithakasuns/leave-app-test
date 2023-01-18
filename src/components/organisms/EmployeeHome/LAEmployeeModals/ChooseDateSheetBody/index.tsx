@@ -196,6 +196,7 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                               .toFormat('yyyy-MM-dd')
                 }
                 maxDate={getLastFriday()}
+                context={{ date: '' }}
             />
             <Spacer height={scale.vsc10} />
             <View style={styles.halfButtonsStyle}>

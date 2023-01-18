@@ -13,6 +13,7 @@ interface Props {
     marginBottom: number;
     indicatorColor: string;
     indicatorSize: 'large' | 'small';
+    testID: string;
 }
 
 const Loader = ({
@@ -22,13 +23,14 @@ const Loader = ({
     containerStyle,
     indicatorColor = colors.primaryColor,
     indicatorSize = 'small',
+    testID,
 }: AtLeast<Props, 'isVisible'>) => {
     if (!isVisible) return null;
 
     const styles = useStyles({ marginTop, marginBottom });
 
     return (
-        <View style={[styles.container, containerStyle]}>
+        <View style={[styles.container, containerStyle]} testID={testID}>
             <ActivityIndicator color={indicatorColor} size={indicatorSize} />
         </View>
     );
