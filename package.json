@@ -22,7 +22,10 @@
         "amplify:checkout:prod": "amplify env checkout prod",
         "deploy:android:stg": "cd android && bundle exec fastlane android build env:STG",
         "deploy:android:qa": "cd android && bundle exec fastlane android build env:QA",
-        "deploy:android:prod": "cd android && bundle exec fastlane android build env:PROD"
+        "deploy:android:prod": "cd android && bundle exec fastlane android build env:PROD",
+        "deploy:ios:stg": "cd ios && bundle exec fastlane ios build env:STG",
+        "deploy:ios:qa": "cd ios && bundle exec fastlane ios build env:QA",
+        "deploy:ios:prod": "cd ios && bundle exec fastlane ios build env:PROD"
     },
     "dependencies": {
         "@aws-amplify/auth": "^5.0.1",

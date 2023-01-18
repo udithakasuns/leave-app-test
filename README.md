@@ -60,3 +60,7 @@ $ amplify remove env <env_name>
 
 Other commands
 https://docs.amplify.aws/cli/teams/commands/
+
+# Fastlane IOS upload_to_testflight issue solution
+
+delete the following folder => /Users/<user>/Library/Caches/com.apple.amp.itmstransporter

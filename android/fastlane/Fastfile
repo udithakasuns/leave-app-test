@@ -1,11 +1,11 @@
 default_platform(:android)
 
+GIT_BRANCH_NAME = "KA/fastlane"
 APP_PACKAGE_NAME = "com.rootcodelabs.leaveapp"
 APP_VERSION_FILE_PATH = "../../src/configs/APP_VERSION"
-GIT_BRANCH_NAME = "KA/fastlane"
-SERVICE_JSON_KEY_PATH = "./google_play_service_account_api_key.json"
 PACKAGE_JSON_PATH = "../package.json"
 GRADLE_FILE_PATH = "./app/build.gradle"
+
 ENV_PROD = "PROD"
 ENV_STG = "STG"
 ENV_QA = "QA"
@@ -27,25 +27,11 @@ platform :android do
     previous_internal_build_number = google_play_track_version_codes(
       package_name: APP_PACKAGE_NAME,
       track: "internal",
-      json_key: SERVICE_JSON_KEY_PATH,
+      json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
     )[0]
 
-    # Get the previous production build number from google play store
-    previous_production_build_number = google_play_track_version_codes(
-      package_name: APP_PACKAGE_NAME,
-      track: "production",
-      json_key: SERVICE_JSON_KEY_PATH,
-    )[0]
-
-    # Find the latest build number
-    latest_build_number = 0
-    if previous_internal_build_number <= previous_production_build_number
-      latest_build_number =  previous_production_build_number
-    else
-      latest_build_number = previous_internal_build_number
-    end
       
-    new_build_number = latest_build_number + 1
+    new_build_number = previous_internal_build_number + 1
     puts "################### New Build Number ###################"
     puts new_build_number
     puts "####################################################"
@@ -57,16 +43,15 @@ platform :android do
 
     # Version name will be updated based on the value mention in the src/configs/VERSION.txt file
     version_name = File.read(APP_VERSION_FILE_PATH)
-    # Attatch the version number, if env is PROD version name is x.x.x otherwise x.x.x_STG. Note that, This underscore must be there. Otherwise version number will not be shown correctly.
-    new_version_name = (env == ENV_PROD) ? version_name : (version_name +"_"+ env)
+    
 
-    puts "################### New Version Name ###################"
-    puts new_version_name
+    puts "################### Version Name ###################"
+    puts version_name
     puts "####################################################"
   
     increment_version_name(
       gradle_file_path: GRADLE_FILE_PATH,
-      version_name: new_version_name
+      version_name: version_name
     )
 
     yarn(command: 'install',  package_path: PACKAGE_JSON_PATH)
@@ -81,17 +66,16 @@ platform :android do
     end
 
     # Clean and build the release
-    releaseFilePath = File.join(Dir.pwd, "../app", "my-release-key.keystore")
     gradle(task: 'clean')
     gradle(
       task: 'bundle',
       build_type: 'Release',
       print_command: false,
       properties: {
-        "android.injected.signing.store.file" => releaseFilePath,
-        "android.injected.signing.store.password" => "dTY93EMHxuCCCWJ6",
-        "android.injected.signing.key.alias" => "leave",
-        "android.injected.signing.key.password" => "dTY93EMHxuCCCWJ6",
+        "android.injected.signing.store.file" => "#{Dir.pwd}/#{ENV['ANDROID_KEYSTORE_FILE']}",
+        "android.injected.signing.store.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
+        "android.injected.signing.key.alias" => ENV["ANDROID_KEYSTORE_ALIAS"],
+        "android.injected.signing.key.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
       }
     )
 
@@ -103,8 +87,27 @@ platform :android do
       skip_upload_images: true,
       skip_upload_apk: true,
       changes_not_sent_for_review: true, 
-      track: env === ENV_PROD ? 'production' : 'internal'
+      track: 'internal'
     )
   end
 end
 
+
+
+
+
+
+    # # Get the previous production build number from google play store
+    # previous_production_build_number = google_play_track_version_codes(
+    #   package_name: APP_PACKAGE_NAME,
+    #   track: "production",
+    #   json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
+    # )[0]
+
+    # # Find the latest build number
+    # latest_build_number = 0
+    # if previous_internal_build_number <= previous_production_build_number
+    #   latest_build_number =  previous_production_build_number
+    # else
+    #   latest_build_number = previous_internal_build_number
+    # end

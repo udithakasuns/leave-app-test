@@ -8,4 +8,4 @@ fastlane/test_output
 
 builds/*
 
-google_play_service_account_api_key.json
+.env
