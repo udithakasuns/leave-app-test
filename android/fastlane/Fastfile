@@ -1,52 +1,113 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
-platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
+GIT_BRANCH_NAME = "release"
+APP_PACKAGE_NAME = "com.rootcodelabs.leaveapp"
+APP_VERSION_FILE_PATH = "../../src/configs/APP_VERSION"
+PACKAGE_JSON_PATH = "../package.json"
+GRADLE_FILE_PATH = "./app/build.gradle"
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    releaseFilePath = File.join(Dir.pwd, "../app", "my-release-key.keystore")
+ENV_PROD = "PROD"
+ENV_STG = "STG"
+ENV_QA = "QA"
+
+before_all do
+  ensure_git_branch(
+    branch: GIT_BRANCH_NAME
+  )
+  git_pull
+end
+
+platform :android do
+  desc "Build and publish the android application"
+  lane :build do |options|
+
+    env = options[:env] # STG | QA | PROD
+
+    # Get the previous internal test build number from google play store
+    previous_internal_build_number = google_play_track_version_codes(
+      package_name: APP_PACKAGE_NAME,
+      track: "internal",
+      json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
+    )[0]
+
+      
+    new_build_number = previous_internal_build_number + 1
+    puts "################### New Build Number ###################"
+    puts new_build_number
+    puts "####################################################"
+
+    increment_version_code(
+      gradle_file_path: GRADLE_FILE_PATH,
+      version_code: new_build_number
+    )
+
+    # Version name will be updated based on the value mention in the src/configs/VERSION.txt file
+    version_name = File.read(APP_VERSION_FILE_PATH)
+    
+
+    puts "################### Version Name ###################"
+    puts version_name
+    puts "####################################################"
+  
+    increment_version_name(
+      gradle_file_path: GRADLE_FILE_PATH,
+      version_name: version_name
+    )
+
+    yarn(command: 'install',  package_path: PACKAGE_JSON_PATH)
+
+    # Change amplify environment. Note that, in amplify both STG and QA environments are used dev environment.
+    if env === ENV_PROD
+      puts "################### Changing Amplify Environment to prod ###################"
+      yarn(command: 'amplify:checkout:prod',  package_path: PACKAGE_JSON_PATH)
+    else
+      puts "################### Changing Amplify Environment to dev ###################"
+      yarn(command: 'amplify:checkout:dev',  package_path: PACKAGE_JSON_PATH)
+    end
+
+    # Clean and build the release
     gradle(task: 'clean')
     gradle(
       task: 'bundle',
       build_type: 'Release',
       print_command: false,
       properties: {
-        "android.injected.signing.store.file" => releaseFilePath,
-        "android.injected.signing.store.password" => "dTY93EMHxuCCCWJ6",
-        "android.injected.signing.key.alias" => "leave",
-        "android.injected.signing.key.password" => "dTY93EMHxuCCCWJ6",
+        "android.injected.signing.store.file" => File.join(Dir.pwd, "../app", ENV['ANDROID_KEYSTORE_FILE']),
+        "android.injected.signing.store.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
+        "android.injected.signing.key.alias" => ENV["ANDROID_KEYSTORE_ALIAS"],
+        "android.injected.signing.key.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
       }
     )
-    upload_to_play_store(
-       track: 'internal'
-    )
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+    # Upload release to google play store based on the env.
+    upload_to_play_store(
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_screenshots: true,
+      skip_upload_images: true,
+      skip_upload_apk: true,
+      changes_not_sent_for_review: true, 
+      track: 'internal'
+    )
   end
 end
+
+
+
+
+
+
+    # # Get the previous production build number from google play store
+    # previous_production_build_number = google_play_track_version_codes(
+    #   package_name: APP_PACKAGE_NAME,
+    #   track: "production",
+    #   json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
+    # )[0]
+
+    # # Find the latest build number
+    # latest_build_number = 0
+    # if previous_internal_build_number <= previous_production_build_number
+    #   latest_build_number =  previous_production_build_number
+    # else
+    #   latest_build_number = previous_internal_build_number
+    # end

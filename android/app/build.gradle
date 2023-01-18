@@ -144,8 +144,9 @@ android {
         applicationId "com.rootcodelabs.leaveapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 23
-        versionName "1.1.0"
+        // Do not manually update!!! (Note that, below versonCode & versonName are updated automatically by Fastlane deployment).
+        versionCode 29
+        versionName "1.1.4"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
