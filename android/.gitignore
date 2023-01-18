@@ -8,4 +8,4 @@ fastlane/test_output
 
 builds/*
 
-.env
+fastlane/.env

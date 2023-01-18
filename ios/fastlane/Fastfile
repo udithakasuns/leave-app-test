@@ -1,6 +1,6 @@
 default_platform(:ios)
 
-GIT_BRANCH_NAME = "KA/fastlane"
+GIT_BRANCH_NAME = "release"
 APP_PACKAGE_NAME = "com.rootcodelabs.leaveapp"
 APP_VERSION_FILE_PATH = "../../src/configs/APP_VERSION"
 XCODE_PROJECT_PATH = "./rtc_leave_app.xcodeproj"

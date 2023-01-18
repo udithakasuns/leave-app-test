@@ -10,4 +10,4 @@ builds/*
 
 *.xcarchive
 
-.env
+fastlane/.env

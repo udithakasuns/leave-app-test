@@ -1,6 +1,6 @@
 default_platform(:android)
 
-GIT_BRANCH_NAME = "KA/fastlane"
+GIT_BRANCH_NAME = "release"
 APP_PACKAGE_NAME = "com.rootcodelabs.leaveapp"
 APP_VERSION_FILE_PATH = "../../src/configs/APP_VERSION"
 PACKAGE_JSON_PATH = "../package.json"
@@ -72,7 +72,7 @@ platform :android do
       build_type: 'Release',
       print_command: false,
       properties: {
-        "android.injected.signing.store.file" => "#{Dir.pwd}/#{ENV['ANDROID_KEYSTORE_FILE']}",
+        "android.injected.signing.store.file" => File.join(Dir.pwd, "../app", ENV['ANDROID_KEYSTORE_FILE']),
         "android.injected.signing.store.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
         "android.injected.signing.key.alias" => ENV["ANDROID_KEYSTORE_ALIAS"],
         "android.injected.signing.key.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
