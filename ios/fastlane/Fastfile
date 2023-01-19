@@ -5,6 +5,8 @@ APP_PACKAGE_NAME = "com.rootcodelabs.leaveapp"
 APP_VERSION_FILE_PATH = "../../src/configs/APP_VERSION"
 XCODE_PROJECT_PATH = "./rtc_leave_app.xcodeproj"
 PACKAGE_JSON_PATH = "../package.json"
+SLACK_URL= "https://hooks.slack.com/services/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"
+PLATFORM="Ios"
 
 ENV_PROD = "PROD"
 ENV_STG = "STG"
@@ -36,6 +38,96 @@ platform :ios do
   end 
 end 
 
+def get_apple_api_key()
+  # Get apple API Key
+  apple_api_key = app_store_connect_api_key(
+    key_id: ENV["APPLE_API_KEY_ID"],
+    issuer_id: ENV["APPLE_API_KEY_ISSER_ID"],
+    key_filepath: "#{Dir.pwd}/#{ENV["APPLE_API_KEY_FILE_PATH"]}"
+  )
+
+  return apple_api_key
+end
+
+
+def get_new_build_number(apple_api_key)
+   # Get Previous build number from Apple App Store
+   previous_build_number = latest_testflight_build_number(
+    app_identifier: APP_PACKAGE_NAME,
+    api_key: apple_api_key
+  )
+  new_build_number = previous_build_number + 1
+  return new_build_number
+end
+
+def update_build_number(new_build_number)
+  increment_build_number(
+    xcodeproj: XCODE_PROJECT_PATH,
+    build_number: new_build_number
+  )
+end
+
+def update_version_name(version_name)
+  increment_version_number(
+    xcodeproj: XCODE_PROJECT_PATH,
+    version_number: version_name
+  )
+end
+
+def checkout_amplify_env(env)
+  # Change amplify environment. Note that, in amplify both STG and QA environments are used dev environment.
+  if env === ENV_PROD
+  puts "################### Changing Amplify Environment to prod ###################"
+  yarn(command: 'amplify:checkout:prod',  package_path: PACKAGE_JSON_PATH)
+  else
+    puts "################### Changing Amplify Environment to dev ###################"
+    yarn(command: 'amplify:checkout:dev',  package_path: PACKAGE_JSON_PATH)
+  end
+end
+
+def build_the_release()
+  workspacePath = "#{Dir.pwd}".gsub!('fastlane', 'rtc_leave_app.xcworkspace')
+  build_app(
+    clean: true,
+    configuration: "Release",
+    workspace: workspacePath,
+    scheme: "rtc_leave_app"
+  )
+end
+
+def notify_in_slack(new_build_number, version_name, env)
+  # Notify in Slack
+  slack(
+    message: "New #{PLATFORM} release is uploaded to Apple App Store",
+    success: true,
+    slack_url: SLACK_URL,
+    use_webhook_configured_username_and_icon: true,
+    default_payloads: [],
+    attachment_properties: {
+      fields: [
+          {
+            title: "Platform",
+            value: PLATFORM
+          },
+          {
+            title: "Build number",
+            value: new_build_number
+          },
+          {
+            title: "Version",
+            value: version_name
+          },
+          {
+            title: "Environment",
+            value: env
+          }
+      ]
+    }
+  )
+end
+
+
+
 platform :ios do
   desc 'Fetch certificates and provisioning profiles'
   private_lane :certificates do
@@ -64,123 +156,45 @@ platform :ios do
 
   desc "Build app"
   lane :build do |options|
+    begin
+      env = options[:env] # STG | QA | PROD
 
-    env = options[:env] # STG | QA | PROD
+      apple_api_key = get_apple_api_key()
+      new_build_number = get_new_build_number(apple_api_key)
+      update_build_number(new_build_number)
 
-    # Get apple API Key
-    apple_api_key = app_store_connect_api_key(
-      key_id: ENV["APPLE_API_KEY_ID"],
-      issuer_id: ENV["APPLE_API_KEY_ISSER_ID"],
-      key_filepath: "#{Dir.pwd}/#{ENV["APPLE_API_KEY_FILE_PATH"]}"
-    )
+      version_name = File.read(APP_VERSION_FILE_PATH)
+      update_version_name(version_name)
+     
+      yarn(command: 'install',  package_path: PACKAGE_JSON_PATH)
 
-    # Get Previous build number from Apple App Store
-    previous_build_number = latest_testflight_build_number(
-      app_identifier: APP_PACKAGE_NAME,
-      api_key: apple_api_key
-    )
+      checkout_amplify_env(env)
+      
+      delete_temporary_keychain(ENV["APPLE_TEMP_KEYCHAIN_NAME"])
+      create_temporary_keychain(ENV["APPLE_TEMP_KEYCHAIN_NAME"], ENV["APPLE_TEMP_KEYCHAIN_PASSWORD"])
 
-    new_build_number = previous_build_number + 1
+      certificates()
 
-    puts "################### New Build Number ###################"
-    puts new_build_number
-    puts "####################################################"
+      build_the_release()
 
-    increment_build_number(
-      xcodeproj: XCODE_PROJECT_PATH,
-      build_number: new_build_number
-    )
+      delete_temporary_keychain(ENV["APPLE_TEMP_KEYCHAIN_NAME"])
 
-    # Version name will be updated based on the value mention in the src/configs/VERSION.txt file
-    version_name = File.read(APP_VERSION_FILE_PATH)
-
-    puts "################### Version Name ###################"
-    puts version_name
-    puts "####################################################"
-
-    increment_version_number(
-      xcodeproj: XCODE_PROJECT_PATH,
-      version_number: version_name
-    )
-
-    yarn(command: 'install',  package_path: PACKAGE_JSON_PATH)
-
-    # Change amplify environment. Note that, in amplify both STG and QA environments are used dev environment.
-    if env === ENV_PROD
-      puts "################### Changing Amplify Environment to prod ###################"
-      yarn(command: 'amplify:checkout:prod',  package_path: PACKAGE_JSON_PATH)
-    else
-      puts "################### Changing Amplify Environment to dev ###################"
-      yarn(command: 'amplify:checkout:dev',  package_path: PACKAGE_JSON_PATH)
-    end
+      ENV['ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD'] = 'true' 
     
+      upload_to_testflight(api_key: apple_api_key)
 
-    delete_temporary_keychain(ENV["APPLE_TEMP_KEYCHAIN_NAME"])
-    create_temporary_keychain(ENV["APPLE_TEMP_KEYCHAIN_NAME"], ENV["APPLE_TEMP_KEYCHAIN_PASSWORD"])
+      notify_in_slack(new_build_number, version_name, env)
 
-    certificates()
 
-    workspacePath = "#{Dir.pwd}".gsub!('fastlane', 'rtc_leave_app.xcworkspace')
 
-    build_app(
-      clean: true,
-      configuration: "Release",
-      workspace: workspacePath,
-      scheme: "rtc_leave_app"
-    )
+      # After doing all the things checkout amplify to dev(Otherwise developer might be in amplify prod env)
+      checkout_amplify_env(ENV_STG)
 
-    delete_temporary_keychain(ENV["APPLE_TEMP_KEYCHAIN_NAME"])
-
-    ENV['ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD'] = 'true' 
-  
-    upload_to_testflight(
-      api_key: apple_api_key
-    )
-
+    rescue => exception
+      puts exception
+    end
   end
 end
 
 
-# platform :ios do
-#   desc "Push a new beta build to TestFlight"
-#   lane :build do
-#     increment_version_number(
-#       xcodeproj: XCODE_PROJECT_PATH,
-#       version_number: File.read(APP_VERSION_FILE_PATH)
-#     )
 
-#     previous_build_number = latest_testflight_build_number(
-#       app_identifier: APP_PACKAGE_NAME,
-#       api_key: apple_api_key
-#     )
-
-#     current_build_number = previous_build_number + 1
-
-#     increment_build_number(
-#       xcodeproj: XCODE_PROJECT_PATH,
-#       build_number: current_build_number
-#     )
-
-#     build_app(
-#       clean: true,
-#       configuration: "Release",
-#       workspace: "#{Dir.pwd}".gsub!('fastlane', 'rtc_leave_app.xcworkspace'), 
-#       scheme: "rtc_leave_app",
-#     )
-
-#     # upload_to_testflight(
-#     #   api_key: apple_api_key
-#     # )
-#   end
-# end
-
-
-
-# platform :ios do
-#   desc "Push a new beta build to TestFlight"
-#   lane :beta do
-#     increment_build_number(xcodeproj: "rtc_leave_app.xcodeproj")
-#     build_app(workspace: "rtc_leave_app.xcworkspace", scheme: "rtc_leave_app")
-#     upload_to_testflight
-#   end
-# end

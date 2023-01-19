@@ -5,6 +5,8 @@ APP_PACKAGE_NAME = "com.rootcodelabs.leaveapp"
 APP_VERSION_FILE_PATH = "../../src/configs/APP_VERSION"
 PACKAGE_JSON_PATH = "../package.json"
 GRADLE_FILE_PATH = "./app/build.gradle"
+SLACK_URL= "https://hooks.slack.com/services/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"
+PLATFORM='Android'
 
 ENV_PROD = "PROD"
 ENV_STG = "STG"
@@ -17,97 +19,137 @@ before_all do
   git_pull
 end
 
-platform :android do
-  desc "Build and publish the android application"
-  lane :build do |options|
+def get_new_build_number()
+   # Get the previous internal test build number from google play store
+   previous_internal_build_number = google_play_track_version_codes(
+    package_name: APP_PACKAGE_NAME,
+    track: "internal",
+    json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
+  )[0]
 
-    env = options[:env] # STG | QA | PROD
+  new_build_number = previous_internal_build_number + 1
+  return new_build_number
+end
 
-    # Get the previous internal test build number from google play store
-    previous_internal_build_number = google_play_track_version_codes(
-      package_name: APP_PACKAGE_NAME,
-      track: "internal",
-      json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
-    )[0]
+def update_build_number(new_build_number)
+  increment_version_code(
+    gradle_file_path: GRADLE_FILE_PATH,
+    version_code: new_build_number
+  )
+end
 
-      
-    new_build_number = previous_internal_build_number + 1
-    puts "################### New Build Number ###################"
-    puts new_build_number
-    puts "####################################################"
+def update_version_name(version_name)
+  increment_version_name(
+    gradle_file_path: GRADLE_FILE_PATH,
+    version_name: version_name
+  )
+end
 
-    increment_version_code(
-      gradle_file_path: GRADLE_FILE_PATH,
-      version_code: new_build_number
-    )
-
-    # Version name will be updated based on the value mention in the src/configs/VERSION.txt file
-    version_name = File.read(APP_VERSION_FILE_PATH)
-    
-
-    puts "################### Version Name ###################"
-    puts version_name
-    puts "####################################################"
-  
-    increment_version_name(
-      gradle_file_path: GRADLE_FILE_PATH,
-      version_name: version_name
-    )
-
-    yarn(command: 'install',  package_path: PACKAGE_JSON_PATH)
-
-    # Change amplify environment. Note that, in amplify both STG and QA environments are used dev environment.
-    if env === ENV_PROD
-      puts "################### Changing Amplify Environment to prod ###################"
-      yarn(command: 'amplify:checkout:prod',  package_path: PACKAGE_JSON_PATH)
-    else
-      puts "################### Changing Amplify Environment to dev ###################"
-      yarn(command: 'amplify:checkout:dev',  package_path: PACKAGE_JSON_PATH)
-    end
-
-    # Clean and build the release
-    gradle(task: 'clean')
-    gradle(
-      task: 'bundle',
-      build_type: 'Release',
-      print_command: false,
-      properties: {
-        "android.injected.signing.store.file" => File.join(Dir.pwd, "../app", ENV['ANDROID_KEYSTORE_FILE']),
-        "android.injected.signing.store.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
-        "android.injected.signing.key.alias" => ENV["ANDROID_KEYSTORE_ALIAS"],
-        "android.injected.signing.key.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
-      }
-    )
-
-    # Upload release to google play store based on the env.
-    upload_to_play_store(
-      skip_upload_metadata: true,
-      skip_upload_changelogs: true,
-      skip_upload_screenshots: true,
-      skip_upload_images: true,
-      skip_upload_apk: true,
-      changes_not_sent_for_review: true, 
-      track: 'internal'
-    )
+def checkout_amplify_env(env)
+  # Change amplify environment. Note that, in amplify both STG and QA environments are used dev environment.
+  if env === ENV_PROD
+    puts "################### Changing Amplify Environment to prod ###################"
+    yarn(command: 'amplify:checkout:prod',  package_path: PACKAGE_JSON_PATH)
+  else
+    puts "################### Changing Amplify Environment to dev ###################"
+    yarn(command: 'amplify:checkout:dev',  package_path: PACKAGE_JSON_PATH)
   end
+end
+
+def build_the_release()
+  # Clean and build the release
+  gradle(task: 'clean')
+  gradle(
+    task: 'bundle',
+    build_type: 'Release',
+    print_command: false,
+    properties: {
+      "android.injected.signing.store.file" => File.join(Dir.pwd, "../app", ENV['ANDROID_KEYSTORE_FILE']),
+      "android.injected.signing.store.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
+      "android.injected.signing.key.alias" => ENV["ANDROID_KEYSTORE_ALIAS"],
+      "android.injected.signing.key.password" => ENV["ANDROID_KEYSTORE_PASSWORD"],
+    }
+  )
+end
+
+def upload_to_playstore()
+  # Upload release to google play store as a internal release.
+  upload_to_play_store(
+    skip_upload_metadata: true,
+    skip_upload_changelogs: true,
+    skip_upload_screenshots: true,
+    skip_upload_images: true,
+    skip_upload_apk: true,
+    changes_not_sent_for_review: true, 
+    track: 'internal'
+  )
+end
+
+def notify_in_slack(new_build_number, version_name, env)
+  # Notify in Slack
+  slack(
+    message: "New #{PLATFORM} release is uploaded to Google Play Store",
+    success: true,
+    slack_url: SLACK_URL,
+    use_webhook_configured_username_and_icon: true,
+    default_payloads: [],
+    attachment_properties: {
+      fields: [
+          {
+            title: "Platform",
+            value: PLATFORM
+          },
+          {
+            title: "Build number",
+            value: new_build_number
+          },
+          {
+            title: "Version",
+            value: version_name
+          },
+          {
+            title: "Environment",
+            value: env
+          }
+      ]
+    }
+  )
 end
 
 
 
 
+platform :android do
+  desc "Build and publish the android application"
+  lane :build do |options|
+    begin
+      env = options[:env] # STG | QA | PROD
+
+      new_build_number = get_new_build_number()
+      update_build_number(new_build_number)
+    
+      version_name = File.read(APP_VERSION_FILE_PATH)
+      update_version_name(version_name) 
+     
+      yarn(command: 'install',  package_path: PACKAGE_JSON_PATH)
+
+      checkout_amplify_env(env)
+      
+      build_the_release()
+
+      upload_to_playstore()
+     
+      notify_in_slack(new_build_number, version_name, env)
 
 
-    # # Get the previous production build number from google play store
-    # previous_production_build_number = google_play_track_version_codes(
-    #   package_name: APP_PACKAGE_NAME,
-    #   track: "production",
-    #   json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
-    # )[0]
 
-    # # Find the latest build number
-    # latest_build_number = 0
-    # if previous_internal_build_number <= previous_production_build_number
-    #   latest_build_number =  previous_production_build_number
-    # else
-    #   latest_build_number = previous_internal_build_number
-    # end
+
+      # After doing all the things checkout amplify to dev(Otherwise developer might be in amplify prod env)
+      checkout_amplify_env(ENV_STG)
+
+
+    rescue => exception
+      puts exception
+    end
+  end
+end
