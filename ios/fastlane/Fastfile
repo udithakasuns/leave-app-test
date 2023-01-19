@@ -185,6 +185,11 @@ platform :ios do
 
       notify_in_slack(new_build_number, version_name, env)
 
+
+
+      # After doing all the things checkout amplify to dev(Otherwise developer might be in amplify prod env)
+      checkout_amplify_env(ENV_STG)
+
     rescue => exception
       puts exception
     end
