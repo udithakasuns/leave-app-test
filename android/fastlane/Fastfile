@@ -16,7 +16,7 @@ before_all do
   ensure_git_branch(
     branch: GIT_BRANCH_NAME
   )
-  git_pull
+  
 end
 
 def get_new_build_number()
@@ -27,7 +27,18 @@ def get_new_build_number()
     json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
   )[0]
 
-  new_build_number = previous_internal_build_number + 1
+  previous_production_build_number = google_play_track_version_codes(
+    package_name: APP_PACKAGE_NAME,
+    track: "production",
+    json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
+  )[0]
+
+  max_build_number = previous_internal_build_number
+  if(previous_production_build_number > max_build_number)
+    max_build_number = previous_production_build_number
+  end
+
+  new_build_number = max_build_number + 1
   return new_build_number
 end
 
@@ -72,7 +83,7 @@ def build_the_release()
   )
 end
 
-def upload_to_playstore()
+def upload_to_playstore(env)
   # Upload release to google play store as a internal release.
   upload_to_play_store(
     skip_upload_metadata: true,
@@ -80,8 +91,8 @@ def upload_to_playstore()
     skip_upload_screenshots: true,
     skip_upload_images: true,
     skip_upload_apk: true,
-    changes_not_sent_for_review: true, 
-    track: 'internal'
+    changes_not_sent_for_review: (env === ENV_PROD) ? false : true, 
+    track: (env === ENV_PROD) ? 'production' : 'internal'
   )
 end
 
@@ -110,6 +121,10 @@ def notify_in_slack(new_build_number, version_name, env)
           {
             title: "Environment",
             value: env
+          },
+          {
+            title: "Status",
+            value: (env == ENV_PROD) ? "In Store Review" : "Available for internal testing"
           }
       ]
     }
@@ -137,7 +152,7 @@ platform :android do
       
       build_the_release()
 
-      upload_to_playstore()
+      upload_to_playstore(env)
      
       notify_in_slack(new_build_number, version_name, env)
 
@@ -149,6 +164,7 @@ platform :android do
 
 
     rescue => exception
+      puts "### Error occured ###"
       puts exception
     end
   end
