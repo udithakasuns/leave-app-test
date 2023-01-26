@@ -27,7 +27,7 @@ const Footer = () => (
                 type='SubH'
                 style={styles.text}
                 color={colors.primaryGrayLabel}>
-                Privacy Policy
+                Privacy policy
             </Text>
         </TouchableOpacity>
     </View>

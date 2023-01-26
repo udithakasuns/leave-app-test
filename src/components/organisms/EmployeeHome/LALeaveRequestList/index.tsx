@@ -27,6 +27,7 @@ interface Props extends Partial<TestProps>, FilterProps {
     callNextPage?: () => void;
     isViewAllPage: boolean;
     totalItems: number;
+    latestLeaveRequestID?: number;
 }
 
 const LALeaveRequestList = ({
@@ -35,6 +36,7 @@ const LALeaveRequestList = ({
     isViewAllPage = false,
     callNextPage,
     totalItems,
+    latestLeaveRequestID,
 }: AtLeast<Props, 'isViewAllPage' | 'onPressRequestItem'>) => {
     const { filterUtils, resetFiltersParams } = useEmployeeFilterStore();
     const navigation = useNavigation<DrawerScreenNavigationProp>();
@@ -55,6 +57,7 @@ const LALeaveRequestList = ({
                 item.leaveType,
                 item.leaveType.name,
             )}
+            isAnimated={latestLeaveRequestID === item.leaveRequestId}
             onPress={() => onPressRequestItem(item)}
             chipsColor={isViewAllPage ? colors.tertiaryColor : colors.white}
         />
@@ -128,7 +131,7 @@ const LALeaveRequestList = ({
                         </View>
                     </View>
                 }
-                keyExtractor={(item, index) => item.status + index}
+                keyExtractor={item => item.leaveRequestId.toLocaleString()}
                 renderItem={({ item }) => <Item item={item} />}
                 onEndReachedThreshold={0.3}
                 onEndReached={() => {

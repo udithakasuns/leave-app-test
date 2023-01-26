@@ -135,7 +135,7 @@ const LAInput = ({
         <View
             testID={testIdcontainer}
             style={[styles.container, containerStyle]}>
-            {label ?? (
+            {label !== '' && (
                 <LAText
                     testID={testIdLabel}
                     type='SubH'

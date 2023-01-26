@@ -14,6 +14,7 @@ interface Props extends Partial<TestProps> {
     status: StatusType | '';
     onPress: () => void;
     chipsColor: string;
+    isAnimated: boolean;
 }
 
 const LARequestListItem = ({
@@ -25,8 +26,11 @@ const LARequestListItem = ({
     testId,
     onPress,
     chipsColor,
+    isAnimated,
 }: Props) => (
-    <Pressable onPress={onPress} style={styles.container}>
+    <Pressable
+        onPress={onPress}
+        style={isAnimated ? styles.annimationContainer : styles.container}>
         <View style={styles.dateContainer}>
             <Text testID={testIdContent} type='ParaSM'>
                 {date}

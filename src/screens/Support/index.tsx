@@ -8,9 +8,10 @@ import theme from 'src/utils/theme';
 import useBackAction from 'src/utils/hooks/useBackAction';
 import getAppVersion from 'src/utils/helpers/getAppVersion';
 import { inAppNormalUrlHandler } from 'src/utils/helpers/inAppUrlHandler';
-import { SUPPORT_URL } from 'src/configs';
+import { DEPLOYMENT_ENV, SUPPORT_URL } from 'src/configs';
 import { styles } from './styles';
 import DetailItem from './DetailItem';
+import CrashCheck from './CrashCheck';
 
 const { scale } = theme;
 
@@ -28,8 +29,8 @@ const Support: React.FC<SupportScreensProps> = () => {
                 <View style={styles.divider} />
                 <Spacer height={scale.sc20} />
                 <Text type='H2Bold'>Contact us</Text>
-                <DetailItem label='Contact number' value='22-998990' />
-                <DetailItem label='Email' value='helplineemail@rootcode.io' />
+                <DetailItem label='Contact number' value='0112 574 572' />
+                <DetailItem label='Email' value='support@myleave.io' />
                 <DetailItem
                     label='Help url'
                     value={SUPPORT_URL}
@@ -42,6 +43,10 @@ const Support: React.FC<SupportScreensProps> = () => {
                 <Text type='H2Bold'>About</Text>
                 <DetailItem label='Developed by' value='Rootcode pvt ltd' />
                 <DetailItem label='App version' value={getAppVersion()} />
+
+                {/* Crash check functionality is only showing for STG environment */}
+                {DEPLOYMENT_ENV === 'STG' && <CrashCheck />}
+                <Spacer height={scale.sc20} />
             </ScrollView>
         </View>
     );

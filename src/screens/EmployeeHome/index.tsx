@@ -97,6 +97,8 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         employeeRequestDefault,
     );
 
+    const [latestLeaveRequestID, setLatestLeaveRequestID] = useState(0);
+
     const {
         getEmployeeModal,
         refreshEmployeeHomeState,
@@ -194,8 +196,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         ['nudgeManger'],
         postHttpNudge,
         {
-            onSuccess: () =>
-                handleNudgeSuccess(setEmployeeModal, managers[0].name ?? ''),
+            onSuccess: () => handleNudgeSuccess(setEmployeeModal),
         },
     );
 
@@ -261,7 +262,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                 nudgeMutate(employeeRequest.leaveRequestId);
             }
         } else {
-            handleAlreadyNudgeError();
+            handleAlreadyNudgeError('');
         }
     };
     const handleViewMoreDetails = (onBackPressModal: EmployeeModal) => {
@@ -277,6 +278,14 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         entitlementsRetch();
         filterRefetch();
     };
+
+    useEffect(() => {
+        if (latestLeaveRequestID) {
+            setTimeout(() => {
+                setLatestLeaveRequestID(0);
+            }, 5000);
+        }
+    }, [latestLeaveRequestID]);
 
     useEffect(() => {
         if (isFocused || refreshEmployeeHomeState) {
@@ -332,6 +341,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     ) : (
                         <LALeaveRequestList
                             leaveRequests={leaveRequests?.items ?? []}
+                            latestLeaveRequestID={latestLeaveRequestID}
                             onPressRequestItem={handleRequestItemPress}
                             isViewAllPage={false}
                             totalItems={leaveRequests?.totalItems ?? 0}
@@ -406,6 +416,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                         deleteMutate(employeeRequest.leaveRequestId);
                     }}
                     onConfirmationHomePress={() => {
+                        setLatestLeaveRequestID(employeeRequest.leaveRequestId);
                         setEmployeePopup(undefined);
                         setEmployeeRequest(employeeRequestDefault);
                         formik.resetForm();
