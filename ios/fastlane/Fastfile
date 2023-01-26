@@ -17,7 +17,6 @@ before_all do
   ensure_git_branch(
     branch: GIT_BRANCH_NAME
   )
-  git_pull
 end
 
 platform :ios do
@@ -95,6 +94,20 @@ def build_the_release()
   )
 end
 
+def deliver_to_production(build_number, app_version)
+  deliver(
+    build_number: "#{build_number}",
+    app_version: "PROD #{app_version}",
+    submit_for_review: true,
+    force: true,
+    skip_metadata: true,
+    skip_screenshots: true,
+    skip_binary_upload: true,
+    automatic_release: false,
+  )
+end
+
+
 def notify_in_slack(new_build_number, version_name, env)
   # Notify in Slack
   slack(
@@ -120,6 +133,10 @@ def notify_in_slack(new_build_number, version_name, env)
           {
             title: "Environment",
             value: env
+          },
+          {
+            title: "Status",
+            value: (env == ENV_PROD) ? "In Store Review" : "Available for internal testing"
           }
       ]
     }
@@ -185,12 +202,15 @@ platform :ios do
 
       notify_in_slack(new_build_number, version_name, env)
 
-
+      if env == ENV_PROD
+        deliver_to_production(new_build_number, version_name)
+      end
 
       # After doing all the things checkout amplify to dev(Otherwise developer might be in amplify prod env)
       checkout_amplify_env(ENV_STG)
 
     rescue => exception
+      puts "### Error occured ###"
       puts exception
     end
   end
