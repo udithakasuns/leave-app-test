@@ -9,6 +9,10 @@ import { useEmployeeFilterStore, useRecipientStore } from 'src/store';
 import { getStartEndDate } from 'src/utils/helpers/dateHandler';
 import { getErrorMessage } from 'src/utils/helpers/errorCodes';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
+import {
+    TID_EMPLOYEE_LEAVE_REQUEST_LIST,
+    TID_LEAVE_REQUEST_ROW,
+} from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import {
     AtLeast,
@@ -51,6 +55,7 @@ const LALeaveRequestList = ({
 
     const Item = ({ item }: { item: LeaveRequestType }) => (
         <RequestListItem
+            testIdContent={`${TID_LEAVE_REQUEST_ROW}_${item.leaveRequestId}`}
             date={getStartEndDate(item.startDate, item.endDate)}
             status={item.status}
             entitlement={getEntitlementChipText(
@@ -67,6 +72,7 @@ const LALeaveRequestList = ({
         <View style={container}>
             {managers.length > 0 && <LAEmployeeFilters />}
             <FlatList
+                testID={TID_EMPLOYEE_LEAVE_REQUEST_LIST}
                 data={leaveRequests && managers.length > 0 ? leaveRequests : []}
                 ListEmptyComponent={
                     <View

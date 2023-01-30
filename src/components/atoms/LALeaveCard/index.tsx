@@ -2,6 +2,10 @@ import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
 import theme from 'src/utils/theme';
 import { PartialBy, TestProps } from 'src/utils/types';
+import {
+    TID_ENTILEMENT_TAKEN_LEAVE_COUNT,
+    TID_ENTILEMENT_ALL_LEAVE_COUNT,
+} from 'src/utils/testIds';
 import LAText from '../LAText';
 import styles from './styles';
 
@@ -41,10 +45,16 @@ const LALeaveCard = ({
     return (
         <View testID={testId} style={[container, style]}>
             <View style={leaveContainer}>
-                <LAText type='H1' style={takenLeavesContainer}>
+                <LAText
+                    testId={TID_ENTILEMENT_TAKEN_LEAVE_COUNT}
+                    type='H1'
+                    style={takenLeavesContainer}>
                     {takenLeaves}
                 </LAText>
-                <LAText type='ParaSM' style={totalLeavesContainer}>
+                <LAText
+                    testId={TID_ENTILEMENT_ALL_LEAVE_COUNT}
+                    type='ParaSM'
+                    style={totalLeavesContainer}>
                     /{totalLeaves}
                 </LAText>
             </View>

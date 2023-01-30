@@ -27,18 +27,7 @@ def get_new_build_number()
     json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
   )[0]
 
-  previous_production_build_number = google_play_track_version_codes(
-    package_name: APP_PACKAGE_NAME,
-    track: "production",
-    json_key: "./"+ENV["ANDROID_API_KEY_FILE"],
-  )[0]
-
-  max_build_number = previous_internal_build_number
-  if(previous_production_build_number > max_build_number)
-    max_build_number = previous_production_build_number
-  end
-
-  new_build_number = max_build_number + 1
+  new_build_number = previous_internal_build_number + 1
   return new_build_number
 end
 
@@ -83,7 +72,7 @@ def build_the_release()
   )
 end
 
-def upload_to_playstore(env)
+def upload_to_playstore()
   # Upload release to google play store as a internal release.
   upload_to_play_store(
     skip_upload_metadata: true,
@@ -91,8 +80,8 @@ def upload_to_playstore(env)
     skip_upload_screenshots: true,
     skip_upload_images: true,
     skip_upload_apk: true,
-    changes_not_sent_for_review: (env === ENV_PROD) ? false : true, 
-    track: (env === ENV_PROD) ? 'production' : 'internal'
+    changes_not_sent_for_review:  true, 
+    track: 'internal'
   )
 end
 
@@ -124,7 +113,7 @@ def notify_in_slack(new_build_number, version_name, env)
           },
           {
             title: "Status",
-            value: (env == ENV_PROD) ? "In Store Review" : "Available for internal testing"
+            value: "Available for internal testing"
           }
       ]
     }
@@ -152,7 +141,7 @@ platform :android do
       
       build_the_release()
 
-      upload_to_playstore(env)
+      upload_to_playstore()
      
       notify_in_slack(new_build_number, version_name, env)
 

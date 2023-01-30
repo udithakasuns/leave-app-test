@@ -21,6 +21,10 @@ import {
     useNotificationStore,
 } from 'src/store';
 import theme from 'src/utils/theme';
+import {
+    TID_NOTFIFICATION_BELL_ICON,
+    TID_USER_PROFILE_PIC,
+} from 'src/utils/testIds';
 import { RoleSheetBody } from './RoleSheetBody';
 import { styles } from './styles';
 
@@ -84,6 +88,7 @@ const LAAppBar = ({ currentScreen }: AppBarProps) => {
                         navigation.dispatch(DrawerActions.openDrawer());
                     }}>
                     <Avatar
+                        testId={TID_USER_PROFILE_PIC}
                         size={AvatarSize.large}
                         source={{ uri: profilePic }}
                     />
@@ -104,7 +109,9 @@ const LAAppBar = ({ currentScreen }: AppBarProps) => {
                     />
                 )}
             </View>
-            <Pressable onPress={onPressNotification}>
+            <Pressable
+                testID={TID_NOTFIFICATION_BELL_ICON}
+                onPress={onPressNotification}>
                 <Icon name='notifications' size={IconSize.xLarge} />
                 {notificationCount && (
                     <View style={styles.notificationCountContainer}>
