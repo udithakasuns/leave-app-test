@@ -4,6 +4,17 @@ import React, { useState } from 'react';
 import { Modal } from 'src/components/molecules';
 import { useEmployeeStore, useRecipientStore } from 'src/store';
 import {
+    TID_EMPLOYEE_APPLY_LEAVE_MODAL,
+    TID_EMPLOYEE_APPROVED_LEAVE_MODAL,
+    TID_EMPLOYEE_CANCELLED_LEAVE_MODAL,
+    TID_EMPLOYEE_CANCEL_REQUEST_MODAL,
+    TID_EMPLOYEE_CHOSE_DATE_MODAL,
+    TID_EMPLOYEE_DENIED_LEAVE_MODAL,
+    TID_EMPLOYEE_LEAVE_INFORMATION,
+    TID_EMPLOYEE_PENDING_LEAVE_MODAL,
+    TID_EMPLOYEE_REVOKE_REQUEST_MODAL,
+} from 'src/utils/testIds';
+import {
     ApplyFormValues,
     EmployeeModal,
     PartialBy,
@@ -76,6 +87,7 @@ const LAEmployeeModals = ({
         <>
             {modalType === EmployeeModal.APPLY_LEAVE_MODAL && formik && (
                 <Modal
+                    testIdModal={TID_EMPLOYEE_APPLY_LEAVE_MODAL}
                     onClose={onCancellation}
                     isVisible
                     header='Apply Leave'
@@ -93,6 +105,7 @@ const LAEmployeeModals = ({
             )}
             {modalType === EmployeeModal.CHOSE_DATE_MODAL && formik && (
                 <Modal
+                    testIdModal={TID_EMPLOYEE_CHOSE_DATE_MODAL}
                     onClose={() => onBackPress(EmployeeModal.CHOSE_DATE_MODAL)}
                     isVisible
                     header='Choose Date'
@@ -108,6 +121,7 @@ const LAEmployeeModals = ({
             )}
             {modalType === EmployeeModal.PENDING_LEAVE_MODAL && (
                 <Modal
+                    testIdModal={TID_EMPLOYEE_PENDING_LEAVE_MODAL}
                     onClose={onClose}
                     isVisible
                     header='Pending leave status'
@@ -132,6 +146,7 @@ const LAEmployeeModals = ({
             )}
             {modalType === EmployeeModal.LEAVE_INFORMATION && (
                 <Modal
+                    testIdModal={TID_EMPLOYEE_LEAVE_INFORMATION}
                     onClose={() => {
                         onBackPress(
                             onBackPressType ??
@@ -151,6 +166,7 @@ const LAEmployeeModals = ({
             )}
             {modalType === EmployeeModal.CANCEL_REQUEST_MODAL && (
                 <Modal
+                    testIdModal={TID_EMPLOYEE_CANCEL_REQUEST_MODAL}
                     onClose={onClose}
                     isVisible
                     header='Cancel requested leave'
@@ -168,6 +184,7 @@ const LAEmployeeModals = ({
             )}
             {modalType === EmployeeModal.CANCELLED_LEAVE_MODAL && (
                 <Modal
+                    testIdModal={TID_EMPLOYEE_CANCELLED_LEAVE_MODAL}
                     onClose={onClose}
                     isVisible
                     header={
@@ -189,6 +206,7 @@ const LAEmployeeModals = ({
             )}
             {modalType === EmployeeModal.DENIED_LEAVE_MODAL && (
                 <Modal
+                    testIdModal={TID_EMPLOYEE_DENIED_LEAVE_MODAL}
                     onClose={onClose}
                     isVisible
                     header='Denied leave status'
@@ -206,6 +224,7 @@ const LAEmployeeModals = ({
             )}
             {modalType === EmployeeModal.APPROVED_LEAVE_MODAL && (
                 <Modal
+                    testIdModal={TID_EMPLOYEE_APPROVED_LEAVE_MODAL}
                     onClose={onClose}
                     isVisible
                     header='Approved leave status'
@@ -228,6 +247,7 @@ const LAEmployeeModals = ({
             )}
             {modalType === EmployeeModal.REVOKE_REQUEST_MODAL && (
                 <Modal
+                    testIdModal={TID_EMPLOYEE_REVOKE_REQUEST_MODAL}
                     onClose={onClose}
                     isVisible
                     header='Revoke requested leave'

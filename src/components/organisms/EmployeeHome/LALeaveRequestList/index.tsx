@@ -11,7 +11,7 @@ import { getErrorMessage } from 'src/utils/helpers/errorCodes';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import {
     TID_EMPLOYEE_LEAVE_REQUEST_LIST,
-    TID_LEAVE_REQUEST_ROW,
+    TID_EMPLOYEE_LEAVE_REQUEST_ROW,
 } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import {
@@ -53,9 +53,15 @@ const LALeaveRequestList = ({
         viewAllPress,
     } = styles(isViewAllPage);
 
-    const Item = ({ item }: { item: LeaveRequestType }) => (
+    const Item = ({
+        item,
+        index,
+    }: {
+        item: LeaveRequestType;
+        index: number;
+    }) => (
         <RequestListItem
-            testIdContent={`${TID_LEAVE_REQUEST_ROW}_${item.leaveRequestId}`}
+            testIdRow={`${TID_EMPLOYEE_LEAVE_REQUEST_ROW}_${index.toString()}`}
             date={getStartEndDate(item.startDate, item.endDate)}
             status={item.status}
             entitlement={getEntitlementChipText(
@@ -138,7 +144,9 @@ const LALeaveRequestList = ({
                     </View>
                 }
                 keyExtractor={item => item.leaveRequestId.toLocaleString()}
-                renderItem={({ item }) => <Item item={item} />}
+                renderItem={({ item, index }) => (
+                    <Item item={item} index={index} />
+                )}
                 onEndReachedThreshold={0.3}
                 onEndReached={() => {
                     if (callNextPage) {

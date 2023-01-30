@@ -9,6 +9,7 @@ import { styles } from './styles';
 const { colors, pixel, scale } = theme;
 
 interface Props extends Partial<TestProps> {
+    testIdRow: string;
     date: string;
     // entitlement: string;
     employee: EmployeeType;
@@ -19,6 +20,7 @@ interface Props extends Partial<TestProps> {
 }
 
 const LAPendingListItem = ({
+    testIdRow,
     date,
     employee,
     // entitlement,
@@ -29,7 +31,7 @@ const LAPendingListItem = ({
     status,
     chipsColor,
 }: Props) => (
-    <Pressable onPress={onPress} style={styles.container}>
+    <Pressable testID={testIdRow} onPress={onPress} style={styles.container}>
         <AvatarChip
             label={employee.name?.split(' ')[0] ?? ''}
             source={{

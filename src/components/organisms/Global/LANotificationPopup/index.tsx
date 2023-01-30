@@ -15,6 +15,10 @@ import { AxiosError } from 'axios';
 import { NotificationContent } from 'src/components/molecules';
 import { patchHttpViewNotification } from 'src/services/http/patchRequest';
 import { NotificationFilterHeader } from 'components/organisms';
+import {
+    TID_NOTFIFICATION_LIST,
+    TID_NOTFIFICATION_ROW,
+} from 'src/utils/testIds';
 import { styles } from './styles';
 import LAEmptyError from '../LAEmptyError';
 
@@ -98,11 +102,13 @@ const LANotificationPopup = () => {
                     />
                     <View style={styles.content}>
                         <FlatList
+                            testID={TID_NOTFIFICATION_LIST}
                             showsVerticalScrollIndicator={false}
                             data={data?.items}
                             keyExtractor={item => item.id.toString()}
-                            renderItem={({ item }) => (
+                            renderItem={({ item, index }) => (
                                 <NotificationContent
+                                    testIdRow={`${TID_NOTFIFICATION_ROW}_${index.toString()}`}
                                     type={item.notificationType}
                                     body={item.body}
                                     date={item.createdDate}
