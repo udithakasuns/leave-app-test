@@ -11,6 +11,7 @@ import { PartialBy } from 'src/utils/types';
 import styles from './styles';
 
 export type SheetProps = {
+    testIdModal: string;
     isVisible: boolean;
     onClose: () => void;
     sheetBody: ReactElement;
@@ -20,13 +21,17 @@ export type SheetProps = {
 };
 
 const LAModal = ({
+    testIdModal,
     isVisible = false,
     onClose,
     sheetBody,
     header,
     headerIcon = 'close',
     style,
-}: PartialBy<SheetProps, 'header' | 'headerIcon' | 'style'>) => {
+}: PartialBy<
+    SheetProps,
+    'header' | 'headerIcon' | 'style' | 'testIdModal'
+>) => {
     const insets = useSafeAreaInsets();
 
     const { container, bodyContainer, headerContainer } = styles(insets);
@@ -45,6 +50,7 @@ const LAModal = ({
     );
     return (
         <Modal
+            testID={testIdModal}
             isVisible={isVisible}
             style={container}
             useNativeDriver

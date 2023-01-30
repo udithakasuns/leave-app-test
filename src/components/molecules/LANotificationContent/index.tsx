@@ -9,6 +9,7 @@ import { useStyles } from './styles';
 const { scale } = theme;
 
 interface Props {
+    testIdRow: string;
     type: NotificationType;
     body: NotificationBody | null;
     date: string;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const LANotificationContent = ({
+    testIdRow,
     type,
     body,
     date,
@@ -121,7 +123,10 @@ const LANotificationContent = ({
 
     if (body && date) {
         return (
-            <TouchableOpacity onPress={onPress} style={styles.container}>
+            <TouchableOpacity
+                testID={testIdRow}
+                onPress={onPress}
+                style={styles.container}>
                 <View style={styles.content}>
                     <Avatar size={scale.sc36} source={{ uri: body.image }} />
                     <View style={styles.rightContainer}>

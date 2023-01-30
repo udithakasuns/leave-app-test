@@ -1,13 +1,20 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/no-unstable-nested-components */
 import React, { ReactNode } from 'react';
-import { StyleProp, TextStyle, View, Platform } from 'react-native';
+import { StyleProp, TextStyle, View } from 'react-native';
 import { Chip, Spacer, Text } from 'src/components/atoms';
 import {
     getCalendarRangeDate,
     getLeaveDurationDays,
 } from 'src/utils/helpers/dateHandler';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
+import {
+    TID_LEAVE_STATUS_DURATION,
+    TID_LEAVE_STATUS_MEMBER,
+    TID_LEAVE_STATUS_RECIPIENT,
+    TID_LEAVE_STATUS_STATUS,
+    TID_LEAVE_STATUS_TYPE,
+} from 'src/utils/testIds';
 import { AtLeast, PendingRequestByID, TestProps } from 'src/utils/types';
 import { AvatarChip, StatusChip } from '..';
 import { styles } from './styles';
@@ -30,15 +37,19 @@ const LAEmployeeRequestDetails = ({
     isRecipientVisible = false,
 }: AtLeast<Props, 'requestDetails'>) => {
     const ItemRow = ({
+        testId,
         title,
         titleStyle,
         child,
     }: {
+        testId: string;
         title: string;
         child: ReactNode;
         titleStyle?: StyleProp<TextStyle>;
     }) => (
-        <View style={flexEnd ? styles.itemRowFlexEnd : styles.itemRow}>
+        <View
+            testID={testId}
+            style={flexEnd ? styles.itemRowFlexEnd : styles.itemRow}>
             <Text type='ParaLG' style={[styles.itemText, titleStyle]}>
                 {title}
             </Text>
@@ -52,6 +63,7 @@ const LAEmployeeRequestDetails = ({
                 <>
                     <Spacer />
                     <ItemRow
+                        testId={TID_LEAVE_STATUS_MEMBER}
                         title={flexEnd ? 'Member' : 'Member :'}
                         child={
                             <>
@@ -72,6 +84,7 @@ const LAEmployeeRequestDetails = ({
             <Spacer />
             {requestDetails && (
                 <ItemRow
+                    testId={TID_LEAVE_STATUS_TYPE}
                     title={flexEnd ? 'Type' : 'Type :'}
                     child={
                         <>
@@ -92,6 +105,7 @@ const LAEmployeeRequestDetails = ({
                 <>
                     <Spacer />
                     <ItemRow
+                        testId={TID_LEAVE_STATUS_STATUS}
                         title={flexEnd ? 'Status' : 'Status :'}
                         child={
                             <>
@@ -109,6 +123,7 @@ const LAEmployeeRequestDetails = ({
             <Spacer />
             {requestDetails?.startDate && isDurationVisible && (
                 <ItemRow
+                    testId={TID_LEAVE_STATUS_DURATION}
                     title={flexEnd ? 'Leave Duration' : 'Duration :'}
                     child={
                         <>
@@ -145,6 +160,7 @@ const LAEmployeeRequestDetails = ({
                 <>
                     <Spacer />
                     <ItemRow
+                        testId={TID_LEAVE_STATUS_RECIPIENT}
                         title='Recipient :'
                         child={
                             <>

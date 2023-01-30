@@ -3,6 +3,15 @@ import React from 'react';
 import { Modal } from 'src/components/molecules';
 import { useManagerStore } from 'src/store';
 import { getCalendarDate } from 'src/utils/helpers/dateHandler';
+import {
+    TID_MANAGER_APPROVED_LEAVE_MODAL,
+    TID_MANAGER_CANCELLED_LEAVE_MODAL,
+    TID_MANAGER_DECLINE_LEAVE_MODAL,
+    TID_MANAGER_DENIED_LEAVE_MODAL,
+    TID_MANAGER_LEAVE_INFORMATION,
+    TID_MANAGER_PENDING_LEAVE_MODAL,
+    TID_MANAGER_REVOKE_LEAVE_MODAL,
+} from 'src/utils/testIds';
 import { ManagerModal, TestProps } from 'src/utils/types';
 import ApproveSheetBody from './ApprovalSheetBody';
 import ApprovedSheetBody from './ApprovedSheetBody';
@@ -49,6 +58,7 @@ const LAManagerModals = ({
         <>
             {modalType === ManagerModal.PENDING_LEAVE_MODAL && (
                 <Modal
+                    testIdModal={TID_MANAGER_PENDING_LEAVE_MODAL}
                     onClose={onClose}
                     isVisible
                     header='Approve Leave'
@@ -64,6 +74,7 @@ const LAManagerModals = ({
             )}
             {modalType === ManagerModal.APPROVED_LEAVE_MODAL && (
                 <Modal
+                    testIdModal={TID_MANAGER_APPROVED_LEAVE_MODAL}
                     onClose={onClose}
                     isVisible
                     header='Approved leave status'
@@ -84,6 +95,7 @@ const LAManagerModals = ({
             )}
             {modalType === ManagerModal.DENIED_LEAVE_MODAL && (
                 <Modal
+                    testIdModal={TID_MANAGER_DENIED_LEAVE_MODAL}
                     onClose={onClose}
                     isVisible
                     header='Denied leave status'
@@ -103,6 +115,7 @@ const LAManagerModals = ({
             )}
             {modalType === ManagerModal.LEAVE_INFORMATION && (
                 <Modal
+                    testIdModal={TID_MANAGER_LEAVE_INFORMATION}
                     onClose={() => {
                         onBackPress(
                             onBackPressType ??
@@ -134,6 +147,7 @@ const LAManagerModals = ({
             )}
             {modalType === ManagerModal.DECLINE_LEAVE_MODAL && (
                 <Modal
+                    testIdModal={TID_MANAGER_DECLINE_LEAVE_MODAL}
                     onClose={() => {
                         onBackPress(ManagerModal.PENDING_LEAVE_MODAL);
                     }}
@@ -150,6 +164,7 @@ const LAManagerModals = ({
             )}
             {modalType === ManagerModal.CANCELLED_LEAVE_MODAL && (
                 <Modal
+                    testIdModal={TID_MANAGER_CANCELLED_LEAVE_MODAL}
                     onClose={onClose}
                     isVisible
                     header={
@@ -168,6 +183,7 @@ const LAManagerModals = ({
             )}
             {modalType === ManagerModal.REVOKE_LEAVE_MODAL && (
                 <Modal
+                    testIdModal={TID_MANAGER_REVOKE_LEAVE_MODAL}
                     onClose={() => {
                         onBackPress(ManagerModal.APPROVED_LEAVE_MODAL);
                     }}

@@ -8,6 +8,10 @@ import { DrawerScreenNavigationProp } from 'src/navigators/types';
 import { useManagerFilterStore } from 'src/store';
 import { getStartEndDate } from 'src/utils/helpers/dateHandler';
 import { getErrorMessage } from 'src/utils/helpers/errorCodes';
+import {
+    TID_MANAGER_LEAVE_REQUEST_LIST,
+    TID_MANAGER_LEAVE_REQUEST_ROW,
+} from 'src/utils/testIds';
 // import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import theme from 'src/utils/theme';
 import { AtLeast, PendingRequestType, TestProps } from 'src/utils/types';
@@ -41,8 +45,15 @@ const LAPendingRequestList = ({
         viewAllContent,
         viewAllPress,
     } = styles(isViewAllPage);
-    const Item = ({ item }: { item: PendingRequestType }) => (
+    const Item = ({
+        item,
+        index,
+    }: {
+        item: PendingRequestType;
+        index: number;
+    }) => (
         <PendingListItem
+            testIdRow={`${TID_MANAGER_LEAVE_REQUEST_ROW}_${index.toString()}`}
             date={getStartEndDate(item.startDate, item.endDate)}
             employee={item.employee}
             // entitlement={getEntitlementChipText(
@@ -62,6 +73,7 @@ const LAPendingRequestList = ({
         <View style={container}>
             <LAManagerFilters />
             <FlatList
+                testID={TID_MANAGER_LEAVE_REQUEST_LIST}
                 data={leaveRequests ?? []}
                 ListEmptyComponent={
                     <View
@@ -128,7 +140,9 @@ const LAPendingRequestList = ({
                         callNextPage();
                     }
                 }}
-                renderItem={({ item }) => <Item item={item} />}
+                renderItem={({ item, index }) => (
+                    <Item item={item} index={index} />
+                )}
                 ListFooterComponent={() =>
                     !isViewAllPage ? (
                         <View style={footerContainer}>
