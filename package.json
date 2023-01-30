@@ -25,7 +25,8 @@
         "deploy:android:prod": "cd android && bundle exec fastlane android build env:PROD",
         "deploy:ios:stg": "cd ios && bundle exec fastlane ios build env:STG",
         "deploy:ios:qa": "cd ios && bundle exec fastlane ios build env:QA",
-        "deploy:ios:prod": "cd ios && bundle exec fastlane ios build env:PROD"
+        "deploy:ios:prod": "cd ios && bundle exec fastlane ios build env:PROD",
+        "codepush:stg": "appcenter codepush release-react -a Rootcode-Phoenix/MyLeave -d Staging"
     },
     "dependencies": {
         "@aws-amplify/auth": "^5.0.1",
@@ -53,6 +54,7 @@
         "react": "18.1.0",
         "react-native": "0.70.3",
         "react-native-calendars": "^1.1291.1",
+        "react-native-code-push": "^7.1.0",
         "react-native-device-info": "^10.3.0",
         "react-native-encrypted-storage": "^4.0.3",
         "react-native-gesture-handler": "^2.8.0",
