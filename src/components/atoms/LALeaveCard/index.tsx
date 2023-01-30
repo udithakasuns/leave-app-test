@@ -46,13 +46,13 @@ const LALeaveCard = ({
         <View testID={testId} style={[container, style]}>
             <View style={leaveContainer}>
                 <LAText
-                    testId={TID_ENTILEMENT_TAKEN_LEAVE_COUNT}
+                    testID={`${TID_ENTILEMENT_TAKEN_LEAVE_COUNT}_${leaveType.toUpperCase()}`}
                     type='H1'
                     style={takenLeavesContainer}>
                     {takenLeaves}
                 </LAText>
                 <LAText
-                    testId={TID_ENTILEMENT_ALL_LEAVE_COUNT}
+                    testID={`${TID_ENTILEMENT_ALL_LEAVE_COUNT}_${leaveType.toUpperCase()}`}
                     type='ParaSM'
                     style={totalLeavesContainer}>
                     /{totalLeaves}

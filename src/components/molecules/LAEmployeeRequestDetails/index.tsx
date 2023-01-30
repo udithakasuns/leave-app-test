@@ -8,6 +8,12 @@ import {
     getLeaveDurationDays,
 } from 'src/utils/helpers/dateHandler';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
+import {
+    TID_LEAVE_STATUS_DURATION,
+    TID_LEAVE_STATUS_RECIPIENT,
+    TID_LEAVE_STATUS_STATUS,
+    TID_LEAVE_STATUS_TYPE,
+} from 'src/utils/testIds';
 import { AtLeast, RequestDetails, TestProps } from 'src/utils/types';
 import { AvatarChip, StatusChip } from '..';
 import { styles } from './styles';
@@ -20,15 +26,17 @@ interface Props extends Partial<TestProps> {
 }
 
 const ItemRow = ({
+    testId,
     title,
     titleStyle,
     child,
 }: {
+    testId: string;
     title: string;
     child: ReactNode;
     titleStyle?: StyleProp<TextStyle>;
 }) => (
-    <View style={styles.itemRow}>
+    <View testID={testId} style={styles.itemRow}>
         <Text type='ParaLG' style={[styles.itemText, titleStyle]}>
             {title}
         </Text>
@@ -46,6 +54,7 @@ const LARequestDetailsSection = ({
         <Spacer />
         {requestDetails?.leaveRequest?.leaveType && (
             <ItemRow
+                testId={TID_LEAVE_STATUS_TYPE}
                 title='Type :'
                 child={
                     <>
@@ -67,6 +76,7 @@ const LARequestDetailsSection = ({
             <>
                 <Spacer />
                 <ItemRow
+                    testId={TID_LEAVE_STATUS_STATUS}
                     title='Status :'
                     child={
                         <>
@@ -84,6 +94,7 @@ const LARequestDetailsSection = ({
         <Spacer />
         {isDurationVisible && requestDetails?.leaveRequest && (
             <ItemRow
+                testId={TID_LEAVE_STATUS_DURATION}
                 title='Duration :'
                 child={
                     <>
@@ -119,6 +130,7 @@ const LARequestDetailsSection = ({
             <>
                 <Spacer />
                 <ItemRow
+                    testId={TID_LEAVE_STATUS_RECIPIENT}
                     title='Recipient :'
                     child={
                         <View

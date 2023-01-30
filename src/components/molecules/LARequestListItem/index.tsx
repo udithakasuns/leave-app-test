@@ -9,6 +9,7 @@ import { styles } from './styles';
 const { colors } = theme;
 
 interface Props extends Partial<TestProps> {
+    testIdRow: string;
     date: string;
     entitlement: string;
     status: StatusType | '';
@@ -18,6 +19,7 @@ interface Props extends Partial<TestProps> {
 }
 
 const LARequestListItem = ({
+    testIdRow,
     date,
     status,
     entitlement,
@@ -29,6 +31,7 @@ const LARequestListItem = ({
     isAnimated,
 }: Props) => (
     <Pressable
+        testID={testIdRow}
         onPress={onPress}
         style={isAnimated ? styles.annimationContainer : styles.container}>
         <View style={styles.dateContainer}>

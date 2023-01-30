@@ -18,6 +18,10 @@ import {
     useNotificationStore,
 } from 'src/store';
 import useBackAction from 'src/utils/hooks/useBackAction';
+import {
+    TID_NOTFIFICATION_LIST,
+    TID_NOTFIFICATION_ROW,
+} from 'src/utils/testIds';
 import { NotificationPayload, NotificationVisibleType } from 'src/utils/types';
 import { screenStyles } from 'utils/styles';
 
@@ -87,14 +91,16 @@ const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = () => {
                 onChangeVisibleType={type => setVisibleType(type)}
             />
             <FlatList
+                testID={TID_NOTFIFICATION_LIST}
                 showsVerticalScrollIndicator={false}
                 data={data?.pages.map(page => page.items).flat()}
                 keyExtractor={(_, index) => index.toString()}
                 onEndReached={onHandlePagination}
                 initialNumToRender={10}
                 onEndReachedThreshold={0.5}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                     <NotificationContent
+                        testIdRow={`${TID_NOTFIFICATION_ROW}_${index.toString()}`}
                         type={item.notificationType}
                         body={item.body}
                         date={item.createdDate}
