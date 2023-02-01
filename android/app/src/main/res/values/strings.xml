@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">MyLeave</string>
     <string name="default_notification_channel_id">defualt-channel</string>
-     <string moduleConfig="true" name="CodePushDeploymentKey">Otat4aVVahXEziFWlo6jezdKB8rjUp9p-QdjX</string>
 </resources>
