@@ -15,7 +15,7 @@ import {
     TID_LEAVE_STATUS_TYPE,
 } from 'src/utils/testIds';
 import { AtLeast, RequestDetails, TestProps } from 'src/utils/types';
-import { AvatarChip, StatusChip } from '..';
+import { AvatarChip, StatusChip } from 'components/molecules';
 import { styles } from './styles';
 
 interface Props extends Partial<TestProps> {

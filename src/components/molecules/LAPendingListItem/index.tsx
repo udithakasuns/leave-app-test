@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import { Chip, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import { EmployeeType, StatusType, TestProps } from 'src/utils/types';
-import { AvatarChip, StatusChip } from '..';
+import { AvatarChip, StatusChip } from 'components/molecules';
 import { styles } from './styles';
 
 const { colors, pixel, scale } = theme;

@@ -64,3 +64,8 @@ https://docs.amplify.aws/cli/teams/commands/
 # Fastlane IOS upload_to_testflight issue solution
 
 delete the following folder => /Users/<user>/Library/Caches/com.apple.amp.itmstransporter
+
+# Before all
+
+    Amplify Globally
+    You have installed the AppCenter Globally
