@@ -240,7 +240,39 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            resValue "string", "CodePushDeploymentKey", '""'
         }
+
+        releaseStg {
+            matchingFallbacks = ['release', 'debug']
+
+            signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+                unstrippedNativeLibsDir 'build/intermediates/merged_native_libs/release/out/lib'
+            }
+
+            resValue "string", "CodePushDeploymentKey", '"oXlAvLeGXzGHw4cn4F6sGEgd3UAOXSpu3rZc_"'
+        }
+
+        releaseQa {
+            matchingFallbacks = ['release', 'debug']
+
+            signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+                unstrippedNativeLibsDir 'build/intermediates/merged_native_libs/release/out/lib'
+            }
+
+            resValue "string", "CodePushDeploymentKey", '"BsPX5NQculfTeErzU7E2XmBEtwXBfmJrJ1Nta"'
+        }
+
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
@@ -253,6 +285,8 @@ android {
                 nativeSymbolUploadEnabled true
                 unstrippedNativeLibsDir 'build/intermediates/merged_native_libs/release/out/lib'
             }
+
+            resValue "string", "CodePushDeploymentKey", '"HLY-jQoQqNNzU8LR-a9IyLoa7zUeC_Mmx4Zq-"'
         }
     }
 
