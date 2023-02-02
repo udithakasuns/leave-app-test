@@ -1,7 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
-import { View, TextInput, TextInputProps, ViewStyle } from 'react-native';
+import {
+    View,
+    TextInput,
+    TextInputProps,
+    ViewStyle,
+    Pressable,
+} from 'react-native';
 import theme from 'src/utils/theme';
 import { AtLeast, TestProps } from 'src/utils/types';
 import LAIcon, { IconSize } from '../LAIcon';
@@ -29,6 +35,8 @@ interface Props extends TextInputProps, TestProps {
     rightIconName: string;
     rightIconSize: number;
     rightIconColor: string;
+    onPressLeftIcon: () => void;
+    onPressRightIcon: () => void;
 }
 
 const LAInput = ({
@@ -57,6 +65,8 @@ const LAInput = ({
     testIdRightIcon,
     testIdCaption,
     placeholderColor,
+    onPressLeftIcon,
+    onPressRightIcon,
     ...rest
 }: AtLeast<Props, 'label' | 'placeholder' | 'value'>) => {
     const [focused, setFocused] = useState<boolean>(false);
@@ -88,7 +98,7 @@ const LAInput = ({
             : error
             ? colors.error
             : leftIconColor || focused
-            ? colors.black
+            ? colors.gray
             : colors.gray;
 
     const getRightIconColor = () =>
@@ -97,7 +107,7 @@ const LAInput = ({
             : error
             ? colors.error
             : rightIconColor || focused
-            ? colors.black
+            ? colors.gray
             : colors.gray;
 
     if (type === 'COMMENT') {
@@ -136,12 +146,14 @@ const LAInput = ({
             testID={testIdcontainer}
             style={[styles.container, containerStyle]}>
             {label !== '' && (
-                <LAText
-                    testID={testIdLabel}
-                    type='SubH'
-                    color={styles.label.color}>
-                    {label}
-                </LAText>
+                <Pressable onPress={onPressLeftIcon}>
+                    <LAText
+                        testID={testIdLabel}
+                        type='SubH'
+                        color={styles.label.color}>
+                        {label}
+                    </LAText>
+                </Pressable>
             )}
             <View
                 testID={testIdInputContainer}
@@ -152,6 +164,7 @@ const LAInput = ({
                         name={leftIconName}
                         color={getLeftIconColor()}
                         size={leftIconSize || getIconSize()}
+                        library='community'
                     />
                 )}
                 <TextInput
@@ -167,12 +180,15 @@ const LAInput = ({
                     onBlur={onToggleFocus}
                 />
                 {rightIconName && (
-                    <LAIcon
-                        testId={testIdRightIcon}
-                        name={rightIconName}
-                        color={getRightIconColor()}
-                        size={rightIconSize || getIconSize()}
-                    />
+                    <Pressable onPress={onPressRightIcon}>
+                        <LAIcon
+                            testId={testIdRightIcon}
+                            name={rightIconName}
+                            color={getRightIconColor()}
+                            size={rightIconSize || getIconSize()}
+                            library='community'
+                        />
+                    </Pressable>
                 )}
             </View>
             {caption && (

@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import theme from 'src/utils/theme';
 
-const { scale } = theme;
+const { scale, colors } = theme;
 
 export const styles = StyleSheet.create({
     container: {
@@ -17,5 +17,9 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
         textAlign: 'center',
         textDecorationLine: 'underline',
+    },
+    input: {
+        borderWidth: 0,
+        backgroundColor: colors.tertiaryColor,
     },
 });
