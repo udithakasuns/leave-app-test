@@ -26,6 +26,8 @@ const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
         fetchNextPage,
         hasNextPage,
         isInitialLoading,
+        refetch: onRefetchLeaveRequests,
+        isRefetching: isRefetchLeaveRequests,
     }: UseInfiniteQueryResult<
         Page<PendingRequestType[]>
     > = useAllPendingRequestData(params);
@@ -62,6 +64,8 @@ const ManagerViewAll: React.FC<ManagerViewAllScreensProps> = () => {
                         onPressRequestItem={handleRequestItemPress}
                         isViewAllPage
                         callNextPage={callNextPage}
+                        onRefetchLeaveRequests={onRefetchLeaveRequests}
+                        isRefetchLeaveRequests={isRefetchLeaveRequests}
                     />
                 ) : (
                     <SkeletonPlaceholder borderRadius={4}>
