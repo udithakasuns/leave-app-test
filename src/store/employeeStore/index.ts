@@ -1,5 +1,5 @@
 import { LeaveRequestByID } from 'src/utils/types';
-import create from 'zustand';
+import { create } from 'zustand';
 import { getHttpLeaveRequestByID } from '../../services/http/getRequest/index';
 import { Actions, State } from './types';
 

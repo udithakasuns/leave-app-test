@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { MultiButtonProps } from 'src/components/molecules';
 import { FilterChipsProps, LeaveRequestParams } from 'src/utils/types';
 import { State, Actions } from './types';

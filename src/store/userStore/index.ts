@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { EmployeeType, UserType, UserRole } from 'utils/types';
 import { getHttpEmployee } from 'services/http';
 import { State, Actions } from './types';
