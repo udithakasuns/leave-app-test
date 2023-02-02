@@ -5,7 +5,7 @@ import {
 import { AxiosError } from 'axios';
 import React, { useState } from 'react';
 import { View, FlatList } from 'react-native';
-import { Loader, Spacer } from 'src/components/atoms';
+import { Loader, Spacer, SwipeRefresh } from 'src/components/atoms';
 import { BackHeader, NotificationContent } from 'src/components/molecules';
 import { NotificationFilterHeader } from 'src/components/organisms';
 import LAEmptyError from 'src/components/organisms/Global/LAEmptyError';
@@ -42,6 +42,7 @@ const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = () => {
         fetchNextPage,
         hasNextPage,
         refetch,
+        isRefetching,
     }: UseInfiniteQueryResult<NotificationPayload, AxiosError> =
         useInfiniteQuery({
             queryKey: ['allNotifications', visibleType, notifyUserRole],
@@ -98,6 +99,12 @@ const NotificationViewAll: React.FC<NotificationViewAllScreensProps> = () => {
                 onEndReached={onHandlePagination}
                 initialNumToRender={10}
                 onEndReachedThreshold={0.5}
+                refreshControl={
+                    <SwipeRefresh
+                        onRefresh={refetch}
+                        refreshing={isRefetching}
+                    />
+                }
                 renderItem={({ item, index }) => (
                     <NotificationContent
                         testIdRow={`${TID_NOTFIFICATION_ROW}_${index.toString()}`}

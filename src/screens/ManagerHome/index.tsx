@@ -5,7 +5,7 @@ import { ManagerHomeScreensProps } from 'navigators/types';
 import React, { useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { Spacer, Text } from 'src/components/atoms';
+import { Spacer, SwipeRefresh, Text } from 'src/components/atoms';
 import { MultiChipProps } from 'src/components/molecules';
 import { LAAppBar } from 'src/components/organisms';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
@@ -46,6 +46,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const {
         data: leaveRequests,
         refetch: refetchLeaveRequests,
+        isRefetching: isRefetchLeaveRequests,
         isLoading,
     }: UseQueryResult<Page<PendingRequestType[]>> = usePendingRequestData(
         params,
@@ -103,6 +104,12 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     return (
         <View style={screenStyles.containerScollable}>
             <ScrollView
+                refreshControl={
+                    <SwipeRefresh
+                        refreshing={isRefetchLeaveRequests}
+                        onRefresh={refetchLeaveRequests}
+                    />
+                }
                 contentContainerStyle={screenStyles.scrollViewContainer}
                 showsVerticalScrollIndicator={false}>
                 <LAAppBar currentScreen='manager' />
