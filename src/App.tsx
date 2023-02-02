@@ -22,7 +22,7 @@ const codePushOptions = {
 
 /* Based on the Key, new app updates will be reflacted in particular environments */
 codePush.sync({
-    installMode: codePush.InstallMode.IMMEDIATE,
+    installMode: codePush.InstallMode.ON_NEXT_RESTART,
     deploymentKey:
         Platform.OS === 'ios'
             ? CODEPUSH_DEPLOYMENT_KEY_IOS
