@@ -11,7 +11,13 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import Toast from 'react-native-toast-message';
-import { Button, ModalLoader, Spacer, Text } from 'src/components/atoms';
+import {
+    Button,
+    ModalLoader,
+    Spacer,
+    SwipeRefresh,
+    Text,
+} from 'src/components/atoms';
 import {
     LAAppBar,
     LAEmployeeModals,
@@ -121,7 +127,8 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
     const {
         data: leaveRequests,
-        refetch,
+        refetch: onRefetchLeaveRequests,
+        isRefetchError: isRefetchingLeaveRequests,
         isLoading,
     }: UseQueryResult<Page<LeaveRequestType[]>> = useLeaveRequestData(
         params,
@@ -204,7 +211,8 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
     const {
         data: entitlements,
-        refetch: entitlementsRetch,
+        refetch: onRefetchEntitlement,
+        isRefetching: isRefetchingEntitlement,
     }: UseQueryResult<Entitlement[]> = useEntitlementData(
         (data: Entitlement[]) => {
             const entitlementsDeepClone: EntitlementSelection[] = JSON.parse(
@@ -274,8 +282,8 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
     };
 
     const refetchAllData = () => {
-        refetch();
-        entitlementsRetch();
+        onRefetchLeaveRequests();
+        onRefetchEntitlement();
         filterRefetch();
     };
 
@@ -303,6 +311,15 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
         <View style={styles.container}>
             <View style={screenStyles.containerScollable}>
                 <ScrollView
+                    refreshControl={
+                        <SwipeRefresh
+                            refreshing={isRefetchingLeaveRequests}
+                            onRefresh={() => {
+                                onRefetchLeaveRequests();
+                                onRefetchEntitlement();
+                            }}
+                        />
+                    }
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={[
                         screenStyles.scrollViewContainer,
@@ -421,7 +438,7 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                         setEmployeeRequest(employeeRequestDefault);
                         formik.resetForm();
                         formik.setFieldValue('entitlements', entitlements);
-                        refetch();
+                        onRefetchLeaveRequests();
                     }}
                     onCancellationUndoPress={() => {
                         const values: Partial<LeaveUndoProp> = {

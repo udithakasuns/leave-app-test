@@ -2,7 +2,14 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, View } from 'react-native';
-import { Button, Chip, Divider, Spacer, Text } from 'src/components/atoms';
+import {
+    Button,
+    Chip,
+    Divider,
+    Spacer,
+    SwipeRefresh,
+    Text,
+} from 'src/components/atoms';
 import { RequestListItem } from 'src/components/molecules';
 import { DrawerScreenNavigationProp } from 'src/navigators/types';
 import { useEmployeeFilterStore, useRecipientStore } from 'src/store';
@@ -32,6 +39,8 @@ interface Props extends Partial<TestProps>, FilterProps {
     isViewAllPage: boolean;
     totalItems: number;
     latestLeaveRequestID?: number;
+    isRefetchLeaveRequests: boolean;
+    onRefetchLeaveRequests: () => void;
 }
 
 const LALeaveRequestList = ({
@@ -41,6 +50,8 @@ const LALeaveRequestList = ({
     callNextPage,
     totalItems,
     latestLeaveRequestID,
+    isRefetchLeaveRequests,
+    onRefetchLeaveRequests,
 }: AtLeast<Props, 'isViewAllPage' | 'onPressRequestItem'>) => {
     const { filterUtils, resetFiltersParams } = useEmployeeFilterStore();
     const navigation = useNavigation<DrawerScreenNavigationProp>();
@@ -80,6 +91,14 @@ const LALeaveRequestList = ({
             <FlatList
                 testID={TID_EMPLOYEE_LEAVE_REQUEST_LIST}
                 data={leaveRequests && managers.length > 0 ? leaveRequests : []}
+                refreshControl={
+                    onRefetchLeaveRequests ? (
+                        <SwipeRefresh
+                            refreshing={isRefetchLeaveRequests || false}
+                            onRefresh={onRefetchLeaveRequests}
+                        />
+                    ) : undefined
+                }
                 ListEmptyComponent={
                     <View
                         style={{

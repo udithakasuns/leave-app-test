@@ -7,7 +7,7 @@ import {
 } from 'src/store';
 import Modal from 'react-native-modal';
 import { useNavigation } from '@react-navigation/native';
-import { Button, Loader } from 'src/components/atoms';
+import { Button, Loader, SwipeRefresh } from 'src/components/atoms';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { getHttpNotifications } from 'src/services/http';
 import { NotificationPayload, NotificationVisibleType } from 'utils/types';
@@ -40,7 +40,8 @@ const LANotificationPopup = () => {
     const {
         isLoading,
         data,
-        refetch: onRefetch,
+        refetch: onRefetchNotifications,
+        isRefetching: isRefetchingNotifications,
     }: UseQueryResult<NotificationPayload, AxiosError> = useQuery(
         ['notifications'],
         () => {
@@ -80,7 +81,7 @@ const LANotificationPopup = () => {
 
     useEffect(() => {
         if (isPopupVisible) {
-            onRefetch();
+            onRefetchNotifications();
         }
     }, [isPopupVisible, notifyUserRole, visibleType, count]);
 
@@ -106,6 +107,12 @@ const LANotificationPopup = () => {
                             showsVerticalScrollIndicator={false}
                             data={data?.items}
                             keyExtractor={item => item.id.toString()}
+                            refreshControl={
+                                <SwipeRefresh
+                                    onRefresh={onRefetchNotifications}
+                                    refreshing={isRefetchingNotifications}
+                                />
+                            }
                             renderItem={({ item, index }) => (
                                 <NotificationContent
                                     testIdRow={`${TID_NOTFIFICATION_ROW}_${index.toString()}`}
@@ -122,7 +129,7 @@ const LANotificationPopup = () => {
                                 />
                             )}
                             ListHeaderComponent={
-                                <Loader isVisible={isLoading} />
+                                isLoading ? <Loader isVisible /> : <View />
                             }
                             ListEmptyComponent={
                                 !isLoading ? (

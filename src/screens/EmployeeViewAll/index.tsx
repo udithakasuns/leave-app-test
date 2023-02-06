@@ -27,6 +27,8 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
         fetchNextPage,
         hasNextPage,
         isInitialLoading,
+        refetch: onRefetchLeaveRequests,
+        isRefetching: isRefetchLeaveRequests,
     }: UseInfiniteQueryResult<
         Page<LeaveRequestType[]>
     > = useAllLeaveRequestData(params);
@@ -62,6 +64,8 @@ const EmployeeHomeViewAll: React.FC<EmployeeViewAllScreensProps> = () => {
                         callNextPage={callNextPage}
                         onPressRequestItem={handleRequestItemPress}
                         isViewAllPage
+                        onRefetchLeaveRequests={onRefetchLeaveRequests}
+                        isRefetchLeaveRequests={isRefetchLeaveRequests}
                     />
                 ) : (
                     <SkeletonPlaceholder borderRadius={4}>

@@ -14,8 +14,9 @@ const LoginGeneral = () => {
     const { setAuthLoading } = useUserStore();
     const { setAuthType } = usePersistStore();
     const passwordRef: LegacyRef<TextInput> = createRef();
-    const [email, setEmail] = useState<string>('test_mobile_user');
-    const [password, setPassword] = useState<string>('Test@1234');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [hidePassword, setHidePassword] = useState<boolean>(true);
 
     const onChangeEmail = (text: string) => setEmail(text);
     const onChangePassword = (text: string) => setPassword(text);
@@ -25,11 +26,15 @@ const LoginGeneral = () => {
         }
     };
 
+    const onToggleHidePassword = () => setHidePassword(prevState => !prevState);
+
     const onLogin = () => {
         setAuthLoading(true);
         setAuthType('general');
         awsOnGeneralSignIn(email, password);
     };
+
+    /* Need to handle errors */
 
     return (
         <View style={styles.container}>
@@ -44,6 +49,7 @@ const LoginGeneral = () => {
                     autoCapitalize='none'
                     onChangeText={onChangeEmail}
                     onSubmitEditing={onSubmitEmail}
+                    inputContainerStyle={styles.input}
                 />
                 <Input
                     reference={passwordRef}
@@ -52,9 +58,14 @@ const LoginGeneral = () => {
                     value={password}
                     autoCapitalize='none'
                     onChangeText={onChangePassword}
-                    rightIconName='remove-red-eye'
-                    secureTextEntry
+                    rightIconName={
+                        hidePassword ? 'eye-outline' : 'eye-off-outline'
+                    }
+                    rightIconColor={colors.gray}
+                    secureTextEntry={hidePassword}
                     onSubmitEditing={onLogin}
+                    inputContainerStyle={styles.input}
+                    onPressRightIcon={onToggleHidePassword}
                 />
                 <Spacer height={20} />
                 <Button
