@@ -7,7 +7,7 @@ export type Config = {
     codePushDeploymentKeyIOS: string /* If you update this key you need to update in ios/rtc_leave_app/build_settings/CODEPUSH_KEY file as well */;
 };
 
-export const DEPLOYMENT_ENV: DeploymentEnv = 'PROD'; // Please change only this value when you are going to deploy
+export const DEPLOYMENT_ENV: DeploymentEnv = 'QA'; // Please change only this value when you are going to deploy
 
 const getCofig = (env: DeploymentEnv): Config => {
     // staging config set as default
