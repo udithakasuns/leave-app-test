@@ -1,5 +1,5 @@
 import { getHttpNotificationCount } from 'src/services/http';
-import create from 'zustand';
+import { create } from 'zustand';
 import { State, Actions } from './types';
 
 const initialState: State = {

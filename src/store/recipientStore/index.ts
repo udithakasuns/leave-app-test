@@ -1,6 +1,6 @@
 import { getHttpRecipients } from 'services/http';
 import { EmployeeType } from 'utils/types';
-import create from 'zustand';
+import { create } from 'zustand';
 import { Actions, State } from './types';
 
 const initialManager = {

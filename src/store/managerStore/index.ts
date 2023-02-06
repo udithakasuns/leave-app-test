@@ -1,6 +1,6 @@
 import { getHttpPendingRequestByID } from 'src/services/http';
 import { PendingRequestByID } from 'src/utils/types';
-import create from 'zustand';
+import { create } from 'zustand';
 import { Actions, State } from './types';
 
 const initialState: State = {

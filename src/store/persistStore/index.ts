@@ -1,5 +1,5 @@
-import create from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { State, Actions, Persist } from './types';
 
@@ -25,7 +25,7 @@ const persistStore = create<State & Actions>(
         }),
         {
             name: 'auth-storage',
-            getStorage: () => EncryptedStorage,
+            storage: createJSONStorage(() => EncryptedStorage),
         },
     ),
 );

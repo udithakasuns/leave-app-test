@@ -149,8 +149,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         // Do not manually update!!! (Note that, below versonCode & versonName are updated automatically by Fastlane deployment).
-        versionCode 35
-        versionName "1.1.9"
+        versionCode 37
+        versionName "1.2.1"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
