@@ -24,6 +24,7 @@ const LAButtonDock = ({
 }: AtLeast<ButtonDockProps, 'primaryButton' | 'secondaryButton'>) => (
     <>
         <Button
+            testID={primaryButton.testId}
             label={primaryButton.label}
             icon={primaryButton.icon ?? 'check'}
             mode={primaryButton.mode ?? 'contained'}
@@ -35,6 +36,7 @@ const LAButtonDock = ({
         />
         <Spacer height={theme.scale.vsc6} />
         <Button
+            testID={secondaryButton.testId}
             label={secondaryButton.label}
             icon={secondaryButton.icon ?? 'close'}
             mode={secondaryButton.mode ?? 'contained-gray'}

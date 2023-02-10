@@ -4,6 +4,7 @@ import Toast, { ToastProps } from 'react-native-toast-message';
 import { Icon, IconSize, Spacer, Text } from 'src/components/atoms';
 import { ErrorCodes, getErrorMessage } from '../helpers/errorCodes';
 import { getSuccessMessage, SuccessCodes } from '../helpers/successCodes';
+import { TID_TOAST_SUB_TITLE, TID_TOAST_TITLE } from '../testIds';
 import theme from '../theme';
 import { styles } from './styles';
 
@@ -30,9 +31,13 @@ export const toastConfig = {
                 />
                 <Spacer width={5} />
                 <View>
-                    <Text type='ParaSMBold'>{props.title}</Text>
+                    <Text testID={TID_TOAST_TITLE} type='ParaSMBold'>
+                        {props.title}
+                    </Text>
                     <Spacer height={1} />
-                    <Text type='ParaXS'>{props.content}</Text>
+                    <Text testID={TID_TOAST_SUB_TITLE} type='ParaXS'>
+                        {props.content}
+                    </Text>
                 </View>
             </View>
             <View>
@@ -53,9 +58,13 @@ export const toastConfig = {
                 <Icon name='info' color={colors.red500} size={IconSize.small} />
                 <Spacer width={5} />
                 <View>
-                    <Text type='ParaSMBold'>{props.title}</Text>
+                    <Text testID={TID_TOAST_TITLE} type='ParaSMBold'>
+                        {props.title}
+                    </Text>
                     <Spacer height={0.1} />
-                    <Text type='ParaXS'>{props.content}</Text>
+                    <Text testID={TID_TOAST_SUB_TITLE} type='ParaXS'>
+                        {props.content}
+                    </Text>
                 </View>
             </View>
             <View>

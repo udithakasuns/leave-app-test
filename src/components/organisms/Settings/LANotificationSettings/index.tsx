@@ -4,6 +4,11 @@ import { Spacer, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { Toggles, Key } from 'src/screens/Settings/types';
+import {
+    TID_TOGGLE_LEAVE_REQUEST,
+    TID_TOGGLE_NUDGE_NOTIFICATION,
+    TID_TOGGLE_UPCOMMING_EVENTS,
+} from 'src/utils/testIds';
 import ToggleItem from './ToggleItem';
 
 const { scale, deviceDimensions } = theme;
@@ -38,6 +43,7 @@ const LANotificationSetting = ({
                 </Text>
                 <Spacer height={scale.sc10} />
                 <ToggleItem
+                    testId={TID_TOGGLE_LEAVE_REQUEST}
                     label='Leave requests'
                     value={toggles.isLeaveRequestNotificationsEnabled}
                     onChangeValue={() => {
@@ -46,6 +52,7 @@ const LANotificationSetting = ({
                 />
                 <Spacer height={scale.sc10} />
                 <ToggleItem
+                    testId={TID_TOGGLE_UPCOMMING_EVENTS}
                     label='Upcoming events'
                     value={toggles.isUpcomingEventsNotificationsEnabled}
                     onChangeValue={() =>
@@ -57,6 +64,7 @@ const LANotificationSetting = ({
                     <>
                         <Spacer height={scale.sc10} />
                         <ToggleItem
+                            testId={TID_TOGGLE_NUDGE_NOTIFICATION}
                             label='Nudge notifications'
                             value={toggles.isNudgeNotificationsEnabled}
                             onChangeValue={() =>

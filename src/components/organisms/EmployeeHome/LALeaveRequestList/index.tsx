@@ -19,6 +19,7 @@ import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import {
     TID_EMPLOYEE_LEAVE_REQUEST_LIST,
     TID_EMPLOYEE_LEAVE_REQUEST_ROW,
+    TID_EMPLOYEE_LEAVE_REQUEST_STATUS,
 } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import {
@@ -64,26 +65,27 @@ const LALeaveRequestList = ({
         viewAllPress,
     } = styles(isViewAllPage);
 
-    const Item = ({
-        item,
-        index,
-    }: {
-        item: LeaveRequestType;
-        index: number;
-    }) => (
-        <RequestListItem
-            testIdRow={`${TID_EMPLOYEE_LEAVE_REQUEST_ROW}_${index.toString()}`}
-            date={getStartEndDate(item.startDate, item.endDate)}
-            status={item.status}
-            entitlement={getEntitlementChipText(
-                item.leaveType,
-                item.leaveType.name,
-            )}
-            isAnimated={latestLeaveRequestID === item.leaveRequestId}
-            onPress={() => onPressRequestItem(item)}
-            chipsColor={isViewAllPage ? colors.tertiaryColor : colors.white}
-        />
-    );
+    // const Item = ({
+    //     item,
+    //     index,
+    // }: {
+    //     item: LeaveRequestType;
+    //     index: number;
+    // }) => (
+    //     <RequestListItem
+    //         testIdRow={`${TID_EMPLOYEE_LEAVE_REQUEST_ROW}_${index.toString()}`}
+    //         testId={`${TID_EMPLOYEE_LEAVE_REQUEST_STATUS}_${index.toString()}`}
+    //         date={getStartEndDate(item.startDate, item.endDate)}
+    //         status={item.status}
+    //         entitlement={getEntitlementChipText(
+    //             item.leaveType,
+    //             item.leaveType.name,
+    //         )}
+    //         isAnimated={latestLeaveRequestID === item.leaveRequestId}
+    //         onPress={() => onPressRequestItem(item)}
+    //         chipsColor={isViewAllPage ? colors.tertiaryColor : colors.white}
+    //     />
+    // );
 
     return (
         <View style={container}>
@@ -164,7 +166,24 @@ const LALeaveRequestList = ({
                 }
                 keyExtractor={item => item.leaveRequestId.toLocaleString()}
                 renderItem={({ item, index }) => (
-                    <Item item={item} index={index} />
+                    <RequestListItem
+                        testIdRow={`${TID_EMPLOYEE_LEAVE_REQUEST_ROW}_${index.toString()}`}
+                        testId={`${TID_EMPLOYEE_LEAVE_REQUEST_STATUS}_${index.toString()}`}
+                        date={getStartEndDate(item.startDate, item.endDate)}
+                        status={item.status}
+                        entitlement={getEntitlementChipText(
+                            item.leaveType,
+                            item.leaveType.name,
+                        )}
+                        isAnimated={
+                            latestLeaveRequestID === item.leaveRequestId
+                        }
+                        onPress={() => onPressRequestItem(item)}
+                        chipsColor={
+                            isViewAllPage ? colors.tertiaryColor : colors.white
+                        }
+                    />
+                    // <Item item={item} index={index} />
                 )}
                 onEndReachedThreshold={0.3}
                 onEndReached={() => {
