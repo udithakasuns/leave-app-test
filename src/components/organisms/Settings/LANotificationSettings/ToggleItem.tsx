@@ -5,6 +5,7 @@ import { AtLeast } from 'src/utils/types';
 import { styles } from './styles';
 
 interface Props {
+    testId: string;
     label: string;
     value: boolean;
     disabled: boolean;
@@ -12,14 +13,16 @@ interface Props {
 }
 
 const ToggleItem = ({
+    testId,
     label,
     value,
     disabled,
     onChangeValue,
-}: AtLeast<Props, 'label' | 'value' | 'onChangeValue'>) => (
+}: AtLeast<Props, 'testId' | 'label' | 'value' | 'onChangeValue'>) => (
     <View style={styles.toggleContainer}>
         <Text style={{ width: '50%' }}>{label}</Text>
         <Toggle
+            testID={testId}
             disabled={disabled}
             value={value}
             onValueChange={onChangeValue}

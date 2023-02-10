@@ -15,6 +15,7 @@ interface Props extends Partial<TestProps> {
     employee: EmployeeType;
     onPress: () => void;
     // entitlementChipColor: string;
+    testIdStatus: string;
     status: StatusType | '';
     chipsColor: string;
 }
@@ -28,6 +29,7 @@ const LAPendingListItem = ({
     // testIdChip,
     onPress,
     // entitlementChipColor,
+    testIdStatus,
     status,
     chipsColor,
 }: Props) => (
@@ -48,6 +50,7 @@ const LAPendingListItem = ({
             }}
         />
         <StatusChip
+            testId={testIdStatus}
             status={status}
             containerStyle={{ backgroundColor: chipsColor }}
             onPress={onPress}
