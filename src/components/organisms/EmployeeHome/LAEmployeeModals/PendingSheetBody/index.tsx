@@ -5,6 +5,10 @@ import {
     MoreDetailsButton,
     RequestDetailsSection,
 } from 'src/components/molecules';
+import {
+    TID_BUTTON_ALREADY_NUDGE_SUPERVISOR,
+    TID_BUTTON_NUDGE_SUPERVISOR,
+} from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import { PartialBy, RequestDetails, TestProps } from 'src/utils/types';
 
@@ -43,6 +47,9 @@ const PendingSheetBody = ({
         <Spacer />
         <ButtonDock
             primaryButton={{
+                testId: isNudgeVisble
+                    ? TID_BUTTON_NUDGE_SUPERVISOR
+                    : TID_BUTTON_ALREADY_NUDGE_SUPERVISOR,
                 label: 'Nudge Supervisor',
                 icon: 'notification',
                 mode: isNudgeVisble ? 'outlined' : 'contained-gray',

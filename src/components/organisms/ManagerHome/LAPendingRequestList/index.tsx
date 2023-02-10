@@ -18,6 +18,7 @@ import { getErrorMessage } from 'src/utils/helpers/errorCodes';
 import {
     TID_MANAGER_LEAVE_REQUEST_LIST,
     TID_MANAGER_LEAVE_REQUEST_ROW,
+    TID_MANAGER_LEAVE_REQUEST_STATUS,
 } from 'src/utils/testIds';
 // import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import theme from 'src/utils/theme';
@@ -56,29 +57,30 @@ const LAPendingRequestList = ({
         viewAllContent,
         viewAllPress,
     } = styles(isViewAllPage);
-    const Item = ({
-        item,
-        index,
-    }: {
-        item: PendingRequestType;
-        index: number;
-    }) => (
-        <PendingListItem
-            testIdRow={`${TID_MANAGER_LEAVE_REQUEST_ROW}_${index.toString()}`}
-            date={getStartEndDate(item.startDate, item.endDate)}
-            employee={item.employee}
-            // entitlement={getEntitlementChipText(
-            //     item.leaveType,
-            //     item.leaveType.name,
-            // )}
-            onPress={() => onPressRequestItem(item)}
-            // entitlementChipColor={
-            //     isViewAllPage ? colors.tertiaryColor : colors.white
-            // }
-            status={item.status}
-            chipsColor={isViewAllPage ? colors.tertiaryColor : colors.white}
-        />
-    );
+    // const Item = ({
+    //     item,
+    //     index,
+    // }: {
+    //     item: PendingRequestType;
+    //     index: number;
+    // }) => (
+    //     <PendingListItem
+    //         testIdRow={`${TID_MANAGER_LEAVE_REQUEST_ROW}_${index.toString()}`}
+    //         date={getStartEndDate(item.startDate, item.endDate)}
+    //         employee={item.employee}
+    //         // entitlement={getEntitlementChipText(
+    //         //     item.leaveType,
+    //         //     item.leaveType.name,
+    //         // )}
+    //         onPress={() => onPressRequestItem(item)}
+    //         // entitlementChipColor={
+    //         //     isViewAllPage ? colors.tertiaryColor : colors.white
+    //         // }
+    //         testIdStatus={`${TID_MANAGER_LEAVE_REQUEST_STATUS}_${index.toString()}`}
+    //         status={item.status}
+    //         chipsColor={isViewAllPage ? colors.tertiaryColor : colors.white}
+    //     />
+    // );
 
     return (
         <View style={container}>
@@ -160,7 +162,25 @@ const LAPendingRequestList = ({
                     }
                 }}
                 renderItem={({ item, index }) => (
-                    <Item item={item} index={index} />
+                    <PendingListItem
+                        testIdRow={`${TID_MANAGER_LEAVE_REQUEST_ROW}_${index.toString()}`}
+                        date={getStartEndDate(item.startDate, item.endDate)}
+                        employee={item.employee}
+                        // entitlement={getEntitlementChipText(
+                        //     item.leaveType,
+                        //     item.leaveType.name,
+                        // )}
+                        onPress={() => onPressRequestItem(item)}
+                        // entitlementChipColor={
+                        //     isViewAllPage ? colors.tertiaryColor : colors.white
+                        // }
+                        testIdStatus={`${TID_MANAGER_LEAVE_REQUEST_STATUS}_${index.toString()}`}
+                        status={item.status}
+                        chipsColor={
+                            isViewAllPage ? colors.tertiaryColor : colors.white
+                        }
+                    />
+                    // <Item item={item} index={index} />
                 )}
                 ListFooterComponent={() =>
                     !isViewAllPage ? (
