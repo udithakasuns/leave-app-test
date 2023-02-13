@@ -32,6 +32,7 @@
 		ECFFC4132FBE47819434C9D5 /* Poppins-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A92FF3B1E4534C2BBC71692E /* Poppins-ExtraBoldItalic.ttf */; };
 		F24A98D9107143F9959BE119 /* Poppins-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4CF75C325B1A4FA4A957EFA5 /* Poppins-LightItalic.ttf */; };
 		F595432E2938CDB000F875CC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F595432D2938CDB000F875CC /* GoogleService-Info.plist */; };
+		F5D08F7A299A266D0025AF13 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = F5D08F79299A266C0025AF13 /* AppCenter-Config.plist */; };
 		F700BC20610B41C19ACEDEC9 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0138524B00E64D17BB2DB125 /* Poppins-Thin.ttf */; };
 /* End PBXBuildFile section */
 
@@ -103,6 +104,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F55B7C00293876940008E174 /* rtc_leave_app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = rtc_leave_app.entitlements; path = rtc_leave_app/rtc_leave_app.entitlements; sourceTree = "<group>"; };
 		F595432D2938CDB000F875CC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F5D08F79299A266C0025AF13 /* AppCenter-Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		F5EEF1C3294C5B0A00835320 /* hermes.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = hermes.xcframework; path = "Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -203,6 +205,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				F5D08F79299A266C0025AF13 /* AppCenter-Config.plist */,
 				F595432D2938CDB000F875CC /* GoogleService-Info.plist */,
 				BD3252F62907C763001D966A /* Fonts */,
 				13B07FAE1A68108700A75B9A /* rtc_leave_app */,
@@ -371,6 +374,7 @@
 				80D20B1938084B60B188B9CF /* Poppins-ExtraBold.ttf in Resources */,
 				ECFFC4132FBE47819434C9D5 /* Poppins-ExtraBoldItalic.ttf in Resources */,
 				02568B1AE8C24E5DAAF8622B /* Poppins-ExtraLight.ttf in Resources */,
+				F5D08F7A299A266D0025AF13 /* AppCenter-Config.plist in Resources */,
 				4A78F458E10744CC9FE1AA75 /* Poppins-ExtraLightItalic.ttf in Resources */,
 				35D97B7A87FF4662A15A0757 /* Poppins-Italic.ttf in Resources */,
 				AF8DE7D385094EB18F8649A6 /* Poppins-Light.ttf in Resources */,

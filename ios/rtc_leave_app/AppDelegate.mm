@@ -1,5 +1,8 @@
 #import "AppDelegate.h"
 
+#import <AppCenterReactNative.h>
+#import <AppCenterReactNativeAnalytics.h>
+#import <AppCenterReactNativeCrashes.h>
 #import <CodePush/CodePush.h>
 #import <Firebase.h>
 #import <React/RCTBridge.h>
@@ -20,6 +23,8 @@
 #import <ReactCommon/RCTTurboModuleManager.h>
 
 #import <react/config/ReactNativeConfig.h>
+
+
 
 static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 
@@ -82,6 +87,12 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   [self.window makeKeyAndVisible];
   
   [RNSplashScreen show];
+
+
+  [AppCenterReactNative register];
+  [AppCenterReactNativeAnalytics registerWithInitiallyEnabled:true];
+  [AppCenterReactNativeCrashes registerWithAutomaticProcessing];
+
   return YES;
 }
 
