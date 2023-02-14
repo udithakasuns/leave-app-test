@@ -9,7 +9,10 @@ import { usePersistStore, useRecipientStore, useUserStore } from 'src/store';
 import amplifiConfig from 'src/aws-exports';
 import { getCurrentUserRoleFromToken } from '../helpers/gettersUtil';
 import { inAppAuthUrlHandler } from '../helpers/inAppUrlHandler';
-import { setCrashlyticsLogs } from '../helpers/crashlyticsUtil';
+import {
+    setAppCenterAnalyticsLogs,
+    setCrashlyticsLogs,
+} from '../helpers/crashlyticsUtil';
 
 Amplify.configure({
     ...amplifiConfig,
@@ -72,6 +75,7 @@ export const useAuthentication = (): ReturnProps => {
 
                 saveUser(email, name, family_name, picture, userRole);
                 setCrashlyticsLogs(email);
+                setAppCenterAnalyticsLogs(email);
 
                 const isValidUser = isRootcodeUser(email);
 
@@ -116,6 +120,7 @@ export const useAuthentication = (): ReturnProps => {
 
                 saveUser(email, name, '', '', userRole);
                 setCrashlyticsLogs(email);
+                setAppCenterAnalyticsLogs(email);
 
                 const isValidUser = isRootcodeUser(email);
 

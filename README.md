@@ -47,6 +47,11 @@ $ sudo arch -x86_64 gem install ffi
 $ arch -x86_64 pod install
 $ arch -x86_64 pod update
 
+GEM issue (Permission)
+$ eval "$(rbenv init -)"
+
+$ gem install ffi
+
 Clone amplify environment - Go to aws console => amplify => leaveapp => backend environments => actions => clone => (new environment name) - After the creation, select edit backend => copy the command that showing there and paste it in your project terminal. - Provide the answeres that they are asking.
 
 View the all environments
