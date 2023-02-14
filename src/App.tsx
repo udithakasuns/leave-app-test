@@ -19,7 +19,8 @@ const App: React.FC = () => {
     return <Navigators />;
 };
 
-AppCenterAnalytics.setEnabled(DEPLOYMENT_ENV === 'QA');
+// Appcenter Crashlytics will only enabled for production environment
+AppCenterAnalytics.setEnabled(DEPLOYMENT_ENV === 'PROD');
 
 const codePushOptions = {
     checkFrequency: codePush.CheckFrequency.ON_APP_START,
