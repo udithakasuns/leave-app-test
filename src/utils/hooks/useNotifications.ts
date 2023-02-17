@@ -42,7 +42,6 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
             Following will be triggered When user is in background mode or user has quite from the app.
         */
         messaging().setBackgroundMessageHandler(async remoteMessage => {
-            console.log('Message handled from background', remoteMessage);
             notificationStore.getCount(notificationStore.notifyUserRole);
         });
 
@@ -52,8 +51,6 @@ export const useNotifications = ({ isAuthenticated }: Props) => {
             trigger the notification count API based on the currently selected user.  
         */
         const unsubscribe = messaging().onMessage(async message => {
-            console.log({ message });
-
             // Create a channel (required for Android)
             const channelId = await notifee.createChannel({
                 id: 'defualt-channel',
