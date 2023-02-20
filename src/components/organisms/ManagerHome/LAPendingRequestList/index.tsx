@@ -16,6 +16,7 @@ import { useManagerFilterStore } from 'src/store';
 import { getStartEndDate } from 'src/utils/helpers/dateHandler';
 import { getErrorMessage } from 'src/utils/helpers/errorCodes';
 import {
+    TID_MANAGER_LEAVE_REQUEST_DATE,
     TID_MANAGER_LEAVE_REQUEST_LIST,
     TID_MANAGER_LEAVE_REQUEST_ROW,
     TID_MANAGER_LEAVE_REQUEST_STATUS,
@@ -175,6 +176,7 @@ const LAPendingRequestList = ({
                         //     isViewAllPage ? colors.tertiaryColor : colors.white
                         // }
                         testIdStatus={`${TID_MANAGER_LEAVE_REQUEST_STATUS}_${index.toString()}`}
+                        testIdContent={`${TID_MANAGER_LEAVE_REQUEST_DATE}_${index.toString()}`}
                         status={item.status}
                         chipsColor={
                             isViewAllPage ? colors.tertiaryColor : colors.white
