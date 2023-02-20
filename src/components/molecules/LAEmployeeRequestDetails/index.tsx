@@ -9,6 +9,7 @@ import {
 } from 'src/utils/helpers/dateHandler';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import {
+    TID_LEAVE_STATUS_DATE,
     TID_LEAVE_STATUS_DURATION,
     TID_LEAVE_STATUS_RECIPIENT,
     TID_LEAVE_STATUS_STATUS,
@@ -26,17 +27,15 @@ interface Props extends Partial<TestProps> {
 }
 
 const ItemRow = ({
-    testId,
     title,
     titleStyle,
     child,
 }: {
-    testId: string;
     title: string;
     child: ReactNode;
     titleStyle?: StyleProp<TextStyle>;
 }) => (
-    <View testID={testId} style={styles.itemRow}>
+    <View style={styles.itemRow}>
         <Text type='ParaLG' style={[styles.itemText, titleStyle]}>
             {title}
         </Text>
@@ -54,12 +53,12 @@ const LARequestDetailsSection = ({
         <Spacer />
         {requestDetails?.leaveRequest?.leaveType && (
             <ItemRow
-                testId={TID_LEAVE_STATUS_TYPE}
                 title='Type :'
                 child={
                     <>
                         <Spacer />
                         <Chip
+                            testIdContent={TID_LEAVE_STATUS_TYPE}
                             content={getEntitlementChipText(
                                 requestDetails.leaveRequest.leaveType,
                                 requestDetails.leaveRequest?.leaveType?.name ??
@@ -76,12 +75,12 @@ const LARequestDetailsSection = ({
             <>
                 <Spacer />
                 <ItemRow
-                    testId={TID_LEAVE_STATUS_STATUS}
                     title='Status :'
                     child={
                         <>
                             <Spacer />
                             <StatusChip
+                                testIdContent={TID_LEAVE_STATUS_STATUS}
                                 status={requestDetails.leaveRequest?.status}
                                 containerStyle={styles.statusContainer}
                                 onPress={() => {}}
@@ -94,13 +93,13 @@ const LARequestDetailsSection = ({
         <Spacer />
         {isDurationVisible && requestDetails?.leaveRequest && (
             <ItemRow
-                testId={TID_LEAVE_STATUS_DURATION}
                 title='Duration :'
                 child={
                     <>
                         <Spacer />
                         <View style={styles.durationContainer}>
                             <Chip
+                                testIdContent={TID_LEAVE_STATUS_DURATION}
                                 containerStyle={styles.durationChip}
                                 content={`${getLeaveDurationDays(
                                     requestDetails?.leaveRequest
@@ -113,6 +112,7 @@ const LARequestDetailsSection = ({
                             <Spacer width={2} height={3} />
                             {requestDetails?.leaveRequest?.startDate && (
                                 <Chip
+                                    testIdContent={TID_LEAVE_STATUS_DATE}
                                     containerStyle={styles.durationChip}
                                     content={getCalendarRangeDate(
                                         requestDetails.leaveRequest?.startDate,
@@ -130,7 +130,6 @@ const LARequestDetailsSection = ({
             <>
                 <Spacer />
                 <ItemRow
-                    testId={TID_LEAVE_STATUS_RECIPIENT}
                     title='Recipient :'
                     child={
                         <View
@@ -141,6 +140,7 @@ const LARequestDetailsSection = ({
                             <Spacer />
                             {requestDetails.recipient?.map(item => (
                                 <AvatarChip
+                                    testIdContent={TID_LEAVE_STATUS_RECIPIENT}
                                     key={item?.employeeId}
                                     label={item?.name ?? ''}
                                     source={{

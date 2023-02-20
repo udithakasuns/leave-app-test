@@ -29,12 +29,14 @@ const LAAvatarChip = ({
     label,
     labelStyle,
     textColor = colors.gray600,
+    testIdContent,
 }: AtLeast<Props, 'source' | 'label'>) => {
     const { container, textContainer } = styles(size);
     return (
         <View style={[container, containerStyle]}>
             <Avatar source={source} size={size} />
             <Text
+                testID={testIdContent}
                 numberOfLines={1}
                 type={size === AvatarSize.large ? 'ParaLG' : 'ParaSM'}
                 color={textColor}

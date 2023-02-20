@@ -17,6 +17,7 @@ import { getStartEndDate } from 'src/utils/helpers/dateHandler';
 import { getErrorMessage } from 'src/utils/helpers/errorCodes';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import {
+    TID_EMPLOYEE_LEAVE_REQUEST_DATE,
     TID_EMPLOYEE_LEAVE_REQUEST_LIST,
     TID_EMPLOYEE_LEAVE_REQUEST_ROW,
     TID_EMPLOYEE_LEAVE_REQUEST_STATUS,
@@ -168,7 +169,8 @@ const LALeaveRequestList = ({
                 renderItem={({ item, index }) => (
                     <RequestListItem
                         testIdRow={`${TID_EMPLOYEE_LEAVE_REQUEST_ROW}_${index.toString()}`}
-                        testId={`${TID_EMPLOYEE_LEAVE_REQUEST_STATUS}_${index.toString()}`}
+                        testIdStatus={`${TID_EMPLOYEE_LEAVE_REQUEST_STATUS}_${index.toString()}`}
+                        testIdContent={`${TID_EMPLOYEE_LEAVE_REQUEST_DATE}_${index.toString()}`}
                         date={getStartEndDate(item.startDate, item.endDate)}
                         status={item.status}
                         entitlement={getEntitlementChipText(

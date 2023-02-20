@@ -9,6 +9,7 @@ import {
 } from 'src/utils/helpers/dateHandler';
 import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
 import {
+    TID_LEAVE_STATUS_DATE,
     TID_LEAVE_STATUS_DURATION,
     TID_LEAVE_STATUS_MEMBER,
     TID_LEAVE_STATUS_RECIPIENT,
@@ -37,19 +38,15 @@ const LAEmployeeRequestDetails = ({
     isRecipientVisible = false,
 }: AtLeast<Props, 'requestDetails'>) => {
     const ItemRow = ({
-        testId,
         title,
         titleStyle,
         child,
     }: {
-        testId: string;
         title: string;
         child: ReactNode;
         titleStyle?: StyleProp<TextStyle>;
     }) => (
-        <View
-            testID={testId}
-            style={flexEnd ? styles.itemRowFlexEnd : styles.itemRow}>
+        <View style={flexEnd ? styles.itemRowFlexEnd : styles.itemRow}>
             <Text type='ParaLG' style={[styles.itemText, titleStyle]}>
                 {title}
             </Text>
@@ -63,12 +60,12 @@ const LAEmployeeRequestDetails = ({
                 <>
                     <Spacer />
                     <ItemRow
-                        testId={TID_LEAVE_STATUS_MEMBER}
                         title={flexEnd ? 'Member' : 'Member :'}
                         child={
                             <>
                                 <Spacer />
                                 <AvatarChip
+                                    testIdContent={TID_LEAVE_STATUS_MEMBER}
                                     label={requestDetails?.employee.name ?? ''}
                                     source={{
                                         uri:
@@ -84,12 +81,12 @@ const LAEmployeeRequestDetails = ({
             <Spacer />
             {requestDetails && (
                 <ItemRow
-                    testId={TID_LEAVE_STATUS_TYPE}
                     title={flexEnd ? 'Type' : 'Type :'}
                     child={
                         <>
                             <Spacer />
                             <Chip
+                                testIdContent={TID_LEAVE_STATUS_TYPE}
                                 content={getEntitlementChipText(
                                     requestDetails.leaveType,
                                     requestDetails?.leaveType?.name ?? '',
@@ -105,12 +102,12 @@ const LAEmployeeRequestDetails = ({
                 <>
                     <Spacer />
                     <ItemRow
-                        testId={TID_LEAVE_STATUS_STATUS}
                         title={flexEnd ? 'Status' : 'Status :'}
                         child={
                             <>
                                 <Spacer />
                                 <StatusChip
+                                    testIdContent={TID_LEAVE_STATUS_STATUS}
                                     status={requestDetails?.status}
                                     containerStyle={styles.statusContainer}
                                     onPress={() => {}}
@@ -123,7 +120,6 @@ const LAEmployeeRequestDetails = ({
             <Spacer />
             {requestDetails?.startDate && isDurationVisible && (
                 <ItemRow
-                    testId={TID_LEAVE_STATUS_DURATION}
                     title={flexEnd ? 'Leave Duration' : 'Duration :'}
                     child={
                         <>
@@ -135,6 +131,7 @@ const LAEmployeeRequestDetails = ({
                                         : styles.durationContainer
                                 }>
                                 <Chip
+                                    testIdContent={TID_LEAVE_STATUS_DURATION}
                                     content={`${getLeaveDurationDays(
                                         requestDetails.durationDays,
                                         requestDetails.leaveState,
@@ -144,6 +141,7 @@ const LAEmployeeRequestDetails = ({
                                 />
                                 <Spacer width={2} height={3} />
                                 <Chip
+                                    testIdContent={TID_LEAVE_STATUS_DATE}
                                     content={getCalendarRangeDate(
                                         requestDetails?.startDate,
                                         requestDetails?.endDate,
@@ -160,12 +158,12 @@ const LAEmployeeRequestDetails = ({
                 <>
                     <Spacer />
                     <ItemRow
-                        testId={TID_LEAVE_STATUS_RECIPIENT}
                         title='Recipient :'
                         child={
                             <>
                                 <Spacer />
                                 <AvatarChip
+                                    testIdContent={TID_LEAVE_STATUS_RECIPIENT}
                                     label={requestDetails?.reviewer?.name ?? ''}
                                     source={{
                                         uri:
