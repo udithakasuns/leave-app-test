@@ -9,6 +9,9 @@ export { default as LAEmployeePopUp } from './EmployeeHome/LAEmployeePopUp';
 
 export { default as LAManagerModals } from './ManagerHome/LAManagerModals';
 export { default as LAManagerPopUp } from './ManagerHome/LAManagerPopUp';
+export { default as TeamAvailabilitySheetBody } from './TeamAvailability/LATeamAvailabilitySheetBody';
 
 export { default as NotificationFilterHeader } from './Notification/LANotificationFilterHeader';
 export { default as SkeletonFullLoader } from './SkeletonFullLoader';
+
+export { default as TeamAvailabilityFilterHeader } from './TeamAvailability/LATeamAvailabilityFilterHeader';

@@ -8,8 +8,12 @@ import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { MarkedDates } from 'react-native-calendars/src/types';
 import { Spacer } from 'src/components/atoms';
 import { ButtonDock, SelectionButton } from 'src/components/molecules';
+import { TeamAvailabilityFilterHeader } from 'src/components/organisms';
 import { showErrorToast } from 'src/utils/alerts';
-import { getCalendarDate } from 'src/utils/helpers/dateHandler';
+import {
+    getCalendarDate,
+    getFormattedDay,
+} from 'src/utils/helpers/dateHandler';
 import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import theme from 'src/utils/theme';
 import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
@@ -20,14 +24,78 @@ const { scale, colors } = theme;
 interface Props extends Partial<TestProps> {
     formik: FormikProps<ApplyFormValues>;
     onBackPress: (modalType: EmployeeModal) => void;
+    onPressTeamAvailibility: (modalType: EmployeeModal) => void;
 }
 
-const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
+const ChooseDateSheetBody = ({
+    formik,
+    onBackPress,
+    onPressTeamAvailibility,
+}: Props) => {
     const [range, setRange] = useState<{
         startDate: string;
         endDate?: string;
     }>({ startDate: '', endDate: '' });
     const [holidays, setHolidays] = useState<MarkedDates>({});
+    const teamChips: {
+        chipId: number;
+        content: string;
+        chipInfo: string;
+        availableCount: number;
+    }[] = [
+        {
+            chipId: 1,
+            content: 'Design',
+            chipInfo: 'Design',
+            availableCount: 10,
+        },
+        {
+            chipId: 2,
+            content: 'BA',
+            chipInfo: 'BA',
+            availableCount: 15,
+        },
+        {
+            chipId: 3,
+            content: 'Project Mgt',
+            chipInfo: 'Project Mgt',
+            availableCount: 8,
+        },
+    ];
+    const awayTeamMembersDetails = [
+        {
+            id: '1',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '2',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '3',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '1',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '2',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '3',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '2',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '3',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+    ];
 
     const marked = useMemo(() => {
         if (!range.startDate) return holidays;
@@ -176,6 +244,30 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
     return (
         <View>
             <Spacer height={scale.vsc8} />
+            {range.startDate ? (
+                <>
+                    <TeamAvailabilityFilterHeader
+                        onExpandTeamAvailability={() =>
+                            onPressTeamAvailibility(
+                                EmployeeModal.TEAM_AVAILABILITY_MODAL,
+                            )
+                        }
+                        teamChipsList={teamChips}
+                        awayTeamMembersDetails={awayTeamMembersDetails}
+                        isTAforApproveLeave
+                        startDate={
+                            range.startDate
+                                ? getFormattedDay(range.startDate)
+                                : ''
+                        }
+                        endDate={
+                            range.endDate ? getFormattedDay(range.endDate) : ''
+                        }
+                    />
+                    <Spacer height={scale.vsc8} />
+                </>
+            ) : null}
+
             <Calendar
                 markedDates={marked}
                 markingType='dot'

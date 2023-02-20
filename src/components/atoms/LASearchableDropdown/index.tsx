@@ -52,7 +52,7 @@ const LASearchableDropdown = ({
     };
 
     return (
-        <View>
+        <View style={styles.container}>
             <Input
                 reference={inputRef}
                 placeholder=''

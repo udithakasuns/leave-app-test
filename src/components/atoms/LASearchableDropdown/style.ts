@@ -4,13 +4,13 @@ import theme from 'src/utils/theme';
 const { colors, scale, radius } = theme;
 
 export const styles = StyleSheet.create({
+    container: { margin: -scale.sc8 },
     list: {
         flexDirection: 'row',
-        position: 'absolute',
-        top: '100%',
         marginTop: -scale.sc8,
         backgroundColor: colors.white,
         marginHorizontal: scale.sc10,
+        marginBottom: scale.sc8,
         shadowColor: colors.black,
         shadowRadius: 2,
         shadowOpacity: 0.5,

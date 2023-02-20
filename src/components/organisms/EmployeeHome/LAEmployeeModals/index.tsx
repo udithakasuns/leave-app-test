@@ -20,6 +20,7 @@ import {
     PartialBy,
     TestProps,
 } from 'src/utils/types';
+import TeamAvailabilitySheetBody from '../../TeamAvailability/LATeamAvailabilitySheetBody';
 import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
 import ApprovedLeaveSheetBody from './ApprovedLeaveSheetBody';
 import CancelLeaveSheetBody from './CancelLeaveSheetBody';
@@ -51,6 +52,7 @@ interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     onPressCancelLeave: () => void;
     onNavigateToCancelLeave: () => void;
     onRevokeLeaveRequest: (revokeComment: string) => void;
+    onPressTeamAvailibility: (modalType: EmployeeModal) => void;
 }
 
 const LAEmployeeModals = ({
@@ -67,10 +69,103 @@ const LAEmployeeModals = ({
     onNavigateToCancelLeave,
     onPressRevokeLeave,
     onRevokeLeaveRequest,
+    onPressTeamAvailibility,
 }: PartialBy<Props, 'formik'>) => {
     const [isHalfSelected, setIsHalfSelected] = useState(false);
     const { employeeRequest } = useEmployeeStore();
     const { managers } = useRecipientStore();
+    const details = [
+        {
+            id: '11',
+            employee: [
+                {
+                    name: 'Nimashi',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+                {
+                    name: 'Gayani',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+                {
+                    name: 'Gayani',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+            ],
+        },
+        {
+            id: '12',
+            employee: [
+                {
+                    name: 'Nirosha',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+                {
+                    name: 'Oshi',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+            ],
+        },
+        {
+            id: '13',
+            employee: [
+                {
+                    name: 'Nirosha',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+            ],
+        },
+        {
+            id: '14',
+            employee: [
+                // {
+                //     name: 'Nirosha',
+                //     authPic:
+                //         'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                // },
+                // {
+                //     name: 'Oshi',
+                //     authPic:
+                //         'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                // },
+            ],
+        },
+        {
+            id: '15',
+            employee: [
+                {
+                    name: 'Nirosha',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+                {
+                    name: 'Oshi',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+            ],
+        },
+        {
+            id: '16',
+            employee: [
+                {
+                    name: 'Nirosha',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+                {
+                    name: 'Oshi',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+            ],
+        },
+    ];
 
     const onCancellation = () => {
         setIsHalfSelected(false);
@@ -115,6 +210,7 @@ const LAEmployeeModals = ({
                         <ChooseDateSheetBody
                             formik={formik}
                             onBackPress={onBackPress}
+                            onPressTeamAvailibility={onPressTeamAvailibility}
                         />
                     }
                 />
@@ -259,6 +355,25 @@ const LAEmployeeModals = ({
                                 recipient: [managers[0]],
                             }}
                             onRevokeLeaveRequest={onRevokeLeaveRequest}
+                        />
+                    }
+                />
+            )}
+            {modalType === EmployeeModal.TEAM_AVAILABILITY_MODAL && (
+                <Modal
+                    onClose={() => {
+                        onBackPress(EmployeeModal.CHOSE_DATE_MODAL);
+                    }}
+                    isVisible
+                    header='Team availability'
+                    headerIcon='arrow-back'
+                    style={styles.commonStyle}
+                    sheetBody={
+                        <TeamAvailabilitySheetBody
+                            awayMemberList={details}
+                            onPressGoBack={() => {
+                                onBackPress(EmployeeModal.CHOSE_DATE_MODAL);
+                            }}
                         />
                     }
                 />

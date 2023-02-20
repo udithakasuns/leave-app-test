@@ -3,11 +3,14 @@ import { UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ManagerHomeScreensProps } from 'navigators/types';
 import React, { useEffect } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Alert, ScrollView, View } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { Spacer, SwipeRefresh, Text } from 'src/components/atoms';
 import { MultiChipProps } from 'src/components/molecules';
-import { LAAppBar } from 'src/components/organisms';
+import {
+    LAAppBar,
+    TeamAvailabilityFilterHeader,
+} from 'src/components/organisms';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
 import {
     useManagerFilterStore,
@@ -42,6 +45,66 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         setEmptyFilterUtils,
         resetFilterUtils,
     } = useManagerFilterStore();
+    const teamChips: {
+        chipId: number;
+        content: string;
+        chipInfo: string;
+        availableCount: number;
+    }[] = [
+        {
+            chipId: 1,
+            content: 'Design',
+            chipInfo: 'Design',
+            availableCount: 10,
+        },
+        {
+            chipId: 2,
+            content: 'BA',
+            chipInfo: 'BA',
+            availableCount: 15,
+        },
+        {
+            chipId: 3,
+            content: 'Project Mgt',
+            chipInfo: 'Project Mgt',
+            availableCount: 8,
+        },
+    ];
+
+    const awayTeamMembersDetails = [
+        {
+            id: '1',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '2',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '3',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '1',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '2',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '3',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '2',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+        {
+            id: '3',
+            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+        },
+    ];
 
     const {
         data: leaveRequests,
@@ -118,6 +181,15 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                     Hey {firstName} {'\n'}
                     {getGreetingsByTime()}
                 </Text>
+                <Spacer />
+                <TeamAvailabilityFilterHeader
+                    onExpandTeamAvailability={() => {
+                        Alert.alert('Expand view');
+                    }}
+                    teamChipsList={teamChips}
+                    awayTeamMembersDetails={awayTeamMembersDetails}
+                    isTAforApproveLeave={false}
+                />
                 <Spacer />
                 <Text type='SubHBold'>Leave requests</Text>
                 {isLoading ? (

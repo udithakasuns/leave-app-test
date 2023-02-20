@@ -26,12 +26,17 @@ export type Colors = {
     pending: string;
     green700: string;
     green200: string;
+    green800: string;
     gray400: string;
+    gray200: string;
     red900: string;
     red500: string;
+    red800: string;
     red50: string;
     lime50: string;
+    lime200: string;
     grey600: string;
+    iconLabel: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -247,6 +252,7 @@ export enum EmployeeModal {
     'CANCEL_REQUEST_MODAL',
     'CANCELLED_LEAVE_MODAL',
     'LEAVE_INFORMATION',
+    'TEAM_AVAILABILITY_MODAL',
 }
 
 export enum EmployeePopup {

@@ -25,6 +25,7 @@ const colors: Colors = {
     errorBackground: '#FEE2E2',
     red50: '#FEF2F2',
     red500: '#EF4444',
+    red800: '#991B1B',
     red900: '#FECACA',
     disabledColor: '#CFCFCF',
     gray600: '#52525B',
@@ -32,13 +33,18 @@ const colors: Colors = {
     gray400: '#A1A1AA',
     gray300: '#E8E8E8',
     grey600: '#868686',
+    gray200: '#FAFAFA',
     dividerColor: '#D4D4D8',
 
     approved: '#65A30D',
     green200: '#62B774',
     green700: '#15803D',
+    green800: '#166534',
     lime50: '#F7FEE7',
+    lime200: '#D9F99D',
     pending: '#FCD34D',
+
+    iconLabel: '#D97706',
 };
 
 const fontSize = {
