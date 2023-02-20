@@ -50,7 +50,7 @@ const LAPendingListItem = ({
             }}
         />
         <StatusChip
-            testId={testIdStatus}
+            testIdContent={testIdStatus}
             status={status}
             containerStyle={{ backgroundColor: chipsColor }}
             onPress={onPress}

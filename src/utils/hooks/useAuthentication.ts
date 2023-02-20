@@ -170,12 +170,12 @@ export const useAuthentication = (): ReturnProps => {
 
     useEffect(() => {
         /* Hub is listened to all events related to authentication */
-
         if (authType) {
             const unsubscribe = Hub.listen('auth', ({ payload: { event } }) => {
                 switch (event) {
                     /* Log the user based on auth type */
                     case 'signIn':
+                        setAuthLoading(true);
                         if (authType === 'social') {
                             getCurrentSocialAuthUser();
                         } else if (authType === 'general') {

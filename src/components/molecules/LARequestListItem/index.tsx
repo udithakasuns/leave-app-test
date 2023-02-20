@@ -16,6 +16,7 @@ interface Props extends Partial<TestProps> {
     onPress: () => void;
     chipsColor: string;
     isAnimated: boolean;
+    testIdStatus: string;
 }
 
 const LARequestListItem = ({
@@ -26,6 +27,7 @@ const LARequestListItem = ({
     testIdContent,
     testIdChip,
     testId,
+    testIdStatus,
     onPress,
     chipsColor,
     isAnimated,
@@ -50,6 +52,7 @@ const LARequestListItem = ({
         />
         <StatusChip
             testId={testId}
+            testIdContent={testIdStatus}
             status={status}
             containerStyle={{ backgroundColor: chipsColor }}
             onPress={onPress}
