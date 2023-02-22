@@ -2,25 +2,38 @@ import React from 'react';
 import { View, Pressable } from 'react-native';
 import { Icon, Text } from 'components/atoms';
 import theme from 'src/utils/theme';
+import { PartialBy } from 'src/utils/types';
 import { styles } from './style';
 
 const { colors } = theme;
 
 interface Props {
+    testIdItem: string;
+    testIdContent: string;
     label: string;
     isSelected: boolean;
     index: number;
     onPress: () => void;
 }
 
-const ListItem = ({ label, isSelected, index, onPress }: Props) => (
+const DropDownItem = ({
+    testIdItem,
+    testIdContent,
+    label,
+    isSelected,
+    index,
+    onPress,
+}: PartialBy<Props, 'testIdItem' | 'testIdContent'>) => (
     <Pressable
+        testID={testIdItem}
         onPress={onPress}
         style={[
             isSelected ? styles.listRowSelected : styles.listRow,
             index === 0 && { borderTopLeftRadius: 0 },
         ]}>
-        <Text color={isSelected ? colors.secondaryOutline : colors.black}>
+        <Text
+            testID={testIdContent}
+            color={isSelected ? colors.secondaryOutline : colors.black}>
             {label}
         </Text>
         {isSelected ? (
@@ -31,4 +44,4 @@ const ListItem = ({ label, isSelected, index, onPress }: Props) => (
     </Pressable>
 );
 
-export default React.memo(ListItem);
+export default React.memo(DropDownItem);

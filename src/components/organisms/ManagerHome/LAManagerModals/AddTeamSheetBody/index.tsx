@@ -2,26 +2,23 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {
-    SearchableDropdown,
-    SearchableDropdownListProps,
+    MultiSearchableDropdown,
+    MultiSearchableDropdownListProps,
     Spacer,
 } from 'src/components/atoms';
-import {
-    ButtonDock,
-    MultiChipProps,
-    TeamChipGroup,
-} from 'src/components/molecules';
+import { ButtonDock, MultiChipProps } from 'src/components/molecules';
 import theme from 'src/utils/theme';
+import SelecetedTeams from './SelectedTeams';
 
 interface Props {
     teamChipsList: MultiChipProps[];
 }
-const { scale } = theme;
+const { scale, colors } = theme;
 
 const AddTeamSheetBody = ({ teamChipsList }: Props) => {
     const [showError, setShowError] = useState<boolean>(false);
     const [text, setText] = useState<string>('');
-    const [list, setList] = useState<SearchableDropdownListProps[]>([
+    const [list, setList] = useState<MultiSearchableDropdownListProps[]>([
         {
             id: '1',
             label: 'Design Team',
@@ -54,10 +51,10 @@ const AddTeamSheetBody = ({ teamChipsList }: Props) => {
         },
     ]);
 
-    const onPressListItem = (listItem: SearchableDropdownListProps) => {
-        list.forEach(item => {
+    const onPressListItem = (listItem: MultiSearchableDropdownListProps) => {
+        list.forEach((item, index) => {
             if (listItem.id === item.id) {
-                // item.isSelected = !item.isSelected;
+                list[index].isSelected = !item.isSelected;
             }
         });
         setList([...list]);
@@ -65,19 +62,14 @@ const AddTeamSheetBody = ({ teamChipsList }: Props) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <TeamChipGroup
-                chips={teamChipsList}
-                singleSelection
-                onPress={() => {}}
-                rightIconName='close'
-            />
+            <SelecetedTeams list={list} onPressListItem={onPressListItem} />
             <Spacer height={scale.vsc6} />
-            <SearchableDropdown
+            <MultiSearchableDropdown
                 value={text}
                 onChangeText={val => setText(val)}
                 label='Search Team'
-                list={list}
-                onListItemPress={onPressListItem}
+                dropDownList={list}
+                onDropdownItemPress={onPressListItem}
             />
             <Spacer height={scale.sc8} />
             <ButtonDock

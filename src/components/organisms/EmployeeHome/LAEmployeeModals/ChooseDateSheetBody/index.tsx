@@ -103,7 +103,11 @@ const ChooseDateSheetBody = ({
     ];
     useQuery(
         ['employeeOnLeaveRequests'],
-        () => getHttpTeamAvailability(range.startDate, [1, 2]),
+        () =>
+            getHttpTeamAvailability({
+                date: range.startDate,
+                teamIds: [1],
+            }),
         {
             enabled,
             onSuccess: data => {

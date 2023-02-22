@@ -1,15 +1,15 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, LegacyRef, createRef } from 'react';
 import { View, TextInput, ScrollView } from 'react-native';
-import { Input, InputProps, Text } from 'components/atoms';
+import { Input, InputProps } from 'components/atoms';
 import { AtLeast } from 'src/utils/types';
 import theme from 'src/utils/theme';
 import { styles } from './style';
-import ListItem from './ListItem';
+import DropdownItem from './DropdownItem';
 
 const { scale } = theme;
 
-export interface List {
+export interface DropDownList {
     id: string;
     label: string;
     value: string;
@@ -17,38 +17,43 @@ export interface List {
 }
 
 interface Props extends InputProps {
+    testIdDropDownList: string;
+    testIdDropDownItem: string;
+    testIdDropdownContent: string;
+    dropDownList: DropDownList[];
+    dropdownMaxHeight: number;
     onChangeText: (text: string) => void;
-    list: List[];
-    onListItemPress: (list: List) => void;
-    listMaxHeight: number;
+    onDropdownItemPress: (list: DropDownList) => void;
 }
 
-const LASearchableDropdown = ({
+const LAMultiSearchableDropdown = ({
+    testIdDropDownList,
+    testIdDropDownItem,
+    testIdDropdownContent,
     label,
-    onChangeText,
+    dropDownList,
     value,
-    list,
-    onListItemPress,
-    listMaxHeight = scale.sc220,
+    dropdownMaxHeight = scale.sc220,
+    onChangeText,
+    onDropdownItemPress,
     ...rest
-}: AtLeast<Props, 'onChangeText' | 'value' | 'onListItemPress'>) => {
+}: AtLeast<
+    Props,
+    'onChangeText' | 'value' | 'onDropdownItemPress' | 'dropDownList'
+>) => {
     const inputRef: LegacyRef<TextInput> = createRef();
+    const [openDropDown, setOpenDropDown] = useState<boolean>(false);
 
-    const [open, setOpen] = useState<boolean>(false);
-
-    // const onOpen = () => setOpen(true);
-
-    const onClose = () => {
+    const onCloseDropDown = () => {
         if (inputRef && inputRef.current) {
             inputRef.current.blur();
         }
         onChangeText('');
-        setOpen(false);
+        setOpenDropDown(false);
     };
 
     const onUpdateText = (text: string) => {
         onChangeText(text);
-        setOpen(true);
     };
 
     return (
@@ -59,29 +64,34 @@ const LASearchableDropdown = ({
                 label={label || ''}
                 onChangeText={(text: string) => onUpdateText(text)}
                 value={value}
-                rightIconName={open ? 'close' : 'search'}
+                rightIconName={openDropDown ? 'close' : 'search'}
                 rightIconLibrary='material'
                 rightIconSize={scale.sc24}
-                onPressRightIcon={open ? onClose : undefined}
+                onPressRightIcon={openDropDown ? onCloseDropDown : undefined}
                 autoCapitalize='none'
+                onPressIn={() => setOpenDropDown(true)}
                 {...rest}
             />
-            {open && (
-                <View style={[styles.list, { maxHeight: listMaxHeight }]}>
-                    <ScrollView>
-                        {list?.map((item, index) => {
+            {openDropDown && (
+                <View style={[styles.list, { maxHeight: dropdownMaxHeight }]}>
+                    <ScrollView testID={testIdDropDownList}>
+                        {dropDownList.map((item, index) => {
                             if (
                                 item.label
                                     .toLowerCase()
                                     .match(value?.toLowerCase() || '')
                             ) {
                                 return (
-                                    <ListItem
+                                    <DropdownItem
+                                        testIdItem={testIdDropDownItem}
+                                        testIdContent={testIdDropdownContent}
                                         key={item.id}
                                         label={item.label}
                                         isSelected={item.isSelected}
                                         index={index}
-                                        onPress={() => onListItemPress(item)}
+                                        onPress={() =>
+                                            onDropdownItemPress(item)
+                                        }
                                     />
                                 );
                             }
@@ -94,4 +104,4 @@ const LASearchableDropdown = ({
     );
 };
 
-export default LASearchableDropdown;
+export default LAMultiSearchableDropdown;

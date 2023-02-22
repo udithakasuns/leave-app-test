@@ -1,5 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
-import { UseQueryResult } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ManagerHomeScreensProps } from 'navigators/types';
 import React, { useEffect } from 'react';
@@ -12,12 +12,16 @@ import {
     TeamAvailabilityFilterHeader,
 } from 'src/components/organisms';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
+import { getHttpTeamAvailability } from 'src/services/http';
 import {
     useManagerFilterStore,
     useManagerStore,
     useUserStore,
 } from 'src/store';
-import { getGreetingsByTime } from 'src/utils/helpers/dateHandler';
+import {
+    getformatDateToYyyyMmDd,
+    getGreetingsByTime,
+} from 'src/utils/helpers/dateHandler';
 import {
     filterChipsManager,
     sortByButtonsManager,
@@ -155,12 +159,34 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         getManagerModal(item.leaveRequestId);
     };
 
+    const {
+        // isLoading: teamAvLoading,
+        isRefetching: teamAvRefetching,
+        data: teamAv,
+        refetch: teamAvRefetch,
+    } = useQuery<
+        { onLeaveCount: number; onlineCount: number; imageList: string[] }, // Refactor
+        AxiosError
+    >(
+        ['teamAvToday'],
+        () =>
+            getHttpTeamAvailability({
+                date: getformatDateToYyyyMmDd(new Date().toString()),
+                teamIds: [1], // Refactor
+            }),
+        {
+            refetchOnMount: true,
+            refetchOnWindowFocus: true,
+        },
+    );
+
     useEffect(() => {
         if (isFocused) {
             setSortByButtons(sortByButtonsManager);
             setFilterChips(filterChipsManager);
             refetchLeaveRequests();
             statusTypesRefetch();
+            teamAvRefetch();
         }
     }, [isFocused]);
 
@@ -169,7 +195,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
             <ScrollView
                 refreshControl={
                     <SwipeRefresh
-                        refreshing={isRefetchLeaveRequests}
+                        refreshing={isRefetchLeaveRequests || teamAvRefetching}
                         onRefresh={refetchLeaveRequests}
                     />
                 }
