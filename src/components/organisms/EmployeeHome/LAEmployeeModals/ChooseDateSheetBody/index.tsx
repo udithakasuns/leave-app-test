@@ -1,4 +1,5 @@
 /* eslint-disable no-plusplus */
+import { useQuery } from '@tanstack/react-query';
 import { FormikProps } from 'formik';
 import { DateTime } from 'luxon';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -9,6 +10,7 @@ import { MarkedDates } from 'react-native-calendars/src/types';
 import { Spacer } from 'src/components/atoms';
 import { ButtonDock, SelectionButton } from 'src/components/molecules';
 import { TeamAvailabilityFilterHeader } from 'src/components/organisms';
+import { getHttpTeamAvailability } from 'src/services/http';
 import { showErrorToast } from 'src/utils/alerts';
 import {
     getCalendarDate,
@@ -24,7 +26,7 @@ const { scale, colors } = theme;
 interface Props extends Partial<TestProps> {
     formik: FormikProps<ApplyFormValues>;
     onBackPress: (modalType: EmployeeModal) => void;
-    onPressTeamAvailibility: (modalType: EmployeeModal) => void;
+    onPressTeamAvailibility: (startDate: string, endDate: string) => void;
 }
 
 const ChooseDateSheetBody = ({
@@ -37,6 +39,9 @@ const ChooseDateSheetBody = ({
         endDate?: string;
     }>({ startDate: '', endDate: '' });
     const [holidays, setHolidays] = useState<MarkedDates>({});
+    const [enabled, setEnabled] = useState<boolean>(false);
+    const [onlineCount, setOnlineCount] = useState<number>(0);
+
     const teamChips: {
         chipId: number;
         content: string;
@@ -96,7 +101,20 @@ const ChooseDateSheetBody = ({
             uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
         },
     ];
-
+    useQuery(
+        ['employeeOnLeaveRequests'],
+        () =>
+            getHttpTeamAvailability({
+                date: range.startDate,
+                teamIds: [1],
+            }),
+        {
+            enabled,
+            onSuccess: data => {
+                setOnlineCount(data.onlineCount);
+            },
+        },
+    );
     const marked = useMemo(() => {
         if (!range.startDate) return holidays;
         const start = new Date(range.startDate).getTime();
@@ -249,10 +267,12 @@ const ChooseDateSheetBody = ({
                     <TeamAvailabilityFilterHeader
                         onExpandTeamAvailability={() =>
                             onPressTeamAvailibility(
-                                EmployeeModal.TEAM_AVAILABILITY_MODAL,
+                                range.startDate ? range.startDate : '',
+                                range.endDate ? range.endDate : '',
                             )
                         }
                         teamChipsList={teamChips}
+                        availableMemberCount={onlineCount}
                         awayTeamMembersDetails={awayTeamMembersDetails}
                         isTAforApproveLeave
                         startDate={
@@ -267,11 +287,13 @@ const ChooseDateSheetBody = ({
                     <Spacer height={scale.vsc8} />
                 </>
             ) : null}
-
             <Calendar
                 markedDates={marked}
                 markingType='dot'
-                onDayPress={day => handleDayPress(day)}
+                onDayPress={day => {
+                    handleDayPress(day);
+                    setEnabled(state => !state);
+                }}
                 enableSwipeMonths
                 disableAllTouchEventsForInactiveDays
                 onMonthChange={(date: DateData) => {

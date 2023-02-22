@@ -105,7 +105,6 @@ export const getHttpTeamAvailability = async ({
     if (teamIds && date) url = `${url}?date=${date}&teamIds=${teamIds}`;
     else if (date) url = `${url}?date=${date}`;
     else if (teamIds) url = `${url}?teamIds=${teamIds}`;
-
     const res = await axiosInstance.get(url);
     return res.data.results[0];
 };

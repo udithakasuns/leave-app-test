@@ -37,6 +37,8 @@ export type ModalProps = {
     onBackPressType: EmployeeModal;
     isNudgeVisble: boolean;
     lastNudgedDateTime: string | null;
+    startDate: string;
+    endDate: string;
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
@@ -52,7 +54,7 @@ interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     onPressCancelLeave: () => void;
     onNavigateToCancelLeave: () => void;
     onRevokeLeaveRequest: (revokeComment: string) => void;
-    onPressTeamAvailibility: (modalType: EmployeeModal) => void;
+    onPressTeamAvailibility: (startDate: string, endDate: string) => void;
 }
 
 const LAEmployeeModals = ({
@@ -60,6 +62,8 @@ const LAEmployeeModals = ({
     onBackPressType,
     formik,
     isNudgeVisble,
+    startDate,
+    endDate,
     onClose,
     onBackPress,
     onPressSelectDate,
@@ -152,6 +156,21 @@ const LAEmployeeModals = ({
         },
         {
             id: '16',
+            employee: [
+                {
+                    name: 'Nirosha',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+                {
+                    name: 'Oshi',
+                    authPic:
+                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+                },
+            ],
+        },
+        {
+            id: '17',
             employee: [
                 {
                     name: 'Nirosha',
@@ -374,6 +393,8 @@ const LAEmployeeModals = ({
                             onPressGoBack={() => {
                                 onBackPress(EmployeeModal.CHOSE_DATE_MODAL);
                             }}
+                            startDate={startDate || ''}
+                            endDate={endDate || ''}
                         />
                     }
                 />

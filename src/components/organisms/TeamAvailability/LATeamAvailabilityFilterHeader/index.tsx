@@ -19,6 +19,7 @@ interface Props {
     onExpandTeamAvailability: () => void;
     isTAforApproveLeave: boolean;
     teamChipsList: MultiChipProps[];
+    availableMemberCount: number;
     awayTeamMembersDetails: object[];
     startDate: string;
     endDate: string;
@@ -28,12 +29,11 @@ const LATeamAvailabilityFilterHeader = ({
     onExpandTeamAvailability,
     isTAforApproveLeave,
     teamChipsList,
+    availableMemberCount,
     awayTeamMembersDetails,
     startDate,
     endDate,
 }: PartialBy<Props, 'startDate' | 'endDate'>) => {
-    const [availableMemberCount, setAvailableMemberCount] =
-        useState<number>(15);
     const [visibleAddTeamModal, setVisibleAddTeamModal] =
         useState<boolean>(false);
 
