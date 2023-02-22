@@ -368,3 +368,12 @@ export type Me = {
     settings: Settings;
     active: boolean;
 };
+
+export type Team = {
+    teamId: number;
+    teamName: string;
+};
+
+export interface SelectedTeam extends Team {
+    recentlySelected: boolean;
+}

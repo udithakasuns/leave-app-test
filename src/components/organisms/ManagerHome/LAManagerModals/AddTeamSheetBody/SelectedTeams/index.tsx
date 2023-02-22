@@ -5,24 +5,26 @@ import {
     Chip,
     MultiSearchableDropdownListProps as List,
 } from 'src/components/atoms';
+import { SelectedTeam } from 'src/utils/types';
 import { styles } from './styles';
 
 interface Props {
-    list: List[];
-    onPressListItem: (item: List) => void;
+    teams: SelectedTeam[];
+    onRemoveTeam: (team: SelectedTeam) => void;
 }
 
-const SelectedTeams = ({ list, onPressListItem }: Props) => (
+const SelectedTeams = ({ teams, onRemoveTeam }: Props) => (
     <View style={styles.container}>
-        {list
-            .filter(item => item.isSelected)
-            .map(item => (
+        {teams
+            // .filter(item => item.isSelected)
+            .map(team => (
                 <Chip
-                    content={item.value}
+                    key={team.teamId}
+                    content={team.teamName}
                     containerStyle={{ marginRight: 5, marginTop: 5 }}
                     rightIconName='close'
                     outline
-                    onPressRight={() => onPressListItem(item)}
+                    onPressRight={() => onRemoveTeam(team)}
                 />
             ))}
     </View>

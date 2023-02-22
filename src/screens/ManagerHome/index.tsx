@@ -9,6 +9,7 @@ import { Spacer, SwipeRefresh, Text } from 'src/components/atoms';
 import { MultiChipProps } from 'src/components/molecules';
 import {
     LAAppBar,
+    LAManagerTeamAvailability,
     TeamAvailabilityFilterHeader,
 } from 'src/components/organisms';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
@@ -29,7 +30,7 @@ import {
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
 
-import { FilterTypes, PendingRequestType, Page } from 'src/utils/types';
+import { FilterTypes, PendingRequestType, Page, Team } from 'src/utils/types';
 import { screenStyles } from 'utils/styles';
 import theme from '../../utils/theme';
 
@@ -49,64 +50,27 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         setEmptyFilterUtils,
         resetFilterUtils,
     } = useManagerFilterStore();
-    const teamChips: {
-        chipId: number;
-        content: string;
-        chipInfo: string;
-        availableCount: number;
-    }[] = [
-        {
-            chipId: 1,
-            content: 'Design',
-            chipInfo: 'Design',
-            availableCount: 10,
-        },
-        {
-            chipId: 2,
-            content: 'BA',
-            chipInfo: 'BA',
-            availableCount: 15,
-        },
-        {
-            chipId: 3,
-            content: 'Project Mgt',
-            chipInfo: 'Project Mgt',
-            availableCount: 8,
-        },
-    ];
 
-    const awayTeamMembersDetails = [
+    const allTeams: Team[] = [
         {
-            id: '1',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+            teamId: 1,
+            teamName: 'Design',
         },
         {
-            id: '2',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+            teamId: 2,
+            teamName: 'BA',
         },
         {
-            id: '3',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+            teamId: 3,
+            teamName: 'Project Mgt',
         },
         {
-            id: '1',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+            teamId: 4,
+            teamName: 'MyLeave',
         },
         {
-            id: '2',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-        {
-            id: '3',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-        {
-            id: '2',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-        {
-            id: '3',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
+            teamId: 5,
+            teamName: 'Expub',
         },
     ];
 
@@ -208,13 +172,17 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                     {getGreetingsByTime()}
                 </Text>
                 <Spacer />
-                <TeamAvailabilityFilterHeader
+                {/* <TeamAvailabilityFilterHeader
                     onExpandTeamAvailability={() => {
                         Alert.alert('Expand view');
                     }}
                     teamChipsList={teamChips}
                     awayTeamMembersDetails={awayTeamMembersDetails}
                     isTAforApproveLeave={false}
+                /> */}
+                <LAManagerTeamAvailability
+                    allTeams={allTeams}
+                    isLoading={false}
                 />
                 <Spacer />
                 <Text type='SubHBold'>Leave requests</Text>
