@@ -3,26 +3,19 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ManagerHomeScreensProps } from 'navigators/types';
 import React, { useEffect } from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { Spacer, SwipeRefresh, Text } from 'src/components/atoms';
 import { MultiChipProps } from 'src/components/molecules';
-import {
-    LAAppBar,
-    LAManagerTeamAvailability,
-    TeamAvailabilityFilterHeader,
-} from 'src/components/organisms';
+import { LAAppBar, LAManagerTeamAvailability } from 'src/components/organisms';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
-import { getHttpTeamAvailability } from 'src/services/http';
+import { getHttpTeamByUser } from 'src/services/http';
 import {
     useManagerFilterStore,
     useManagerStore,
     useUserStore,
 } from 'src/store';
-import {
-    getformatDateToYyyyMmDd,
-    getGreetingsByTime,
-} from 'src/utils/helpers/dateHandler';
+import { getGreetingsByTime } from 'src/utils/helpers/dateHandler';
 import {
     filterChipsManager,
     sortByButtonsManager,
@@ -37,7 +30,7 @@ import theme from '../../utils/theme';
 const { deviceDimensions } = theme;
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const {
-        user: { firstName },
+        user: { firstName, userId },
     } = useUserStore();
     const isFocused = useIsFocused();
 
@@ -50,29 +43,6 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         setEmptyFilterUtils,
         resetFilterUtils,
     } = useManagerFilterStore();
-
-    const allTeams: Team[] = [
-        {
-            teamId: 1,
-            teamName: 'Design',
-        },
-        {
-            teamId: 2,
-            teamName: 'BA',
-        },
-        {
-            teamId: 3,
-            teamName: 'Project Mgt',
-        },
-        {
-            teamId: 4,
-            teamName: 'MyLeave',
-        },
-        {
-            teamId: 5,
-            teamName: 'Expub',
-        },
-    ];
 
     const {
         data: leaveRequests,
@@ -119,30 +89,22 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         },
     );
 
+    const {
+        data: managerTeams,
+        refetch: onRefetchManagerTeams,
+        isRefetching: isRefetchingManagerTeams,
+    } = useQuery<Team[], AxiosError>(
+        ['fetchManagerTeams'],
+        () => getHttpTeamByUser(userId),
+        {
+            keepPreviousData: true,
+            enabled: false,
+        },
+    );
+
     const handleRequestItemPress = (item: PendingRequestType) => {
         getManagerModal(item.leaveRequestId);
     };
-
-    const {
-        // isLoading: teamAvLoading,
-        isRefetching: teamAvRefetching,
-        data: teamAv,
-        refetch: teamAvRefetch,
-    } = useQuery<
-        { onLeaveCount: number; onlineCount: number; imageList: string[] }, // Refactor
-        AxiosError
-    >(
-        ['teamAvToday'],
-        () =>
-            getHttpTeamAvailability({
-                date: getformatDateToYyyyMmDd(new Date().toString()),
-                teamIds: [1], // Refactor
-            }),
-        {
-            refetchOnMount: true,
-            refetchOnWindowFocus: true,
-        },
-    );
 
     useEffect(() => {
         if (isFocused) {
@@ -150,7 +112,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
             setFilterChips(filterChipsManager);
             refetchLeaveRequests();
             statusTypesRefetch();
-            teamAvRefetch();
+            onRefetchManagerTeams();
         }
     }, [isFocused]);
 
@@ -159,7 +121,9 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
             <ScrollView
                 refreshControl={
                     <SwipeRefresh
-                        refreshing={isRefetchLeaveRequests || teamAvRefetching}
+                        refreshing={
+                            isRefetchLeaveRequests || isRefetchingManagerTeams
+                        }
                         onRefresh={refetchLeaveRequests}
                     />
                 }
@@ -172,17 +136,9 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                     {getGreetingsByTime()}
                 </Text>
                 <Spacer />
-                {/* <TeamAvailabilityFilterHeader
-                    onExpandTeamAvailability={() => {
-                        Alert.alert('Expand view');
-                    }}
-                    teamChipsList={teamChips}
-                    awayTeamMembersDetails={awayTeamMembersDetails}
-                    isTAforApproveLeave={false}
-                /> */}
                 <LAManagerTeamAvailability
-                    allTeams={allTeams}
-                    isLoading={false}
+                    managerTeams={managerTeams || []}
+                    isManagerTeamsLoading={isRefetchingManagerTeams}
                 />
                 <Spacer />
                 <Text type='SubHBold'>Leave requests</Text>

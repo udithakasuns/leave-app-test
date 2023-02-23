@@ -1,11 +1,11 @@
-import { SelectedTeam } from 'src/utils/types';
+import { Team } from 'src/utils/types';
 import { StateCreator } from 'zustand';
 import { PersistOptions } from 'zustand/middleware';
 
 type AuthType = 'social' | 'general' | '';
 
 type Manager = {
-    selectedTeams: SelectedTeam[];
+    filteredTeams: Team[];
 };
 
 export type State = {
@@ -19,7 +19,7 @@ export type Actions = {
     setIsAutherized: (isAutherized: boolean) => void; // For authentication
     setAuthType: (authType: AuthType) => void; // For authentication
     setDeviceUniqueId: (deviceUniqueId: string | null) => void;
-    setManagerTeams: (selectedTeams: SelectedTeam[]) => void;
+    setManagerFilteredTeams: (filteredTeams: Team[]) => void;
 };
 
 export type Persist = (

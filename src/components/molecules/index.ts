@@ -18,6 +18,9 @@ export { default as RequestDetailsSection } from './LAEmployeeRequestDetails';
 export { default as ManagerRequestDetails } from './LAManagerRequestDetails';
 export { default as PendingListItem } from './LAPendingListItem';
 export { default as BackHeader } from './LABackHeader';
+
+/* Team Availability */
+export { default as TeamAvailabilityHeader } from './LATeamAvailabilityHeader';
 export { default as TeamChipGroup } from './LATeamChipGroup';
 export { default as TeamAvailabilityDetails } from './LATeamAvailabilityDetails';
 

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect } from 'react';
-import { Platform } from 'react-native';
+import { Platform, LogBox } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import codePush from 'react-native-code-push';
 import AppCenterAnalytics from 'appcenter-analytics';
@@ -10,6 +10,8 @@ import {
     CODEPUSH_DEPLOYMENT_KEY_IOS,
     DEPLOYMENT_ENV,
 } from './configs';
+
+// LogBox.ignoreAllLogs(); // Ignore all log notifications
 
 const App: React.FC = () => {
     useEffect(() => {

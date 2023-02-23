@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, LegacyRef, createRef } from 'react';
+import React, { useState, LegacyRef, createRef, useEffect } from 'react';
 import { View, TextInput, ScrollView } from 'react-native';
 import { Input, InputProps } from 'components/atoms';
 import { AtLeast } from 'src/utils/types';
@@ -36,6 +36,7 @@ const LAMultiSearchableDropdown = ({
     dropdownMaxHeight = scale.sc220,
     onChangeText,
     onDropdownItemPress,
+    disabled,
     ...rest
 }: AtLeast<
     Props,
@@ -56,6 +57,12 @@ const LAMultiSearchableDropdown = ({
         onChangeText(text);
     };
 
+    useEffect(() => {
+        if (disabled) {
+            onCloseDropDown();
+        }
+    }, [disabled]);
+
     return (
         <View style={styles.container}>
             <Input
@@ -69,7 +76,8 @@ const LAMultiSearchableDropdown = ({
                 rightIconSize={scale.sc24}
                 onPressRightIcon={openDropDown ? onCloseDropDown : undefined}
                 autoCapitalize='none'
-                onPressIn={() => setOpenDropDown(true)}
+                onPressIn={() => !disabled && setOpenDropDown(true)}
+                disabled={disabled}
                 {...rest}
             />
             {openDropDown && (

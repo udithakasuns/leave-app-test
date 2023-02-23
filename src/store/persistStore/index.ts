@@ -8,7 +8,7 @@ const initialState: State = {
     authType: '',
     deviceUniqueId: null,
     manager: {
-        selectedTeams: [],
+        filteredTeams: [],
     },
 };
 
@@ -28,10 +28,10 @@ const persistStore = create<State & Actions>(
                 set(() => ({
                     deviceUniqueId,
                 })),
-            setManagerTeams: managerTeams =>
+            setManagerFilteredTeams: filteredTeams =>
                 set(() => ({
                     manager: {
-                        selectedTeams: managerTeams,
+                        filteredTeams,
                     },
                 })),
         }),

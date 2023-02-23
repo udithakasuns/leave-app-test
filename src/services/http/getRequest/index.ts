@@ -108,3 +108,8 @@ export const getHttpTeamAvailability = async ({
     const res = await axiosInstance.get(url);
     return res.data.results[0];
 };
+
+export const getHttpTeamByUser = async (userId: string) => {
+    const res = await axiosInstance.get(`/v1/employees/get/teams/${userId}`);
+    return res.data.results;
+};

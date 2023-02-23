@@ -17,4 +17,3 @@ export { default as NotificationFilterHeader } from './Notification/LANotificati
 export { default as SkeletonFullLoader } from './SkeletonFullLoader';
 
 export { default as TeamAvailabilityFilterHeader } from './TeamAvailability/LATeamAvailabilityFilterHeader';
-export { default as TeamAvailabilityFilterHeader2 } from './TeamAvailability/LATeamAvailabilityFilterHeader2';

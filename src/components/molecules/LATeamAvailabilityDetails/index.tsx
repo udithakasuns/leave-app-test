@@ -1,45 +1,28 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
-import {
-    Avatar,
-    AvatarSize,
-    Chip,
-    Icon,
-    IconSize,
-    Text,
-} from 'src/components/atoms';
+import { View } from 'react-native';
+import { Avatar, AvatarSize, Chip, Icon, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import { styles } from './styles';
 
 const { colors, scale } = theme;
 
-type ItemProps = { uri: string };
-
-const Item = ({ uri }: ItemProps) => (
-    <Avatar
-        size={AvatarSize.small}
-        source={{
-            uri,
-        }}
-        style={styles.avatarStyle}
-    />
-);
-
 interface Detail {
-    availableCount: number;
+    availableTeamCount: number;
     hasDateRange: boolean;
-    awayTeamMembersDetails: object[];
+    awayTeamImages: string[];
 }
 
 const LATeamAvailabilityDetails = ({
-    availableCount,
+    availableTeamCount,
     hasDateRange,
-    awayTeamMembersDetails,
+    awayTeamImages,
 }: Detail) => (
     <View style={styles.detailRow}>
         {hasDateRange === false ? (
             <View style={styles.detailRowLeft}>
-                <Text style={styles.availableCountStyle}>{availableCount}</Text>
+                <Text style={styles.availableCountStyle}>
+                    {availableTeamCount}
+                </Text>
                 <Chip
                     content='Online'
                     contentColor={colors.green800}
@@ -51,14 +34,21 @@ const LATeamAvailabilityDetails = ({
         ) : null}
         <View style={styles.detailRowRight}>
             <View style={styles.awayTeamMembersDetails}>
-                {awayTeamMembersDetails.map(
+                {awayTeamImages.map(
                     (item, index) =>
                         index < 5 && ( // <= only 5 items
-                            <Item uri={item.uri} />
+                            <Avatar
+                                key={item}
+                                size={AvatarSize.small}
+                                source={{
+                                    uri: item,
+                                }}
+                                style={styles.avatarStyle}
+                            />
                         ),
                 )}
 
-                {awayTeamMembersDetails.length > 5 ? (
+                {awayTeamImages.length > 5 ? (
                     <View style={styles.plusIconStyle}>
                         <Icon
                             name='plus'
@@ -69,12 +59,12 @@ const LATeamAvailabilityDetails = ({
                             backgroundColor={colors.white}
                         />
                         <Text style={styles.plusIconValue}>
-                            {awayTeamMembersDetails.length - 5}
+                            {awayTeamImages.length - 5}
                         </Text>
                     </View>
                 ) : null}
             </View>
-            {awayTeamMembersDetails.length > 0 ? (
+            {awayTeamImages.length > 0 ? (
                 <View style={styles.awayStatusChip}>
                     <Chip
                         content='Away'

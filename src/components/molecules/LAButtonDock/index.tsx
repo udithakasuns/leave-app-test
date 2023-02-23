@@ -33,6 +33,7 @@ const LAButtonDock = ({
             iconPosition={iconPosition}
             onPress={primaryButton.onPress}
             labelStyle={styles.labelStyle}
+            disabled={primaryButton.disabled}
         />
         <Spacer height={theme.scale.vsc6} />
         <Button
@@ -45,6 +46,7 @@ const LAButtonDock = ({
             iconPosition={iconPosition}
             onPress={secondaryButton.onPress}
             labelStyle={styles.labelStyle}
+            disabled={secondaryButton.disabled}
         />
     </>
 );

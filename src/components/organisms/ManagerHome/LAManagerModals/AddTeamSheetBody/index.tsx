@@ -1,35 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
     MultiSearchableDropdown,
     MultiSearchableDropdownListProps,
     Spacer,
+    Text,
 } from 'src/components/atoms';
-import { ButtonDock, MultiChipProps } from 'src/components/molecules';
+import { ButtonDock } from 'src/components/molecules';
 import { usePersistStore } from 'src/store';
 import theme from 'src/utils/theme';
-import { SelectedTeam, Team } from 'src/utils/types';
+import { Team } from 'src/utils/types';
 import SelecetedTeams from './SelectedTeams';
+import { styles } from './styles';
+
+const { scale, colors } = theme;
 
 interface Props {
     allTeams: Team[];
     onClose: () => void;
 }
-const { scale, colors } = theme;
 
 const AddTeamSheetBody = ({ allTeams, onClose }: Props) => {
     const {
-        manager: { selectedTeams },
-        setManagerTeams,
+        manager: { filteredTeams },
+        setManagerFilteredTeams,
     } = usePersistStore();
 
-    const [teams, setTeams] = useState<SelectedTeam[]>(selectedTeams);
+    const [teams, setTeams] = useState<Team[]>(filteredTeams);
     const [dropdownList, setDropdownList] = useState<
         MultiSearchableDropdownListProps[]
     >([]);
 
-    const [showError, setShowError] = useState<boolean>(false);
     const [text, setText] = useState<string>('');
 
     const onPressDropdownItem = (
@@ -49,7 +50,6 @@ const AddTeamSheetBody = ({ allTeams, onClose }: Props) => {
                     teams.unshift({
                         teamId: parseInt(item.id, 10),
                         teamName: item.value,
-                        recentlySelected: false,
                     });
                     setTeams([...teams]);
                 }
@@ -59,7 +59,7 @@ const AddTeamSheetBody = ({ allTeams, onClose }: Props) => {
         setDropdownList([...dropdownList]);
     };
 
-    const onRemoveTeam = (removeTeam: SelectedTeam) => {
+    const onRemoveTeam = (removeTeam: Team) => {
         setTeams([...teams.filter(team => team.teamId !== removeTeam.teamId)]);
         dropdownList.forEach((list, index) => {
             if (list.id === removeTeam.teamId.toString() && list.isSelected) {
@@ -85,14 +85,7 @@ const AddTeamSheetBody = ({ allTeams, onClose }: Props) => {
     };
 
     const onConfirm = () => {
-        teams.forEach((_, index) => {
-            if (index === 0) {
-                teams[index].recentlySelected = true;
-            } else {
-                teams[index].recentlySelected = false;
-            }
-        });
-        setManagerTeams([...teams]);
+        setManagerFilteredTeams([...teams]);
         onClose();
     };
 
@@ -101,10 +94,20 @@ const AddTeamSheetBody = ({ allTeams, onClose }: Props) => {
     }, []);
 
     return (
-        <View style={{ flex: 1 }}>
+        <View>
             <SelecetedTeams teams={teams} onRemoveTeam={onRemoveTeam} />
-            <Spacer height={scale.vsc6} />
+            <Spacer height={scale.vsc1} />
+            <View style={styles.infoText}>
+                <Text type='ParaLG' color={colors.gray600}>
+                    You can add up to 3 teams
+                </Text>
+                <Text type='ParaLG' color={colors.gray600}>
+                    {teams.length}/3 teams
+                </Text>
+            </View>
+            <Spacer height={scale.vsc10} />
             <MultiSearchableDropdown
+                disabled={teams.length === 3}
                 value={text}
                 onChangeText={val => setText(val)}
                 label='Search Team'
@@ -118,6 +121,11 @@ const AddTeamSheetBody = ({ allTeams, onClose }: Props) => {
                     label: 'Confirm',
                     icon: 'arrow-forward',
                     onPress: onConfirm,
+                    disabled: teams.length === 0,
+                    mode:
+                        teams.length === 0
+                            ? 'outlined-light-error'
+                            : 'contained',
                 }}
                 secondaryButton={{
                     label: 'Cancel',
