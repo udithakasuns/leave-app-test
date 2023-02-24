@@ -2,7 +2,7 @@ import React from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import theme from 'src/utils/theme';
 
-const { pixel } = theme;
+const { pixel, colors, scale } = theme;
 
 export const SkelitonLoaderFull = () => (
     <SkeletonPlaceholder borderRadius={4}>
@@ -10,12 +10,9 @@ export const SkelitonLoaderFull = () => (
     </SkeletonPlaceholder>
 );
 
-export const SkelitonLoaderDetails = () => (
-    <SkeletonPlaceholder borderRadius={4}>
-        <SkeletonPlaceholder.Item
-            flexDirection='row'
-            alignItems='center'
-            marginTop={pixel(10)}>
+export const SkelitonLoaderContent = () => (
+    <SkeletonPlaceholder backgroundColor={colors.gray200} borderRadius={4}>
+        <SkeletonPlaceholder.Item flexDirection='row' alignItems='center'>
             <SkeletonPlaceholder.Item
                 width={pixel(80)}
                 height={pixel(40)}
@@ -23,9 +20,9 @@ export const SkelitonLoaderDetails = () => (
             />
             {[...Array(5)].map(() => (
                 <SkeletonPlaceholder.Item
-                    width={pixel(50)}
-                    height={pixel(50)}
-                    borderRadius={pixel(50)}
+                    width={scale.sc36}
+                    height={scale.sc36}
+                    borderRadius={scale.sc36 / 2}
                     marginLeft={-pixel(10)}
                 />
             ))}

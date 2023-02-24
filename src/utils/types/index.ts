@@ -377,3 +377,10 @@ export type Team = {
 export interface SelectedTeam extends Team {
     recentlySelected: boolean;
 }
+
+export type AvailableTeam = {
+    onLeaveCount: number;
+    onlineCount: number;
+    imageList: string[];
+    nameList: string[];
+};

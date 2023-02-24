@@ -12,7 +12,7 @@ interface Props {
     onSelectTeam: (team: SelectedTeam) => void;
 }
 
-const TeamChipGroup = ({ teams, onSelectTeam }: Props) => (
+const LATeamAvChipGroup = ({ teams, onSelectTeam }: Props) => (
     <View style={styles.container}>
         {teams.map(team => (
             <Chip
@@ -37,4 +37,4 @@ const TeamChipGroup = ({ teams, onSelectTeam }: Props) => (
     </View>
 );
 
-export default TeamChipGroup;
+export default LATeamAvChipGroup;

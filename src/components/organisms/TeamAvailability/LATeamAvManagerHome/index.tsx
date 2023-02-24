@@ -1,34 +1,28 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
 import { getHttpTeamAvailability } from 'src/services/http';
 import { usePersistStore } from 'src/store';
 import { getformatDateToYyyyMmDd } from 'src/utils/helpers/dateHandler';
-import { SelectedTeam, Team } from 'src/utils/types';
-import {
-    Modal,
-    TeamAvailabilityDetails,
-    TeamAvailabilityHeader,
-    TeamChipGroup,
-} from 'src/components/molecules';
+import { AvailableTeam, SelectedTeam, Team } from 'src/utils/types';
+import { Modal } from 'src/components/molecules';
 import { Spacer, Text } from 'src/components/atoms';
-import { SkelitonLoaderFull, SkelitonLoaderDetails } from './SkelitonLoader';
-import { styles } from './styles';
-import AddTeamSheetBody from '../LAManagerModals/AddTeamSheetBody';
+import {
+    LATeamAvChipGroup,
+    LATeamAvContainer,
+    LATeamAvContent,
+    LATeamAvHeader,
+} from 'src/components/molecules/LATeamAvailability';
+import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
+
+import AddTeamSheetBody from '../../ManagerHome/LAManagerModals/AddTeamSheetBody';
 
 interface Props {
     isManagerTeamsLoading: boolean;
     managerTeams: Team[];
 }
 
-type AvailableTeam = {
-    onLeaveCount: number;
-    onlineCount: number;
-    imageList: string[];
-};
-
-const LAManagerTeamAvailability = ({
+const LATeamAvManagerHome = ({
     isManagerTeamsLoading,
     managerTeams,
 }: Props) => {
@@ -103,27 +97,26 @@ const LAManagerTeamAvailability = ({
 
     return (
         <>
-            <View style={styles.container}>
-                <TeamAvailabilityHeader
-                    rightComponentType='options'
+            <LATeamAvContainer>
+                <LATeamAvHeader
+                    headerType='options'
                     onPressOption={onOpenAddTeamModal}
                 />
-                <TeamChipGroup
+                <LATeamAvChipGroup
                     teams={selectedTeams}
                     onSelectTeam={onSelectTeam}
                 />
                 <Spacer height={5} />
                 <Text>TODAY</Text>
                 {availableTeamLoading || availableTeamRefetching ? (
-                    <SkelitonLoaderDetails />
+                    <SkelitonLoaderContent />
                 ) : (
-                    <TeamAvailabilityDetails
+                    <LATeamAvContent
                         availableTeamCount={availableTeam.onlineCount}
-                        hasDateRange={false}
                         awayTeamImages={availableTeam.imageList}
                     />
                 )}
-            </View>
+            </LATeamAvContainer>
             <Modal
                 onClose={onCloseAddTeamModal}
                 isVisible={openAddTeamModal}
@@ -139,4 +132,4 @@ const LAManagerTeamAvailability = ({
     );
 };
 
-export default LAManagerTeamAvailability;
+export default LATeamAvManagerHome;

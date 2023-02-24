@@ -8,16 +8,16 @@ import { styles } from './styles';
 const { colors } = theme;
 
 interface NoneProps {
-    rightComponentType: 'none';
+    headerType: 'none';
 }
 
 interface OptionProps {
-    rightComponentType: 'options';
+    headerType: 'options';
     onPressOption: () => void;
 }
 
 interface DropdownProps {
-    rightComponentType: 'dropdown';
+    headerType: 'dropdown';
     dropDownList: string[];
     defaultItem: string;
     onSelect: (item: string) => void;
@@ -25,10 +25,10 @@ interface DropdownProps {
 
 type Props = NoneProps | OptionProps | DropdownProps;
 
-const LATeamAvailabilityHeader = (props: Props) => (
+const LATeamAvHeader = (props: Props) => (
     <View style={styles.container}>
         <Text type='SubHBold'>Team availability</Text>
-        {props.rightComponentType === 'options' ? (
+        {props.headerType === 'options' ? (
             <TouchableOpacity onPress={props.onPressOption}>
                 <Icon
                     name='dots-horizontal'
@@ -39,7 +39,7 @@ const LATeamAvailabilityHeader = (props: Props) => (
                 />
             </TouchableOpacity>
         ) : (
-            props.rightComponentType === 'dropdown' && (
+            props.headerType === 'dropdown' && (
                 <Chip
                     content={props.defaultItem}
                     rightIconName='arrow-drop-down'
@@ -56,4 +56,4 @@ const LATeamAvailabilityHeader = (props: Props) => (
     </View>
 );
 
-export default LATeamAvailabilityHeader;
+export default LATeamAvHeader;
