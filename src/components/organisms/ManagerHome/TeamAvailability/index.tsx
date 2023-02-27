@@ -8,6 +8,7 @@ import { AvailableTeam, SelectedTeam, Team } from 'src/utils/types';
 import { Modal } from 'src/components/molecules';
 import { Spacer, Text } from 'src/components/atoms';
 import {
+    LATeamAvAvailableText,
     LATeamAvChipGroup,
     LATeamAvContainer,
     LATeamAvContent,
@@ -15,17 +16,14 @@ import {
 } from 'src/components/molecules/LATeamAvailability';
 import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
 
-import AddTeamSheetBody from '../../ManagerHome/LAManagerModals/AddTeamSheetBody';
+import AddTeamSheetBody from '../LAManagerModals/AddTeamSheetBody';
 
 interface Props {
     isManagerTeamsLoading: boolean;
     managerTeams: Team[];
 }
 
-const LATeamAvManagerHome = ({
-    isManagerTeamsLoading,
-    managerTeams,
-}: Props) => {
+const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
     const {
         manager: { filteredTeams },
         setManagerFilteredTeams,
@@ -91,6 +89,22 @@ const LATeamAvManagerHome = ({
         onSetFilteredTeams();
     }, [filteredTeams]);
 
+    const getTeamAvailabilityContent = () => {
+        if (availableTeamLoading || availableTeamRefetching || !availableTeam) {
+            return <SkelitonLoaderContent />;
+        }
+        if (availableTeam.onLeaveCount === 0) {
+            return <LATeamAvAvailableText awayTeamList={[]} leaveDuration='' />;
+        }
+        return (
+            <LATeamAvContent
+                showAvailableTeamCount
+                availableTeamCount={availableTeam.onlineCount}
+                awayTeamImages={availableTeam.imageList}
+            />
+        );
+    };
+
     if (isManagerTeamsLoading || !availableTeam) {
         return <SkelitonLoaderFull />;
     }
@@ -108,14 +122,7 @@ const LATeamAvManagerHome = ({
                 />
                 <Spacer height={5} />
                 <Text>TODAY</Text>
-                {availableTeamLoading || availableTeamRefetching ? (
-                    <SkelitonLoaderContent />
-                ) : (
-                    <LATeamAvContent
-                        availableTeamCount={availableTeam.onlineCount}
-                        awayTeamImages={availableTeam.imageList}
-                    />
-                )}
+                {getTeamAvailabilityContent()}
             </LATeamAvContainer>
             <Modal
                 onClose={onCloseAddTeamModal}
@@ -132,4 +139,4 @@ const LATeamAvManagerHome = ({
     );
 };
 
-export default LATeamAvManagerHome;
+export default TeamAvailability;

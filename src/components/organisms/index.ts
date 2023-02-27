@@ -17,5 +17,4 @@ export { default as SkeletonFullLoader } from './SkeletonFullLoader';
 
 export { default as TeamAvailabilityFilterHeader } from './TeamAvailability/LATeamAvailabilityFilterHeader';
 
-export { default as TeamAvManagerAproveLeave } from './TeamAvailability/LATeamAvManagerAproveLeave';
-export { default as LATeamAvManagerHome } from './TeamAvailability/LATeamAvManagerHome';
+export { default as TeamAvilability } from './ManagerHome/TeamAvailability';

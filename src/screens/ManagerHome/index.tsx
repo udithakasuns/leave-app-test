@@ -7,7 +7,7 @@ import { ScrollView, View } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { Spacer, SwipeRefresh, Text } from 'src/components/atoms';
 import { MultiChipProps } from 'src/components/molecules';
-import { LAAppBar, LATeamAvManagerHome } from 'src/components/organisms';
+import { LAAppBar, TeamAvilability } from 'src/components/organisms';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
 import { getHttpTeamByUser } from 'src/services/http';
 import {
@@ -136,15 +136,15 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                     {getGreetingsByTime()}
                 </Text>
                 <Spacer />
-                <LATeamAvManagerHome
+                <TeamAvilability
                     managerTeams={managerTeams || []}
                     isManagerTeamsLoading={isRefetchingManagerTeams}
                 />
                 <Spacer />
                 <Text type='SubHBold'>Leave requests</Text>
                 {isLoading ? (
-                    [...Array(6)].map(() => (
-                        <SkeletonPlaceholder borderRadius={4}>
+                    [...Array(6)].map(item => (
+                        <SkeletonPlaceholder key={item} borderRadius={4}>
                             <SkeletonPlaceholder.Item
                                 flexDirection='row'
                                 alignItems='center'

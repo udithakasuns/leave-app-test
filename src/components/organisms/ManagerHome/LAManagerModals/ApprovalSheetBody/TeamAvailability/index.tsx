@@ -23,7 +23,7 @@ interface Props {
     requestDetails: PendingRequestByID;
 }
 
-const LATeamAvManagerAproveLeave = ({ requestDetails }: Props) => {
+const TeamAvailability = ({ requestDetails }: Props) => {
     const [selectedTeam, setSelectedTeam] = useState<Team>({
         teamId: -1,
         teamName: '',
@@ -33,6 +33,8 @@ const LATeamAvManagerAproveLeave = ({ requestDetails }: Props) => {
 
     const onOpenDetailModal = () => setOpenDetailModal(true);
     const onCloseDetailModal = () => setOpenDetailModal(false);
+
+    const onSelectTeam = (team: Team) => setSelectedTeam(team);
 
     const { data: employeeTeams, isLoading: isLoadingEmployeeTeams } = useQuery<
         Team[],
@@ -75,15 +77,15 @@ const LATeamAvManagerAproveLeave = ({ requestDetails }: Props) => {
         <>
             <LATeamAvContainer outline onPress={onOpenDetailModal}>
                 <LATeamAvHeader
-                    headerType={
-                        selectedTeam.teamId === -1 ? 'none' : 'dropdown'
-                    }
-                    dropDownList={employeeTeams.map(team => team.teamName)}
-                    defaultItem={selectedTeam.teamName}
-                    onSelect={() => {}}
+                    headerType='teamSelector'
+                    teams={employeeTeams}
+                    selectedTeam={selectedTeam}
+                    onSelectTeam={onSelectTeam}
                 />
                 <Spacer height={scale.vsc2} />
-                {availableTeamLoading || !availableTeam ? (
+                {availableTeamLoading ||
+                availableTeamRefetching ||
+                !availableTeam ? (
                     <SkelitonLoaderContent />
                 ) : (
                     <>
@@ -97,6 +99,7 @@ const LATeamAvManagerAproveLeave = ({ requestDetails }: Props) => {
                         <Spacer height={scale.vsc2} />
                         <LATeamAvContent
                             awayTeamImages={availableTeam.imageList}
+                            availableTeamCount={availableTeam.onlineCount}
                         />
                     </>
                 )}
@@ -106,4 +109,4 @@ const LATeamAvManagerAproveLeave = ({ requestDetails }: Props) => {
     );
 };
 
-export default LATeamAvManagerAproveLeave;
+export default TeamAvailability;

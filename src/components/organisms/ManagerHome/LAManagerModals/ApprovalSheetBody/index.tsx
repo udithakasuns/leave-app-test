@@ -6,9 +6,9 @@ import {
     ManagerRequestDetails,
     SelectionButton,
 } from 'src/components/molecules';
-import { TeamAvManagerAproveLeave } from 'src/components/organisms';
 import theme from 'src/utils/theme';
 import { PendingRequestByID, TestProps } from 'src/utils/types';
+import TeamAvailability from './TeamAvailability';
 import { styles } from './styles';
 
 interface Props extends Partial<TestProps> {
@@ -53,7 +53,7 @@ const ApprovalSheetBody = ({
             iconLibrary='svg'
             onPress={() => {}}
         /> */}
-        <TeamAvManagerAproveLeave requestDetails={requestDetails} />
+        <TeamAvailability requestDetails={requestDetails} />
         <Spacer />
         <ButtonDock
             iconPosition='left'

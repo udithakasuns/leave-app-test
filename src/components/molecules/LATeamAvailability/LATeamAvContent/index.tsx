@@ -8,14 +8,16 @@ import { styles } from './styles';
 const { colors } = theme;
 
 interface Props {
+    showAvailableTeamCount: boolean;
     availableTeamCount: number;
     awayTeamImages: string[];
 }
 
 const LATeamAvContent = ({
+    showAvailableTeamCount = false,
     availableTeamCount,
     awayTeamImages,
-}: AtLeast<Props, 'awayTeamImages'>) => {
+}: AtLeast<Props, 'availableTeamCount' | 'awayTeamImages'>) => {
     const displayTeamCountContent = () => {
         if (awayTeamImages.length === 0) {
             return null;
@@ -45,41 +47,48 @@ const LATeamAvContent = ({
         </View>
     );
 
-    const displayImagContent = () => (
-        <View style={styles.container}>
-            {awayTeamImages.slice(0, 5).map((image, index) => (
-                <Avatar
-                    key={image}
-                    size={AvatarSize.small}
-                    source={{
-                        uri: image,
-                    }}
-                    style={
-                        index === 0 ? styles.avatar : styles.avatarWithLeftSpace
-                    }
+    const displayImagContent = () => {
+        if (awayTeamImages.length === 0) {
+            return null;
+        }
+        return (
+            <View style={styles.container}>
+                {awayTeamImages.slice(0, 5).map((image, index) => (
+                    <Avatar
+                        key={image}
+                        size={AvatarSize.small}
+                        source={{
+                            uri: image,
+                        }}
+                        style={
+                            index === 0
+                                ? styles.avatar
+                                : styles.avatarWithLeftSpace
+                        }
+                    />
+                ))}
+                {awayTeamImages.length > 5 && (
+                    <View style={styles.plusIcon}>
+                        <Text color={colors.iconLabel}>
+                            +{awayTeamImages.length - 5}
+                        </Text>
+                    </View>
+                )}
+                <Chip
+                    content='Away'
+                    contentColor={colors.red800}
+                    contentTextType='ParaSM'
+                    backgroundColor={colors.errorBackground}
+                    containerStyle={styles.awayChip}
                 />
-            ))}
-            {awayTeamImages.length > 5 && (
-                <View style={styles.plusIcon}>
-                    <Text color={colors.iconLabel}>
-                        +{awayTeamImages.length - 5}
-                    </Text>
-                </View>
-            )}
-            <Chip
-                content='Away'
-                contentColor={colors.red800}
-                contentTextType='ParaSM'
-                backgroundColor={colors.errorBackground}
-                containerStyle={styles.awayChip}
-            />
-        </View>
-    );
+            </View>
+        );
+    };
 
     return (
         <View style={styles.container}>
-            {availableTeamCount !== undefined && displayTeamCountContent()}
-            {awayTeamImages.length === 0
+            {showAvailableTeamCount && displayTeamCountContent()}
+            {availableTeamCount === 0 && awayTeamImages.length === 0
                 ? displayEmptyDataContent()
                 : displayImagContent()}
         </View>

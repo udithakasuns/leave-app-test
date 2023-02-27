@@ -15,8 +15,9 @@ export const SkelitonLoaderContent = () => (
         <SkeletonPlaceholder.Item marginTop={scale.vsc2}>
             <SkeletonPlaceholder.Item width={pixel(200)} height={pixel(20)} />
             <SkeletonPlaceholder.Item marginTop={pixel(10)} flexDirection='row'>
-                {[...Array(5)].map((_, index) => (
+                {[...Array(5)].map((item, index) => (
                     <SkeletonPlaceholder.Item
+                        key={item}
                         width={scale.sc36}
                         height={scale.sc36}
                         borderRadius={scale.sc36 / 2}
