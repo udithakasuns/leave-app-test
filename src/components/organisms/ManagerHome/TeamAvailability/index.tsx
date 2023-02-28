@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 import { getHttpTeamAvailability } from 'src/services/http';
 import { usePersistStore } from 'src/store';
 import { getformatDateToYyyyMmDd } from 'src/utils/helpers/dateHandler';
 import { AvailableTeam, SelectedTeam, Team } from 'src/utils/types';
 import { Modal } from 'src/components/molecules';
-import { Spacer, Text } from 'src/components/atoms';
+import { Text } from 'src/components/atoms';
 import {
     LATeamAvAvailableText,
     LATeamAvChipGroup,
@@ -16,6 +17,7 @@ import {
 } from 'src/components/molecules/LATeamAvailability';
 import { TID } from 'src/utils/testIds';
 import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
+import { styles } from './styles';
 
 import AddTeamSheetBody from '../LAManagerModals/AddTeamSheetBody';
 
@@ -91,7 +93,9 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
     };
 
     useEffect(() => {
-        onSetSelectedTeam();
+        if (filteredTeams) {
+            onSetSelectedTeam();
+        }
     }, [filteredTeams]);
 
     if (isManagerTeamsLoading || !availableTeam) {
@@ -109,9 +113,13 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
                     teams={selectedTeams}
                     onSelectTeam={onSelectTeam}
                 />
-                <Spacer height={5} />
-                <Text testID={`${TID}TEXT_TEAM_AVAILABLITY_TODAY`}>TODAY</Text>
-                {getTeamAvailabilityContent()}
+
+                <View style={styles.conentContainer}>
+                    <Text testID={`${TID}TEXT_TEAM_AVAILABLITY_TODAY`}>
+                        TODAY
+                    </Text>
+                    {getTeamAvailabilityContent()}
+                </View>
             </LATeamAvContainer>
             <Modal
                 onClose={onCloseAddTeamModal}

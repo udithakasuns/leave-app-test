@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { FlatList } from 'react-native';
 import { Chip } from 'src/components/atoms';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
@@ -14,29 +14,33 @@ interface Props {
 }
 
 const LATeamAvChipGroup = ({ teams, onSelectTeam }: Props) => (
-    <View style={styles.container}>
-        {teams.map((team, index) => (
+    <FlatList
+        horizontal
+        data={teams}
+        keyExtractor={item => item.teamId.toString()}
+        showsHorizontalScrollIndicator={false}
+        renderItem={({ item, index }) => (
             <Chip
-                testIdContent={`${TID}CHIP_${team.teamName}_${index}`}
-                key={team.teamId}
-                content={team.teamName}
+                testIdContent={`${TID}CHIP_${item.teamName}_${index}`}
+                key={item.teamId}
+                content={item.teamName}
                 containerStyle={styles.chip}
                 contentColor={colors.black}
                 outline
                 outlineColor={
-                    team.recentlySelected
+                    item.recentlySelected
                         ? colors.secondaryOutline
                         : colors.secondaryGray
                 }
                 backgroundColor={
-                    team.recentlySelected
+                    item.recentlySelected
                         ? colors.secondaryBackground
                         : colors.tertiaryColor
                 }
-                onPressChip={() => onSelectTeam(team)}
+                onPressChip={() => onSelectTeam(item)}
             />
-        ))}
-    </View>
+        )}
+    />
 );
 
 export default LATeamAvChipGroup;

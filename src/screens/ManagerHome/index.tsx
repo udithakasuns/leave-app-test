@@ -106,7 +106,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
             keepPreviousData: true,
             enabled: false,
             onSuccess: teams => {
-                if (filteredTeams.length === 0) {
+                if (!filteredTeams || filteredTeams.length === 0) {
                     setManagerFilteredTeams(teams);
                 }
             },
