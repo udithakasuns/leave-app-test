@@ -1,4 +1,4 @@
-const TID = 'test:id/';
+export const TID = 'test:id/';
 
 export const TID_NOTFIFICATION_BELL_ICON = `${TID}NOTFIFICATION_BELL_ICON`;
 export const TID_NOTFIFICATION_LIST = `${TID}NOTFIFICATION_LIST`;

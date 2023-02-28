@@ -13,6 +13,7 @@ import { getHttpTeamByUser } from 'src/services/http';
 import {
     useManagerFilterStore,
     useManagerStore,
+    usePersistStore,
     useUserStore,
 } from 'src/store';
 import { getGreetingsByTime } from 'src/utils/helpers/dateHandler';
@@ -43,6 +44,11 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         setEmptyFilterUtils,
         resetFilterUtils,
     } = useManagerFilterStore();
+
+    const {
+        manager: { filteredTeams },
+        setManagerFilteredTeams,
+    } = usePersistStore();
 
     const {
         data: leaveRequests,
@@ -99,6 +105,11 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         {
             keepPreviousData: true,
             enabled: false,
+            onSuccess: teams => {
+                if (filteredTeams.length === 0) {
+                    setManagerFilteredTeams(teams);
+                }
+            },
         },
     );
 
@@ -146,6 +157,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                     [...Array(6)].map(item => (
                         <SkeletonPlaceholder key={item} borderRadius={4}>
                             <SkeletonPlaceholder.Item
+                                key={item * 2}
                                 flexDirection='row'
                                 alignItems='center'
                                 height={deviceDimensions.height / 16}

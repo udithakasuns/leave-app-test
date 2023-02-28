@@ -8,6 +8,7 @@ import {
 } from 'src/components/atoms';
 import { ButtonDock } from 'src/components/molecules';
 import { usePersistStore } from 'src/store';
+import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import { Team } from 'src/utils/types';
 import SelecetedTeams from './SelectedTeams';
@@ -98,15 +99,22 @@ const AddTeamSheetBody = ({ allTeams, onClose }: Props) => {
             <SelecetedTeams teams={teams} onRemoveTeam={onRemoveTeam} />
             <Spacer height={scale.vsc1} />
             <View style={styles.infoText}>
-                <Text type='ParaLG' color={colors.gray600}>
+                <Text
+                    testID={`${TID}TEXT_MAX_TEAMS_VALIDATION`}
+                    type='ParaLG'
+                    color={colors.gray600}>
                     You can add up to 3 teams
                 </Text>
-                <Text type='ParaLG' color={colors.gray600}>
+                <Text
+                    testID={`${TID}TEXT_MAX_TEAMS_NUMBER`}
+                    type='ParaLG'
+                    color={colors.gray600}>
                     {teams.length}/3 teams
                 </Text>
             </View>
             <Spacer height={scale.vsc10} />
             <MultiSearchableDropdown
+                testIdInput={`${TID}DROPDOWN_TEAM_SEARCH`}
                 disabled={teams.length === 3}
                 value={text}
                 onChangeText={val => setText(val)}
@@ -118,6 +126,7 @@ const AddTeamSheetBody = ({ allTeams, onClose }: Props) => {
             <ButtonDock
                 iconPosition='left'
                 primaryButton={{
+                    testIdLabel: `${TID}BUTTON_CONFIRM`,
                     label: 'Confirm',
                     icon: 'arrow-forward',
                     onPress: onConfirm,
@@ -128,6 +137,7 @@ const AddTeamSheetBody = ({ allTeams, onClose }: Props) => {
                             : 'contained',
                 }}
                 secondaryButton={{
+                    testIdLabel: `${TID}BUTTON_CANCEL`,
                     label: 'Cancel',
                     onPress: onClose,
                 }}

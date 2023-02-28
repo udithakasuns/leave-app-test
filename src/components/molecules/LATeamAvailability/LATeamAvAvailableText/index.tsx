@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text } from 'src/components/atoms';
+import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 
 const { colors } = theme;
@@ -32,7 +33,13 @@ const LATeamAvAvailabileText = ({ awayTeamList, leaveDuration }: Props) => {
         return `${leaveDuration} - ${firstName}, ${secondName} and more are away`;
     };
 
-    return <Text color={colors.tertiaryLabel}>{getDisplayText()}</Text>;
+    return (
+        <Text
+            testID={`${TID}TEXT_TEAM_AVAILABILITY`}
+            color={colors.tertiaryLabel}>
+            {getDisplayText()}
+        </Text>
+    );
 };
 
 export default LATeamAvAvailabileText;

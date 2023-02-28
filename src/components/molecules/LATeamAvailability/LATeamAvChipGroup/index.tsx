@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Chip } from 'src/components/atoms';
+import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import { SelectedTeam } from 'src/utils/types';
 import { styles } from './styles';
@@ -14,8 +15,9 @@ interface Props {
 
 const LATeamAvChipGroup = ({ teams, onSelectTeam }: Props) => (
     <View style={styles.container}>
-        {teams.map(team => (
+        {teams.map((team, index) => (
             <Chip
+                testIdContent={`${TID}CHIP_${team.teamName}_${index}`}
                 key={team.teamId}
                 content={team.teamName}
                 containerStyle={styles.chip}

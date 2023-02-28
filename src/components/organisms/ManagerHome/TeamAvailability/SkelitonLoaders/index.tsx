@@ -12,15 +12,19 @@ export const SkelitonLoaderFull = () => (
 
 export const SkelitonLoaderContent = () => (
     <SkeletonPlaceholder backgroundColor={colors.gray200} borderRadius={4}>
-        <SkeletonPlaceholder.Item flexDirection='row' alignItems='center'>
+        <SkeletonPlaceholder.Item
+            key={1}
+            flexDirection='row'
+            alignItems='center'>
             <SkeletonPlaceholder.Item
+                key={2}
                 width={pixel(80)}
                 height={pixel(40)}
                 marginRight={pixel(70)}
             />
             {[...Array(5)].map(item => (
                 <SkeletonPlaceholder.Item
-                    key={item + 1}
+                    key={item + 3}
                     width={scale.sc36}
                     height={scale.sc36}
                     borderRadius={scale.sc36 / 2}

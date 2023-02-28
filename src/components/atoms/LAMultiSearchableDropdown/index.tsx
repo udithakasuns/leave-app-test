@@ -4,6 +4,7 @@ import { View, TextInput, ScrollView } from 'react-native';
 import { Input, InputProps } from 'components/atoms';
 import { AtLeast } from 'src/utils/types';
 import theme from 'src/utils/theme';
+import { TID } from 'src/utils/testIds';
 import { styles } from './style';
 import DropdownItem from './DropdownItem';
 
@@ -27,6 +28,7 @@ interface Props extends InputProps {
 }
 
 const LAMultiSearchableDropdown = ({
+    testIdInput,
     testIdDropDownList,
     testIdDropDownItem,
     testIdDropdownContent,
@@ -66,6 +68,7 @@ const LAMultiSearchableDropdown = ({
     return (
         <View style={styles.container}>
             <Input
+                testIdInput={testIdInput}
                 reference={inputRef}
                 placeholder=''
                 label={label || ''}
@@ -91,8 +94,8 @@ const LAMultiSearchableDropdown = ({
                             ) {
                                 return (
                                     <DropdownItem
-                                        testIdItem={testIdDropDownItem}
-                                        testIdContent={testIdDropdownContent}
+                                        testIdItem={`${TID}DROPDOWN_ITEM`}
+                                        testIdContent={`${TID}DROPDOWN_TEXT_${item.label}_${index}`}
                                         key={item.id}
                                         label={item.label}
                                         isSelected={item.isSelected}

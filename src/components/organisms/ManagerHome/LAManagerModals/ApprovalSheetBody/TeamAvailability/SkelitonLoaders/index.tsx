@@ -12,12 +12,19 @@ export const SkelitonLoaderFull = () => (
 
 export const SkelitonLoaderContent = () => (
     <SkeletonPlaceholder backgroundColor={colors.gray300} borderRadius={4}>
-        <SkeletonPlaceholder.Item marginTop={scale.vsc2}>
-            <SkeletonPlaceholder.Item width={pixel(200)} height={pixel(20)} />
-            <SkeletonPlaceholder.Item marginTop={pixel(10)} flexDirection='row'>
+        <SkeletonPlaceholder.Item key={1} marginTop={scale.vsc2}>
+            <SkeletonPlaceholder.Item
+                key={2}
+                width={pixel(200)}
+                height={pixel(20)}
+            />
+            <SkeletonPlaceholder.Item
+                key={3}
+                marginTop={pixel(10)}
+                flexDirection='row'>
                 {[...Array(5)].map((item, index) => (
                     <SkeletonPlaceholder.Item
-                        key={item}
+                        key={item + 4}
                         width={scale.sc36}
                         height={scale.sc36}
                         borderRadius={scale.sc36 / 2}

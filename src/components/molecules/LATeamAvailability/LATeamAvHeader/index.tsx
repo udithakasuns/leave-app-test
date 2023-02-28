@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Chip, Icon, IconSize, Text } from 'src/components/atoms';
+import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import { Team } from 'src/utils/types';
 import { Modal, SelectableButton } from '../..';
@@ -35,7 +36,9 @@ const LATeamAvHeader = (props: Props) => {
 
     return (
         <View style={styles.container}>
-            <Text type='SubHBold'>Team availability</Text>
+            <Text testID={`${TID}TEXT_TEAM_AVAILABILITY_TITLE`} type='SubHBold'>
+                Team availability
+            </Text>
             {props.headerType === 'options' ? (
                 <TouchableOpacity onPress={props.onPressOption}>
                     <Icon
@@ -50,6 +53,7 @@ const LATeamAvHeader = (props: Props) => {
                 props.headerType === 'teamSelector' && (
                     <>
                         <Chip
+                            testIdContent={`${TID}SELECTED_TEAM`}
                             onPressChip={onOpenTeamSelector}
                             content={props.selectedTeam.teamName}
                             rightIconName='arrow-drop-down'
@@ -69,6 +73,7 @@ const LATeamAvHeader = (props: Props) => {
                                 <View>
                                     {props.teams.map((team, index) => (
                                         <SelectableButton
+                                            testIdLabel={`${TID}SELECTABLE_ITEM_${team.teamName}_${index}`}
                                             key={team.teamId}
                                             label={team.teamName}
                                             index={index}

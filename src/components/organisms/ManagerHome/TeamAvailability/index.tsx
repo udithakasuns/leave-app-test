@@ -14,6 +14,7 @@ import {
     LATeamAvContent,
     LATeamAvHeader,
 } from 'src/components/molecules/LATeamAvailability';
+import { TID } from 'src/utils/testIds';
 import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
 
 import AddTeamSheetBody from '../LAManagerModals/AddTeamSheetBody';
@@ -26,34 +27,22 @@ interface Props {
 const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
     const {
         manager: { filteredTeams },
-        setManagerFilteredTeams,
     } = usePersistStore();
 
     const [selectedTeams, setSelectedTeams] = useState<SelectedTeam[]>([]);
     const [openAddTeamModal, setAddTeamModal] = useState<boolean>(false);
 
+    const onSetSelectedTeam = () => {
+        setSelectedTeams(
+            filteredTeams.map((team, index) => ({
+                ...team,
+                recentlySelected: index === 0,
+            })),
+        );
+    };
+
     const onOpenAddTeamModal = () => setAddTeamModal(true);
     const onCloseAddTeamModal = () => setAddTeamModal(false);
-
-    const onSetFilteredTeams = () => {
-        if (filteredTeams.length === 0) {
-            // Set 1st 3 teams set to the persist store
-            setManagerFilteredTeams([...managerTeams.slice(0, 3)]);
-            setSelectedTeams(
-                managerTeams.map((team, index) => ({
-                    ...team,
-                    recentlySelected: index === 0,
-                })),
-            );
-        } else {
-            setSelectedTeams(
-                filteredTeams.map((team, index) => ({
-                    ...team,
-                    recentlySelected: index === 0,
-                })),
-            );
-        }
-    };
 
     const onSelectTeam = (team: SelectedTeam) => {
         selectedTeams.forEach((selectedTeam, index) => {
@@ -85,10 +74,6 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
         },
     );
 
-    useEffect(() => {
-        onSetFilteredTeams();
-    }, [filteredTeams]);
-
     const getTeamAvailabilityContent = () => {
         if (availableTeamLoading || availableTeamRefetching || !availableTeam) {
             return <SkelitonLoaderContent />;
@@ -104,6 +89,10 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
             />
         );
     };
+
+    useEffect(() => {
+        onSetSelectedTeam();
+    }, [filteredTeams]);
 
     if (isManagerTeamsLoading || !availableTeam) {
         return <SkelitonLoaderFull />;
@@ -121,7 +110,7 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
                     onSelectTeam={onSelectTeam}
                 />
                 <Spacer height={5} />
-                <Text>TODAY</Text>
+                <Text testID={`${TID}TEXT_TEAM_AVAILABLITY_TODAY`}>TODAY</Text>
                 {getTeamAvailabilityContent()}
             </LATeamAvContainer>
             <Modal

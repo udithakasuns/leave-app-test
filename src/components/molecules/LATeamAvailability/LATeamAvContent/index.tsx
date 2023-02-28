@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Avatar, AvatarSize, Chip, Text } from 'src/components/atoms';
+import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import { AtLeast } from 'src/utils/types';
 import { styles } from './styles';
@@ -24,8 +25,11 @@ const LATeamAvContent = ({
         }
         return (
             <View style={styles.availableContainer}>
-                <Text type='H1Bold'>{availableTeamCount}</Text>
+                <Text testID={`${TID}TEXT_AVAILABLE_COUNT`} type='H1Bold'>
+                    {availableTeamCount}
+                </Text>
                 <Chip
+                    testIdContent={`${TID}CHIP_ONLINE`}
                     content='Online'
                     contentColor={colors.green800}
                     contentTextType='ParaSM'
@@ -38,10 +42,17 @@ const LATeamAvContent = ({
 
     const displayEmptyDataContent = () => (
         <View style={styles.emtyContainer}>
-            <Text numberOfLines={2} type='ParaLGBold'>
+            <Text
+                testID={`${TID}TEXT_NO_DATA`}
+                numberOfLines={2}
+                type='ParaLGBold'>
                 🧐 No data for this team
             </Text>
-            <Text numberOfLines={2} type='ParaSM' color={colors.gray700}>
+            <Text
+                testID={`${TID}TEXT_SUB_NO_DATA`}
+                numberOfLines={2}
+                type='ParaSM'
+                color={colors.gray700}>
                 There is no availability data for this team yet.
             </Text>
         </View>
@@ -55,6 +66,7 @@ const LATeamAvContent = ({
             <View style={styles.container}>
                 {awayTeamImages.slice(0, 5).map((image, index) => (
                     <Avatar
+                        testId={`${TID}IMAGE_AVATAR_${index}`}
                         key={image}
                         size={AvatarSize.small}
                         source={{
@@ -69,12 +81,15 @@ const LATeamAvContent = ({
                 ))}
                 {awayTeamImages.length > 5 && (
                     <View style={styles.plusIcon}>
-                        <Text color={colors.iconLabel}>
+                        <Text
+                            testID={`${TID}TEXT_AWAY_COUNT`}
+                            color={colors.iconLabel}>
                             +{awayTeamImages.length - 5}
                         </Text>
                     </View>
                 )}
                 <Chip
+                    testIdContent={`${TID}CHIP_AWAY`}
                     content='Away'
                     contentColor={colors.red800}
                     contentTextType='ParaSM'
