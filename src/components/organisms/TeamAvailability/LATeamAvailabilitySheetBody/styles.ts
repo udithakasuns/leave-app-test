@@ -31,6 +31,12 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         marginLeft: pixel(23),
     },
+    rangeListContainer: {
+        backgroundColor: colors.tertiaryColor,
+        padding: scale.sc12,
+        borderRadius: scale.sc64,
+        marginRight: scale.sc4,
+    },
     textStyle: {
         color: colors.white,
         fontSize: fontSize.fs16,

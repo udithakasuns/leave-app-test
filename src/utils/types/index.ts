@@ -35,6 +35,7 @@ export type Colors = {
     red50: string;
     lime50: string;
     lime200: string;
+    lime800: string;
     grey600: string;
     iconLabel: string;
 };
@@ -377,10 +378,17 @@ export type Team = {
 export interface SelectedTeam extends Team {
     recentlySelected: boolean;
 }
-
+export interface AwayTeamByDate {
+    date: string;
+    employeeResponseDtos: EmployeeType[];
+}
 export type AvailableTeam = {
     onLeaveCount: number;
     onlineCount: number;
     imageList: string[];
     nameList: string[];
 };
+export interface EmployeeOnLeaveByDay {
+    employeeOnLeaveByDayResponseDtoList: AwayTeamByDate[];
+    adminEmployeesOnLeaveByTeamDto: AvailableTeam;
+}

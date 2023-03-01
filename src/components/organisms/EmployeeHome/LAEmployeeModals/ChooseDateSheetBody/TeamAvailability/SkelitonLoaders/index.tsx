@@ -20,7 +20,7 @@ export const SkelitonLoaderContent = () => (
             />
             <SkeletonPlaceholder.Item
                 key={3}
-                marginTop={pixel(5)}
+                marginTop={pixel(10)}
                 flexDirection='row'>
                 {[...Array(5)].map((item, index) => (
                     <SkeletonPlaceholder.Item

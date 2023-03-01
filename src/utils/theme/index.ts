@@ -42,6 +42,7 @@ const colors: Colors = {
     green800: '#166534',
     lime50: '#F7FEE7',
     lime200: '#D9F99D',
+    lime800: '#3F6212',
     pending: '#FCD34D',
 
     iconLabel: '#D97706',

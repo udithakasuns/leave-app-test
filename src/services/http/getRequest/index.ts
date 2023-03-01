@@ -113,15 +113,13 @@ export const getHttpAwayEmployees = async ({
     teamId,
     startDate,
     endDate,
-    imageOnly = true,
 }: {
     teamId: number;
     startDate: string;
     endDate: string;
-    imageOnly?: boolean;
 }) => {
     const res = await axiosInstance.get(
-        `/v1/admin/onleave-detailed?startDate=${startDate}&endDate=${endDate}&teamId=${teamId}&imageOnly=${imageOnly}`,
+        `/v1/admin/onleave-detailed?startDate=${startDate}&endDate=${endDate}&teamId=${teamId}`,
     );
     return res.data.results[0];
 };
