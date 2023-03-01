@@ -15,6 +15,4 @@ export { default as TeamAvailabilitySheetBody } from './TeamAvailability/LATeamA
 export { default as NotificationFilterHeader } from './Notification/LANotificationFilterHeader';
 export { default as SkeletonFullLoader } from './SkeletonFullLoader';
 
-export { default as TeamAvailabilityFilterHeader } from './TeamAvailability/LATeamAvailabilityFilterHeader';
-
 export { default as TeamAvilability } from './ManagerHome/TeamAvailability';

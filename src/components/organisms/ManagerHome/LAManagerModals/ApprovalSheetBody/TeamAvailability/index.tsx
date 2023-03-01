@@ -116,10 +116,6 @@ const TeamAvailability = ({ requestDetails }: Props) => {
                                 requestDetails.startDate,
                                 requestDetails.endDate,
                             )}
-                            availableCount={
-                                availableTeam.adminEmployeesOnLeaveByTeamDto
-                                    .onlineCount
-                            }
                         />
                         <Spacer height={scale.vsc2} />
                         <LATeamAvContent

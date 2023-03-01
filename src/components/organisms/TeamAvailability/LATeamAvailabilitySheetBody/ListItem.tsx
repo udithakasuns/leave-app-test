@@ -9,8 +9,6 @@ import LAText from 'src/components/atoms/LAText';
 import { EmployeeType } from 'src/utils/types';
 import { styles } from './styles';
 
-const { colors, scale, pixel } = theme;
-
 interface Props {
     date: string;
     awayMemberDetailsList: EmployeeType[];
@@ -23,14 +21,7 @@ const ListItem = ({ date, awayMemberDetailsList }: Props) => (
         </View>
         <View style={styles.listItemRightContainer}>
             {awayMemberDetailsList.length === 0 ? (
-                <View
-                    style={{
-                        backgroundColor: colors.lime200,
-                        borderColor: colors.lime800,
-                        borderWidth: 1,
-                        borderRadius: scale.sc36,
-                        padding: scale.sc4,
-                    }}>
+                <View style={styles.listItemRightContainerText}>
                     <LAText>🥳 Full team available</LAText>
                 </View>
             ) : awayMemberDetailsList.length <= 2 ? (
@@ -40,13 +31,7 @@ const ListItem = ({ date, awayMemberDetailsList }: Props) => (
                         source={{
                             uri: item.authPic ?? '',
                         }}
-                        containerStyle={{
-                            paddingVertical: scale.sc1,
-                            backgroundColor: colors.white,
-                            marginRight: scale.sc6,
-                            maxWidth: pixel(121),
-                            minWidth: pixel(140),
-                        }}
+                        containerStyle={styles.expandAvatarStyle}
                         labelStyle={{
                             flex: 1,
                         }}
