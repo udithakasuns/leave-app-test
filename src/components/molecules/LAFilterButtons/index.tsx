@@ -22,7 +22,8 @@ const LAFilterButtons = ({
 }: Props) => (
     <View style={styles.container}>
         <Chip
-            content={`Sort by : ${sortBy}`}
+            // content={`Sort by : ${sortBy}`}
+            content={`${sortBy}`}
             rightIconName='arrow-drop-down'
             outline
             disabled={disabled}
