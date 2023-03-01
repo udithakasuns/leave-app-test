@@ -16,6 +16,7 @@ import {
 } from 'src/utils/testIds';
 import {
     ApplyFormValues,
+    AwayTeamByDate,
     EmployeeModal,
     PartialBy,
     TestProps,
@@ -39,6 +40,7 @@ export type ModalProps = {
     lastNudgedDateTime: string | null;
     startDate: string;
     endDate: string;
+    awayMemberList: AwayTeamByDate[];
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
@@ -64,6 +66,7 @@ const LAEmployeeModals = ({
     isNudgeVisble,
     startDate,
     endDate,
+    awayMemberList,
     onClose,
     onBackPress,
     onPressSelectDate,
@@ -78,113 +81,6 @@ const LAEmployeeModals = ({
     const [isHalfSelected, setIsHalfSelected] = useState(false);
     const { employeeRequest } = useEmployeeStore();
     const { managers } = useRecipientStore();
-    const details = [
-        {
-            id: '11',
-            employee: [
-                {
-                    name: 'Nimashi',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-                {
-                    name: 'Gayani',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-                {
-                    name: 'Gayani',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-            ],
-        },
-        {
-            id: '12',
-            employee: [
-                {
-                    name: 'Nirosha',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-                {
-                    name: 'Oshi',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-            ],
-        },
-        {
-            id: '13',
-            employee: [
-                {
-                    name: 'Nirosha',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-            ],
-        },
-        {
-            id: '14',
-            employee: [
-                // {
-                //     name: 'Nirosha',
-                //     authPic:
-                //         'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                // },
-                // {
-                //     name: 'Oshi',
-                //     authPic:
-                //         'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                // },
-            ],
-        },
-        {
-            id: '15',
-            employee: [
-                {
-                    name: 'Nirosha',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-                {
-                    name: 'Oshi',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-            ],
-        },
-        {
-            id: '16',
-            employee: [
-                {
-                    name: 'Nirosha',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-                {
-                    name: 'Oshi',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-            ],
-        },
-        {
-            id: '17',
-            employee: [
-                {
-                    name: 'Nirosha',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-                {
-                    name: 'Oshi',
-                    authPic:
-                        'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-                },
-            ],
-        },
-    ];
 
     const onCancellation = () => {
         setIsHalfSelected(false);
@@ -389,12 +285,10 @@ const LAEmployeeModals = ({
                     style={styles.commonStyle}
                     sheetBody={
                         <TeamAvailabilitySheetBody
-                            awayMemberList={details}
+                            awayTeamsByDate={awayMemberList || []}
                             onPressGoBack={() => {
                                 onBackPress(EmployeeModal.CHOSE_DATE_MODAL);
                             }}
-                            startDate={startDate || ''}
-                            endDate={endDate || ''}
                         />
                     }
                 />

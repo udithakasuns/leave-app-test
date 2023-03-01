@@ -81,7 +81,13 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
             return <SkelitonLoaderContent />;
         }
         if (availableTeam.onLeaveCount === 0) {
-            return <LATeamAvAvailableText awayTeamList={[]} leaveDuration='' />;
+            return (
+                <LATeamAvAvailableText
+                    awayTeamList={[]}
+                    leaveDuration=''
+                    availableCount={availableTeam.onlineCount}
+                />
+            );
         }
         return (
             <LATeamAvContent

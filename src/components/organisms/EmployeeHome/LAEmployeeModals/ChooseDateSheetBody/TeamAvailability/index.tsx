@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Spacer } from 'src/components/atoms';
 import { Modal } from 'src/components/molecules';
 import {
@@ -11,30 +11,30 @@ import {
 } from 'src/components/molecules/LATeamAvailability';
 import { TeamAvailabilitySheetBody } from 'src/components/organisms';
 import { getHttpAwayEmployees, getHttpTeamByUser } from 'src/services/http';
+import { useUserStore } from 'src/store';
 import {
-    getCalendarRangeDate,
     getformatDateToYyyyMmDd,
+    getFormattedDay,
 } from 'src/utils/helpers/dateHandler';
 import theme from 'src/utils/theme';
-import {
-    AvailableTeam,
-    EmployeeOnLeaveByDay,
-    PendingRequestByID,
-    Team,
-} from 'src/utils/types';
+import { EmployeeOnLeaveByDay, Team } from 'src/utils/types';
 import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
 
 const { scale } = theme;
 
 interface Props {
-    requestDetails: PendingRequestByID;
+    startDate: string;
+    endDate: string;
 }
 
-const TeamAvailability = ({ requestDetails }: Props) => {
+const TeamAvailability = ({ startDate, endDate }: Props) => {
     const [selectedTeam, setSelectedTeam] = useState<Team>({
         teamId: -1,
         teamName: '',
     });
+    const {
+        user: { userId },
+    } = useUserStore();
 
     const [openDetailModal, setOpenDetailModal] = useState<boolean>(false);
 
@@ -46,44 +46,76 @@ const TeamAvailability = ({ requestDetails }: Props) => {
     const { data: employeeTeams, isLoading: isLoadingEmployeeTeams } = useQuery<
         Team[],
         AxiosError
-    >(
-        ['fetchEmployeeTeams', requestDetails],
-        () => getHttpTeamByUser(requestDetails.employee.employeeId),
-        {
-            keepPreviousData: true,
-            onSuccess: teams => {
-                if (teams.length > 0) {
-                    setSelectedTeam(teams[0]);
-                }
-            },
+    >(['fetchEmployeeTeams'], () => getHttpTeamByUser(userId), {
+        keepPreviousData: true,
+        onSuccess: teams => {
+            if (teams.length > 0) {
+                setSelectedTeam(teams[0]);
+            }
         },
-    );
+    });
+    // const {
+    //     isLoading: availableTeamOnlyDateLoading,
+    //     isRefetching: availableTeamOnlyDateRefetching,
+    //     data: availableTeamOnlyDate,
+    // } = useQuery<AvailableTeam, AxiosError>(
+    //     [selectedTeam, startDate],
+    //     () =>
+    //         getHttpTeamAvailability({
+    //             date: getformatDateToYyyyMmDd(startDate),
+    //             teamIds: [selectedTeam.teamId],
+    //         }),
+    //     {
+    //         enabled: startDate !== '' && endDate === '',
+    //         keepPreviousData: true,
+    //     },
+    // );
 
+    // const {
+    //     isLoading: availableTeamLoading,
+    //     isRefetching: availableTeamRefetching,
+    //     data: availableTeam,
+    //     refetch: refetchAvailableTeam,
+    // } = useQuery<EmployeeOnLeaveByDay, AxiosError>(
+    //     [selectedTeam, startDate, endDate],
+    //     () => {
+    //         if (startDate !== '' && endDate !== '') {
+    //             return getHttpAwayEmployees({
+    //                 startDate: getformatDateToYyyyMmDd(startDate),
+    //                 endDate: getformatDateToYyyyMmDd(endDate),
+    //                 teamId: selectedTeam.teamId,
+    //             });
+    //         }
+    //         return null;
+    //     },
+    //     {
+    //         keepPreviousData: true,
+    //     },
+    // );
     const {
         isLoading: availableTeamLoading,
         isRefetching: availableTeamRefetching,
+        refetch: refetchAvailableTeam,
         data: availableTeam,
     } = useQuery<EmployeeOnLeaveByDay, AxiosError>(
-        [selectedTeam],
+        [selectedTeam, startDate, endDate],
         () =>
             getHttpAwayEmployees({
-                startDate: getformatDateToYyyyMmDd(requestDetails.startDate),
-                endDate: getformatDateToYyyyMmDd(
-                    requestDetails.endDate
-                        ? requestDetails.endDate
-                        : requestDetails.startDate,
-                ),
+                startDate: getformatDateToYyyyMmDd(startDate),
+                endDate: getformatDateToYyyyMmDd(endDate || startDate),
                 teamId: selectedTeam.teamId,
             }),
         {
             keepPreviousData: true,
         },
     );
+    useEffect(() => {
+        refetchAvailableTeam();
+    }, [selectedTeam, startDate, endDate]);
 
     if (isLoadingEmployeeTeams || !employeeTeams) {
         return <SkelitonLoaderFull />;
     }
-
     return (
         <>
             <LATeamAvContainer
@@ -112,17 +144,21 @@ const TeamAvailability = ({ requestDetails }: Props) => {
                                 availableTeam.adminEmployeesOnLeaveByTeamDto
                                     .nameList
                             }
-                            leaveDuration={getCalendarRangeDate(
-                                requestDetails.startDate,
-                                requestDetails.endDate,
-                            )}
+                            leaveDuration={
+                                startDate && endDate
+                                    ? `${getFormattedDay(
+                                          startDate,
+                                      )} - ${getFormattedDay(endDate)}`
+                                    : getFormattedDay(startDate)
+                            }
                             availableCount={
                                 availableTeam.adminEmployeesOnLeaveByTeamDto
-                                    .onlineCount
+                                    .onLeaveCount
                             }
                         />
                         <Spacer height={scale.vsc2} />
                         <LATeamAvContent
+                            showAvailableTeamCount
                             awayTeamImages={
                                 availableTeam.adminEmployeesOnLeaveByTeamDto
                                     .imageList

@@ -10,7 +10,12 @@ import { MarkedDates } from 'react-native-calendars/src/types';
 import { Spacer } from 'src/components/atoms';
 import { ButtonDock, SelectionButton } from 'src/components/molecules';
 import { TeamAvailabilityFilterHeader } from 'src/components/organisms';
-import { getHttpTeamAvailability } from 'src/services/http';
+import {
+    getHttpTeamAvailability,
+    getHttpTeamAvailabilityDateRange,
+    getHttpTeamByUser,
+} from 'src/services/http';
+import { useUserStore } from 'src/store';
 import { showErrorToast } from 'src/utils/alerts';
 import {
     getCalendarDate,
@@ -20,13 +25,21 @@ import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import theme from 'src/utils/theme';
 import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
 import { calendarTheme, styles } from './styles';
+import TeamAvailability from './TeamAvailability';
 
 const { scale, colors } = theme;
-
+export interface DropDownList {
+    teamId: number;
+    teamName: string;
+}
 interface Props extends Partial<TestProps> {
     formik: FormikProps<ApplyFormValues>;
     onBackPress: (modalType: EmployeeModal) => void;
-    onPressTeamAvailibility: (startDate: string, endDate: string) => void;
+    onPressTeamAvailibility: (
+        startDate: string,
+        endDate: string,
+        awayEmployeeDetails: object[],
+    ) => void;
 }
 
 const ChooseDateSheetBody = ({
@@ -40,8 +53,28 @@ const ChooseDateSheetBody = ({
     }>({ startDate: '', endDate: '' });
     const [holidays, setHolidays] = useState<MarkedDates>({});
     const [enabled, setEnabled] = useState<boolean>(false);
+    const [enabledForRange, setEnabledForRange] = useState<boolean>(false);
+    const [enabledDetailsForRange, setEnabledDetailsForRange] =
+        useState<boolean>(false);
     const [onlineCount, setOnlineCount] = useState<number>(0);
+    const [onLeaveCount, setOnLeaveCount] = useState<number>(0);
+    const [awayMembersImageList, setAwayMembersImageList] = useState<string[]>(
+        [],
+    );
+    const [awayMembersNameList, setAwayMembersNameList] = useState<string[]>(
+        [],
+    );
+    const [awayMembersDetailsList, setAwayMembersDetailsList] = useState<
+        object[]
+    >([]);
+    const [employeeTeamList, setEmployeeTeamList] = useState<DropDownList[]>(
+        [],
+    );
+    const [employeeTeamIdList, setEmployeeTeamIdList] = useState<number[]>([]);
 
+    const {
+        user: { userId },
+    } = useUserStore();
     const teamChips: {
         chipId: number;
         content: string;
@@ -67,54 +100,77 @@ const ChooseDateSheetBody = ({
             availableCount: 8,
         },
     ];
-    const awayTeamMembersDetails = [
-        {
-            id: '1',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-        {
-            id: '2',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-        {
-            id: '3',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-        {
-            id: '1',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-        {
-            id: '2',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-        {
-            id: '3',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-        {
-            id: '2',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-        {
-            id: '3',
-            uri: 'https://lh3.googleusercontent.com/a/AEdFTp7RTGB3Od_-3cj8GqW7Ct0on2HY79Qpv0rXhgEJ=s96-c',
-        },
-    ];
-    useQuery(
-        ['employeeOnLeaveRequests'],
-        () =>
-            getHttpTeamAvailability({
-                date: range.startDate,
-                teamIds: [1],
-            }),
-        {
-            enabled,
-            onSuccess: data => {
-                setOnlineCount(data.onlineCount);
-            },
-        },
-    );
+    // useQuery(['employeeTeams'], () => getHttpTeamByUser(userId), {
+    //     onSuccess: data => {
+    //         setEmployeeTeamList(data);
+    //         data.map((item: { teamId: number }, index: any) =>
+    //             employeeTeamIdList.push(item.teamId),
+    //         );
+    //     },
+    // });
+    // useQuery(
+    //     ['employeeOnLeaveRequests'],
+    //     () =>
+    //         getHttpTeamAvailability({
+    //             date: range.startDate,
+    //             teamIds: employeeTeamIdList,
+    //         }),
+    //     {
+    //         enabled,
+    //         onSuccess: data => {
+    //             setOnlineCount(data.onlineCount);
+    //             setAwayMembersImageList(data.imageList);
+    //             setAwayMembersNameList(data.nameList);
+    //             setOnLeaveCount(data.onLeaveCount);
+    //             setEnabled(state => !state);
+    //         },
+    //     },
+    // );
+
+    // useQuery(
+    //     ['employeeOnLeaveRequestsForRange'],
+    //     () =>
+    //         getHttpTeamAvailabilityDateRange({
+    //             startDate: range.startDate,
+    //             endDate: range.endDate,
+    //             teamId: 4,
+    //             imageOnly: true,
+    //         }),
+    //     {
+    //         enabled: enabledForRange,
+    //         onSuccess: data => {
+    //             setOnlineCount(data.onlineCount);
+    //             // setAwayMembersImageList(data.nameList);
+    //             // setAwayMembersNameList(data.imageList);
+    //             setOnLeaveCount(data.onLeaveCount);
+    //             setEnabledForRange(state => !state);
+    //         },
+    //     },
+    // );
+    // useQuery(
+    //     ['employeeOnLeaveDetailsForRange'],
+    //     () =>
+    //         getHttpTeamAvailabilityDateRange({
+    //             startDate: range.startDate,
+    //             endDate: range.endDate,
+    //             teamId: 4,
+    //         }),
+    //     {
+    //         enabled: enabledForRange,
+    //         onSuccess: data => {
+    //             setAwayMembersDetailsList(data);
+    //             setEnabledDetailsForRange(state => !state);
+    //         },
+    //     },
+    // );
+    const getHttpTeamAvailabilityDetails = () => {
+        if (range.startDate && !range.endDate) {
+            setEnabled(state => !state);
+            // eslint-disable-next-line no-dupe-else-if
+        } else if (range.startDate && range.endDate) {
+            setEnabledForRange(state => !state);
+        }
+    };
     const marked = useMemo(() => {
         if (!range.startDate) return holidays;
         const start = new Date(range.startDate).getTime();
@@ -141,6 +197,7 @@ const ChooseDateSheetBody = ({
                     selectedTextColor: colors.white,
                 };
         }
+        getHttpTeamAvailabilityDetails();
         return tempMarked;
     }, [range, holidays]);
 
@@ -264,25 +321,9 @@ const ChooseDateSheetBody = ({
             <Spacer height={scale.vsc8} />
             {range.startDate ? (
                 <>
-                    <TeamAvailabilityFilterHeader
-                        onExpandTeamAvailability={() =>
-                            onPressTeamAvailibility(
-                                range.startDate ? range.startDate : '',
-                                range.endDate ? range.endDate : '',
-                            )
-                        }
-                        teamChipsList={teamChips}
-                        availableMemberCount={onlineCount}
-                        awayTeamMembersDetails={awayTeamMembersDetails}
-                        isTAforApproveLeave
-                        startDate={
-                            range.startDate
-                                ? getFormattedDay(range.startDate)
-                                : ''
-                        }
-                        endDate={
-                            range.endDate ? getFormattedDay(range.endDate) : ''
-                        }
+                    <TeamAvailability
+                        startDate={range.startDate ? range.startDate : ''}
+                        endDate={range.endDate ? range.endDate : ''}
                     />
                     <Spacer height={scale.vsc8} />
                 </>
@@ -292,7 +333,6 @@ const ChooseDateSheetBody = ({
                 markingType='dot'
                 onDayPress={day => {
                     handleDayPress(day);
-                    setEnabled(state => !state);
                 }}
                 enableSwipeMonths
                 disableAllTouchEventsForInactiveDays
