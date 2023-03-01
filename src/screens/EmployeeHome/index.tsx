@@ -387,8 +387,6 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
 
                 <LAEmployeeModals
                     isNudgeVisble={employeeModal?.isNudgeVisble}
-                    startDate={employeeModal?.startDate}
-                    endDate={employeeModal?.endDate}
                     modalType={employeeModal?.modalType}
                     onBackPressType={employeeModal?.onBackPressType}
                     onClose={() => setEmployeeModal(undefined)}
@@ -422,14 +420,6 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                             modalType: undefined,
                         });
                         // TODO:  Make API Call for Revoke Request
-                    }}
-                    onPressTeamAvailibility={(startDate, endDate) => {
-                        setEmployeeModal({
-                            ...employeeModal,
-                            startDate,
-                            endDate,
-                            modalType: EmployeeModal.TEAM_AVAILABILITY_MODAL,
-                        });
                     }}
                 />
 

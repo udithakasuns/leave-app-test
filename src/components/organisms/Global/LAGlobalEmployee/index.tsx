@@ -240,12 +240,6 @@ const LAGlobalEmployee = () => {
                     });
                     // TODO:  Make API Call for Revoke Request
                 }}
-                onPressTeamAvailibility={() => {
-                    setEmployeeModal({
-                        ...employeeModal,
-                        modalType: EmployeeModal.TEAM_AVAILABILITY_MODAL,
-                    });
-                }}
             />
             <LAEmployeePopUp
                 employeeRequest={employeeRequest}

@@ -54,57 +54,24 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
             }
         },
     });
-    // const {
-    //     isLoading: availableTeamOnlyDateLoading,
-    //     isRefetching: availableTeamOnlyDateRefetching,
-    //     data: availableTeamOnlyDate,
-    // } = useQuery<AvailableTeam, AxiosError>(
-    //     [selectedTeam, startDate],
-    //     () =>
-    //         getHttpTeamAvailability({
-    //             date: getformatDateToYyyyMmDd(startDate),
-    //             teamIds: [selectedTeam.teamId],
-    //         }),
-    //     {
-    //         enabled: startDate !== '' && endDate === '',
-    //         keepPreviousData: true,
-    //     },
-    // );
 
-    // const {
-    //     isLoading: availableTeamLoading,
-    //     isRefetching: availableTeamRefetching,
-    //     data: availableTeam,
-    //     refetch: refetchAvailableTeam,
-    // } = useQuery<EmployeeOnLeaveByDay, AxiosError>(
-    //     [selectedTeam, startDate, endDate],
-    //     () => {
-    //         if (startDate !== '' && endDate !== '') {
-    //             return getHttpAwayEmployees({
-    //                 startDate: getformatDateToYyyyMmDd(startDate),
-    //                 endDate: getformatDateToYyyyMmDd(endDate),
-    //                 teamId: selectedTeam.teamId,
-    //             });
-    //         }
-    //         return null;
-    //     },
-    //     {
-    //         keepPreviousData: true,
-    //     },
-    // );
     const {
         isLoading: availableTeamLoading,
         isRefetching: availableTeamRefetching,
         refetch: refetchAvailableTeam,
         data: availableTeam,
-    } = useQuery<EmployeeOnLeaveByDay, AxiosError>(
+    } = useQuery<EmployeeOnLeaveByDay | null, AxiosError>(
         [selectedTeam, startDate, endDate],
-        () =>
-            getHttpAwayEmployees({
-                startDate: getformatDateToYyyyMmDd(startDate),
-                endDate: getformatDateToYyyyMmDd(endDate || startDate),
-                teamId: selectedTeam.teamId,
-            }),
+        () => {
+            if (selectedTeam.teamId !== -1) {
+                return getHttpAwayEmployees({
+                    startDate: getformatDateToYyyyMmDd(startDate),
+                    endDate: getformatDateToYyyyMmDd(endDate || startDate),
+                    teamId: selectedTeam.teamId,
+                });
+            }
+            return null;
+        },
         {
             keepPreviousData: true,
         },
@@ -116,15 +83,21 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
     if (isLoadingEmployeeTeams || !employeeTeams) {
         return <SkelitonLoaderFull />;
     }
+    const isAllowToPressTeamAv = (): boolean => {
+        if (
+            availableTeam &&
+            availableTeam.adminEmployeesOnLeaveByTeamDto.onLeaveCount !== 0
+        ) {
+            return true;
+        }
+        return false;
+    };
     return (
         <>
             <LATeamAvContainer
                 outline
                 onPress={
-                    availableTeam?.adminEmployeesOnLeaveByTeamDto
-                        .onLeaveCount !== 0
-                        ? onOpenDetailModal
-                        : () => {}
+                    isAllowToPressTeamAv() ? onOpenDetailModal : undefined
                 }>
                 <LATeamAvHeader
                     headerType='teamSelector'
@@ -148,12 +121,8 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
                                 startDate && endDate
                                     ? `${getFormattedDay(
                                           startDate,
-                                      )} - ${getFormattedDay(endDate)}`
+                                      )} to ${getFormattedDay(endDate)}`
                                     : getFormattedDay(startDate)
-                            }
-                            availableCount={
-                                availableTeam.adminEmployeesOnLeaveByTeamDto
-                                    .onLeaveCount
                             }
                         />
                         <Spacer height={scale.vsc2} />

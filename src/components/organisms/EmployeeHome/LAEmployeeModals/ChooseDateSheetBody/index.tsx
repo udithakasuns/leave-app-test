@@ -1,5 +1,4 @@
 /* eslint-disable no-plusplus */
-import { useQuery } from '@tanstack/react-query';
 import { FormikProps } from 'formik';
 import { DateTime } from 'luxon';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -9,18 +8,8 @@ import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { MarkedDates } from 'react-native-calendars/src/types';
 import { Spacer } from 'src/components/atoms';
 import { ButtonDock, SelectionButton } from 'src/components/molecules';
-import { TeamAvailabilityFilterHeader } from 'src/components/organisms';
-import {
-    getHttpTeamAvailability,
-    getHttpTeamAvailabilityDateRange,
-    getHttpTeamByUser,
-} from 'src/services/http';
-import { useUserStore } from 'src/store';
 import { showErrorToast } from 'src/utils/alerts';
-import {
-    getCalendarDate,
-    getFormattedDay,
-} from 'src/utils/helpers/dateHandler';
+import { getCalendarDate } from 'src/utils/helpers/dateHandler';
 import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import theme from 'src/utils/theme';
 import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
@@ -35,142 +24,15 @@ export interface DropDownList {
 interface Props extends Partial<TestProps> {
     formik: FormikProps<ApplyFormValues>;
     onBackPress: (modalType: EmployeeModal) => void;
-    onPressTeamAvailibility: (
-        startDate: string,
-        endDate: string,
-        awayEmployeeDetails: object[],
-    ) => void;
 }
 
-const ChooseDateSheetBody = ({
-    formik,
-    onBackPress,
-    onPressTeamAvailibility,
-}: Props) => {
+const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
     const [range, setRange] = useState<{
         startDate: string;
         endDate?: string;
     }>({ startDate: '', endDate: '' });
     const [holidays, setHolidays] = useState<MarkedDates>({});
-    const [enabled, setEnabled] = useState<boolean>(false);
-    const [enabledForRange, setEnabledForRange] = useState<boolean>(false);
-    const [enabledDetailsForRange, setEnabledDetailsForRange] =
-        useState<boolean>(false);
-    const [onlineCount, setOnlineCount] = useState<number>(0);
-    const [onLeaveCount, setOnLeaveCount] = useState<number>(0);
-    const [awayMembersImageList, setAwayMembersImageList] = useState<string[]>(
-        [],
-    );
-    const [awayMembersNameList, setAwayMembersNameList] = useState<string[]>(
-        [],
-    );
-    const [awayMembersDetailsList, setAwayMembersDetailsList] = useState<
-        object[]
-    >([]);
-    const [employeeTeamList, setEmployeeTeamList] = useState<DropDownList[]>(
-        [],
-    );
-    const [employeeTeamIdList, setEmployeeTeamIdList] = useState<number[]>([]);
 
-    const {
-        user: { userId },
-    } = useUserStore();
-    const teamChips: {
-        chipId: number;
-        content: string;
-        chipInfo: string;
-        availableCount: number;
-    }[] = [
-        {
-            chipId: 1,
-            content: 'Design',
-            chipInfo: 'Design',
-            availableCount: 10,
-        },
-        {
-            chipId: 2,
-            content: 'BA',
-            chipInfo: 'BA',
-            availableCount: 15,
-        },
-        {
-            chipId: 3,
-            content: 'Project Mgt',
-            chipInfo: 'Project Mgt',
-            availableCount: 8,
-        },
-    ];
-    // useQuery(['employeeTeams'], () => getHttpTeamByUser(userId), {
-    //     onSuccess: data => {
-    //         setEmployeeTeamList(data);
-    //         data.map((item: { teamId: number }, index: any) =>
-    //             employeeTeamIdList.push(item.teamId),
-    //         );
-    //     },
-    // });
-    // useQuery(
-    //     ['employeeOnLeaveRequests'],
-    //     () =>
-    //         getHttpTeamAvailability({
-    //             date: range.startDate,
-    //             teamIds: employeeTeamIdList,
-    //         }),
-    //     {
-    //         enabled,
-    //         onSuccess: data => {
-    //             setOnlineCount(data.onlineCount);
-    //             setAwayMembersImageList(data.imageList);
-    //             setAwayMembersNameList(data.nameList);
-    //             setOnLeaveCount(data.onLeaveCount);
-    //             setEnabled(state => !state);
-    //         },
-    //     },
-    // );
-
-    // useQuery(
-    //     ['employeeOnLeaveRequestsForRange'],
-    //     () =>
-    //         getHttpTeamAvailabilityDateRange({
-    //             startDate: range.startDate,
-    //             endDate: range.endDate,
-    //             teamId: 4,
-    //             imageOnly: true,
-    //         }),
-    //     {
-    //         enabled: enabledForRange,
-    //         onSuccess: data => {
-    //             setOnlineCount(data.onlineCount);
-    //             // setAwayMembersImageList(data.nameList);
-    //             // setAwayMembersNameList(data.imageList);
-    //             setOnLeaveCount(data.onLeaveCount);
-    //             setEnabledForRange(state => !state);
-    //         },
-    //     },
-    // );
-    // useQuery(
-    //     ['employeeOnLeaveDetailsForRange'],
-    //     () =>
-    //         getHttpTeamAvailabilityDateRange({
-    //             startDate: range.startDate,
-    //             endDate: range.endDate,
-    //             teamId: 4,
-    //         }),
-    //     {
-    //         enabled: enabledForRange,
-    //         onSuccess: data => {
-    //             setAwayMembersDetailsList(data);
-    //             setEnabledDetailsForRange(state => !state);
-    //         },
-    //     },
-    // );
-    const getHttpTeamAvailabilityDetails = () => {
-        if (range.startDate && !range.endDate) {
-            setEnabled(state => !state);
-            // eslint-disable-next-line no-dupe-else-if
-        } else if (range.startDate && range.endDate) {
-            setEnabledForRange(state => !state);
-        }
-    };
     const marked = useMemo(() => {
         if (!range.startDate) return holidays;
         const start = new Date(range.startDate).getTime();
@@ -197,7 +59,6 @@ const ChooseDateSheetBody = ({
                     selectedTextColor: colors.white,
                 };
         }
-        getHttpTeamAvailabilityDetails();
         return tempMarked;
     }, [range, holidays]);
 

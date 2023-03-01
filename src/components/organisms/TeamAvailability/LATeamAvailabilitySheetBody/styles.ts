@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import theme from 'src/utils/theme';
 
 const { colors, scale, fontSize, fontFamily, pixel } = theme;
@@ -9,6 +9,29 @@ export const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
     },
+    subLeftTitleTextStyle: {
+        flex: 1,
+        textAlign: 'center',
+        marginLeft: -scale.sc6,
+        fontSize: fontSize.fs12,
+    },
+    subRightTitleTextStyle: {
+        flex: 4,
+        fontSize: fontSize.fs12,
+        marginLeft: scale.sc6,
+    },
+    rangeListContainer: {
+        backgroundColor: colors.tertiaryColor,
+        paddingVertical: scale.sc12,
+        paddingHorizontal: scale.sc16,
+        borderRadius: scale.sc64,
+        marginRight: scale.sc4,
+    },
+    listContentStyle: {
+        minHeight: Platform.OS === 'ios' ? pixel(430) : pixel(440),
+        justifyContent: 'flex-start',
+        marginBottom: scale.sc4,
+    },
     listItemContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -16,22 +39,20 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.tertiaryColor,
         borderRadius: scale.sc8,
         padding: scale.sc12,
-        marginBottom: scale.sc12,
+        marginBottom: scale.sc4,
+        minHeight: scale.sc64,
     },
     listItemLeftContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: scale.sc36,
-        height: scale.sc36,
-        borderRadius: scale.sc36 / 2,
-        backgroundColor: colors.secondaryOutline,
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
     },
     listItemRightContainerText: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
-        backgroundColor: colors.lime200,
-        borderColor: colors.lime800,
+        backgroundColor: colors.lime600,
+        borderColor: colors.approved,
         borderWidth: 1,
         borderRadius: scale.sc36,
         padding: scale.sc4,
@@ -39,29 +60,32 @@ export const styles = StyleSheet.create({
     listItemRightContainer: {
         flex: 4,
         flexDirection: 'row',
-        marginLeft: pixel(23),
+        justifyContent: 'flex-start',
+        marginLeft: pixel(-23),
     },
-    rangeListContainer: {
-        backgroundColor: colors.tertiaryColor,
-        padding: scale.sc12,
-        borderRadius: scale.sc64,
-        marginRight: scale.sc4,
+    listItemDateContainer: {
+        width: scale.sc36,
+        height: scale.sc36,
+        borderRadius: scale.sc36 / 2,
+        backgroundColor: colors.secondaryOutline,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    textStyle: {
+    listItemDateStyle: {
         color: colors.white,
         fontSize: fontSize.fs16,
         fontFamily: fontFamily.poppins400,
     },
-    avatarStyle: {
+    listItemAvatarStyle: {
         marginLeft: pixel(-15),
         borderColor: colors.white,
         borderWidth: 1,
     },
-    expandAvatarStyle: {
+    listItemExpandAvatarStyle: {
         paddingVertical: scale.sc1,
+        paddingHorizontal: scale.sc1,
         backgroundColor: colors.white,
         marginRight: scale.sc6,
-        maxWidth: pixel(121),
-        minWidth: pixel(140),
+        borderRadius: scale.sc64,
     },
 });

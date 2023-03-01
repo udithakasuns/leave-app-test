@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
-import { Button, Spacer } from 'src/components/atoms';
-import LAText from 'src/components/atoms/LAText';
+import { Button, Spacer, Text } from 'src/components/atoms';
 import { getFormattedDay } from 'src/utils/helpers/dateHandler';
+import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import { AwayTeamByDate } from 'src/utils/types';
 import ListItem from './ListItem';
@@ -69,24 +69,30 @@ const LATeamAvailabilitySheetBody = ({
     return (
         <View>
             <Spacer height={9} />
-            <LAText color={colors.gray700}>
+            <Text
+                testID={`${TID}TEXT_TEAM_AVAILABILITY_EXPANDED_MODAL_DESCRIPTION`}
+                color={colors.gray700}>
                 We encourage everyone to consider already booked leaves to take
                 responsibility of their own day offs!
-            </LAText>
+            </Text>
             <Spacer height={9} />
             <View style={styles.container}>
-                <LAText
+                <Text
+                    testID={`${TID}TEXT_LEFT_SUB_TITLE`}
                     color={colors.gray700}
-                    style={{ flex: 1, textAlign: 'center' }}>
+                    style={styles.subLeftTitleTextStyle}>
                     Date
-                </LAText>
-                <LAText color={colors.gray700} style={{ flex: 4 }}>
+                </Text>
+                <Text
+                    testID={`${TID}TEXT_RIGHT_SUB_TITLE`}
+                    color={colors.gray700}
+                    style={styles.subRightTitleTextStyle}>
                     Away team members
-                </LAText>
+                </Text>
             </View>
             <Spacer height={0} />
-            <View>
-                {selectedMemberList?.slice(0, 5).map((item, index) => (
+            <View style={styles.listContentStyle}>
+                {selectedMemberList?.slice(0, 5).map(item => (
                     <ListItem
                         key={item.date}
                         date={item.date}
@@ -94,11 +100,12 @@ const LATeamAvailabilitySheetBody = ({
                     />
                 ))}
             </View>
+            <Spacer height={-6} />
             {isVisible ? (
                 <FlatList
                     data={[...Array(Math.ceil(awayTeamsByDate.length / 5))]}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item, index }) => {
+                    keyExtractor={(_item, index) => index.toString()}
+                    renderItem={({ index }) => {
                         const { rangeText, startIndex, endIndex } = getRange(
                             awayTeamsByDate,
                             index,
@@ -120,14 +127,15 @@ const LATeamAvailabilitySheetBody = ({
                                               },
                                           ]
                                 }>
-                                <LAText
+                                <Text
+                                    testID={`${TID}TEXT_DATE_RANGE_${index}`}
                                     color={
                                         index !== selectedItemId
                                             ? colors.gray600
                                             : colors.white
                                     }>
                                     {rangeText}
-                                </LAText>
+                                </Text>
                             </TouchableOpacity>
                         );
                     }}

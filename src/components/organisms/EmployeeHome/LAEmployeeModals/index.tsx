@@ -16,12 +16,10 @@ import {
 } from 'src/utils/testIds';
 import {
     ApplyFormValues,
-    AwayTeamByDate,
     EmployeeModal,
     PartialBy,
     TestProps,
 } from 'src/utils/types';
-import TeamAvailabilitySheetBody from '../../TeamAvailability/LATeamAvailabilitySheetBody';
 import ApplyLeaveSheetBody from './ApplyLeaveSheetBody';
 import ApprovedLeaveSheetBody from './ApprovedLeaveSheetBody';
 import CancelLeaveSheetBody from './CancelLeaveSheetBody';
@@ -38,9 +36,6 @@ export type ModalProps = {
     onBackPressType: EmployeeModal;
     isNudgeVisble: boolean;
     lastNudgedDateTime: string | null;
-    startDate: string;
-    endDate: string;
-    awayMemberList: AwayTeamByDate[];
 };
 
 export type LAEmployeeModalProps = Partial<ModalProps>;
@@ -56,7 +51,6 @@ interface Props extends Partial<TestProps>, LAEmployeeModalProps {
     onPressCancelLeave: () => void;
     onNavigateToCancelLeave: () => void;
     onRevokeLeaveRequest: (revokeComment: string) => void;
-    onPressTeamAvailibility: (startDate: string, endDate: string) => void;
 }
 
 const LAEmployeeModals = ({
@@ -64,9 +58,6 @@ const LAEmployeeModals = ({
     onBackPressType,
     formik,
     isNudgeVisble,
-    startDate,
-    endDate,
-    awayMemberList,
     onClose,
     onBackPress,
     onPressSelectDate,
@@ -76,7 +67,6 @@ const LAEmployeeModals = ({
     onNavigateToCancelLeave,
     onPressRevokeLeave,
     onRevokeLeaveRequest,
-    onPressTeamAvailibility,
 }: PartialBy<Props, 'formik'>) => {
     const [isHalfSelected, setIsHalfSelected] = useState(false);
     const { employeeRequest } = useEmployeeStore();
@@ -125,7 +115,6 @@ const LAEmployeeModals = ({
                         <ChooseDateSheetBody
                             formik={formik}
                             onBackPress={onBackPress}
-                            onPressTeamAvailibility={onPressTeamAvailibility}
                         />
                     }
                 />
@@ -270,25 +259,6 @@ const LAEmployeeModals = ({
                                 recipient: [managers[0]],
                             }}
                             onRevokeLeaveRequest={onRevokeLeaveRequest}
-                        />
-                    }
-                />
-            )}
-            {modalType === EmployeeModal.TEAM_AVAILABILITY_MODAL && (
-                <Modal
-                    onClose={() => {
-                        onBackPress(EmployeeModal.CHOSE_DATE_MODAL);
-                    }}
-                    isVisible
-                    header='Team availability'
-                    headerIcon='arrow-back'
-                    style={styles.commonStyle}
-                    sheetBody={
-                        <TeamAvailabilitySheetBody
-                            awayTeamsByDate={awayMemberList || []}
-                            onPressGoBack={() => {
-                                onBackPress(EmployeeModal.CHOSE_DATE_MODAL);
-                            }}
                         />
                     }
                 />

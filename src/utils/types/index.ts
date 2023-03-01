@@ -35,6 +35,7 @@ export type Colors = {
     red50: string;
     lime50: string;
     lime200: string;
+    lime600: string;
     lime800: string;
     grey600: string;
     iconLabel: string;
@@ -253,7 +254,6 @@ export enum EmployeeModal {
     'CANCEL_REQUEST_MODAL',
     'CANCELLED_LEAVE_MODAL',
     'LEAVE_INFORMATION',
-    'TEAM_AVAILABILITY_MODAL',
 }
 
 export enum EmployeePopup {
