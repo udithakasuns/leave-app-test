@@ -40,24 +40,6 @@ const LATeamAvContent = ({
         );
     };
 
-    const displayEmptyDataContent = () => (
-        <View style={styles.emtyContainer}>
-            <Text
-                testID={`${TID}TEXT_NO_DATA`}
-                numberOfLines={2}
-                type='ParaLGBold'>
-                🧐 No data for this team
-            </Text>
-            <Text
-                testID={`${TID}TEXT_SUB_NO_DATA`}
-                numberOfLines={2}
-                type='ParaSM'
-                color={colors.gray700}>
-                There is no availability data for this team yet.
-            </Text>
-        </View>
-    );
-
     const displayImagContent = () => {
         if (awayTeamImages.length === 0) {
             return null;
@@ -103,9 +85,7 @@ const LATeamAvContent = ({
     return (
         <View style={styles.container}>
             {showAvailableTeamCount && displayTeamCountContent()}
-            {availableTeamCount === 0 && awayTeamImages.length === 0
-                ? displayEmptyDataContent()
-                : displayImagContent()}
+            {displayImagContent()}
         </View>
     );
 };

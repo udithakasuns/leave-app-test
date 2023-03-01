@@ -10,9 +10,6 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
     },
-    emtyContainer: {
-        flex: 1,
-    },
     availableContainer: {
         flexDirection: 'row',
         alignItems: 'center',

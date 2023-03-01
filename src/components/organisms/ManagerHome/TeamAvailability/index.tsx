@@ -14,6 +14,7 @@ import {
     LATeamAvContainer,
     LATeamAvContent,
     LATeamAvHeader,
+    LATeamAvNoDataContent,
 } from 'src/components/molecules/LATeamAvailability';
 import { TID } from 'src/utils/testIds';
 import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
@@ -80,14 +81,18 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
         if (availableTeamLoading || availableTeamRefetching || !availableTeam) {
             return <SkelitonLoaderContent />;
         }
-        if (availableTeam.onLeaveCount === 0) {
+        const { imageList, onLeaveCount, onlineCount } = availableTeam;
+        if (onlineCount === 0 && onLeaveCount === 0) {
+            return <LATeamAvNoDataContent />;
+        }
+        if (onLeaveCount === 0) {
             return <LATeamAvAvailableText awayTeamList={[]} leaveDuration='' />;
         }
         return (
             <LATeamAvContent
                 showAvailableTeamCount
-                availableTeamCount={availableTeam.onlineCount}
-                awayTeamImages={availableTeam.imageList}
+                availableTeamCount={onlineCount}
+                awayTeamImages={imageList}
             />
         );
     };
