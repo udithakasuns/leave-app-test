@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Amplify, Auth, Hub } from 'aws-amplify';
 import { useEffect, useState } from 'react';
-import {
-    AuthGeneralUserPayload,
-    AuthSocialUserPayload,
-} from 'src/services/aws/types';
+import { AuthUserPayload } from 'src/services/aws/types';
 import { usePersistStore, useRecipientStore, useUserStore } from 'src/store';
 import amplifiConfig from 'src/aws-exports';
 import { getCurrentUserRoleFromToken } from '../helpers/gettersUtil';
@@ -46,153 +43,77 @@ export const useAuthentication = (): ReturnProps => {
     const { authLoading, saveUser, updateUser, removeUser, setAuthLoading } =
         useUserStore();
     const { updateRecipients, removeUserRecipients } = useRecipientStore();
-    const {
-        isAutherized,
-        setIsAutherized,
-        authType,
-        setAuthType,
-        setDeviceUniqueId,
-    } = usePersistStore();
+    const { setDeviceUniqueId } = usePersistStore();
 
     const [visibleAuthNav, setVisibleAuthNav] = useState<boolean>(false);
     const [openInvalidUserPopup, setOpenInvalidUserPopup] =
         useState<boolean>(false);
 
-    const getCurrentSocialAuthUser = async () => {
+    const getCurrentAuthUser = async () => {
         try {
-            const authUser: AuthSocialUserPayload =
+            const authUser: AuthUserPayload =
                 await Auth.currentAuthenticatedUser();
+            const {
+                attributes: { email, name, family_name, picture },
+                signInUserSession: { accessToken },
+            } = authUser;
 
-            if (authUser) {
-                const {
-                    attributes: { email, name, family_name, picture },
-                    signInUserSession: { accessToken },
-                } = authUser;
+            const userRole = getCurrentUserRoleFromToken(accessToken.jwtToken);
 
-                const userRole = getCurrentUserRoleFromToken(
-                    accessToken.jwtToken,
-                );
+            saveUser(email, name, family_name, picture, userRole);
+            setCrashlyticsLogs(email);
+            setAppCenterAnalyticsLogs(email);
 
-                saveUser(email, name, family_name, picture, userRole);
-                setCrashlyticsLogs(email);
-                setAppCenterAnalyticsLogs(email);
+            const isValidUser = isRootcodeUser(email);
 
-                const isValidUser = isRootcodeUser(email);
-
-                if (!isValidUser) {
-                    setOpenInvalidUserPopup(true);
-                } else {
-                    await updateUser();
-                }
-
-                updateRecipients();
-                setIsAutherized(true);
-                setVisibleAuthNav(true);
-                setAuthLoading(false);
+            if (!isValidUser) {
+                setOpenInvalidUserPopup(true);
             } else {
-                setVisibleAuthNav(false);
-                removeUser();
-                removeUserRecipients();
-                setAuthLoading(false);
+                await updateUser();
             }
-        } catch (error) {
+
+            updateRecipients();
+            setVisibleAuthNav(true);
             setAuthLoading(false);
-            // Error needs to be handled here
-        }
-    };
-
-    const getCurrentGeneralAuthUser = async () => {
-        try {
-            const authUser: AuthGeneralUserPayload =
-                await Auth.currentAuthenticatedUser();
-
-            if (authUser) {
-                const {
-                    attributes: { email },
-                    signInUserSession: { accessToken },
-                } = authUser;
-
-                const name = email.split('@')[0];
-
-                const userRole = getCurrentUserRoleFromToken(
-                    accessToken.jwtToken,
-                );
-
-                saveUser(email, name, '', '', userRole);
-                setCrashlyticsLogs(email);
-                setAppCenterAnalyticsLogs(email);
-
-                const isValidUser = isRootcodeUser(email);
-
-                if (!isValidUser) {
-                    setOpenInvalidUserPopup(true);
-                } else {
-                    await updateUser(); // This will returns an error (Need to fix from backend)
-                }
-
-                updateRecipients();
-                setIsAutherized(true);
-                setVisibleAuthNav(true);
-                setAuthLoading(false);
-            }
-        } catch (error) {
+        } catch {
+            setVisibleAuthNav(false);
+            removeUser();
+            removeUserRecipients();
             setAuthLoading(false);
-            // Error needs to be handled here
         }
     };
 
     useEffect(() => {
-        /* 
-            Initially check whether the user has already signed in to the application.
-            If so, check wheather the authentication type that the user has used.
-        */
-
-        if (isAutherized) {
-            if (authType === 'social') {
-                getCurrentSocialAuthUser();
-            } else {
-                getCurrentGeneralAuthUser();
-            }
-        } else {
-            setVisibleAuthNav(false);
-            setTimeout(() => {
-                setAuthLoading(false);
-            }, 2000);
-        }
-    }, [isAutherized]);
+        getCurrentAuthUser();
+    }, []);
 
     const onSignout = async () => {
         setDeviceUniqueId(null);
-        setIsAutherized(false);
-        setAuthType('');
+        setVisibleAuthNav(false);
         setAuthLoading(false);
     };
 
     useEffect(() => {
         /* Hub is listened to all events related to authentication */
-        if (authType) {
-            const unsubscribe = Hub.listen('auth', ({ payload: { event } }) => {
+        const unsubscribe = Hub.listen(
+            'auth',
+            async ({ payload: { event } }) => {
                 switch (event) {
                     /* Log the user based on auth type */
                     case 'signIn':
-                        setAuthLoading(true);
-                        if (authType === 'social') {
-                            getCurrentSocialAuthUser();
-                        } else if (authType === 'general') {
-                            getCurrentGeneralAuthUser();
-                        }
+                        getCurrentAuthUser();
                         break;
+
                     case 'signOut':
                         onSignout();
                         break;
                     default:
                         break;
                 }
-            });
-            return () => unsubscribe();
-        }
-        return () => {};
-    }, [authType]);
+            },
+        );
+        return () => unsubscribe();
+    }, []);
 
     return {
         isAuthenticated: visibleAuthNav,

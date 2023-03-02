@@ -2,23 +2,23 @@ import React from 'react';
 import { View, ScrollView, Platform } from 'react-native';
 import { LoginScreenProps } from 'navigators/types';
 import { awsOnAppleSignIn, awsOnGoogleSignIn } from 'src/services/aws';
-import { Spacer, Text } from 'components/atoms';
+import { Spacer } from 'components/atoms';
 import { SocialButton } from 'components/molecules';
 import Header from 'src/components/organisms/Login/Header';
-import { usePersistStore } from 'src/store';
+import { useUserStore } from 'src/store';
 import Footer from 'src/components/organisms/Login/Footer';
 import { styles } from './styles';
 
 const LoginSocial: React.FC<LoginScreenProps> = () => {
-    const { setAuthType } = usePersistStore();
+    const { setAuthLoading } = useUserStore();
 
     const onPressGoogleSignin = () => {
-        setAuthType('social');
+        setAuthLoading(true);
         awsOnGoogleSignIn();
     };
 
     const onPressAppleSignin = () => {
-        setAuthType('social');
+        setAuthLoading(true);
         awsOnAppleSignIn();
     };
 

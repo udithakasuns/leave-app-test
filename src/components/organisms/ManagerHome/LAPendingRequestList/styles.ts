@@ -13,6 +13,7 @@ export default (isViewAllPage = false) =>
             marginTop: isViewAllPage ? scale.sc1 : scale.sc10,
             borderRadius: radius.rd8,
             paddingHorizontal: isViewAllPage ? scale.sc10 : scale.sc16,
+            marginBottom: scale.sc20,
         },
         scrollViewContainer: {
             width: '100%',

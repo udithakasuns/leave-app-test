@@ -12,6 +12,8 @@ import NotificationViewAll from 'src/screens/NotificationViewAll';
 import Account from 'src/screens/Account';
 import Settings from 'src/screens/Settings';
 import Support from 'src/screens/Support';
+import LAGlobalEmployee from 'src/components/organisms/Global/LAGlobalEmployee';
+import LAGlobalManager from 'src/components/organisms/Global/LAGlobalManager';
 import { AuthScreensParamList } from '../types';
 
 import LADrawer from '../../components/organisms/Global/LADrawer';
@@ -33,35 +35,42 @@ const AuthNavigator = () => {
         user: { role },
     } = useUserStore();
     return (
-        <DrawerNav.Navigator
-            initialRouteName={
-                role === 'employee' ? 'EmployeeHome' : 'ManagerHome'
-            }
-            drawerContent={({ navigation }) => (
-                <MemoizedDrawer navigation={navigation} />
-            )}
-            screenOptions={{
-                headerShown: false,
-                drawerType: 'front',
-            }}>
-            <DrawerNav.Screen name='EmployeeHome' component={EmployeeHome} />
-            <DrawerNav.Screen
-                name='EmployeeViewAll'
-                component={EmployeeViewAll}
-            />
-            <DrawerNav.Screen
-                name='ManagerViewAll'
-                component={ManagerViewAll}
-            />
-            <DrawerNav.Screen name='ManagerHome' component={ManagerHome} />
-            <DrawerNav.Screen
-                name='NotificationViewAll'
-                component={NotificationViewAll}
-            />
-            <DrawerNav.Screen name='Account' component={Account} />
-            <DrawerNav.Screen name='Settings' component={Settings} />
-            <DrawerNav.Screen name='Support' component={Support} />
-        </DrawerNav.Navigator>
+        <>
+            <DrawerNav.Navigator
+                initialRouteName={
+                    role === 'employee' ? 'EmployeeHome' : 'ManagerHome'
+                }
+                drawerContent={({ navigation }) => (
+                    <MemoizedDrawer navigation={navigation} />
+                )}
+                screenOptions={{
+                    headerShown: false,
+                    drawerType: 'front',
+                }}>
+                <DrawerNav.Screen
+                    name='EmployeeHome'
+                    component={EmployeeHome}
+                />
+                <DrawerNav.Screen
+                    name='EmployeeViewAll'
+                    component={EmployeeViewAll}
+                />
+                <DrawerNav.Screen
+                    name='ManagerViewAll'
+                    component={ManagerViewAll}
+                />
+                <DrawerNav.Screen name='ManagerHome' component={ManagerHome} />
+                <DrawerNav.Screen
+                    name='NotificationViewAll'
+                    component={NotificationViewAll}
+                />
+                <DrawerNav.Screen name='Account' component={Account} />
+                <DrawerNav.Screen name='Settings' component={Settings} />
+                <DrawerNav.Screen name='Support' component={Support} />
+            </DrawerNav.Navigator>
+            <LAGlobalEmployee />
+            <LAGlobalManager />
+        </>
     );
 };
 
