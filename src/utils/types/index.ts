@@ -26,12 +26,19 @@ export type Colors = {
     pending: string;
     green700: string;
     green200: string;
+    green800: string;
     gray400: string;
+    gray200: string;
     red900: string;
     red500: string;
+    red800: string;
     red50: string;
     lime50: string;
+    lime200: string;
+    lime600: string;
+    lime800: string;
     grey600: string;
+    iconLabel: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -362,3 +369,26 @@ export type Me = {
     settings: Settings;
     active: boolean;
 };
+
+export type Team = {
+    teamId: number;
+    teamName: string;
+};
+
+export interface SelectedTeam extends Team {
+    recentlySelected: boolean;
+}
+export interface AwayTeamByDate {
+    date: string;
+    employeeResponseDtos: EmployeeType[];
+}
+export type AvailableTeam = {
+    onLeaveCount: number;
+    onlineCount: number;
+    imageList: string[];
+    nameList: string[];
+};
+export interface EmployeeOnLeaveByDay {
+    employeeOnLeaveByDayResponseDtoList: AwayTeamByDate[];
+    adminEmployeesOnLeaveByTeamDto: AvailableTeam;
+}
