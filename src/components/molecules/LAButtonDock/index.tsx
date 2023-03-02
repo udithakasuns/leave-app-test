@@ -25,13 +25,11 @@ const LAButtonDock = ({
     <>
         <Button
             testID={primaryButton.testId}
-            // label={primaryButton.label}
             icon={primaryButton.icon ?? 'check'}
             mode={primaryButton.mode ?? 'contained'}
             iconLibrary={primaryButton.iconLibrary}
             iconColor={primaryButton.iconColor}
             iconPosition={iconPosition}
-            // onPress={primaryButton.onPress}
             labelStyle={styles.labelStyle}
             disabled={primaryButton.disabled}
             {...primaryButton}
@@ -39,13 +37,11 @@ const LAButtonDock = ({
         <Spacer height={theme.scale.vsc6} />
         <Button
             testID={secondaryButton.testId}
-            // label={secondaryButton.label}
             icon={secondaryButton.icon ?? 'close'}
             mode={secondaryButton.mode ?? 'contained-gray'}
             iconLibrary={secondaryButton.iconLibrary}
             iconColor={secondaryButton.iconColor}
             iconPosition={iconPosition}
-            // onPress={secondaryButton.onPress}
             labelStyle={styles.labelStyle}
             disabled={secondaryButton.disabled}
             {...secondaryButton}

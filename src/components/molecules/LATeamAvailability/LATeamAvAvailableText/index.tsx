@@ -19,15 +19,15 @@ const LATeamAvAvailabileText = ({
     style,
 }: PartialBy<Props, 'style'>) => {
     const getDisplayText = (): string => {
-        const len = awayTeamList.length;
-        if (len === 0) {
+        const awayMembersCount = awayTeamList.length;
+        if (awayMembersCount === 0) {
             return '🥳  All team members are available!';
         }
-        if (len === 1) {
+        if (awayMembersCount === 1) {
             const firstName = awayTeamList[0].split(' ')[0];
             return `${leaveDuration} - ${firstName} is away`;
         }
-        if (len === 2) {
+        if (awayMembersCount === 2) {
             const firstName = awayTeamList[0].split(' ')[0];
             const secondName = awayTeamList[1].split(' ')[0];
 
