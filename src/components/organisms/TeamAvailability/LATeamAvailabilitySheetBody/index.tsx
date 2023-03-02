@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { Button, Spacer, Text } from 'src/components/atoms';
 import { getFormattedDay } from 'src/utils/helpers/dateHandler';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import { AwayTeamByDate } from 'src/utils/types';
+import DateRangeItem from './DateRangeItem';
 import ListItem from './ListItem';
 import { styles } from './styles';
 
 const { colors } = theme;
 export interface Range {
+    dateRange: string;
     startIndex: number;
     endIndex: number;
 }
@@ -22,24 +24,22 @@ const LATeamAvailabilitySheetBody = ({
     awayTeamsByDate,
     onPressGoBack,
 }: Props) => {
-    const [isVisible, setIsVisible] = useState<boolean>(false);
-    const [selectedItemId, setSelectedItemId] = useState<number>(0);
-    const [selectedMemberList, setSelectedMemberList] = useState<
-        AwayTeamByDate[]
-    >([]);
+    const [isRangeVisible, setIsRangeVisible] = useState<boolean>(false);
+    const [selectedDateRangeId, setSelectedDateRangeId] = useState<number>(0);
+    const [selectedTeam, setSelectedTeam] = useState<AwayTeamByDate[]>([]);
 
     useEffect(() => {
-        setSelectedMemberList(awayTeamsByDate);
-    }, []);
-
-    useEffect(() => {
+        setSelectedTeam(awayTeamsByDate);
         if (awayTeamsByDate.length > 5) {
-            setIsVisible(state => !state);
+            setIsRangeVisible(state => !state);
         }
     }, []);
 
-    const getRange = (awayTeamByDateList: AwayTeamByDate[], index: number) => {
-        let rangeText = '';
+    const getRange = (
+        awayTeamByDateList: AwayTeamByDate[],
+        index: number,
+    ): Range => {
+        let dateRange = '';
         const rangeSize = 5;
         const startIndex = index * rangeSize;
         const endIndex = Math.min(
@@ -47,23 +47,41 @@ const LATeamAvailabilitySheetBody = ({
             awayTeamByDateList.length - 1,
         );
 
-        const firstValue = awayTeamByDateList[startIndex].date;
-        const secondValue = awayTeamByDateList[endIndex].date;
+        const firstDate = awayTeamByDateList[startIndex].date;
+        const secondDate = awayTeamByDateList[endIndex].date;
 
-        if (firstValue === secondValue) {
-            rangeText = `${getFormattedDay(firstValue, true).toString()}`;
-            return { rangeText, startIndex, endIndex };
+        if (firstDate === secondDate) {
+            dateRange = `${getFormattedDay(firstDate, true).toString()}`;
+            return { dateRange, startIndex, endIndex };
         }
 
-        rangeText = `${getFormattedDay(
-            firstValue,
+        dateRange = `${getFormattedDay(
+            firstDate,
             true,
-        ).toString()} - ${getFormattedDay(secondValue, true).toString()}`;
-        return { rangeText, startIndex, endIndex };
+        ).toString()} - ${getFormattedDay(secondDate, true).toString()}`;
+        return { dateRange, startIndex, endIndex };
     };
 
-    const onPressrange = (startIndex: number, endIndex: number) => {
-        setSelectedMemberList(awayTeamsByDate.slice(startIndex, endIndex + 1));
+    const onPressRangeItem = (startIndex: number, endIndex: number) => {
+        setSelectedTeam(awayTeamsByDate.slice(startIndex, endIndex + 1));
+    };
+
+    const renderItem = ({ index }: { index: number }) => {
+        const { dateRange, startIndex, endIndex } = getRange(
+            awayTeamsByDate,
+            index,
+        );
+        return (
+            <DateRangeItem
+                testID={`${TID}TEXT_DATE_RANGE_${index}`}
+                selected={index === selectedDateRangeId}
+                dateRange={dateRange}
+                onPress={() => {
+                    setSelectedDateRangeId(index);
+                    onPressRangeItem(startIndex, endIndex);
+                }}
+            />
+        );
     };
 
     return (
@@ -92,53 +110,21 @@ const LATeamAvailabilitySheetBody = ({
             </View>
             <Spacer height={0} />
             <View style={styles.listContentStyle}>
-                {selectedMemberList?.slice(0, 5).map(item => (
+                {selectedTeam?.slice(0, 5).map((item, index) => (
                     <ListItem
+                        testID={`${TID}TEXT_SELECTED_DATE_${index}`}
                         key={item.date}
                         date={item.date}
-                        awayMemberDetailsList={item.employeeResponseDtos}
+                        awayTeam={item.employeeResponseDtos}
                     />
                 ))}
             </View>
             <Spacer height={-6} />
-            {isVisible ? (
+            {isRangeVisible ? (
                 <FlatList
                     data={[...Array(Math.ceil(awayTeamsByDate.length / 5))]}
-                    keyExtractor={(_item, index) => index.toString()}
-                    renderItem={({ index }) => {
-                        const { rangeText, startIndex, endIndex } = getRange(
-                            awayTeamsByDate,
-                            index,
-                        );
-                        return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    setSelectedItemId(index);
-                                    onPressrange(startIndex, endIndex);
-                                }}
-                                style={
-                                    index !== selectedItemId
-                                        ? styles.rangeListContainer
-                                        : [
-                                              styles.rangeListContainer,
-                                              {
-                                                  backgroundColor:
-                                                      colors.secondaryOutline,
-                                              },
-                                          ]
-                                }>
-                                <Text
-                                    testID={`${TID}TEXT_DATE_RANGE_${index}`}
-                                    color={
-                                        index !== selectedItemId
-                                            ? colors.gray600
-                                            : colors.white
-                                    }>
-                                    {rangeText}
-                                </Text>
-                            </TouchableOpacity>
-                        );
-                    }}
+                    keyExtractor={item => item}
+                    renderItem={renderItem}
                     horizontal
                 />
             ) : (
@@ -146,6 +132,7 @@ const LATeamAvailabilitySheetBody = ({
             )}
             <Spacer height={3} />
             <Button
+                testID={`${TID}BUTTON_GO_BACK`}
                 iconPosition='left'
                 icon='arrow-back'
                 label='Go back'

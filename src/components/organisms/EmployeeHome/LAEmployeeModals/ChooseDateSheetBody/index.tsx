@@ -180,7 +180,7 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
     return (
         <View>
             <Spacer height={scale.vsc8} />
-            {range.startDate ? (
+            {range.startDate && (
                 <>
                     <TeamAvailability
                         startDate={range.startDate ? range.startDate : ''}
@@ -188,7 +188,7 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                     />
                     <Spacer height={scale.vsc8} />
                 </>
-            ) : null}
+            )}
             <Calendar
                 markedDates={marked}
                 markingType='dot'

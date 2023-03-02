@@ -9,13 +9,14 @@ import { TID } from 'src/utils/testIds';
 import { styles } from './styles';
 
 interface Props {
+    testID: string;
     date: string;
-    awayMemberDetailsList: EmployeeType[];
+    awayTeam: EmployeeType[];
 }
 const { colors } = theme;
-const ListItem = ({ date, awayMemberDetailsList }: Props) => {
+const ListItem = ({ testID, date, awayTeam }: Props) => {
     const getListItemContent = () => {
-        if (awayMemberDetailsList.length === 0) {
+        if (awayTeam.length === 0) {
             return (
                 <View style={styles.listItemRightContainerText}>
                     <Text testID={`${TID}TEXT_FULL_TEAM_AVAILABLE`}>
@@ -24,10 +25,10 @@ const ListItem = ({ date, awayMemberDetailsList }: Props) => {
                 </View>
             );
         }
-        if (awayMemberDetailsList.length <= 2) {
-            return awayMemberDetailsList?.map((item, index) => (
+        if (awayTeam.length <= 2) {
+            return awayTeam?.map((item, index) => (
                 <AvatarChip
-                    testId={`${TID}CHIP_IMAGE_AVATAR_${index}`}
+                    testIdContent={`${TID}CHIP_IMAGE_AVATAR_${index}`}
                     size={AvatarSize.small}
                     label={item.name?.split(' ')[0] ?? ''}
                     source={{
@@ -38,7 +39,7 @@ const ListItem = ({ date, awayMemberDetailsList }: Props) => {
                 />
             ));
         }
-        return awayMemberDetailsList?.map((item, index) => (
+        return awayTeam?.map((item, index) => (
             <Avatar
                 testId={`${TID}IMAGE_AVATAR_AWAY_MEMBER_${index}`}
                 size={AvatarSize.small}
@@ -54,9 +55,7 @@ const ListItem = ({ date, awayMemberDetailsList }: Props) => {
         <View style={styles.listItemContainer}>
             <View style={styles.listItemLeftContainer}>
                 <View style={styles.listItemDateContainer}>
-                    <Text
-                        testID={`${TID}TEXT_SELECTED_DATE`}
-                        style={styles.listItemDateStyle}>
+                    <Text testID={testID} style={styles.listItemDateStyle}>
                         {getFormattedDay(date, true)}
                     </Text>
                 </View>

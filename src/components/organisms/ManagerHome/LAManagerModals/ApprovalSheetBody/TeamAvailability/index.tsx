@@ -87,6 +87,7 @@ const TeamAvailability = ({ requestDetails }: Props) => {
     );
 
     const getTeamAvailabilityContent = () => {
+        let leaveDuration = `${getFormattedDay(requestDetails.startDate)}`;
         if (availableTeamLoading || availableTeamRefetching || !availableTeam) {
             return <SkelitonLoaderContent />;
         }
@@ -95,13 +96,16 @@ const TeamAvailability = ({ requestDetails }: Props) => {
         if (onLeaveCount === 0 && onlineCount === 0) {
             return <LATeamAvNoDataContent />;
         }
+        if (requestDetails.startDate !== requestDetails.endDate) {
+            leaveDuration = `${getFormattedDay(
+                requestDetails.startDate,
+            )} to ${getFormattedDay(requestDetails.endDate)}`;
+        }
         return (
             <>
                 <LATeamAvAvailableText
                     awayTeamList={nameList}
-                    leaveDuration={`${getFormattedDay(
-                        requestDetails.startDate,
-                    )} to ${getFormattedDay(requestDetails.endDate)}`}
+                    leaveDuration={leaveDuration}
                 />
                 <Spacer height={scale.vsc2} />
                 <LATeamAvContent
