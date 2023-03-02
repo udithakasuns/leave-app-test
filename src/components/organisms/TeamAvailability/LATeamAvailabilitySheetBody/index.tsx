@@ -119,7 +119,7 @@ const LATeamAvailabilitySheetBody = ({
                     />
                 ))}
             </View>
-            <Spacer height={-6} />
+            <Spacer height={4} />
             {isRangeVisible ? (
                 <FlatList
                     data={[...Array(Math.ceil(awayTeamsByDate.length / 5))]}
@@ -130,7 +130,7 @@ const LATeamAvailabilitySheetBody = ({
             ) : (
                 <View />
             )}
-            <Spacer height={3} />
+            <Spacer height={10} />
             <Button
                 testID={`${TID}BUTTON_GO_BACK`}
                 iconPosition='left'
