@@ -46,7 +46,7 @@ const ListItem = ({ testID, date, awayTeam }: Props) => {
                 source={{
                     uri: item.authPic ?? '',
                 }}
-                style={styles.listItemAvatarStyle}
+                style={index === 0 ? styles.avatar : styles.avatarWithLeftSpace}
             />
         ));
     };

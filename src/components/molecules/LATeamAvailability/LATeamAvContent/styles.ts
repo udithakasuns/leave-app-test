@@ -26,7 +26,6 @@ export const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     avatar: {
-        marginLeft: MINERS_MARGIN,
         borderColor: colors.white,
         borderWidth: 1,
     },

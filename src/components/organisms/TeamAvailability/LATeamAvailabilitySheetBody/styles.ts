@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
         marginRight: scale.sc4,
     },
     listContentStyle: {
-        minHeight: Platform.OS === 'ios' ? pixel(430) : pixel(440),
+        minHeight: Platform.OS === 'ios' ? pixel(410) : pixel(420),
         justifyContent: 'flex-start',
         marginBottom: scale.sc4,
     },
@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
         borderRadius: scale.sc8,
         padding: scale.sc12,
         marginBottom: scale.sc4,
-        minHeight: scale.sc64,
+        maxHeight: scale.sc64,
     },
     listItemLeftContainer: {
         flex: 1,
@@ -76,8 +76,12 @@ export const styles = StyleSheet.create({
         fontSize: fontSize.fs16,
         fontFamily: fontFamily.poppins400,
     },
-    listItemAvatarStyle: {
-        marginLeft: pixel(-15),
+    avatar: {
+        borderColor: colors.white,
+        borderWidth: 1,
+    },
+    avatarWithLeftSpace: {
+        marginLeft: -scale.sc8,
         borderColor: colors.white,
         borderWidth: 1,
     },
