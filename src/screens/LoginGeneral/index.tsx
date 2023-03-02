@@ -43,6 +43,7 @@ const LoginGeneral = () => {
                 contentContainerStyle={styles.scrollView}>
                 <Header description='Enter your email and password to Sign in to the system.' />
                 <Input
+                    testIdInput='txtLoginEmail'
                     label='Enter Rootcode email'
                     placeholder=''
                     value={email}
@@ -53,6 +54,7 @@ const LoginGeneral = () => {
                 />
                 <Input
                     reference={passwordRef}
+                    testIdInput='txtLoginPassword'
                     label='Enter current password'
                     placeholder=''
                     value={password}
@@ -69,6 +71,7 @@ const LoginGeneral = () => {
                 />
                 <Spacer height={20} />
                 <Button
+                    testID='btnLogin'
                     label='Login'
                     onPress={onLogin}
                     iconPosition='left'

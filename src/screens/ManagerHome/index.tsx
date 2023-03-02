@@ -114,7 +114,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                 showsVerticalScrollIndicator={false}>
                 <LAAppBar currentScreen='manager' />
                 <Spacer />
-                <Text type='H1Bold'>
+                <Text testID='txtGreetingManagerHome' type='H1Bold'>
                     Hey {firstName} {'\n'}
                     {getGreetingsByTime()}
                 </Text>
