@@ -23,11 +23,16 @@ import { styles } from './styles';
 import AddTeamSheetBody from '../LAManagerModals/AddTeamSheetBody';
 
 interface Props {
-    isManagerTeamsLoading: boolean;
+    isManagerTeamsInitialLoading: boolean;
+    isManagerTeamsRefetching: boolean;
     managerTeams: Team[];
 }
 
-const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
+const TeamAvailability = ({
+    isManagerTeamsInitialLoading,
+    isManagerTeamsRefetching,
+    managerTeams,
+}: Props) => {
     const {
         manager: { filteredTeams },
     } = usePersistStore();
@@ -62,16 +67,20 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
         isLoading: availableTeamLoading,
         isRefetching: availableTeamRefetching,
         data: availableTeam,
-    } = useQuery<AvailableTeam, AxiosError>(
-        [selectedTeams],
-        () =>
-            getHttpTeamAvailability({
-                date: getformatDateToYyyyMmDd(new Date().toString()),
-                teamIds: [
-                    selectedTeams.find(team => team.recentlySelected)?.teamId ||
-                        -1,
-                ],
-            }),
+    } = useQuery<AvailableTeam | null, AxiosError>(
+        [selectedTeams, isManagerTeamsRefetching],
+        () => {
+            if (!isManagerTeamsRefetching) {
+                return getHttpTeamAvailability({
+                    date: getformatDateToYyyyMmDd(new Date().toString()),
+                    teamIds: [
+                        selectedTeams.find(team => team.recentlySelected)
+                            ?.teamId || -1,
+                    ],
+                });
+            }
+            return null;
+        },
         {
             keepPreviousData: true,
         },
@@ -103,7 +112,7 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
         }
     }, [filteredTeams]);
 
-    if (isManagerTeamsLoading || !availableTeam) {
+    if (isManagerTeamsInitialLoading || !managerTeams) {
         return <SkelitonLoaderFull />;
     }
 

@@ -99,6 +99,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         data: managerTeams,
         refetch: onRefetchManagerTeams,
         isRefetching: isRefetchingManagerTeams,
+        isInitialLoading: isInitialLoadingManagerTeams,
     } = useQuery<Team[], AxiosError>(
         ['fetchManagerTeams'],
         () => getHttpTeamByUser(userId),
@@ -133,9 +134,13 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                 refreshControl={
                     <SwipeRefresh
                         refreshing={
-                            isRefetchLeaveRequests || isRefetchingManagerTeams
+                            isRefetchLeaveRequests ||
+                            isInitialLoadingManagerTeams
                         }
-                        onRefresh={refetchLeaveRequests}
+                        onRefresh={() => {
+                            refetchLeaveRequests();
+                            onRefetchManagerTeams();
+                        }}
                     />
                 }
                 contentContainerStyle={screenStyles.scrollViewContainer}
@@ -149,7 +154,8 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                 <Spacer />
                 <TeamAvilability
                     managerTeams={managerTeams || []}
-                    isManagerTeamsLoading={isRefetchingManagerTeams}
+                    isManagerTeamsInitialLoading={isInitialLoadingManagerTeams}
+                    isManagerTeamsRefetching={isRefetchingManagerTeams}
                 />
                 <Spacer />
                 <Text type='SubHBold'>Leave requests</Text>

@@ -19,7 +19,7 @@ export const SkelitonLoaderContent = () => (
             <SkeletonPlaceholder.Item
                 key={2}
                 width={pixel(80)}
-                height={pixel(40)}
+                height={pixel(50)}
                 marginRight={pixel(70)}
             />
             {[...Array(5)].map(item => (
