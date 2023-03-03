@@ -8,6 +8,8 @@
         "start": "react-native start",
         "test:unit": "jest --testPathPattern 'src/components'",
         "test:e2e": "detox test --configuration ios.sim.debug",
+        "e2e:build": "detox build --configuration",
+        "e2e:test": "detox test --configuration",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "lint:fix": "eslint --fix .",
         "prepare": "husky install",
