@@ -24,4 +24,9 @@ export default (insets: EdgeInsets) =>
             paddingHorizontal: theme.scale.sc20,
         },
         headerContainer: { marginTop: theme.scale.vsc20 },
+        headerRightContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+        },
     });

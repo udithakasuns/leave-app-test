@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import React, { ReactElement } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
 import Modal, { OnSwipeCompleteParams } from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,6 +17,7 @@ export type SheetProps = {
     sheetBody: ReactElement;
     header: string;
     headerIcon: string;
+    headerRightContent: ReactNode;
     style: StyleProp<ViewStyle>;
 };
 
@@ -27,14 +28,16 @@ const LAModal = ({
     sheetBody,
     header,
     headerIcon = 'close',
+    headerRightContent,
     style,
 }: PartialBy<
     SheetProps,
-    'header' | 'headerIcon' | 'style' | 'testIdModal'
+    'header' | 'headerIcon' | 'style' | 'testIdModal' | 'headerRightContent'
 >) => {
     const insets = useSafeAreaInsets();
 
-    const { container, bodyContainer, headerContainer } = styles(insets);
+    const { container, bodyContainer, headerContainer, headerRightContainer } =
+        styles(insets);
     const DefaultHeaderContainer = () => (
         <View style={headerContainer}>
             <Icon
@@ -45,7 +48,10 @@ const LAModal = ({
                 onPress={onClose}
             />
             <Spacer height={8} />
-            <Text type='H1Bold'>{header}</Text>
+            <View style={headerRightContainer}>
+                <Text type='H1Bold'>{header}</Text>
+                <View>{headerRightContent}</View>
+            </View>
         </View>
     );
     return (

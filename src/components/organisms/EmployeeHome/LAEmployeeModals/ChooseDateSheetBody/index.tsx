@@ -14,9 +14,13 @@ import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import theme from 'src/utils/theme';
 import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
 import { calendarTheme, styles } from './styles';
+import TeamAvailability from './TeamAvailability';
 
 const { scale, colors } = theme;
-
+export interface DropDownList {
+    teamId: number;
+    teamName: string;
+}
 interface Props extends Partial<TestProps> {
     formik: FormikProps<ApplyFormValues>;
     onBackPress: (modalType: EmployeeModal) => void;
@@ -176,10 +180,21 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
     return (
         <View>
             <Spacer height={scale.vsc8} />
+            {range.startDate && (
+                <>
+                    <TeamAvailability
+                        startDate={range.startDate ? range.startDate : ''}
+                        endDate={range.endDate ? range.endDate : ''}
+                    />
+                    <Spacer height={scale.vsc8} />
+                </>
+            )}
             <Calendar
                 markedDates={marked}
                 markingType='dot'
-                onDayPress={day => handleDayPress(day)}
+                onDayPress={day => {
+                    handleDayPress(day);
+                }}
                 enableSwipeMonths
                 disableAllTouchEventsForInactiveDays
                 onMonthChange={(date: DateData) => {

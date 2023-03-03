@@ -21,7 +21,7 @@ import {
     TID_MANAGER_LEAVE_REQUEST_ROW,
     TID_MANAGER_LEAVE_REQUEST_STATUS,
 } from 'src/utils/testIds';
-// import { getEntitlementChipText } from 'src/utils/helpers/unicodeHandler';
+
 import theme from 'src/utils/theme';
 import { AtLeast, PendingRequestType, TestProps } from 'src/utils/types';
 import LAManagerFilters from '../LAManagerFilters';
@@ -58,30 +58,6 @@ const LAPendingRequestList = ({
         viewAllContent,
         viewAllPress,
     } = styles(isViewAllPage);
-    // const Item = ({
-    //     item,
-    //     index,
-    // }: {
-    //     item: PendingRequestType;
-    //     index: number;
-    // }) => (
-    //     <PendingListItem
-    //         testIdRow={`${TID_MANAGER_LEAVE_REQUEST_ROW}_${index.toString()}`}
-    //         date={getStartEndDate(item.startDate, item.endDate)}
-    //         employee={item.employee}
-    //         // entitlement={getEntitlementChipText(
-    //         //     item.leaveType,
-    //         //     item.leaveType.name,
-    //         // )}
-    //         onPress={() => onPressRequestItem(item)}
-    //         // entitlementChipColor={
-    //         //     isViewAllPage ? colors.tertiaryColor : colors.white
-    //         // }
-    //         testIdStatus={`${TID_MANAGER_LEAVE_REQUEST_STATUS}_${index.toString()}`}
-    //         status={item.status}
-    //         chipsColor={isViewAllPage ? colors.tertiaryColor : colors.white}
-    //     />
-    // );
 
     return (
         <View style={container}>
@@ -167,14 +143,7 @@ const LAPendingRequestList = ({
                         testIdRow={`${TID_MANAGER_LEAVE_REQUEST_ROW}_${index.toString()}`}
                         date={getStartEndDate(item.startDate, item.endDate)}
                         employee={item.employee}
-                        // entitlement={getEntitlementChipText(
-                        //     item.leaveType,
-                        //     item.leaveType.name,
-                        // )}
                         onPress={() => onPressRequestItem(item)}
-                        // entitlementChipColor={
-                        //     isViewAllPage ? colors.tertiaryColor : colors.white
-                        // }
                         testIdStatus={`${TID_MANAGER_LEAVE_REQUEST_STATUS}_${index.toString()}`}
                         testIdContent={`${TID_MANAGER_LEAVE_REQUEST_DATE}_${index.toString()}`}
                         status={item.status}
@@ -182,7 +151,6 @@ const LAPendingRequestList = ({
                             isViewAllPage ? colors.tertiaryColor : colors.white
                         }
                     />
-                    // <Item item={item} index={index} />
                 )}
                 ListFooterComponent={() =>
                     !isViewAllPage ? (
