@@ -20,6 +20,9 @@ jobs:
       - name: Install Yarn Dependencies
         run: yarn install
 
+      - name: Run Unit Test(s)
+        run: yarn test:unit
+
       - name: Install Pod Dependencies
         run: cd ./ios && pod install && cd ..
 
@@ -27,8 +30,6 @@ jobs:
         run: |
           brew tap wix/brew
           brew install applesimutils
-      - name: Run Unit Test(s)
-        run: yarn test
 
       - name: Run Detox Build
         run: yarn e2e:build ios.sim.release
