@@ -16,6 +16,7 @@ export type AuthScreensParamList = {
 export type RootScreensParamsList = {
     Loading: undefined;
     Login: undefined;
+    ForgotPw: undefined;
     Auth: NavigatorScreenParams<AuthScreensParamList>;
 };
 
@@ -27,6 +28,11 @@ export type LoadingScreenProps = NativeStackScreenProps<
 export type LoginScreenProps = NativeStackScreenProps<
     RootScreensParamsList,
     'Login'
+>;
+
+export type ForgotPwScreenProps = NativeStackScreenProps<
+    RootScreensParamsList,
+    'ForgotPw'
 >;
 
 export type EmployeeHomeScreensProps = NativeStackScreenProps<

@@ -13,10 +13,16 @@ export const styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'center',
     },
+    forgotPwText: {
+        textDecorationLine: 'underline',
+    },
     bottomText: {
         alignSelf: 'center',
         textAlign: 'center',
         textDecorationLine: 'underline',
+    },
+    inputContainer: {
+        marginHorizontal: 0,
     },
     input: {
         borderWidth: 0,
