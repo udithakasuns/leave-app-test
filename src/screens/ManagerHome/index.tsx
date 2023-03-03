@@ -7,7 +7,7 @@ import { ScrollView, View } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { Spacer, SwipeRefresh, Text } from 'src/components/atoms';
 import { MultiChipProps } from 'src/components/molecules';
-import { LAAppBar, TeamAvilability } from 'src/components/organisms';
+import { LAAppBar, TeamAvailability } from 'src/components/organisms';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
 import { getHttpTeamByUser } from 'src/services/http';
 import {
@@ -100,6 +100,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         refetch: onRefetchManagerTeams,
         isRefetching: isRefetchingManagerTeams,
         isInitialLoading: isInitialLoadingManagerTeams,
+        isError: isManagerTeamError,
     } = useQuery<Team[], AxiosError>(
         ['fetchManagerTeams'],
         () => getHttpTeamByUser(userId),
@@ -152,10 +153,11 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                     {getGreetingsByTime()}
                 </Text>
                 <Spacer />
-                <TeamAvilability
+                <TeamAvailability
                     managerTeams={managerTeams || []}
                     isManagerTeamsInitialLoading={isInitialLoadingManagerTeams}
                     isManagerTeamsRefetching={isRefetchingManagerTeams}
+                    isManagerTeamsNotFound={isManagerTeamError}
                 />
                 <Spacer />
                 <Text type='SubHBold'>Leave requests</Text>

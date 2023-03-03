@@ -4,7 +4,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { Chip, Icon, IconSize, Text } from 'src/components/atoms';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
-import { Team } from 'src/utils/types';
+import { PartialBy, Team } from 'src/utils/types';
 import { Modal, SelectableButton } from '../..';
 import { styles } from './styles';
 
@@ -17,6 +17,7 @@ interface NoneProps {
 interface OptionProps {
     headerType: 'options';
     onPressOption: () => void;
+    disableOnPressOption: boolean;
 }
 
 interface TeamSelector {
@@ -26,7 +27,10 @@ interface TeamSelector {
     onSelectTeam: (team: Team) => void;
 }
 
-type Props = NoneProps | OptionProps | TeamSelector;
+type Props =
+    | NoneProps
+    | PartialBy<OptionProps, 'disableOnPressOption'>
+    | TeamSelector;
 
 const LATeamAvHeader = (props: Props) => {
     const [openTeamSelector, setOpenTeamSelector] = useState<boolean>(false);
@@ -40,7 +44,9 @@ const LATeamAvHeader = (props: Props) => {
                 Team availability
             </Text>
             {props.headerType === 'options' ? (
-                <TouchableOpacity onPress={props.onPressOption}>
+                <TouchableOpacity
+                    disabled={props.disableOnPressOption}
+                    onPress={props.onPressOption}>
                     <Icon
                         name='dots-horizontal'
                         library='community'
