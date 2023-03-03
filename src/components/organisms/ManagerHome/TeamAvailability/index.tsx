@@ -5,7 +5,12 @@ import { View } from 'react-native';
 import { getHttpTeamAvailability } from 'src/services/http';
 import { usePersistStore } from 'src/store';
 import { getformatDateToYyyyMmDd } from 'src/utils/helpers/dateHandler';
-import { AvailableTeam, SelectedTeam, Team } from 'src/utils/types';
+import {
+    AvailableTeam,
+    EmployeeType,
+    SelectedTeam,
+    Team,
+} from 'src/utils/types';
 import { Modal } from 'src/components/molecules';
 import { Text } from 'src/components/atoms';
 import {
@@ -21,12 +26,24 @@ import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
 import { styles } from './styles';
 
 import AddTeamSheetBody from '../LAManagerModals/AddTeamSheetBody';
+import ViewAllMembersSheetBody from '../../TeamAvailability/ViewAllMembersSheetBody';
 
 interface Props {
     isManagerTeamsInitialLoading: boolean;
     isManagerTeamsRefetching: boolean;
     managerTeams: Team[];
 }
+
+interface OpenAwayTeamDetailItem {
+    isOpen: boolean;
+    awayTeamImages: string[];
+    awayTeamNames: string[];
+}
+const initialOpenAwayTeamDetailItem: OpenAwayTeamDetailItem = {
+    isOpen: false,
+    awayTeamImages: [],
+    awayTeamNames: [],
+};
 
 const TeamAvailability = ({
     isManagerTeamsInitialLoading,
@@ -39,6 +56,8 @@ const TeamAvailability = ({
 
     const [selectedTeams, setSelectedTeams] = useState<SelectedTeam[]>([]);
     const [openAddTeamModal, setAddTeamModal] = useState<boolean>(false);
+    const [openAwayTeamDetailItemModal, setOpenAwayTeamDetailItemModal] =
+        useState<OpenAwayTeamDetailItem>(initialOpenAwayTeamDetailItem);
 
     const onSetSelectedTeam = () => {
         setSelectedTeams(
@@ -51,6 +70,22 @@ const TeamAvailability = ({
 
     const onOpenAddTeamModal = () => setAddTeamModal(true);
     const onCloseAddTeamModal = () => setAddTeamModal(false);
+
+    const onOpenDetailItemModal = (
+        awayTeamImages: string[],
+        awayTeamNames: string[],
+    ) => {
+        setTimeout(() => {
+            setOpenAwayTeamDetailItemModal({
+                isOpen: true,
+                awayTeamImages,
+                awayTeamNames,
+            });
+        }, 500);
+    };
+    const onCloseDetailItemModal = () => {
+        setOpenAwayTeamDetailItemModal(initialOpenAwayTeamDetailItem);
+    };
 
     const onSelectTeam = (team: SelectedTeam) => {
         selectedTeams.forEach((selectedTeam, index) => {
@@ -98,11 +133,33 @@ const TeamAvailability = ({
             return <LATeamAvAvailableText awayTeamList={[]} leaveDuration='' />;
         }
         return (
-            <LATeamAvContent
-                showAvailableTeamCount
-                availableTeamCount={onlineCount}
-                awayTeamImages={imageList}
-            />
+            <>
+                <LATeamAvContent
+                    showAvailableTeamCount
+                    availableTeamCount={onlineCount}
+                    awayTeamImages={imageList}
+                />
+                <Modal
+                    onClose={onCloseDetailItemModal}
+                    isVisible={openAwayTeamDetailItemModal.isOpen}
+                    header='All members'
+                    sheetBody={
+                        <ViewAllMembersSheetBody
+                            awayTeam={[]}
+                            imageList={availableTeam?.imageList}
+                            nameList={availableTeam?.nameList}
+                            onClose={onCloseDetailItemModal}
+                        />
+                    }
+                    headerRightContent={
+                        <View style={styles.headerRightContentBody}>
+                            <Text>
+                                {availableTeam?.nameList.length.toString()}
+                            </Text>
+                        </View>
+                    }
+                />
+            </>
         );
     };
 
