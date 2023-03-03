@@ -195,6 +195,7 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
                 header='View all members'
                 sheetBody={
                     <ViewAllMembersSheetBody
+                        isAvatarOnly={false}
                         awayTeam={openAwayTeamDetailItemModal.awayTeam}
                         onClose={onCloseDetailItemModal}
                     />

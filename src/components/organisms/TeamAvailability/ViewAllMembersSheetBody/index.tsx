@@ -1,70 +1,71 @@
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import { View } from 'react-native';
 import { Button, Divider, Spacer, Text } from 'src/components/atoms';
 import { AvatarChip } from 'src/components/molecules';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
-import { EmployeeType, PartialBy } from 'src/utils/types';
+import { EmployeeType } from 'src/utils/types';
 import styles from './styles';
 
-interface Props {
-    awayTeam: EmployeeType[];
-    imageList: string[];
-    nameList: string[];
+const { scale } = theme;
+
+interface CommonProps {
     onClose: () => void;
 }
-const { colors, scale } = theme;
-const ViewAllMembersSheetBody = ({
-    awayTeam,
-    imageList,
-    nameList,
-    onClose,
-}: PartialBy<Props, 'imageList' | 'nameList'>) => {
-    const getContentBodyWithDesignation = () =>
-        awayTeam.map(item => (
-            <View
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginBottom: scale.sc20,
-                }}>
-                <AvatarChip
-                    key={item?.employeeId}
-                    label={item?.name ?? ''}
-                    source={{
-                        uri: item?.authPic ?? '',
-                    }}
-                    labelStyle={{ color: colors.black }}
-                    containerStyle={{
-                        padding: scale.sc1,
-                        borderRadius: scale.sc64,
-                    }}
-                />
 
-                <Text type='ParaXS' style={{ alignSelf: 'center' }}>
-                    {item?.designation}
-                </Text>
+interface AvatarOnlyProps extends CommonProps {
+    isAvatarOnly: true;
+    imageList: string[];
+    nameList: string[];
+}
+
+interface AvatarAndDesignationProps extends CommonProps {
+    isAvatarOnly: false | undefined;
+    awayTeam: EmployeeType[];
+}
+
+type Props = AvatarOnlyProps | AvatarAndDesignationProps;
+
+const ViewAllMembersSheetBody = (props: Props) => {
+    const getAvatartsWithDesignation = (awayTeam: EmployeeType[]) =>
+        awayTeam.map((team, index) => (
+            <View style={styles.row}>
+                <View style={styles.nameContainer}>
+                    <AvatarChip
+                        testIdContent={`${TID}AVATR_CHIP_AWAY_TEAM_MEMBER_${index}`}
+                        key={team.employeeId}
+                        label={team.name ?? ''}
+                        source={{
+                            uri: team.authPic ?? '',
+                        }}
+                        labelStyle={styles.avatarChipLabel}
+                        containerStyle={styles.avatarChipContainer}
+                    />
+                </View>
+                <View style={styles.designationContainer}>
+                    <Text
+                        testID={`${TID}TEXT_DESIGNATION_${index}`}
+                        numberOfLines={2}
+                        type='ParaXS'>
+                        {team.designation}
+                    </Text>
+                </View>
             </View>
         ));
-    const getContentBody = () =>
-        imageList?.map((item, index) => (
-            <View
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginBottom: scale.sc20,
-                }}>
+
+    const getAvatarList = (imageList: string[], nameList: string[]) =>
+        imageList.map((item, index) => (
+            <View style={styles.row}>
                 <AvatarChip
+                    testIdContent={`${TID}AVATAR_CHIP_AWAY_TEAM_MEMBER_${index}`}
                     key={item}
-                    label={nameList?.[index] ?? ''}
+                    label={nameList[index] ?? ''}
                     source={{
                         uri: item ?? '',
                     }}
-                    labelStyle={{ color: colors.black }}
-                    containerStyle={{
-                        padding: scale.sc1,
-                        borderRadius: scale.sc64,
-                    }}
+                    labelStyle={styles.avatarChipLabel}
+                    containerStyle={styles.avatarChipContainer}
                 />
             </View>
         ));
@@ -73,12 +74,10 @@ const ViewAllMembersSheetBody = ({
         <View style={styles.container}>
             <Divider />
             <Spacer height={scale.sc15} />
-            <View
-                style={{
-                    flexDirection: 'column',
-                }}>
-                {getContentBodyWithDesignation()}
-                {getContentBody()}
+            <View>
+                {props.isAvatarOnly
+                    ? getAvatarList(props.imageList, props.nameList)
+                    : getAvatartsWithDesignation(props.awayTeam)}
             </View>
             <Spacer height={scale.sc1} />
             <Button
@@ -87,7 +86,7 @@ const ViewAllMembersSheetBody = ({
                 iconPosition='left'
                 icon='close'
                 label='Close'
-                onPress={onClose}
+                onPress={props.onClose}
                 labelStyle={{ paddingHorizontal: scale.sc4 }}
             />
             <Spacer />
