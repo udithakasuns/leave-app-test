@@ -11,7 +11,10 @@ import {
     LATeamAvHeader,
     LATeamAvNoDataContent,
 } from 'src/components/molecules/LATeamAvailability';
-import { TeamAvailabilitySheetBody } from 'src/components/organisms';
+import {
+    TeamAvailabilitySheetBody,
+    ViewAllMembersSheetBody,
+} from 'src/components/organisms';
 import { getHttpAwayEmployees, getHttpTeamByUser } from 'src/services/http';
 import {
     getCalendarRangeDate,
@@ -21,6 +24,7 @@ import {
 import theme from 'src/utils/theme';
 import {
     EmployeeOnLeaveByDay,
+    EmployeeType,
     PendingRequestByID,
     Team,
 } from 'src/utils/types';
@@ -32,6 +36,16 @@ const { scale } = theme;
 interface Props {
     requestDetails: PendingRequestByID;
 }
+interface OpenAwayTeamDetailItem {
+    isOpen: boolean;
+    awayTeam: EmployeeType[];
+}
+const initialOpenAwayTeamDetailItem: OpenAwayTeamDetailItem = {
+    isOpen: false,
+    awayTeam: [],
+};
+
+const MODAL_TIMER = 550;
 
 const TeamAvailability = ({ requestDetails }: Props) => {
     const [selectedTeam, setSelectedTeam] = useState<Team>({
@@ -40,6 +54,8 @@ const TeamAvailability = ({ requestDetails }: Props) => {
     });
 
     const [openDetailModal, setOpenDetailModal] = useState<boolean>(false);
+    const [openAwayTeamDetailItemModal, setOpenAwayTeamDetailItemModal] =
+        useState<OpenAwayTeamDetailItem>(initialOpenAwayTeamDetailItem);
 
     const onSelectTeam = (team: Team) => setSelectedTeam(team);
 
@@ -129,6 +145,21 @@ const TeamAvailability = ({ requestDetails }: Props) => {
     const onOpenDetailModal = () => setOpenDetailModal(true);
     const onCloseDetailModal = () => setOpenDetailModal(false);
 
+    const onOpenDetailItemModal = (awayTeam: EmployeeType[]) => {
+        setTimeout(() => {
+            setOpenAwayTeamDetailItemModal({
+                isOpen: true,
+                awayTeam,
+            });
+        }, MODAL_TIMER);
+    };
+    const onCloseDetailItemModal = () => {
+        setOpenAwayTeamDetailItemModal(initialOpenAwayTeamDetailItem);
+        setTimeout(() => {
+            onOpenDetailModal();
+        }, MODAL_TIMER);
+    };
+
     if (isLoadingEmployeeTeams || !employeeTeams) {
         return <SkelitonLoaderFull />;
     }
@@ -163,6 +194,22 @@ const TeamAvailability = ({ requestDetails }: Props) => {
                             []
                         }
                         onPressGoBack={onCloseDetailModal}
+                        onPressTeamDetailItem={data => {
+                            onCloseDetailModal();
+                            onOpenDetailItemModal(data);
+                        }}
+                    />
+                }
+            />
+
+            <Modal
+                onClose={onCloseDetailItemModal}
+                isVisible={openAwayTeamDetailItemModal.isOpen}
+                header='View all members'
+                sheetBody={
+                    <ViewAllMembersSheetBody
+                        awayTeam={openAwayTeamDetailItemModal.awayTeam}
+                        onClose={onCloseDetailItemModal}
                     />
                 }
             />

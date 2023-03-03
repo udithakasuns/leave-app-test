@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { Avatar, AvatarSize, Text } from 'components/atoms';
 import { AvatarChip } from 'src/components/molecules';
 import { getFormattedDay } from 'src/utils/helpers/dateHandler';
@@ -12,9 +12,15 @@ interface Props {
     testID: string;
     date: string;
     awayTeam: EmployeeType[];
+    onPressTeamDetailItem: (awayTeam: EmployeeType[]) => void;
 }
 const { colors } = theme;
-const ListItem = ({ testID, date, awayTeam }: Props) => {
+const AwayTeamListItem = ({
+    testID,
+    date,
+    awayTeam,
+    onPressTeamDetailItem,
+}: Props) => {
     const getListItemContent = () => {
         if (awayTeam.length === 0) {
             return (
@@ -39,16 +45,37 @@ const ListItem = ({ testID, date, awayTeam }: Props) => {
                 />
             ));
         }
-        return awayTeam?.map((item, index) => (
-            <Avatar
-                testId={`${TID}IMAGE_AVATAR_AWAY_MEMBER_${index}`}
-                size={AvatarSize.small}
-                source={{
-                    uri: item.authPic ?? '',
-                }}
-                style={styles.listItemAvatarStyle}
-            />
-        ));
+        return (
+            <TouchableOpacity
+                style={{ flexDirection: 'row' }}
+                onPress={() => {
+                    onPressTeamDetailItem(awayTeam);
+                }}>
+                {awayTeam?.slice(0, 5).map((item, index) => (
+                    <Avatar
+                        testId={`${TID}IMAGE_AVATAR_AWAY_MEMBER_${index}`}
+                        size={AvatarSize.small}
+                        source={{
+                            uri: item.authPic ?? '',
+                        }}
+                        style={
+                            index === 0
+                                ? styles.avatar
+                                : styles.avatarWithLeftSpace
+                        }
+                    />
+                ))}
+                {awayTeam.length > 5 && (
+                    <View style={styles.listItemPlusIcon}>
+                        <Text
+                            testID={`${TID}TEXT_AWAY_COUNT`}
+                            color={colors.iconLabel}>
+                            +{awayTeam.length - 5}
+                        </Text>
+                    </View>
+                )}
+            </TouchableOpacity>
+        );
     };
 
     return (
@@ -67,4 +94,4 @@ const ListItem = ({ testID, date, awayTeam }: Props) => {
     );
 };
 
-export default React.memo(ListItem);
+export default React.memo(AwayTeamListItem);

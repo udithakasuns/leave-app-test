@@ -9,7 +9,10 @@ import {
     LATeamAvContent,
     LATeamAvHeader,
 } from 'src/components/molecules/LATeamAvailability';
-import { TeamAvailabilitySheetBody } from 'src/components/organisms';
+import {
+    TeamAvailabilitySheetBody,
+    ViewAllMembersSheetBody,
+} from 'src/components/organisms';
 import { getHttpAwayEmployees, getHttpTeamByUser } from 'src/services/http';
 import { useUserStore } from 'src/store';
 import {
@@ -17,7 +20,7 @@ import {
     getFormattedDay,
 } from 'src/utils/helpers/dateHandler';
 import theme from 'src/utils/theme';
-import { EmployeeOnLeaveByDay, Team } from 'src/utils/types';
+import { EmployeeOnLeaveByDay, EmployeeType, Team } from 'src/utils/types';
 import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
 
 const { scale } = theme;
@@ -26,7 +29,16 @@ interface Props {
     startDate: string;
     endDate: string;
 }
+interface OpenAwayTeamDetailItem {
+    isOpen: boolean;
+    awayTeam: EmployeeType[];
+}
+const initialOpenAwayTeamDetailItem: OpenAwayTeamDetailItem = {
+    isOpen: false,
+    awayTeam: [],
+};
 
+const MODAL_TIMER = 550;
 const TeamAvailability = ({ startDate, endDate }: Props) => {
     const [selectedTeam, setSelectedTeam] = useState<Team>({
         teamId: -1,
@@ -37,9 +49,26 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
     } = useUserStore();
 
     const [openDetailModal, setOpenDetailModal] = useState<boolean>(false);
+    const [openAwayTeamDetailItemModal, setOpenAwayTeamDetailItemModal] =
+        useState<OpenAwayTeamDetailItem>(initialOpenAwayTeamDetailItem);
 
     const onOpenDetailModal = () => setOpenDetailModal(true);
     const onCloseDetailModal = () => setOpenDetailModal(false);
+
+    const onOpenDetailItemModal = (awayTeam: EmployeeType[]) => {
+        setTimeout(() => {
+            setOpenAwayTeamDetailItemModal({
+                isOpen: true,
+                awayTeam,
+            });
+        }, 500);
+    };
+    const onCloseDetailItemModal = () => {
+        setOpenAwayTeamDetailItemModal(initialOpenAwayTeamDetailItem);
+        setTimeout(() => {
+            onOpenDetailModal();
+        }, MODAL_TIMER);
+    };
 
     const onSelectTeam = (team: Team) => setSelectedTeam(team);
 
@@ -151,7 +180,24 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
                             availableTeam?.employeeOnLeaveByDayResponseDtoList ||
                             []
                         }
+                        onPressTeamDetailItem={data => {
+                            onCloseDetailModal();
+                            onOpenDetailItemModal(data);
+                        }}
                         onPressGoBack={onCloseDetailModal}
+                    />
+                }
+            />
+
+            <Modal
+                onClose={onCloseDetailItemModal}
+                isVisible={openAwayTeamDetailItemModal.isOpen}
+                header='View all members'
+                sheetBody={
+                    <ViewAllMembersSheetBody
+                        isAvatarOnly={false}
+                        awayTeam={openAwayTeamDetailItemModal.awayTeam}
+                        onClose={onCloseDetailItemModal}
                     />
                 }
             />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Avatar, AvatarSize, Chip, Text } from 'src/components/atoms';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
@@ -12,12 +12,14 @@ interface Props {
     showAvailableTeamCount: boolean;
     availableTeamCount: number;
     awayTeamImages: string[];
+    onPressAwayTeamImages: () => void;
 }
 
 const LATeamAvContent = ({
     showAvailableTeamCount = false,
     availableTeamCount,
     awayTeamImages,
+    onPressAwayTeamImages,
 }: AtLeast<Props, 'availableTeamCount' | 'awayTeamImages'>) => {
     const displayTeamCountContent = () => {
         if (awayTeamImages.length === 0) {
@@ -45,7 +47,10 @@ const LATeamAvContent = ({
             return null;
         }
         return (
-            <View style={styles.container}>
+            <TouchableOpacity
+                disabled={!onPressAwayTeamImages || awayTeamImages.length <= 5}
+                onPress={onPressAwayTeamImages}
+                style={styles.container}>
                 {awayTeamImages.slice(0, 5).map((image, index) => (
                     <Avatar
                         testId={`${TID}IMAGE_AVATAR_${index}`}
@@ -78,7 +83,7 @@ const LATeamAvContent = ({
                     backgroundColor={colors.errorBackground}
                     containerStyle={styles.awayChip}
                 />
-            </View>
+            </TouchableOpacity>
         );
     };
 
