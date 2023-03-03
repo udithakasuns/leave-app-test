@@ -13,15 +13,24 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Install Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '14'
+          cache: 'yarn'
 
       - name: Install Yarn Dependencies
         run: yarn install
 
       - name: Run Unit Test(s)
         run: yarn test:unit
+
+      - name: Cache Pods
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
 
       - name: Install Pod Dependencies
         run: cd ./ios && pod install && cd ..
