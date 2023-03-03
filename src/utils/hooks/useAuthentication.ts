@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { AuthUserPayload } from 'src/services/aws/types';
 import { usePersistStore, useRecipientStore, useUserStore } from 'src/store';
 import amplifiConfig from 'src/aws-exports';
+import { COGNITO_CUSTOM_DOMAIN } from 'src/configs';
 import { getCurrentUserRoleFromToken } from '../helpers/gettersUtil';
 import { inAppAuthUrlHandler } from '../helpers/inAppUrlHandler';
 import {
@@ -15,6 +16,7 @@ Amplify.configure({
     ...amplifiConfig,
     oauth: {
         ...amplifiConfig.oauth,
+        domain: COGNITO_CUSTOM_DOMAIN,
         urlOpener: inAppAuthUrlHandler,
     },
 });
