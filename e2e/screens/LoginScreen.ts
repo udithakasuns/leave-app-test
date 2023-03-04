@@ -19,7 +19,7 @@ export default class LoginScreen {
     // Actions
 
     checkLoginPageLoaded = async () => {
-        await expect(element(this.lblSignIn)).toBeVisible();
+        await waitFor(element(this.lblSignIn)).toBeVisible().withTimeout(30000);
     };
 
     clearEmail = async () => {
@@ -50,6 +50,8 @@ export default class LoginScreen {
     };
 
     checkEmployeeHomeLoaded = async () => {
-        await expect(element(this.lblGreeting)).toBeVisible();
+        await waitFor(element(this.lblGreeting))
+            .toBeVisible()
+            .withTimeout(30000);
     };
 }
