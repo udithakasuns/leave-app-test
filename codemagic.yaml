@@ -43,6 +43,9 @@ workflows:
       - name: Run Detox Build
         script: |
                       yarn e2e:build ios.sim.release
+      - name: Free Port 8081
+        script: |
+                      kill -9 $(lsof -ti:8081)
       - name: Run Detox Test(s)
         script: |
                       bash ./scripts/run-e2e-ios-release.sh
