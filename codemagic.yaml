@@ -13,7 +13,12 @@ workflows:
         - $CM_BUILD_DIR/node_modules
         - $HOME/Library/Caches/CocoaPods
         - $HOME/Library/Detox/ios/
-        
+    triggering:
+      events:
+        - pull_request
+      branch_patterns: 
+        - pattern: detox-integration
+      cancel_previous_builds: true
     scripts:
       - name: AWS CLI configuration
         script: |
