@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { usePersistStore } from 'src/store';
 import { SelectedTeam, Team } from 'src/utils/types';
-import { Modal } from 'src/components/molecules';
+import { LAErrorContent, Modal } from 'src/components/molecules';
 import { Text } from 'src/components/atoms';
 import {
     LATeamAvChipGroup,
@@ -18,12 +18,14 @@ import AvailabilityContent from './AvailabilityConent';
 interface Props {
     isManagerTeamsInitialLoading: boolean;
     isManagerTeamsRefetching: boolean;
+    isManagerTeamsNotFound: boolean;
     managerTeams: Team[];
 }
 
 const TeamAvailability = ({
     isManagerTeamsInitialLoading,
     isManagerTeamsRefetching,
+    isManagerTeamsNotFound,
     managerTeams,
 }: Props) => {
     const {
@@ -72,20 +74,33 @@ const TeamAvailability = ({
                 <LATeamAvHeader
                     headerType='options'
                     onPressOption={onOpenAddTeamModal}
+                    disableOnPressOption={isManagerTeamsNotFound}
                 />
-                <LATeamAvChipGroup
-                    teams={selectedTeams}
-                    onSelectTeam={onSelectTeam}
-                />
-                <View style={styles.conentContainer}>
-                    <Text testID={`${TID}TEXT_TEAM_AVAILABLITY_TODAY`}>
-                        TODAY
-                    </Text>
-                    <AvailabilityContent
-                        selectedTeams={selectedTeams}
-                        isManagerTeamsRefetching={isManagerTeamsRefetching}
+
+                {isManagerTeamsNotFound ? (
+                    <LAErrorContent
+                        title='No teams assigned'
+                        subTitle='You have not been assigned a team to supervise yet. Please have a chat with the admin'
                     />
-                </View>
+                ) : (
+                    <>
+                        <LATeamAvChipGroup
+                            teams={selectedTeams}
+                            onSelectTeam={onSelectTeam}
+                        />
+                        <View style={styles.conentContainer}>
+                            <Text testID={`${TID}TEXT_TEAM_AVAILABLITY_TODAY`}>
+                                TODAY
+                            </Text>
+                            <AvailabilityContent
+                                selectedTeams={selectedTeams}
+                                isManagerTeamsRefetching={
+                                    isManagerTeamsRefetching
+                                }
+                            />
+                        </View>
+                    </>
+                )}
             </LATeamAvContainer>
             <Modal
                 onClose={onCloseAddTeamModal}
