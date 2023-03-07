@@ -63,13 +63,16 @@ const AvailabilityContent = ({
         [selectedTeams, isManagerTeamsRefetching],
         () => {
             if (!isManagerTeamsRefetching) {
-                return getHttpTeamAvailability({
-                    date: getformatDateToYyyyMmDd(new Date().toString()),
-                    teamIds: [
-                        selectedTeams.find(team => team.recentlySelected)
-                            ?.teamId || -1,
-                    ],
-                });
+                const selectedTeam = selectedTeams.find(
+                    team => team.recentlySelected,
+                );
+                if (selectedTeam) {
+                    return getHttpTeamAvailability({
+                        date: getformatDateToYyyyMmDd(new Date().toString()),
+                        teamIds: [selectedTeam.teamId],
+                    });
+                }
+                return null;
             }
             return null;
         },
