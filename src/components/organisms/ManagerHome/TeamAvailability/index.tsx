@@ -1,33 +1,33 @@
-import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { getHttpTeamAvailability } from 'src/services/http';
 import { usePersistStore } from 'src/store';
-import { getformatDateToYyyyMmDd } from 'src/utils/helpers/dateHandler';
-import { AvailableTeam, SelectedTeam, Team } from 'src/utils/types';
-import { Modal } from 'src/components/molecules';
+import { SelectedTeam, Team } from 'src/utils/types';
+import { LAErrorContent, Modal } from 'src/components/molecules';
 import { Text } from 'src/components/atoms';
 import {
-    LATeamAvAvailableText,
     LATeamAvChipGroup,
     LATeamAvContainer,
-    LATeamAvContent,
     LATeamAvHeader,
-    LATeamAvNoDataContent,
 } from 'src/components/molecules/LATeamAvailability';
 import { TID } from 'src/utils/testIds';
-import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
+import { SkelitonLoaderFull } from './SkelitonLoaders';
 import { styles } from './styles';
-
 import AddTeamSheetBody from '../LAManagerModals/AddTeamSheetBody';
+import AvailabilityContent from './AvailabilityConent';
 
 interface Props {
-    isManagerTeamsLoading: boolean;
+    isManagerTeamsInitialLoading: boolean;
+    isManagerTeamsRefetching: boolean;
+    isManagerTeamsNotFound: boolean;
     managerTeams: Team[];
 }
 
-const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
+const TeamAvailability = ({
+    isManagerTeamsInitialLoading,
+    isManagerTeamsRefetching,
+    isManagerTeamsNotFound,
+    managerTeams,
+}: Props) => {
     const {
         manager: { filteredTeams },
     } = usePersistStore();
@@ -58,52 +58,13 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
         setSelectedTeams([...selectedTeams]);
     };
 
-    const {
-        isLoading: availableTeamLoading,
-        isRefetching: availableTeamRefetching,
-        data: availableTeam,
-    } = useQuery<AvailableTeam, AxiosError>(
-        [selectedTeams],
-        () =>
-            getHttpTeamAvailability({
-                date: getformatDateToYyyyMmDd(new Date().toString()),
-                teamIds: [
-                    selectedTeams.find(team => team.recentlySelected)?.teamId ||
-                        -1,
-                ],
-            }),
-        {
-            keepPreviousData: true,
-        },
-    );
-
-    const getTeamAvailabilityContent = () => {
-        if (availableTeamLoading || availableTeamRefetching || !availableTeam) {
-            return <SkelitonLoaderContent />;
-        }
-        const { imageList, onLeaveCount, onlineCount } = availableTeam;
-        if (onlineCount === 0 && onLeaveCount === 0) {
-            return <LATeamAvNoDataContent />;
-        }
-        if (onLeaveCount === 0) {
-            return <LATeamAvAvailableText awayTeamList={[]} leaveDuration='' />;
-        }
-        return (
-            <LATeamAvContent
-                showAvailableTeamCount
-                availableTeamCount={onlineCount}
-                awayTeamImages={imageList}
-            />
-        );
-    };
-
     useEffect(() => {
         if (filteredTeams) {
             onSetSelectedTeam();
         }
     }, [filteredTeams]);
 
-    if (isManagerTeamsLoading || !availableTeam) {
+    if (isManagerTeamsInitialLoading || !managerTeams) {
         return <SkelitonLoaderFull />;
     }
 
@@ -113,18 +74,33 @@ const TeamAvailability = ({ isManagerTeamsLoading, managerTeams }: Props) => {
                 <LATeamAvHeader
                     headerType='options'
                     onPressOption={onOpenAddTeamModal}
-                />
-                <LATeamAvChipGroup
-                    teams={selectedTeams}
-                    onSelectTeam={onSelectTeam}
+                    disableOnPressOption={isManagerTeamsNotFound}
                 />
 
-                <View style={styles.conentContainer}>
-                    <Text testID={`${TID}TEXT_TEAM_AVAILABLITY_TODAY`}>
-                        TODAY
-                    </Text>
-                    {getTeamAvailabilityContent()}
-                </View>
+                {isManagerTeamsNotFound ? (
+                    <LAErrorContent
+                        title='No teams assigned'
+                        subTitle='You have not been assigned a team to supervise yet. Please have a chat with the admin'
+                    />
+                ) : (
+                    <>
+                        <LATeamAvChipGroup
+                            teams={selectedTeams}
+                            onSelectTeam={onSelectTeam}
+                        />
+                        <View style={styles.conentContainer}>
+                            <Text testID={`${TID}TEXT_TEAM_AVAILABLITY_TODAY`}>
+                                TODAY
+                            </Text>
+                            <AvailabilityContent
+                                selectedTeams={selectedTeams}
+                                isManagerTeamsRefetching={
+                                    isManagerTeamsRefetching
+                                }
+                            />
+                        </View>
+                    </>
+                )}
             </LATeamAvContainer>
             <Modal
                 onClose={onCloseAddTeamModal}

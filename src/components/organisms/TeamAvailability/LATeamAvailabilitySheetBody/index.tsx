@@ -4,12 +4,12 @@ import { Button, Spacer, Text } from 'src/components/atoms';
 import { getFormattedDay } from 'src/utils/helpers/dateHandler';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
-import { AwayTeamByDate } from 'src/utils/types';
+import { AwayTeamByDate, EmployeeType } from 'src/utils/types';
 import DateRangeItem from './DateRangeItem';
-import ListItem from './ListItem';
 import { styles } from './styles';
+import AwayTeamListItem from './AwayTeamListItem';
 
-const { colors } = theme;
+const { colors, scale } = theme;
 export interface Range {
     dateRange: string;
     startIndex: number;
@@ -18,11 +18,13 @@ export interface Range {
 interface Props {
     awayTeamsByDate: AwayTeamByDate[];
     onPressGoBack: () => void;
+    onPressTeamDetailItem: (awayTeam: EmployeeType[]) => void;
 }
 
 const LATeamAvailabilitySheetBody = ({
     awayTeamsByDate,
     onPressGoBack,
+    onPressTeamDetailItem,
 }: Props) => {
     const [isRangeVisible, setIsRangeVisible] = useState<boolean>(false);
     const [selectedDateRangeId, setSelectedDateRangeId] = useState<number>(0);
@@ -86,14 +88,14 @@ const LATeamAvailabilitySheetBody = ({
 
     return (
         <View>
-            <Spacer height={9} />
+            <Spacer height={scale.sc10} />
             <Text
                 testID={`${TID}TEXT_TEAM_AVAILABILITY_EXPANDED_MODAL_DESCRIPTION`}
                 color={colors.gray700}>
                 We encourage everyone to consider already booked leaves to take
                 responsibility of their own day offs!
             </Text>
-            <Spacer height={9} />
+            <Spacer height={scale.sc10} />
             <View style={styles.container}>
                 <Text
                     testID={`${TID}TEXT_LEFT_SUB_TITLE`}
@@ -111,15 +113,18 @@ const LATeamAvailabilitySheetBody = ({
             <Spacer height={0} />
             <View style={styles.listContentStyle}>
                 {selectedTeam?.slice(0, 5).map((item, index) => (
-                    <ListItem
+                    <AwayTeamListItem
                         testID={`${TID}TEXT_SELECTED_DATE_${index}`}
                         key={item.date}
                         date={item.date}
                         awayTeam={item.employeeResponseDtos}
+                        onPressTeamDetailItem={() =>
+                            onPressTeamDetailItem(item.employeeResponseDtos)
+                        }
                     />
                 ))}
             </View>
-            <Spacer height={-6} />
+            <Spacer height={scale.sc4} />
             {isRangeVisible ? (
                 <FlatList
                     data={[...Array(Math.ceil(awayTeamsByDate.length / 5))]}
@@ -130,14 +135,14 @@ const LATeamAvailabilitySheetBody = ({
             ) : (
                 <View />
             )}
-            <Spacer height={3} />
+            <Spacer height={scale.sc10} />
             <Button
                 testID={`${TID}BUTTON_GO_BACK`}
                 iconPosition='left'
                 icon='arrow-back'
                 label='Go back'
                 onPress={onPressGoBack}
-                labelStyle={{ paddingHorizontal: 4 }}
+                labelStyle={{ paddingHorizontal: scale.sc4 }}
             />
             <Spacer />
         </View>
