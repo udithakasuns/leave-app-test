@@ -38,6 +38,16 @@ const LATeamAvHeader = (props: Props) => {
     const onOpenTeamSelector = () => setOpenTeamSelector(true);
     const onCloseTeamSelector = () => setOpenTeamSelector(false);
 
+    const getFormattedSelectorContent = (
+        conent: string,
+        maxContentLength: number,
+    ) => {
+        if (conent.length > maxContentLength) {
+            return `${conent.toString().substring(0, maxContentLength)}...`;
+        }
+        return conent;
+    };
+
     return (
         <View style={styles.container}>
             <Text testID={`${TID}TEXT_TEAM_AVAILABILITY_TITLE`} type='SubHBold'>
@@ -60,8 +70,15 @@ const LATeamAvHeader = (props: Props) => {
                     <>
                         <Chip
                             testIdContent={`${TID}SELECTED_TEAM`}
-                            onPressChip={onOpenTeamSelector}
-                            content={props.selectedTeam.teamName}
+                            onPressChip={
+                                props.teams.length > 0
+                                    ? onOpenTeamSelector
+                                    : undefined
+                            }
+                            content={getFormattedSelectorContent(
+                                props.selectedTeam.teamName,
+                                12,
+                            )}
                             rightIconName='arrow-drop-down'
                             rightIconColor={colors.black}
                             contentColor={colors.black}

@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Spacer } from 'src/components/atoms';
-import { Modal } from 'src/components/molecules';
+import { LAErrorContent, Modal } from 'src/components/molecules';
 import {
     LATeamAvAvailableText,
     LATeamAvContainer,
@@ -17,7 +17,6 @@ import {
 } from 'src/components/organisms';
 import { getHttpAwayEmployees, getHttpTeamByUser } from 'src/services/http';
 import {
-    getCalendarRangeDate,
     getformatDateToYyyyMmDd,
     getFormattedDay,
 } from 'src/utils/helpers/dateHandler';
@@ -59,10 +58,11 @@ const TeamAvailability = ({ requestDetails }: Props) => {
 
     const onSelectTeam = (team: Team) => setSelectedTeam(team);
 
-    const { data: employeeTeams, isLoading: isLoadingEmployeeTeams } = useQuery<
-        Team[],
-        AxiosError
-    >(
+    const {
+        isLoading: isLoadingEmployeeTeams,
+        data: employeeTeams,
+        isError: isErrorEmployeeTeams,
+    } = useQuery<Team[], AxiosError>(
         ['fetchEmployeeTeams', requestDetails],
         () => getHttpTeamByUser(requestDetails.employee.employeeId),
         {
@@ -178,9 +178,17 @@ const TeamAvailability = ({ requestDetails }: Props) => {
                     onSelectTeam={onSelectTeam}
                 />
                 <Spacer height={scale.vsc2} />
-                <View style={styles.conentContainer}>
-                    {getTeamAvailabilityContent()}
-                </View>
+                {isErrorEmployeeTeams ? (
+                    <LAErrorContent
+                        title='No available teams for the employee'
+                        subTitle='Please ask the admin to assign a team for the employee, then
+                        they will show up here'
+                    />
+                ) : (
+                    <View style={styles.conentContainer}>
+                        {getTeamAvailabilityContent()}
+                    </View>
+                )}
             </LATeamAvContainer>
             <Modal
                 onClose={onCloseDetailModal}
@@ -208,6 +216,7 @@ const TeamAvailability = ({ requestDetails }: Props) => {
                 header='View all members'
                 sheetBody={
                     <ViewAllMembersSheetBody
+                        isAvatarOnly={false}
                         awayTeam={openAwayTeamDetailItemModal.awayTeam}
                         onClose={onCloseDetailItemModal}
                     />
