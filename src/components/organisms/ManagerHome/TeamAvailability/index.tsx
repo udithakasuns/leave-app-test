@@ -79,9 +79,8 @@ const TeamAvailability = ({
 
                 {isManagerTeamsNotFound ? (
                     <LAErrorContent
-                        title='No available teams'
-                        subTitle='Please ask the admin to assign teams for you, then
-                        they will show up here'
+                        title='No teams assigned'
+                        subTitle='You have not been assigned a team to supervise yet. Please have a chat with the admin'
                     />
                 ) : (
                     <>

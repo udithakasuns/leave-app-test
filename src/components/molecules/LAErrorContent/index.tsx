@@ -2,8 +2,11 @@ import React from 'react';
 import { View, StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { Text } from 'src/components/atoms';
 import { TID } from 'src/utils/testIds';
+import theme from 'src/utils/theme';
 import { AtLeast, TextTypeProps } from 'src/utils/types';
 import { styles } from './styles';
+
+const { colors } = theme;
 
 interface Props {
     testIdTitle: string;
@@ -16,6 +19,8 @@ interface Props {
     containerStyle: StyleProp<ViewStyle>;
     titleTextStyle: StyleProp<TextStyle>;
     subTitleTextStyle: StyleProp<TextStyle>;
+    titleColor: string;
+    subtitleColor: string;
 }
 
 const LAErrorContent = ({
@@ -29,20 +34,23 @@ const LAErrorContent = ({
     subTitleTextType = 'ParaSM',
     titleTextStyle,
     subTitleTextStyle,
+    titleColor = colors.black,
+    subtitleColor = colors.gray700,
 }: AtLeast<Props, 'title'>) => (
     <View style={[styles.container, containerStyle]}>
-        <Text testID={testIdTitle} type={unicodeTextType}>
-            🧐
-        </Text>
+        <Text type={unicodeTextType}>🧐</Text>
         <Text
-            testID={testIdSubTitle}
+            testID={testIdTitle}
             type={titleTextType}
+            color={titleColor}
             style={[styles.title, titleTextStyle]}>
             {title}
         </Text>
         {subTitle && (
             <Text
+                testID={testIdSubTitle}
                 type={subTitleTextType}
+                color={subtitleColor}
                 style={[styles.subTitle, subTitleTextStyle]}>
                 {subTitle}
             </Text>

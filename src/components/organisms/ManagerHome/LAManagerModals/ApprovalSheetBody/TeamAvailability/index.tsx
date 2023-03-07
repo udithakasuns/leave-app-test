@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Spacer } from 'src/components/atoms';
-import { LAErrorContent, Modal } from 'src/components/molecules';
+import { Modal } from 'src/components/molecules';
 import {
     LATeamAvAvailableText,
     LATeamAvContainer,
@@ -58,11 +58,10 @@ const TeamAvailability = ({ requestDetails }: Props) => {
 
     const onSelectTeam = (team: Team) => setSelectedTeam(team);
 
-    const {
-        isLoading: isLoadingEmployeeTeams,
-        data: employeeTeams,
-        isError: isErrorEmployeeTeams,
-    } = useQuery<Team[], AxiosError>(
+    const { data: employeeTeams, isLoading: isLoadingEmployeeTeams } = useQuery<
+        Team[],
+        AxiosError
+    >(
         ['fetchEmployeeTeams', requestDetails],
         () => getHttpTeamByUser(requestDetails.employee.employeeId),
         {
@@ -178,17 +177,9 @@ const TeamAvailability = ({ requestDetails }: Props) => {
                     onSelectTeam={onSelectTeam}
                 />
                 <Spacer height={scale.vsc2} />
-                {isErrorEmployeeTeams ? (
-                    <LAErrorContent
-                        title='No available teams for the employee'
-                        subTitle='Please ask the admin to assign a team for the employee, then
-                        they will show up here'
-                    />
-                ) : (
-                    <View style={styles.conentContainer}>
-                        {getTeamAvailabilityContent()}
-                    </View>
-                )}
+                <View style={styles.conentContainer}>
+                    {getTeamAvailabilityContent()}
+                </View>
             </LATeamAvContainer>
             <Modal
                 onClose={onCloseDetailModal}
