@@ -6,7 +6,8 @@ import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import LAErrorPopup from 'src/components/organisms/Global/LAErrorPopup';
 import ForgotPw from 'src/screens/ForgotPw';
 import Loading from 'src/screens/Loading';
-// import LoginSocial from 'src/screens/LoginSocial';
+import LoginSocial from 'src/screens/LoginSocial';
+import ProviderCode from 'src/screens/ProviderCode';
 import LoginGeneral from 'screens/LoginGeneral';
 import { useAuthentication } from 'src/utils/hooks/useAuthentication';
 import useLogout from 'src/utils/hooks/useLogout';
@@ -44,9 +45,16 @@ const RootNavigator = () => {
                     <StackNav.Screen name='Auth' component={AuthNavigator} />
                 ) : (
                     <>
-                        {/* <StackNav.Screen name='Login' component={LoginSocial} /> */}
                         <StackNav.Screen
-                            name='Login'
+                            name='LoginSocial'
+                            component={LoginSocial}
+                        />
+                        <StackNav.Screen
+                            name='ProviderCode'
+                            component={ProviderCode}
+                        />
+                        <StackNav.Screen
+                            name='LoginGeneral'
                             component={LoginGeneral}
                         />
                         <StackNav.Screen name='ForgotPw' component={ForgotPw} />

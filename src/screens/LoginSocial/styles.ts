@@ -13,9 +13,7 @@ export const styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'center',
     },
-    bottomText: {
+    linkTextContainer: {
         alignSelf: 'center',
-        textAlign: 'center',
-        textDecorationLine: 'underline',
     },
 });

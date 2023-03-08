@@ -7,6 +7,8 @@ import {
     TextInputProps,
     ViewStyle,
     Pressable,
+    StyleProp,
+    TextStyle,
 } from 'react-native';
 import theme from 'src/utils/theme';
 import {
@@ -27,6 +29,7 @@ export interface Props extends TextInputProps, TestProps {
     placeholderColor: string;
     containerStyle: ViewStyle;
     inputContainerStyle: ViewStyle;
+    inputStyle: StyleProp<TextStyle>;
     type: InputTypes;
     label: string;
     labelType: TextTypeProps;
@@ -49,6 +52,7 @@ const LAInput = ({
     reference,
     containerStyle,
     inputContainerStyle,
+    inputStyle,
     type = 'DEFAULT',
     label,
     labelType = type === 'COMMENT' ? 'ParaLG' : 'SubH',
@@ -175,7 +179,7 @@ const LAInput = ({
                     testID={testIdInput}
                     ref={reference}
                     editable={editable ?? !disabled}
-                    style={styles.input}
+                    style={[styles.input, inputStyle]}
                     placeholder={placeholder}
                     placeholderTextColor={getPlaceholderTextColor()}
                     value={value}

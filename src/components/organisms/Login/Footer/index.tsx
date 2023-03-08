@@ -1,36 +1,35 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import { Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import { SUPPORT_URL, PRIVACY_POLICY_URL } from 'src/configs';
 import { inAppNormalUrlHandler } from 'src/utils/helpers/inAppUrlHandler';
+import { LALinkText } from 'src/components/molecules';
+import { TID } from 'src/utils/testIds';
 import { styles } from './styles';
 
 const { colors } = theme;
 
 const Footer = () => (
     <View style={styles.container}>
-        <TouchableOpacity onPress={() => inAppNormalUrlHandler(SUPPORT_URL)}>
-            <Text
-                type='SubH'
-                style={styles.text}
-                color={colors.primaryGrayLabel}>
-                Get support
-            </Text>
-        </TouchableOpacity>
-        <Text type='SubH' style={styles.pipe} color={colors.primaryGrayLabel}>
+        <LALinkText
+            testIdText={`${TID}LINK_TEXT_SUPPORT`}
+            text='Get support'
+            onPress={() => inAppNormalUrlHandler(SUPPORT_URL)}
+        />
+        <Text
+            testID={`${TID}TEXT_PIPE`}
+            type='SubH'
+            style={styles.pipe}
+            color={colors.primaryGrayLabel}>
             |
         </Text>
-        <TouchableOpacity
-            onPress={() => inAppNormalUrlHandler(PRIVACY_POLICY_URL)}>
-            <Text
-                type='SubH'
-                style={styles.text}
-                color={colors.primaryGrayLabel}>
-                Privacy policy
-            </Text>
-        </TouchableOpacity>
+        <LALinkText
+            testIdText={`${TID}LINK_TEXT_PRIVACY`}
+            text='Privacy policy'
+            onPress={() => inAppNormalUrlHandler(PRIVACY_POLICY_URL)}
+        />
     </View>
 );
 
-export default Footer;
+export default React.memo(Footer);

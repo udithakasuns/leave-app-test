@@ -20,6 +20,8 @@ export { default as PendingListItem } from './LAPendingListItem';
 export { default as BackHeader } from './LABackHeader';
 export { default as SelectableButton } from './LASelectableButton';
 export { default as LAErrorContent } from './LAErrorContent';
+export { default as LACodeInput } from './LACodeInput';
+export { default as LALinkText } from './LALinkText';
 
 export { default as PopUp } from './LAPopUp';
 export type { MultiChipProps } from './LAChipGroup';

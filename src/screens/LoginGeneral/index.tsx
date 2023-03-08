@@ -1,10 +1,11 @@
 import React, { useState, LegacyRef, createRef } from 'react';
 import { View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import { Button, Input, Spacer, Text } from 'src/components/atoms';
+import { BackHeader } from 'src/components/molecules';
 import Footer from 'src/components/organisms/Login/Footer';
 import Header from 'src/components/organisms/Login/Header';
 import { ForgotPwPopup } from 'src/components/organisms/LoginGeneral';
-import { LoginScreenProps } from 'src/navigators/types';
+import { LoginGeneralScreenProps } from 'src/navigators/types';
 import { awsOnGeneralSignIn } from 'src/services/aws';
 import { useUserStore } from 'src/store';
 import theme from 'src/utils/theme';
@@ -12,7 +13,7 @@ import { styles } from './styles';
 
 const { colors } = theme;
 
-const LoginGeneral: React.FC<LoginScreenProps> = ({ navigation }) => {
+const LoginGeneral: React.FC<LoginGeneralScreenProps> = ({ navigation }) => {
     const { setAuthLoading } = useUserStore();
     const passwordRef: LegacyRef<TextInput> = createRef();
     const [email, setEmail] = useState<string>('kalanaramesh.dev@gmail.com');
@@ -41,16 +42,20 @@ const LoginGeneral: React.FC<LoginScreenProps> = ({ navigation }) => {
 
     const onCloseForgotPwPopup = () => setOpenForgotPwPopup(false);
 
+    const onGoBack = () => navigation.goBack();
+
     const onNavigateToForgotPw = () => navigation.navigate('ForgotPw');
 
     return (
         <View style={styles.container}>
+            <BackHeader title='' onBackPress={onGoBack} />
             <ScrollView
                 keyboardShouldPersistTaps='handled'
+                automaticallyAdjustKeyboardInsets
                 contentContainerStyle={styles.scrollView}>
-                <Header description='Enter your email and password to Sign in to the system.' />
+                <Header description='Log into your account using your work email and password.' />
                 <Input
-                    label='Enter Rootcode email'
+                    label='Enter work email'
                     placeholder=''
                     value={email}
                     autoCapitalize='none'
@@ -61,7 +66,7 @@ const LoginGeneral: React.FC<LoginScreenProps> = ({ navigation }) => {
                 />
                 <Input
                     reference={passwordRef}
-                    label='Enter current password'
+                    label='Enter password'
                     placeholder=''
                     value={password}
                     autoCapitalize='none'
@@ -91,13 +96,6 @@ const LoginGeneral: React.FC<LoginScreenProps> = ({ navigation }) => {
                     iconPosition='left'
                     icon='arrow-forward'
                 />
-                <Spacer height={8} />
-                <Text
-                    type='SubH'
-                    style={styles.bottomText}
-                    color={colors.gray600}>
-                    Sign in with email and password
-                </Text>
             </ScrollView>
             <Footer />
             <ForgotPwPopup
