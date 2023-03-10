@@ -2,17 +2,21 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Avatar, AvatarSize, Text } from 'components/atoms';
 import { AvatarChip } from 'src/components/molecules';
-import { getFormattedDay } from 'src/utils/helpers/dateHandler';
-import { EmployeeType } from 'src/utils/types';
+import {
+    getFormattedDay,
+    getformatDateToYyyyMmDd,
+} from 'src/utils/helpers/dateHandler';
+import { EmployeeType, PartialBy } from 'src/utils/types';
 import theme from 'src/utils/theme';
 import { TID } from 'src/utils/testIds';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 interface Props {
     testID: string;
     date: string;
     awayTeam: EmployeeType[];
     onPressTeamDetailItem: (awayTeam: EmployeeType[]) => void;
+    companyHolidays: { dateString: string }[];
 }
 const { colors } = theme;
 const AwayTeamListItem = ({
@@ -20,8 +24,31 @@ const AwayTeamListItem = ({
     date,
     awayTeam,
     onPressTeamDetailItem,
-}: Props) => {
+    companyHolidays,
+}: PartialBy<Props, 'companyHolidays'>) => {
+    const styles = useStyles({
+        isHoliday:
+            companyHolidays?.find(
+                holiday => holiday.dateString === getformatDateToYyyyMmDd(date),
+            ) !== undefined,
+    });
     const getListItemContent = () => {
+        if (awayTeam.length === 0 && companyHolidays?.length !== 0) {
+            if (
+                companyHolidays?.find(
+                    holiday =>
+                        holiday.dateString === getformatDateToYyyyMmDd(date),
+                )
+            ) {
+                return (
+                    <View style={styles.listItemRightContainerText}>
+                        <Text testID={`${TID}TEXT_HOLIDAY`}>
+                            🥳 Full Woo hoo, holiday!
+                        </Text>
+                    </View>
+                );
+            }
+        }
         if (awayTeam.length === 0) {
             return (
                 <View style={styles.listItemRightContainerText}>

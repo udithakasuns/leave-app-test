@@ -39,6 +39,8 @@ export type Colors = {
     lime800: string;
     grey600: string;
     iconLabel: string;
+    yellow300: string;
+    amber50: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -391,4 +393,13 @@ export type AvailableTeam = {
 export interface EmployeeOnLeaveByDay {
     employeeOnLeaveByDayResponseDtoList: AwayTeamByDate[];
     adminEmployeesOnLeaveByTeamDto: AvailableTeam;
+}
+
+export interface Holiday {
+    id: number;
+    date: string;
+    reason: string;
+    holidayType: string;
+    holidayDuration: string;
+    holidayColor: string;
 }

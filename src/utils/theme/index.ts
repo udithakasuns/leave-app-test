@@ -45,6 +45,8 @@ const colors: Colors = {
     lime600: '#ECFCCB',
     lime800: '#3F6212',
     pending: '#FCD34D',
+    yellow300: '#EEA92E',
+    amber50: '#FFFBEB',
 
     iconLabel: '#D97706',
 };

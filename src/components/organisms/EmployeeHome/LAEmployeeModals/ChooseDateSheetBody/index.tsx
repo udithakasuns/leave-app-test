@@ -1,4 +1,6 @@
 /* eslint-disable no-plusplus */
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { FormikProps } from 'formik';
 import { DateTime } from 'luxon';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -8,11 +10,26 @@ import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { MarkedDates } from 'react-native-calendars/src/types';
 import { Spacer } from 'src/components/atoms';
 import { ButtonDock, SelectionButton } from 'src/components/molecules';
-import { showErrorToast } from 'src/utils/alerts';
-import { getCalendarDate } from 'src/utils/helpers/dateHandler';
+import { getHttpAllHolidays, getHttpLeavesByUser } from 'src/services/http';
+import { useUserStore } from 'src/store';
+import {
+    showErrorToast,
+    showErrorWithInfoToast,
+    showWarningToast,
+} from 'src/utils/alerts';
+import {
+    getCalendarDate,
+    getFormattedDay,
+} from 'src/utils/helpers/dateHandler';
 import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import theme from 'src/utils/theme';
-import { ApplyFormValues, EmployeeModal, TestProps } from 'src/utils/types';
+import {
+    ApplyFormValues,
+    EmployeeModal,
+    Holiday,
+    TestProps,
+} from 'src/utils/types';
+import { SkelitonLoaderFull } from './SkelitonLoaders';
 import { calendarTheme, styles } from './styles';
 import TeamAvailability from './TeamAvailability';
 
@@ -32,7 +49,14 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
         endDate?: string;
     }>({ startDate: '', endDate: '' });
     const [holidays, setHolidays] = useState<MarkedDates>({});
-
+    const holiday: MarkedDates = {};
+    let alreadyLeaveDatesList: { dateString: string }[] = [];
+    const [companyHolidayList, setCompanyHolidayList] = useState<
+        { dateString: string }[]
+    >([]);
+    const {
+        user: { userId },
+    } = useUserStore();
     const marked = useMemo(() => {
         if (!range.startDate) return holidays;
         const start = new Date(range.startDate).getTime();
@@ -62,12 +86,101 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
         return tempMarked;
     }, [range, holidays]);
 
+    // fetch All company holidays
+    const { data: allCompanyHolidays, isLoading: isLoadingCompanyHolidays } =
+        useQuery<Holiday[], AxiosError>(
+            ['fetchAllCompanyHolidays'],
+            () => getHttpAllHolidays(),
+            {
+                keepPreviousData: true,
+            },
+        );
+    const getCompanyHolidays = () => {
+        if (allCompanyHolidays) {
+            for (let i = 0; i < allCompanyHolidays.length; i++) {
+                const companyHolidayMarker: MarkingProps = {
+                    selected: true,
+                    marked: true,
+                    dotColor: allCompanyHolidays[i].holidayColor,
+                    selectedColor: colors.dividerColor,
+                    selectedTextColor: colors.gray400,
+                };
+                holiday[allCompanyHolidays[i].date] = companyHolidayMarker;
+            }
+            setHolidays(holiday);
+        }
+    };
+    const getCompanyHolidaysForSelectedDates = (
+        startDate: string,
+        endDate: string,
+    ): {
+        dateString: string;
+    }[] => {
+        setCompanyHolidayList(
+            Object.keys(holidays)
+                .filter(
+                    date =>
+                        holidays[date].marked &&
+                        date >= startDate &&
+                        date <= endDate,
+                )
+                .map(date => ({ dateString: date })),
+        );
+
+        return companyHolidayList;
+    };
+
+    // fetch already leave dates of the user
+    const { data: alreadyLeaveDates, isLoading: isLoadingAlreadyLeaveDates } =
+        useQuery<string[], AxiosError>(
+            ['fetchAlreadyLeaveDates'],
+            () => getHttpLeavesByUser(userId),
+            {
+                keepPreviousData: true,
+            },
+        );
+
+    const getAlreadyLeaveDates = () => {
+        if (alreadyLeaveDates) {
+            const allAlreadyLeaveDates: string[] =
+                Object.values(alreadyLeaveDates).flat();
+            for (let i = 0; i < allAlreadyLeaveDates.length; i++) {
+                const companyHolidayMarker: MarkingProps = {
+                    selected: true,
+                    marked: false,
+                    selectedColor: colors.dividerColor,
+                    selectedTextColor: colors.gray400,
+                };
+                holiday[allAlreadyLeaveDates[i]] = companyHolidayMarker;
+            }
+            setHolidays(holiday);
+        }
+    };
+    const getAlreadyLeaveDatesForSelectedDates = (
+        startDate: string,
+        endDate: string,
+    ): {
+        dateString: string;
+    }[] => {
+        alreadyLeaveDatesList = Object.keys(holidays)
+            .filter(
+                date =>
+                    holidays[date].marked === false &&
+                    date >= startDate &&
+                    date <= endDate,
+            )
+            .map(date => ({ dateString: date }));
+
+        return alreadyLeaveDatesList;
+    };
+
     const daysInMonth = (month: number, year: number) =>
         new Date(year, month, 0).getDate();
 
     const getAllHolidaysForMonth = (timeStamp: number) => {
         const holidayMarker: MarkingProps = {
             selected: true,
+            inactive: true,
             selectedColor: colors.secondaryColor,
             selectedTextColor: colors.pending,
         };
@@ -76,7 +189,6 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
             dateForMonth.getMonth(),
             dateForMonth.getFullYear(),
         );
-        const holiday: MarkedDates = {};
         holiday[CalendarUtils.getCalendarDateString(dateForMonth)] = {
             selectedColor: colors.secondaryBackground,
             selectedTextColor: colors.black,
@@ -92,6 +204,8 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                     holidayMarker;
             }
         }
+        getCompanyHolidays();
+        getAlreadyLeaveDates();
         setHolidays(holiday);
     };
 
@@ -103,15 +217,39 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
             });
         }
     };
+    let reasonForCompanyHoliday = '';
+    const getResonForHoliday = (day: DateData): string => {
+        if (allCompanyHolidays != null) {
+            for (let i = 0; i < allCompanyHolidays.length; i++) {
+                if (allCompanyHolidays[i].date === day.dateString) {
+                    reasonForCompanyHoliday = allCompanyHolidays[i].reason;
+                    break;
+                }
+            }
+        }
+        return reasonForCompanyHoliday;
+    };
 
     const handleDayPress = (day: DateData) => {
         const currentDate = new Date(range.startDate);
         const clickedDate = new Date(day.dateString);
-        if (clickedDate.getDay() === 0 || clickedDate.getDay() === 6) {
+
+        if (holidays[clickedDate.toISOString().split('T')[0]]) {
             setRange({
                 startDate: '',
             });
-            showErrorToast(ErrorCodes.ERROR_OCCURRED);
+            showErrorToast(ErrorCodes.LEAVE_ALREADY_APPLIED);
+            if (holidays[clickedDate.toISOString().split('T')[0]].marked) {
+                setRange({
+                    startDate: '',
+                });
+                getResonForHoliday(day);
+                showWarningToast(
+                    'This day is already a holiday!',
+                    `The date is marked as a ${reasonForCompanyHoliday}`,
+                );
+                return;
+            }
             return;
         }
         if (
@@ -122,6 +260,27 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
         ) {
             const newRange = { ...range, ...{ endDate: day.dateString } };
             setRange(newRange);
+            getCompanyHolidaysForSelectedDates(range.startDate, day.dateString);
+            getAlreadyLeaveDatesForSelectedDates(
+                range.startDate,
+                day.dateString,
+            );
+            if (alreadyLeaveDatesList.length === 0) {
+                setRange(newRange);
+            } else {
+                setRange({
+                    startDate: '',
+                    endDate: '',
+                });
+                const leaveDatesString = alreadyLeaveDatesList
+                    .map(date => getFormattedDay(date.dateString))
+                    .join(', ');
+
+                showErrorWithInfoToast(
+                    'Cannot apply extended leave over an existing leave',
+                    `You already have a leave applied for ${leaveDatesString}`,
+                );
+            }
         } else {
             setRange({
                 startDate: day.dateString,
@@ -173,10 +332,24 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
     };
 
     useEffect(() => {
+        if (!isLoadingCompanyHolidays) {
+            getCompanyHolidays();
+        }
+        if (!isLoadingAlreadyLeaveDates) {
+            getAlreadyLeaveDates();
+        }
         getAllHolidaysForMonth(new Date().valueOf());
         getPrevSelectedRange();
-    }, []);
+    }, [isLoadingCompanyHolidays, isLoadingAlreadyLeaveDates]);
 
+    if (
+        isLoadingCompanyHolidays ||
+        !allCompanyHolidays ||
+        isLoadingAlreadyLeaveDates ||
+        !alreadyLeaveDates
+    ) {
+        return <SkelitonLoaderFull />;
+    }
     return (
         <View>
             <Spacer height={scale.vsc8} />
@@ -185,11 +358,13 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                     <TeamAvailability
                         startDate={range.startDate ? range.startDate : ''}
                         endDate={range.endDate ? range.endDate : ''}
+                        companyHolidays={companyHolidayList}
                     />
                     <Spacer height={scale.vsc8} />
                 </>
             )}
             <Calendar
+                firstDay={1}
                 markedDates={marked}
                 markingType='dot'
                 onDayPress={day => {

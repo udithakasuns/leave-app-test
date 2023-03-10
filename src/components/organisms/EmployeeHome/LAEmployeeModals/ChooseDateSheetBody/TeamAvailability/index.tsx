@@ -28,6 +28,7 @@ const { scale } = theme;
 interface Props {
     startDate: string;
     endDate: string;
+    companyHolidays: { dateString: string }[];
 }
 interface OpenAwayTeamDetailItem {
     isOpen: boolean;
@@ -39,7 +40,7 @@ const initialOpenAwayTeamDetailItem: OpenAwayTeamDetailItem = {
 };
 
 const MODAL_TIMER = 550;
-const TeamAvailability = ({ startDate, endDate }: Props) => {
+const TeamAvailability = ({ startDate, endDate, companyHolidays }: Props) => {
     const [selectedTeam, setSelectedTeam] = useState<Team>({
         teamId: -1,
         teamName: '',
@@ -185,6 +186,7 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
                             onOpenDetailItemModal(data);
                         }}
                         onPressGoBack={onCloseDetailModal}
+                        companyHolidays={companyHolidays}
                     />
                 }
             />
