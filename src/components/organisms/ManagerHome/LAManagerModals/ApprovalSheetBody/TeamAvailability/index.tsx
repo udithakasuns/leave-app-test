@@ -17,7 +17,6 @@ import {
 } from 'src/components/organisms';
 import { getHttpAwayEmployees, getHttpTeamByUser } from 'src/services/http';
 import {
-    getCalendarRangeDate,
     getformatDateToYyyyMmDd,
     getFormattedDay,
 } from 'src/utils/helpers/dateHandler';
@@ -208,6 +207,7 @@ const TeamAvailability = ({ requestDetails }: Props) => {
                 header='View all members'
                 sheetBody={
                     <ViewAllMembersSheetBody
+                        isAvatarOnly={false}
                         awayTeam={openAwayTeamDetailItemModal.awayTeam}
                         onClose={onCloseDetailItemModal}
                     />

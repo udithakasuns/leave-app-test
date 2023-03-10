@@ -4,7 +4,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { Chip, Icon, IconSize, Text } from 'src/components/atoms';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
-import { Team } from 'src/utils/types';
+import { PartialBy, Team } from 'src/utils/types';
 import { Modal, SelectableButton } from '../..';
 import { styles } from './styles';
 
@@ -17,6 +17,7 @@ interface NoneProps {
 interface OptionProps {
     headerType: 'options';
     onPressOption: () => void;
+    disableOnPressOption: boolean;
 }
 
 interface TeamSelector {
@@ -26,7 +27,10 @@ interface TeamSelector {
     onSelectTeam: (team: Team) => void;
 }
 
-type Props = NoneProps | OptionProps | TeamSelector;
+type Props =
+    | NoneProps
+    | PartialBy<OptionProps, 'disableOnPressOption'>
+    | TeamSelector;
 
 const LATeamAvHeader = (props: Props) => {
     const [openTeamSelector, setOpenTeamSelector] = useState<boolean>(false);
@@ -34,13 +38,25 @@ const LATeamAvHeader = (props: Props) => {
     const onOpenTeamSelector = () => setOpenTeamSelector(true);
     const onCloseTeamSelector = () => setOpenTeamSelector(false);
 
+    const getFormattedSelectorContent = (
+        conent: string,
+        maxContentLength: number,
+    ) => {
+        if (conent.length > maxContentLength) {
+            return `${conent.toString().substring(0, maxContentLength)}...`;
+        }
+        return conent;
+    };
+
     return (
         <View style={styles.container}>
             <Text testID={`${TID}TEXT_TEAM_AVAILABILITY_TITLE`} type='SubHBold'>
                 Team availability
             </Text>
             {props.headerType === 'options' ? (
-                <TouchableOpacity onPress={props.onPressOption}>
+                <TouchableOpacity
+                    disabled={props.disableOnPressOption}
+                    onPress={props.onPressOption}>
                     <Icon
                         name='dots-horizontal'
                         library='community'
@@ -54,8 +70,15 @@ const LATeamAvHeader = (props: Props) => {
                     <>
                         <Chip
                             testIdContent={`${TID}SELECTED_TEAM`}
-                            onPressChip={onOpenTeamSelector}
-                            content={props.selectedTeam.teamName}
+                            onPressChip={
+                                props.teams.length > 0
+                                    ? onOpenTeamSelector
+                                    : undefined
+                            }
+                            content={getFormattedSelectorContent(
+                                props.selectedTeam.teamName,
+                                12,
+                            )}
                             rightIconName='arrow-drop-down'
                             rightIconColor={colors.black}
                             contentColor={colors.black}
