@@ -61,3 +61,30 @@ export type AccessTokenPayload = {
     username: string;
     version: number;
 };
+
+export interface GeneralSigninUser {
+    Session: string;
+    authenticationFlowType: string;
+    challengeName: 'NEW_PASSWORD_REQUIRED';
+    challengeParam: {
+        requiredAttributes: string[];
+        userAttributes: any;
+    };
+    client: any;
+    pool: any;
+    signInUserSession: string;
+    storage: any;
+    userDataKey: string;
+    username: string;
+}
+
+export interface GeneralSigninSuccessProps {
+    isSuccess: true;
+    user: GeneralSigninUser;
+}
+
+export interface GeneralSigninFailedProps {
+    isSuccess: false;
+    code: string;
+    message: string;
+}

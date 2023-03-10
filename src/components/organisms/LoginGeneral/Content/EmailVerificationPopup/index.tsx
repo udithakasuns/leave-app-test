@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { PopUp } from 'src/components/molecules';
 import Modal from 'react-native-modal';
 import {
     Button,
@@ -22,7 +21,7 @@ interface Props {
     onNavigateToForgotPw: () => void;
 }
 
-const ForgotPwPopup = ({
+const EmailVerificationPopup = ({
     openPopup,
     onClosePopup,
     onNavigateToForgotPw,
@@ -82,4 +81,4 @@ const ForgotPwPopup = ({
     );
 };
 
-export default ForgotPwPopup;
+export default EmailVerificationPopup;

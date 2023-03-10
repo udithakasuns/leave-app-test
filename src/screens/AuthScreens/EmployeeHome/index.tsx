@@ -71,11 +71,11 @@ import {
     handleUndoCancellationSuccess,
 } from 'components/organisms/Global/LAGlobalEmployee/helpers/successHandlers';
 
-import { useFormik } from '../../utils/hooks/useFormik';
+import { useFormik } from '../../../utils/hooks/useFormik';
 
-import theme from '../../utils/theme';
+import theme from '../../../utils/theme';
 import { useStyles } from './styles';
-import { screenStyles } from '../../utils/styles';
+import { screenStyles } from '../../../utils/styles';
 import { employeeRequestDefault } from './helper';
 
 const { deviceDimensions } = theme;

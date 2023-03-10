@@ -51,4 +51,7 @@ export const styles = StyleSheet.create({
         borderColor: colors.red500,
         borderRadius: radius.rd4,
     },
+    content: {
+        flex: 1,
+    },
 });

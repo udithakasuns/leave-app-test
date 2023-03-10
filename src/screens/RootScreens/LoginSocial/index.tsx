@@ -22,7 +22,7 @@ const LoginSocial: React.FC<LoginSocialScreenProps> = ({ navigation }) => {
         awsOnAppleSignIn();
     };
 
-    const onNavigateToProviderCode = () => navigation.navigate('ProviderCode');
+    const onNavigateToLoginGeneral = () => navigation.navigate('LoginGeneral');
 
     return (
         <View style={styles.container}>
@@ -52,7 +52,7 @@ const LoginSocial: React.FC<LoginSocialScreenProps> = ({ navigation }) => {
                 <LALinkText
                     containerStyle={styles.linkTextContainer}
                     text='Log in with email and password'
-                    onPress={onNavigateToProviderCode}
+                    onPress={onNavigateToLoginGeneral}
                 />
             </ScrollView>
             <Footer />

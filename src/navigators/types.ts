@@ -1,6 +1,7 @@
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { GeneralSigninUser } from 'src/services/aws/types';
 
 export type AuthScreensParamList = {
     EmployeeHome: undefined;
@@ -17,6 +18,7 @@ export type RootScreensParamsList = {
     Loading: undefined;
     LoginSocial: undefined;
     LoginGeneral: undefined;
+    ResetPw: { user: GeneralSigninUser };
     ForgotPw: undefined;
     ProviderCode: undefined;
     Auth: NavigatorScreenParams<AuthScreensParamList>;
@@ -35,6 +37,11 @@ export type LoginSocialScreenProps = NativeStackScreenProps<
 export type LoginGeneralScreenProps = NativeStackScreenProps<
     RootScreensParamsList,
     'LoginGeneral'
+>;
+
+export type ResetPwScreenProps = NativeStackScreenProps<
+    RootScreensParamsList,
+    'ResetPw'
 >;
 
 export type ForgotPwScreenProps = NativeStackScreenProps<

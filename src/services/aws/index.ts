@@ -1,6 +1,11 @@
 /* eslint-disable consistent-return */
 import { Auth } from 'aws-amplify';
 import { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
+import {
+    GeneralSigninFailedProps,
+    GeneralSigninSuccessProps,
+    GeneralSigninUser,
+} from './types';
 
 export const awsOnGoogleSignIn = async () =>
     Auth.federatedSignIn({
@@ -14,9 +19,40 @@ export const awsOnSignOut = async () => {
     await Auth.signOut();
 };
 
-export const awsOnGeneralSignIn = (username: string, password: string) => {
-    Auth.signIn({ username, password });
-};
+export const awsOnGeneralSignIn = (username: string, password: string) =>
+    new Promise<GeneralSigninSuccessProps | GeneralSigninFailedProps>(
+        (resolve, reject) => {
+            Auth.signIn({ username, password })
+                .then(user => {
+                    resolve({ isSuccess: true, user });
+                })
+                .catch(err => {
+                    if (err && err.code) {
+                        resolve({
+                            isSuccess: false,
+                            code: err.code,
+                            message: err.message,
+                        });
+                    } else {
+                        reject();
+                    }
+                });
+        },
+    );
+
+export const awsOnResetInitialPw = (
+    user: GeneralSigninUser,
+    newPassword: string,
+) =>
+    new Promise((resolve, reject) => {
+        Auth.completeNewPassword(user, newPassword, { name: user.username })
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => {
+                reject();
+            });
+    });
 
 /* Used in axios interceptors */
 export const awsGetCurrentAccessToken = async (): Promise<string> => {

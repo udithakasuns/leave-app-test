@@ -26,7 +26,7 @@ import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
 
 import { FilterTypes, PendingRequestType, Page, Team } from 'src/utils/types';
 import { screenStyles } from 'utils/styles';
-import theme from '../../utils/theme';
+import theme from '../../../utils/theme';
 
 const { deviceDimensions } = theme;
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {

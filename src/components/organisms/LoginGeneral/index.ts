@@ -1,1 +1,1 @@
-export { default as ForgotPwPopup } from './ForgotPwPopup';
+export { default as Content } from './Content';

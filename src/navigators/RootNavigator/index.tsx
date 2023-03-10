@@ -4,11 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import LAErrorPopup from 'src/components/organisms/Global/LAErrorPopup';
-import ForgotPw from 'src/screens/ForgotPw';
-import Loading from 'src/screens/Loading';
-import LoginSocial from 'src/screens/LoginSocial';
-import ProviderCode from 'src/screens/ProviderCode';
-import LoginGeneral from 'screens/LoginGeneral';
+import {
+    Loading,
+    LoginSocial,
+    ProviderCode,
+    LoginGeneral,
+    ResetPw,
+    ForgotPw,
+} from 'src/screens/RootScreens';
 import { useAuthentication } from 'src/utils/hooks/useAuthentication';
 import useLogout from 'src/utils/hooks/useLogout';
 import { useNotifications } from 'src/utils/hooks/useNotifications';
@@ -57,6 +60,7 @@ const RootNavigator = () => {
                             name='LoginGeneral'
                             component={LoginGeneral}
                         />
+                        <StackNav.Screen name='ResetPw' component={ResetPw} />
                         <StackNav.Screen name='ForgotPw' component={ForgotPw} />
                     </>
                 )}

@@ -21,4 +21,9 @@ export const screenStyles = StyleSheet.create({
         flexGrow: 1,
         paddingTop,
     },
+    scrollViewCenterContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        paddingTop,
+    },
 });

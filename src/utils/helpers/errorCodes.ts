@@ -15,6 +15,7 @@ export enum ErrorCodes {
     ERROR_OCCURRED = 'ERROR_OCCURRED',
     NO_RECIPIENT = 'NO_RECIPIENT',
     REQUEST_ALREADY_NUDGE = 'REQUEST_ALREADY_NUDGE',
+    GENERAL_SIGNIN_ERROR = 'GENERAL_SIGNIN_ERROR',
 }
 
 type ErrorProp = {
@@ -130,6 +131,12 @@ export const getErrorMessage = (
             errorCodeMessage = {
                 title: 'Consequent leave allocation exceeded',
                 message: 'Cannot apply for more than 3 casual leaves in a row',
+            };
+            break;
+        case 'GENERAL_SIGNIN_ERROR':
+            errorCodeMessage = {
+                title: 'Authetication error',
+                message: patchContent || '',
             };
             break;
         default:
