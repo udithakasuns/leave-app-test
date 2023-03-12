@@ -1,5 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
-import { UseQueryResult } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ManagerHomeScreensProps } from 'navigators/types';
 import React, { useEffect } from 'react';
@@ -7,11 +7,13 @@ import { ScrollView, View } from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { Spacer, SwipeRefresh, Text } from 'src/components/atoms';
 import { MultiChipProps } from 'src/components/molecules';
-import { LAAppBar } from 'src/components/organisms';
+import { LAAppBar, TeamAvailability } from 'src/components/organisms';
 import LAPendingRequestList from 'src/components/organisms/ManagerHome/LAPendingRequestList';
+import { getHttpTeamByUser } from 'src/services/http';
 import {
     useManagerFilterStore,
     useManagerStore,
+    usePersistStore,
     useUserStore,
 } from 'src/store';
 import { getGreetingsByTime } from 'src/utils/helpers/dateHandler';
@@ -22,14 +24,14 @@ import {
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { usePendingRequestData } from 'src/utils/hooks/usePendingRequestData';
 
-import { FilterTypes, PendingRequestType, Page } from 'src/utils/types';
+import { FilterTypes, PendingRequestType, Page, Team } from 'src/utils/types';
 import { screenStyles } from 'utils/styles';
 import theme from '../../utils/theme';
 
 const { deviceDimensions } = theme;
 const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
     const {
-        user: { firstName },
+        user: { firstName, userId },
     } = useUserStore();
     const isFocused = useIsFocused();
 
@@ -42,6 +44,11 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         setEmptyFilterUtils,
         resetFilterUtils,
     } = useManagerFilterStore();
+
+    const {
+        manager: { filteredTeams },
+        setManagerFilteredTeams,
+    } = usePersistStore();
 
     const {
         data: leaveRequests,
@@ -88,6 +95,26 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
         },
     );
 
+    const {
+        data: managerTeams,
+        refetch: onRefetchManagerTeams,
+        isRefetching: isRefetchingManagerTeams,
+        isInitialLoading: isInitialLoadingManagerTeams,
+        isError: isManagerTeamError,
+    } = useQuery<Team[], AxiosError>(
+        ['fetchManagerTeams'],
+        () => getHttpTeamByUser(userId),
+        {
+            keepPreviousData: true,
+            enabled: false,
+            onSuccess: teams => {
+                if (!filteredTeams || filteredTeams.length === 0) {
+                    setManagerFilteredTeams(teams);
+                }
+            },
+        },
+    );
+
     const handleRequestItemPress = (item: PendingRequestType) => {
         getManagerModal(item.leaveRequestId);
     };
@@ -98,6 +125,7 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
             setFilterChips(filterChipsManager);
             refetchLeaveRequests();
             statusTypesRefetch();
+            onRefetchManagerTeams();
         }
     }, [isFocused]);
 
@@ -106,8 +134,14 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
             <ScrollView
                 refreshControl={
                     <SwipeRefresh
-                        refreshing={isRefetchLeaveRequests}
-                        onRefresh={refetchLeaveRequests}
+                        refreshing={
+                            isRefetchLeaveRequests ||
+                            isInitialLoadingManagerTeams
+                        }
+                        onRefresh={() => {
+                            refetchLeaveRequests();
+                            onRefetchManagerTeams();
+                        }}
                     />
                 }
                 contentContainerStyle={screenStyles.scrollViewContainer}
@@ -119,11 +153,19 @@ const ManagerHome: React.FC<ManagerHomeScreensProps> = () => {
                     {getGreetingsByTime()}
                 </Text>
                 <Spacer />
+                <TeamAvailability
+                    managerTeams={managerTeams || []}
+                    isManagerTeamsInitialLoading={isInitialLoadingManagerTeams}
+                    isManagerTeamsRefetching={isRefetchingManagerTeams}
+                    isManagerTeamsNotFound={isManagerTeamError}
+                />
+                <Spacer />
                 <Text type='SubHBold'>Leave requests</Text>
                 {isLoading ? (
-                    [...Array(6)].map(() => (
-                        <SkeletonPlaceholder borderRadius={4}>
+                    [...Array(6)].map(item => (
+                        <SkeletonPlaceholder key={item} borderRadius={4}>
                             <SkeletonPlaceholder.Item
+                                key={item * 2}
                                 flexDirection='row'
                                 alignItems='center'
                                 height={deviceDimensions.height / 16}

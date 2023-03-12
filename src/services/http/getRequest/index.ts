@@ -93,3 +93,38 @@ export const getHttpMe = async () => {
     const res = await axiosInstance.get('/v1/users/me');
     return res.data.results[0];
 };
+
+export const getHttpTeamAvailability = async ({
+    date,
+    teamIds,
+}: {
+    date?: string /* 2023-01-10 */;
+    teamIds?: number[];
+}) => {
+    let url = '/v1/admin/get/onleave';
+    if (teamIds && date) url = `${url}?date=${date}&teamIds=${teamIds}`;
+    else if (date) url = `${url}?date=${date}`;
+    else if (teamIds) url = `${url}?teamIds=${teamIds}`;
+    const res = await axiosInstance.get(url);
+    return res.data.results[0];
+};
+
+export const getHttpAwayEmployees = async ({
+    teamId,
+    startDate,
+    endDate,
+}: {
+    teamId: number;
+    startDate: string;
+    endDate: string;
+}) => {
+    const res = await axiosInstance.get(
+        `/v1/admin/onleave-detailed?startDate=${startDate}&endDate=${endDate}&teamId=${teamId}`,
+    );
+    return res.data.results[0];
+};
+
+export const getHttpTeamByUser = async (userId: string) => {
+    const res = await axiosInstance.get(`/v1/employees/get/teams/${userId}`);
+    return res.data.results;
+};

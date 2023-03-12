@@ -12,8 +12,8 @@ import NotificationViewAll from 'src/screens/NotificationViewAll';
 import Account from 'src/screens/Account';
 import Settings from 'src/screens/Settings';
 import Support from 'src/screens/Support';
-import LAGlobalManager from 'src/components/organisms/Global/LAGlobalManager';
 import LAGlobalEmployee from 'src/components/organisms/Global/LAGlobalEmployee';
+import LAGlobalManager from 'src/components/organisms/Global/LAGlobalManager';
 import LADrawer from '../../components/organisms/Global/LADrawer';
 import { AuthScreensParamList } from '../types';
 
@@ -68,8 +68,8 @@ const AuthNavigator = () => {
                 <DrawerNav.Screen name='Settings' component={Settings} />
                 <DrawerNav.Screen name='Support' component={Support} />
             </DrawerNav.Navigator>
-            <LAGlobalManager />
             <LAGlobalEmployee />
+            <LAGlobalManager />
         </>
     );
 };

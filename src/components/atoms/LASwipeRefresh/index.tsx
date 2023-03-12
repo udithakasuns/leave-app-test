@@ -6,7 +6,11 @@ import theme from 'src/utils/theme';
 const { colors } = theme;
 
 const LASwipeRefresh = (props: RefreshControlProps) => (
-    <RefreshControl tintColor={colors.secondaryColor} {...props} />
+    <RefreshControl
+        colors={[colors.primaryColor]}
+        tintColor={colors.primaryColor}
+        {...props}
+    />
 );
 
 export default LASwipeRefresh;

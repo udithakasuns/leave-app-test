@@ -9,15 +9,14 @@ import {
     Pressable,
 } from 'react-native';
 import theme from 'src/utils/theme';
-import { AtLeast, TestProps } from 'src/utils/types';
+import { AtLeast, IconLibrary, TestProps } from 'src/utils/types';
 import LAIcon, { IconSize } from '../LAIcon';
 import LAText from '../LAText';
 import inputStyles from './styles';
 import { InputTypes } from './types';
 
 const { colors } = theme;
-
-interface Props extends TextInputProps, TestProps {
+export interface Props extends TextInputProps, TestProps {
     reference: React.LegacyRef<TextInput>;
     placeholder: string;
     placeholderColor: string;
@@ -32,13 +31,14 @@ interface Props extends TextInputProps, TestProps {
     leftIconName: string;
     leftIconSize: number;
     leftIconColor: string;
+    leftIconLibrary: IconLibrary;
     rightIconName: string;
     rightIconSize: number;
     rightIconColor: string;
+    rightIconLibrary: IconLibrary;
     onPressLeftIcon: () => void;
     onPressRightIcon: () => void;
 }
-
 const LAInput = ({
     reference,
     containerStyle,
@@ -53,9 +53,11 @@ const LAInput = ({
     leftIconName,
     leftIconColor,
     leftIconSize,
+    leftIconLibrary = 'community',
     rightIconName,
     rightIconColor,
     rightIconSize,
+    rightIconLibrary = 'community',
     caption,
     testIdcontainer,
     testIdInputContainer,
@@ -70,10 +72,8 @@ const LAInput = ({
     ...rest
 }: AtLeast<Props, 'label' | 'placeholder' | 'value'>) => {
     const [focused, setFocused] = useState<boolean>(false);
-
     const styles = inputStyles({ type, disabled, error, value, focused });
     const onToggleFocus = () => setFocused(prevState => !prevState);
-
     const getIconSize = () => {
         switch (type) {
             case 'LARGE':
@@ -84,14 +84,12 @@ const LAInput = ({
                 return IconSize.medium;
         }
     };
-
     const getPlaceholderTextColor = () =>
         disabled
             ? colors.disabledColor
             : error
             ? colors.error
             : placeholderColor ?? colors.gray;
-
     const getLeftIconColor = () =>
         disabled
             ? colors.disabledColor
@@ -100,7 +98,6 @@ const LAInput = ({
             : leftIconColor || focused
             ? colors.gray
             : colors.gray;
-
     const getRightIconColor = () =>
         disabled
             ? colors.disabledColor
@@ -109,7 +106,6 @@ const LAInput = ({
             : rightIconColor || focused
             ? colors.gray
             : colors.gray;
-
     if (type === 'COMMENT') {
         return (
             <View
@@ -164,7 +160,7 @@ const LAInput = ({
                         name={leftIconName}
                         color={getLeftIconColor()}
                         size={leftIconSize || getIconSize()}
-                        library='community'
+                        library={leftIconLibrary}
                     />
                 )}
                 <TextInput
@@ -186,7 +182,7 @@ const LAInput = ({
                             name={rightIconName}
                             color={getRightIconColor()}
                             size={rightIconSize || getIconSize()}
-                            library='community'
+                            library={rightIconLibrary}
                         />
                     </Pressable>
                 )}
@@ -202,5 +198,4 @@ const LAInput = ({
         </View>
     );
 };
-
 export default LAInput;

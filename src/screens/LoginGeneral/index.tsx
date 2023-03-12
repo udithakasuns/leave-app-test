@@ -4,7 +4,7 @@ import { Button, Input, Spacer, Text } from 'src/components/atoms';
 import Footer from 'src/components/organisms/Login/Footer';
 import Header from 'src/components/organisms/Login/Header';
 import { awsOnGeneralSignIn } from 'src/services/aws';
-import { usePersistStore, useUserStore } from 'src/store';
+import { useUserStore } from 'src/store';
 import theme from 'src/utils/theme';
 import { styles } from './styles';
 
@@ -12,10 +12,9 @@ const { colors } = theme;
 
 const LoginGeneral = () => {
     const { setAuthLoading } = useUserStore();
-    const { setAuthType } = usePersistStore();
     const passwordRef: LegacyRef<TextInput> = createRef();
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [email, setEmail] = useState<string>('tharindusilva095@gmail.com');
+    const [password, setPassword] = useState<string>('Test@1234');
     const [hidePassword, setHidePassword] = useState<boolean>(true);
 
     const onChangeEmail = (text: string) => setEmail(text);
@@ -30,7 +29,6 @@ const LoginGeneral = () => {
 
     const onLogin = () => {
         setAuthLoading(true);
-        setAuthType('general');
         awsOnGeneralSignIn(email, password);
     };
 
