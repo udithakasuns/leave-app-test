@@ -6,7 +6,7 @@ import {
     getFormattedDay,
     getformatDateToYyyyMmDd,
 } from 'src/utils/helpers/dateHandler';
-import { EmployeeType, PartialBy } from 'src/utils/types';
+import { CompanyHolidays, EmployeeType } from 'src/utils/types';
 import theme from 'src/utils/theme';
 import { TID } from 'src/utils/testIds';
 import { useStyles } from './styles';
@@ -16,7 +16,7 @@ interface Props {
     date: string;
     awayTeam: EmployeeType[];
     onPressTeamDetailItem: (awayTeam: EmployeeType[]) => void;
-    companyHolidays: { dateString: string }[];
+    companyHolidays: CompanyHolidays[];
 }
 const { colors } = theme;
 const AwayTeamListItem = ({
@@ -25,17 +25,17 @@ const AwayTeamListItem = ({
     awayTeam,
     onPressTeamDetailItem,
     companyHolidays,
-}: PartialBy<Props, 'companyHolidays'>) => {
+}: Props) => {
     const styles = useStyles({
         isHoliday:
-            companyHolidays?.find(
+            companyHolidays.find(
                 holiday => holiday.dateString === getformatDateToYyyyMmDd(date),
             ) !== undefined,
     });
     const getListItemContent = () => {
-        if (awayTeam.length === 0 && companyHolidays?.length !== 0) {
+        if (awayTeam.length === 0 && companyHolidays.length !== 0) {
             if (
-                companyHolidays?.find(
+                companyHolidays.find(
                     holiday =>
                         holiday.dateString === getformatDateToYyyyMmDd(date),
                 )

@@ -20,7 +20,12 @@ import {
     getFormattedDay,
 } from 'src/utils/helpers/dateHandler';
 import theme from 'src/utils/theme';
-import { EmployeeOnLeaveByDay, EmployeeType, Team } from 'src/utils/types';
+import {
+    CompanyHolidays,
+    EmployeeOnLeaveByDay,
+    EmployeeType,
+    Team,
+} from 'src/utils/types';
 import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
 
 const { scale } = theme;
@@ -28,7 +33,7 @@ const { scale } = theme;
 interface Props {
     startDate: string;
     endDate: string;
-    companyHolidays: { dateString: string }[];
+    companyHolidays: CompanyHolidays[];
 }
 interface OpenAwayTeamDetailItem {
     isOpen: boolean;

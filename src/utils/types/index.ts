@@ -403,3 +403,5 @@ export interface Holiday {
     holidayDuration: string;
     holidayColor: string;
 }
+
+export type CompanyHolidays = { dateString: string };

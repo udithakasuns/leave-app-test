@@ -4,7 +4,12 @@ import { Button, Spacer, Text } from 'src/components/atoms';
 import { getFormattedDay } from 'src/utils/helpers/dateHandler';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
-import { AwayTeamByDate, EmployeeType, PartialBy } from 'src/utils/types';
+import {
+    AwayTeamByDate,
+    CompanyHolidays,
+    EmployeeType,
+    PartialBy,
+} from 'src/utils/types';
 import DateRangeItem from './DateRangeItem';
 import { styles } from './styles';
 import AwayTeamListItem from './AwayTeamListItem';
@@ -19,7 +24,7 @@ interface Props {
     awayTeamsByDate: AwayTeamByDate[];
     onPressGoBack: () => void;
     onPressTeamDetailItem: (awayTeam: EmployeeType[]) => void;
-    companyHolidays: { dateString: string }[] | undefined;
+    companyHolidays: CompanyHolidays[];
 }
 
 const LATeamAvailabilitySheetBody = ({
