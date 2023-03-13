@@ -15,7 +15,10 @@ const initialUser: UserType = {
 
 const initialState: State = {
     user: initialUser,
-    authLoading: true,
+    userAuth: {
+        loading: true,
+        type: 'none',
+    },
     error: '',
 };
 
@@ -54,7 +57,7 @@ const userStore = create<State & Actions>(set => ({
         }));
     },
     removeUser: () => set(state => ({ ...state, user: initialUser })),
-    setAuthLoading: authLoading => set(() => ({ authLoading })),
+    setUserAuth: userAuth => set(() => ({ userAuth })),
 }));
 
 export default userStore;

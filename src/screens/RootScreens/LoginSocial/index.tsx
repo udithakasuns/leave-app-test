@@ -3,35 +3,44 @@ import { View, ScrollView, Platform } from 'react-native';
 import { LoginSocialScreenProps } from 'navigators/types';
 import { awsOnAppleSignIn, awsOnGoogleSignIn } from 'src/services/aws';
 import { Spacer } from 'components/atoms';
-import { LALinkText, SocialButton } from 'components/molecules';
-import Header from 'src/components/organisms/Login/Header';
+import {
+    LALinkText,
+    LARootFooter,
+    LARootHeader,
+    SocialButton,
+} from 'components/molecules';
+
 import { useUserStore } from 'src/store';
-import Footer from 'src/components/organisms/Login/Footer';
 import { styles } from './styles';
 
 const LoginSocial: React.FC<LoginSocialScreenProps> = ({ navigation }) => {
-    const { setAuthLoading } = useUserStore();
+    const { setUserAuth } = useUserStore();
 
     const onPressGoogleSignin = () => {
-        setAuthLoading(true);
+        setUserAuth({ loading: true, type: 'social' });
         awsOnGoogleSignIn();
     };
 
     const onPressAppleSignin = () => {
-        setAuthLoading(true);
+        setUserAuth({ loading: true, type: 'social' });
         awsOnAppleSignIn();
     };
 
     const onNavigateToLoginGeneral = () => navigation.navigate('LoginGeneral');
 
+    const getSubTitle = (): string =>
+        Platform.OS === 'ios'
+            ? 'Log into your organization account using your G-suite account Single Sign on, or using Apple account'
+            : 'Log into your organization account using your G-suite account';
+
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollView}>
-                {Platform.OS === 'ios' ? (
-                    <Header description='Log into your organization account using your G-suite account Single Sign on, or using Apple account' />
-                ) : (
-                    <Header description='Log into your organization account using your G-suite account' />
-                )}
+                <LARootHeader
+                    showLogo
+                    title='Sign in'
+                    subTitle={getSubTitle()}
+                />
                 <SocialButton
                     label='Sign in with Gmail'
                     iconName='google'
@@ -55,7 +64,7 @@ const LoginSocial: React.FC<LoginSocialScreenProps> = ({ navigation }) => {
                     onPress={onNavigateToLoginGeneral}
                 />
             </ScrollView>
-            <Footer />
+            <LARootFooter />
         </View>
     );
 };

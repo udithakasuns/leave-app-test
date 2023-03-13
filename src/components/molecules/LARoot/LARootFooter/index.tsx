@@ -10,7 +10,7 @@ import { styles } from './styles';
 
 const { colors } = theme;
 
-const Footer = () => (
+const LARootFooter = () => (
     <View style={styles.container}>
         <LALinkText
             testIdText={`${TID}LINK_TEXT_SUPPORT`}
@@ -32,4 +32,4 @@ const Footer = () => (
     </View>
 );
 
-export default React.memo(Footer);
+export default React.memo(LARootFooter);

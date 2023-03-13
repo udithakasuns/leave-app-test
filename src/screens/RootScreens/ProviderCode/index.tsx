@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
-import { BackHeader } from 'src/components/molecules';
-import Footer from 'src/components/organisms/Login/Footer';
+import { BackHeader, LARootFooter } from 'src/components/molecules';
 import { Header, Content } from 'src/components/organisms/ProviderCode';
 import { ProviderCodeScreenProps } from 'src/navigators/types';
 import { screenStyles } from 'src/utils/styles';
@@ -28,7 +27,7 @@ const ProviderCode: React.FC<ProviderCodeScreenProps> = ({ navigation }) => {
                     onNavigateToGeneralLogin={onNavigateToGeneralLogin}
                 />
             </ScrollView>
-            <Footer />
+            <LARootFooter />
         </View>
     );
 };

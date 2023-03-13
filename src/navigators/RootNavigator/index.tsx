@@ -10,6 +10,7 @@ import {
     ProviderCode,
     LoginGeneral,
     ResetPw,
+    ResetPwSuccess,
     ForgotPw,
 } from 'src/screens/RootScreens';
 import { useAuthentication } from 'src/utils/hooks/useAuthentication';
@@ -61,6 +62,10 @@ const RootNavigator = () => {
                             component={LoginGeneral}
                         />
                         <StackNav.Screen name='ResetPw' component={ResetPw} />
+                        <StackNav.Screen
+                            name='ResetPwSuccess'
+                            component={ResetPwSuccess}
+                        />
                         <StackNav.Screen name='ForgotPw' component={ForgotPw} />
                     </>
                 )}

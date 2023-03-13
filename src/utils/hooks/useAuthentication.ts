@@ -42,7 +42,7 @@ const isRootcodeUser = (email: string): boolean => {
 };
 
 export const useAuthentication = (): ReturnProps => {
-    const { authLoading, saveUser, updateUser, removeUser, setAuthLoading } =
+    const { setUserAuth, saveUser, updateUser, removeUser, userAuth } =
         useUserStore();
     const { updateRecipients, removeUserRecipients } = useRecipientStore();
     const { setDeviceUniqueId } = usePersistStore();
@@ -76,12 +76,13 @@ export const useAuthentication = (): ReturnProps => {
 
             updateRecipients();
             setVisibleAuthNav(true);
-            setAuthLoading(false);
+
+            setUserAuth({ loading: false, type: 'none' });
         } catch {
             setVisibleAuthNav(false);
             removeUser();
             removeUserRecipients();
-            setAuthLoading(false);
+            setUserAuth({ loading: false, type: 'none' });
         }
     };
 
@@ -92,7 +93,7 @@ export const useAuthentication = (): ReturnProps => {
     const onSignout = async () => {
         setDeviceUniqueId(null);
         setVisibleAuthNav(false);
-        setAuthLoading(false);
+        setUserAuth({ loading: false, type: 'none' });
     };
 
     useEffect(() => {
@@ -102,10 +103,12 @@ export const useAuthentication = (): ReturnProps => {
             async ({ payload: { event } }) => {
                 switch (event) {
                     /* Log the user based on auth type */
-                    case 'signIn':
-                        getCurrentAuthUser();
+                    case 'signIn': {
+                        if (userAuth.type !== 'none') {
+                            getCurrentAuthUser();
+                        }
                         break;
-
+                    }
                     case 'signOut':
                         onSignout();
                         break;
@@ -115,11 +118,11 @@ export const useAuthentication = (): ReturnProps => {
             },
         );
         return () => unsubscribe();
-    }, []);
+    }, [userAuth.type]);
 
     return {
         isAuthenticated: visibleAuthNav,
-        isAuthLoading: authLoading,
+        isAuthLoading: userAuth.loading,
         openInvalidUserPopup,
         onCloseInvalidUserPopup: () => setOpenInvalidUserPopup(false),
     };

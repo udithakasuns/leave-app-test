@@ -29,7 +29,7 @@ const EMAIL_REGEX =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
-    const { setAuthLoading } = useUserStore();
+    const { setUserAuth } = useUserStore();
     const passwordRef: LegacyRef<TextInput> = createRef();
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -102,7 +102,7 @@ const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
                         onNavigateToResetPw(result.user);
                     } else {
                         onResetFields();
-                        setAuthLoading(true);
+                        setUserAuth({ loading: true, type: 'general' });
                     }
                 } else {
                     const { message } = result;

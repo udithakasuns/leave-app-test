@@ -15,14 +15,21 @@ import { styles } from './styles';
 
 const { colors, scale } = theme;
 
-type InitialPwResetProps = {
+type PwResetType = 'initial' | 'general';
+
+interface CommonPwResetProps {
+    pwResetType: PwResetType;
+    onNavigateToResetPwSuccess: () => void;
+}
+
+interface InitialPwResetProps extends CommonPwResetProps {
     pwResetType: 'initial';
     user: GeneralSigninUser;
-};
+}
 
-type GeneralPwResetProps = {
+interface GeneralPwResetProps extends CommonPwResetProps {
     pwResetType: 'general';
-};
+}
 
 type Props = InitialPwResetProps | GeneralPwResetProps;
 
@@ -153,7 +160,7 @@ const PasswordContent = (props: Props) => {
                         setPassword('');
                         setCpassword('');
                         setLoading(false);
-                        // If navigate to home, call to setAuthloading(true);
+                        props.onNavigateToResetPwSuccess();
                     })
                     .catch(() => {
                         setLoading(false);

@@ -19,6 +19,7 @@ export type RootScreensParamsList = {
     LoginSocial: undefined;
     LoginGeneral: undefined;
     ResetPw: { user: GeneralSigninUser };
+    ResetPwSuccess: undefined;
     ForgotPw: undefined;
     ProviderCode: undefined;
     Auth: NavigatorScreenParams<AuthScreensParamList>;
@@ -42,6 +43,11 @@ export type LoginGeneralScreenProps = NativeStackScreenProps<
 export type ResetPwScreenProps = NativeStackScreenProps<
     RootScreensParamsList,
     'ResetPw'
+>;
+
+export type ResetPwSuccessScreenProps = NativeStackScreenProps<
+    RootScreensParamsList,
+    'ResetPwSuccess'
 >;
 
 export type ForgotPwScreenProps = NativeStackScreenProps<

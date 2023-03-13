@@ -1,10 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { BackHeader } from 'src/components/molecules';
-import {
-    LASigninFooter,
-    LASigninHeader,
-} from 'src/components/molecules/LASignin';
+import { LARootHeader, LARootFooter } from 'src/components/molecules/LARoot';
 import { Content } from 'src/components/organisms/LoginGeneral';
 import { LoginGeneralScreenProps } from 'src/navigators/types';
 import { GeneralSigninUser } from 'src/services/aws/types';
@@ -23,13 +20,17 @@ const LoginGeneral: React.FC<LoginGeneralScreenProps> = ({ navigation }) => {
             <BackHeader title='' onBackPress={onGoBack} />
             <KeyboardAwareScrollView
                 contentContainerStyle={screenStyles.scrollViewCenterContainer}>
-                <LASigninHeader description='Log into your account using your work email and password.' />
+                <LARootHeader
+                    showLogo
+                    title='Sign in'
+                    subTitle='Log into your account using your work email and password.'
+                />
                 <Content
                     onNavigateToResetPw={onNavigateToResetPw}
                     onNavigateToForgotPw={onNavigateToForgotPw}
                 />
             </KeyboardAwareScrollView>
-            <LASigninFooter />
+            <LARootFooter />
         </View>
     );
 };
