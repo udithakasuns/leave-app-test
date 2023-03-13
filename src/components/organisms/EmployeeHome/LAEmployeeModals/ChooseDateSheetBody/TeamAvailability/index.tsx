@@ -156,7 +156,7 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
                         />
                         <Spacer height={scale.vsc2} />
                         <LATeamAvContent
-                            showAvailableTeamCount
+                            showAvailableTeamCount={!(startDate && endDate)}
                             awayTeamImages={
                                 availableTeam.adminEmployeesOnLeaveByTeamDto
                                     .imageList
