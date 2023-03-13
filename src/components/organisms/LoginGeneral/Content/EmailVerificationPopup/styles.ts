@@ -20,5 +20,9 @@ export const styles = StyleSheet.create({
     },
     inputContainer: {
         marginHorizontal: 0,
+        marginBottom: 0,
+    },
+    errorText: {
+        marginVertical: scale.sc1,
     },
 });

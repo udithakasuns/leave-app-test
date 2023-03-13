@@ -13,16 +13,18 @@ import {
 import theme from 'src/utils/theme';
 import { styles } from './styles';
 
-const { scale } = theme;
+const { scale, colors } = theme;
 
 interface Props {
     openPopup: boolean;
+    emailRegex: RegExp;
     onClosePopup: () => void;
     onNavigateToForgotPw: () => void;
 }
 
 const EmailVerificationPopup = ({
     openPopup,
+    emailRegex,
     onClosePopup,
     onNavigateToForgotPw,
 }: Props) => {
@@ -30,6 +32,31 @@ const EmailVerificationPopup = ({
     const [emailError, setEmailError] = useState<string>('');
 
     const onChangeEmail = (text: string) => setEmail(text);
+
+    const isEmailValidated = (): boolean => {
+        if (email.length === 0) {
+            setEmailError('Please enter the email');
+            return false;
+        }
+        if (!emailRegex.test(email)) {
+            setEmailError('Please enter a valid email');
+            return false;
+        }
+        return true;
+    };
+
+    const onResetField = () => {
+        setTimeout(() => {
+            setEmail('');
+        }, 100);
+    };
+
+    const onSubmitEmail = () => {
+        if (isEmailValidated()) {
+            // Call to the API
+            // Remember to reset field
+        }
+    };
 
     // need to add basic email validation regex
 
@@ -67,14 +94,21 @@ const EmailVerificationPopup = ({
                     autoCapitalize='none'
                     onChangeText={onChangeEmail}
                     containerStyle={styles.inputContainer}
-                    error={email.length > 0}
                 />
+                {emailError !== '' && (
+                    <Text
+                        style={styles.errorText}
+                        color={colors.error}
+                        type='ParaSM'>
+                        {emailError}
+                    </Text>
+                )}
                 <Spacer height={scale.sc10} />
                 <Button
                     label='Send verification code'
                     iconPosition='left'
                     icon='arrow-forward'
-                    onPress={() => {}}
+                    onPress={onSubmitEmail}
                 />
             </View>
         </Modal>

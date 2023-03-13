@@ -178,8 +178,10 @@ const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
                 icon='arrow-forward'
             />
 
+            {/* For Forgot PW */}
             <EmailVerificationPopup
                 openPopup={openEmailVerifyPopup}
+                emailRegex={EMAIL_REGEX}
                 onClosePopup={onCloseEmailVerifyPopup}
                 onNavigateToForgotPw={onNavigateToForgotPw}
             />
