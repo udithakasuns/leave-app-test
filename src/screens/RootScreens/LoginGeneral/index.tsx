@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { View } from 'react-native';
 import { BackHeader } from 'src/components/molecules';
 import {
     LASigninFooter,
@@ -9,9 +8,8 @@ import {
 import { Content } from 'src/components/organisms/LoginGeneral';
 import { LoginGeneralScreenProps } from 'src/navigators/types';
 import { GeneralSigninUser } from 'src/services/aws/types';
-import { toastConfig } from 'src/utils/alerts';
 import { screenStyles } from 'src/utils/styles';
-import { styles } from './styles';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const LoginGeneral: React.FC<LoginGeneralScreenProps> = ({ navigation }) => {
     const onGoBack = () => navigation.goBack();
@@ -23,16 +21,14 @@ const LoginGeneral: React.FC<LoginGeneralScreenProps> = ({ navigation }) => {
     return (
         <View style={screenStyles.containerScollable}>
             <BackHeader title='' onBackPress={onGoBack} />
-            <ScrollView
-                keyboardShouldPersistTaps='handled'
-                automaticallyAdjustKeyboardInsets
-                contentContainerStyle={styles.scrollView}>
+            <KeyboardAwareScrollView
+                contentContainerStyle={screenStyles.scrollViewCenterContainer}>
                 <LASigninHeader description='Log into your account using your work email and password.' />
                 <Content
                     onNavigateToResetPw={onNavigateToResetPw}
                     onNavigateToForgotPw={onNavigateToForgotPw}
                 />
-            </ScrollView>
+            </KeyboardAwareScrollView>
             <LASigninFooter />
         </View>
     );

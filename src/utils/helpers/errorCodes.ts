@@ -135,7 +135,7 @@ export const getErrorMessage = (
             break;
         case 'GENERAL_SIGNIN_ERROR':
             errorCodeMessage = {
-                title: 'Authetication error',
+                title: 'Login error',
                 message: patchContent || '',
             };
             break;

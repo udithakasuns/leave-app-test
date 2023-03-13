@@ -23,9 +23,13 @@ export const styles = StyleSheet.create({
     },
     inputContainer: {
         marginHorizontal: 0,
+        marginBottom: 0,
     },
     input: {
         borderWidth: 0,
         backgroundColor: colors.tertiaryColor,
+    },
+    errorText: {
+        marginVertical: scale.sc1,
     },
 });

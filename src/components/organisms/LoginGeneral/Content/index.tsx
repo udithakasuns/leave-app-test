@@ -1,6 +1,7 @@
+/* eslint-disable no-useless-escape */
 import React, { useState, LegacyRef, createRef } from 'react';
 import { TextInput } from 'react-native';
-import { Button, Input, Spacer } from 'src/components/atoms';
+import { Button, Input, Spacer, Text } from 'src/components/atoms';
 import { LALinkText } from 'src/components/molecules';
 import { awsOnGeneralSignIn } from 'src/services/aws';
 import { useUserStore } from 'src/store';
@@ -19,49 +20,102 @@ interface Props {
     onNavigateToForgotPw: () => void;
 }
 
+interface Errors {
+    emailError: string;
+    passwordError: string;
+}
+
+const EMAIL_REGEX =
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
     const { setAuthLoading } = useUserStore();
     const passwordRef: LegacyRef<TextInput> = createRef();
-    const [email, setEmail] = useState<string>('kalanaramesh.dev@gmail.com');
-    const [password, setPassword] = useState<string>('MQ7TdOy?');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [errors, setErrors] = useState<Errors>({
+        emailError: '',
+        passwordError: '',
+    });
     const [hidePassword, setHidePassword] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
     const [openEmailVerifyPopup, setOpenEmailVerifyPopup] =
         useState<boolean>(false);
 
-    const onChangeEmail = (text: string) => setEmail(text);
-    const onChangePassword = (text: string) => setPassword(text);
+    const onChangeEmail = (text: string) => {
+        setErrors({ ...errors, emailError: '' });
+        setEmail(text);
+    };
+    const onChangePassword = (text: string) => {
+        setErrors({ ...errors, passwordError: '' });
+        setPassword(text);
+    };
+
+    const isEmailValidated = (): boolean => {
+        if (email.length === 0) {
+            setErrors({ ...errors, emailError: 'Please enter the email' });
+            return false;
+        }
+        if (!EMAIL_REGEX.test(email)) {
+            setErrors({ ...errors, emailError: 'Please enter a valid email' });
+            return false;
+        }
+        return true;
+    };
+
+    const isPasswordValidated = (): boolean => {
+        if (password.length === 0) {
+            setErrors({
+                ...errors,
+                passwordError: 'Please enter the password',
+            });
+            return false;
+        }
+        return true;
+    };
+
     const onSubmitEmail = () => {
         if (passwordRef && passwordRef.current) {
+            isPasswordValidated();
             passwordRef.current.focus();
         }
     };
 
     const onToggleHidePassword = () => setHidePassword(prevState => !prevState);
 
-    const onSignin = async () => {
-        setLoading(true);
-        try {
-            const result = await awsOnGeneralSignIn(email, password);
-            setLoading(false);
-            if (result.isSuccess) {
-                if (result.user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-                    onNavigateToResetPw(result.user);
-                } else {
-                    setAuthLoading(true);
-                }
-            } else {
-                const { message } = result;
-                showErrorToast(ErrorCodes.GENERAL_SIGNIN_ERROR, message);
-            }
-        } catch {
-            setLoading(false);
-            const message = 'Something went wrong! Please contact your admin.';
-            showErrorToast(ErrorCodes.GENERAL_SIGNIN_ERROR, message);
-        }
+    const onResetFields = () => {
+        setTimeout(() => {
+            setEmail('');
+            setPassword('');
+        }, 100);
     };
 
-    /* Need to handle errors */
+    const onSignin = async () => {
+        if (isEmailValidated() && isPasswordValidated()) {
+            setLoading(true);
+            try {
+                const result = await awsOnGeneralSignIn(email, password);
+                setLoading(false);
+                if (result.isSuccess) {
+                    /* If user comes 1st time, will navigate to ResetPw */
+                    if (result.user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+                        onNavigateToResetPw(result.user);
+                    } else {
+                        onResetFields();
+                        setAuthLoading(true);
+                    }
+                } else {
+                    const { message } = result;
+                    showErrorToast(ErrorCodes.GENERAL_SIGNIN_ERROR, message);
+                }
+            } catch {
+                setLoading(false);
+                const message =
+                    'Something went wrong! Please contact your admin.';
+                showErrorToast(ErrorCodes.GENERAL_SIGNIN_ERROR, message);
+            }
+        }
+    };
 
     const onOpenEmailVerifyPopup = () => setOpenEmailVerifyPopup(true);
 
@@ -76,9 +130,17 @@ const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
                 autoCapitalize='none'
                 onChangeText={onChangeEmail}
                 onSubmitEditing={onSubmitEmail}
+                error={errors.emailError !== ''}
                 containerStyle={styles.inputContainer}
-                inputContainerStyle={styles.input}
             />
+            {errors.emailError !== '' && (
+                <Text
+                    style={styles.errorText}
+                    color={colors.error}
+                    type='ParaSM'>
+                    {errors.emailError}
+                </Text>
+            )}
             <Input
                 reference={passwordRef}
                 label='Enter password'
@@ -90,10 +152,19 @@ const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
                 rightIconColor={colors.gray}
                 secureTextEntry={hidePassword}
                 onSubmitEditing={onSignin}
-                containerStyle={styles.inputContainer}
-                inputContainerStyle={styles.input}
+                error={errors.passwordError !== ''}
                 onPressRightIcon={onToggleHidePassword}
+                containerStyle={styles.inputContainer}
             />
+            {errors.passwordError !== '' && (
+                <Text
+                    style={styles.errorText}
+                    color={colors.error}
+                    type='ParaSM'>
+                    {errors.passwordError}
+                </Text>
+            )}
+            <Spacer height={scale.sc1} />
             <LALinkText
                 text='Forgot Password ?'
                 onPress={onOpenEmailVerifyPopup}
@@ -116,7 +187,7 @@ const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
                 config={toastConfig}
                 position='bottom'
                 bottomOffset={0}
-                autoHide={false}
+                autoHide
             />
         </>
     );
