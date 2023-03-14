@@ -101,7 +101,7 @@ export const getHttpTeamAvailability = async ({
     date?: string /* 2023-01-10 */;
     teamIds?: number[];
 }) => {
-    let url = '/v1/admin/get/onleave';
+    let url = '/v1/managers/onleave';
     if (teamIds && date) url = `${url}?date=${date}&teamIds=${teamIds}`;
     else if (date) url = `${url}?date=${date}`;
     else if (teamIds) url = `${url}?teamIds=${teamIds}`;
@@ -125,6 +125,18 @@ export const getHttpAwayEmployees = async ({
 };
 
 export const getHttpTeamByUser = async (userId: string) => {
-    const res = await axiosInstance.get(`/v1/employees/get/teams/${userId}`);
+    const res = await axiosInstance.get(`/v1/employees/teams/${userId}`);
     return res.data.results;
+};
+
+export const getHttpAllHolidays = async () => {
+    const res = await axiosInstance.get(`/v1/holiday`);
+    return res.data.results[0].items;
+};
+
+export const getHttpLeavesByUser = async (userId: string) => {
+    const res = await axiosInstance.get(
+        `/v1/leaves/already-leave-days/${userId}`,
+    );
+    return res.data.results[0];
 };
