@@ -9,16 +9,12 @@ import theme from 'src/utils/theme';
 import { showErrorToast, toastConfig } from 'src/utils/alerts';
 import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
-import { GeneralSigninUser } from 'src/services/aws/types';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootScreensParamsList } from 'src/navigators/types';
 import { styles } from './styles';
 import EmailVerificationPopup from './EmailVerificationPopup';
 
 const { colors, scale } = theme;
-
-interface Props {
-    onNavigateToResetPw: (user: GeneralSigninUser) => void;
-    onNavigateToForgotPw: () => void;
-}
 
 interface Errors {
     emailError: string;
@@ -28,7 +24,8 @@ interface Errors {
 const EMAIL_REGEX =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
+const Content = () => {
+    const navigation = useNavigation<NavigationProp<RootScreensParamsList>>();
     const { setUserAuth } = useUserStore();
     const passwordRef: LegacyRef<TextInput> = createRef();
     const [email, setEmail] = useState<string>('');
@@ -99,7 +96,10 @@ const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
                 if (result.isSuccess) {
                     /* If user comes 1st time, will navigate to ResetPw */
                     if (result.user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-                        onNavigateToResetPw(result.user);
+                        navigation.navigate('ResetPw', {
+                            resetType: 'INITIAL',
+                            user: result.user,
+                        });
                     } else {
                         onResetFields();
                         setUserAuth({ loading: true, type: 'general' });
@@ -141,6 +141,7 @@ const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
                     {errors.emailError}
                 </Text>
             )}
+            <Spacer height={scale.sc1} />
             <Input
                 reference={passwordRef}
                 label='Enter password'
@@ -183,7 +184,6 @@ const Content = ({ onNavigateToResetPw, onNavigateToForgotPw }: Props) => {
                 openPopup={openEmailVerifyPopup}
                 emailRegex={EMAIL_REGEX}
                 onClosePopup={onCloseEmailVerifyPopup}
-                onNavigateToForgotPw={onNavigateToForgotPw}
             />
             <Toast
                 config={toastConfig}

@@ -392,3 +392,11 @@ export interface EmployeeOnLeaveByDay {
     employeeOnLeaveByDayResponseDtoList: AwayTeamByDate[];
     adminEmployeesOnLeaveByTeamDto: AvailableTeam;
 }
+
+export const PwResetTypeConst = {
+    INITIAL: 'INITIAL',
+    FORGOT_PW: 'FORGOT_PW',
+} as const;
+
+export type PwResetType =
+    (typeof PwResetTypeConst)[keyof typeof PwResetTypeConst];

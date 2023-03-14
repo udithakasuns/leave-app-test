@@ -1,4 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
+import { RouteProp } from '@react-navigation/native';
 import React, { useState, createRef, LegacyRef } from 'react';
 import { TextInput } from 'react-native';
 import { Button, Input, Spacer, Text } from 'src/components/atoms';
@@ -7,33 +8,22 @@ import {
     LAPasswordStrengthRuleKey as RuleKey,
     LAPasswordStrengthRule as Rule,
 } from 'src/components/molecules';
-import { awsOnResetInitialPw } from 'src/services/aws';
-import { GeneralSigninUser } from 'src/services/aws/types';
+import { RootScreensParamsList } from 'src/navigators/types';
+import { awsOnForgotPwSubmit, awsOnResetInitialPw } from 'src/services/aws';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import { styles } from './styles';
+import VerificationCode from './VerificationCode';
 
 const { colors, scale } = theme;
 
-type PwResetType = 'initial' | 'general';
-
-interface CommonPwResetProps {
-    pwResetType: PwResetType;
+type Props = {
+    route: RouteProp<RootScreensParamsList, 'ResetPw'>;
     onNavigateToResetPwSuccess: () => void;
-}
-
-interface InitialPwResetProps extends CommonPwResetProps {
-    pwResetType: 'initial';
-    user: GeneralSigninUser;
-}
-
-interface GeneralPwResetProps extends CommonPwResetProps {
-    pwResetType: 'general';
-}
-
-type Props = InitialPwResetProps | GeneralPwResetProps;
+};
 
 interface Errors {
+    codeError: string;
     pwError: string;
     cPwError: string;
 }
@@ -84,16 +74,35 @@ const errorMap: ErrorMap = {
         'New password must contain at least one special character[@,$,%]',
 };
 
-const PasswordContent = (props: Props) => {
+const defaultCodeValues: string[] = ['', '', '', '', '', ''];
+
+const PasswordContent = ({
+    route: { params },
+    onNavigateToResetPwSuccess,
+}: Props) => {
     const [rules, setRules] = useState<Rule[]>(defaultRules);
+    const [codeValues, setCodeValues] = useState<string[]>(defaultCodeValues);
     const [password, setPassword] = useState<string>('');
     const [hidePassword, setHidePassword] = useState<boolean>(true);
     const [cPassword, setCpassword] = useState<string>('');
     const [hideCpassword, setHideCpassword] = useState<boolean>(true);
-    const [errors, setErrors] = useState<Errors>({ pwError: '', cPwError: '' });
+    const [errors, setErrors] = useState<Errors>({
+        codeError: '',
+        pwError: '',
+        cPwError: '',
+    });
     const [loading, setLoading] = useState<boolean>(false);
 
+    const passwordRef: LegacyRef<TextInput> = createRef();
     const cPasswordRef: LegacyRef<TextInput> = createRef();
+
+    const isCodeValidated = (): boolean => {
+        if (codeValues.some(value => value === '')) {
+            setErrors({ ...errors, codeError: 'Invalid code!' });
+            return false;
+        }
+        return true;
+    };
 
     const isPwValidated = (): boolean => {
         if (password.length === 0) {
@@ -132,6 +141,12 @@ const PasswordContent = (props: Props) => {
     const onToggleHideCpassword = () =>
         setHideCpassword(prevState => !prevState);
 
+    const onChangeCodeValue = (value: string, index: number) => {
+        setErrors({ ...errors, codeError: '' });
+        codeValues[index] = value;
+        setCodeValues([...codeValues]);
+    };
+
     const onChangePassword = (text: string) => {
         setErrors({ ...errors, pwError: '' });
         setPassword(text);
@@ -145,36 +160,80 @@ const PasswordContent = (props: Props) => {
 
     const onUpdateRules = (updatedRules: Rule[]) => setRules(updatedRules);
 
+    const onSubmitCode = () => {
+        if (passwordRef && passwordRef.current) {
+            passwordRef.current.focus();
+        }
+    };
+
     const onSubmitPassword = () => {
         if (cPasswordRef && cPasswordRef.current) {
             cPasswordRef.current.focus();
         }
     };
 
+    const onResetFields = () => {
+        if (params.resetType === 'FORGOT_PW') {
+            setCodeValues(defaultCodeValues);
+        }
+        setPassword('');
+        setCpassword('');
+    };
+
     const onPressResetPw = () => {
-        if (isPwValidated() && isCpwValidated()) {
-            if (props.pwResetType === 'initial') {
+        if (params.resetType === 'INITIAL') {
+            if (isPwValidated() && isCpwValidated()) {
                 setLoading(true);
-                awsOnResetInitialPw(props.user, password)
+                awsOnResetInitialPw(params.user, password)
                     .then(() => {
                         setPassword('');
                         setCpassword('');
                         setLoading(false);
-                        props.onNavigateToResetPwSuccess();
+                        onResetFields();
+                        onNavigateToResetPwSuccess();
                     })
                     .catch(() => {
                         setLoading(false);
                     });
             }
-
-            // Remember to clean the fields
+        } else if (params.resetType === 'FORGOT_PW') {
+            if (isCodeValidated() && isPwValidated() && isCpwValidated()) {
+                setLoading(true);
+                const code = codeValues.join('');
+                // console.log('email:', params.userEmail);
+                awsOnForgotPwSubmit(params.userEmail, code, password)
+                    .then(res => {
+                        // console.log(res);
+                        setLoading(false);
+                        onResetFields();
+                        onNavigateToResetPwSuccess();
+                    })
+                    .catch(err => {
+                        // Handle the error
+                        // CodeMismatchException: Invalid verification code provided, please try again.
+                        setLoading(false);
+                        // console.log(err);
+                        // if (err && err.length > 0) {
+                        // }
+                    });
+            }
         }
     };
 
     return (
         <>
             <Spacer height={scale.sc20} />
+            {params.resetType === 'FORGOT_PW' && (
+                <VerificationCode
+                    codeValues={codeValues}
+                    codeError={errors.codeError}
+                    resendEmail={params.userEmail}
+                    onChangeCodeValue={onChangeCodeValue}
+                    onSubmitCode={onSubmitCode}
+                />
+            )}
             <Input
+                reference={passwordRef}
                 testIdInput={`${TID}INPUT_PASSWORD`}
                 label='New password'
                 placeholder=''
@@ -238,7 +297,7 @@ const PasswordContent = (props: Props) => {
                 icon='arrow-forward'
                 label='Reset password'
                 onPress={onPressResetPw}
-                buttonStyle={styles.button}
+                buttonStyle={styles.buttonReset}
             />
         </>
     );

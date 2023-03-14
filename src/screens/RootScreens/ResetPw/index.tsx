@@ -11,21 +11,19 @@ const ResetPw: React.FC<ResetPwScreenProps> = ({ route, navigation }) => {
     const onNavigateToResetPwSuccess = () =>
         navigation.navigate('ResetPwSuccess');
 
-    const { user } = route.params;
-
     return (
         <View style={screenStyles.containerScollable}>
             <BackHeader title='' onBackPress={onGoBack} />
             <KeyboardAwareScrollView
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={screenStyles.scrollViewCenterContainer}>
                 <LARootHeader
                     title='Reset password'
                     subTitle='Please choose your new password'
                 />
                 <PasswordContent
+                    route={route}
                     onNavigateToResetPwSuccess={onNavigateToResetPwSuccess}
-                    pwResetType='initial'
-                    user={user}
                 />
             </KeyboardAwareScrollView>
         </View>

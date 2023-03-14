@@ -20,10 +20,12 @@ export const screenStyles = StyleSheet.create({
     scrollViewContainer: {
         flexGrow: 1,
         paddingTop,
+        paddingBottom: scale.sc10,
     },
     scrollViewCenterContainer: {
         flexGrow: 1,
         justifyContent: 'center',
         paddingTop,
+        paddingBottom: scale.sc10,
     },
 });

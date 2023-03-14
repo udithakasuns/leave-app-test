@@ -50,7 +50,43 @@ export const awsOnResetInitialPw = (
                 resolve(res);
             })
             .catch(err => {
-                reject();
+                reject(err);
+            });
+    });
+
+export const awsOnForgotpwEmailSubmit = (username: string) =>
+    new Promise<{ isSuccess: boolean; message: string }>((resolve, reject) => {
+        Auth.forgotPassword(username)
+            .then(() => {
+                resolve({
+                    isSuccess: true,
+                    message: '',
+                });
+            })
+            .catch(err => {
+                if (err) {
+                    resolve({
+                        isSuccess: false,
+                        message: err.message,
+                    });
+                } else {
+                    reject(err);
+                }
+            });
+    });
+
+export const awsOnForgotPwSubmit = (
+    username: string,
+    code: string,
+    password: string,
+) =>
+    new Promise((resolve, reject) => {
+        Auth.forgotPasswordSubmit(username, code, password)
+            .then(res => {
+                resolve(res);
+            })
+            .catch(err => {
+                reject(err);
             });
     });
 

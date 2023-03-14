@@ -1,3 +1,4 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
@@ -10,6 +11,8 @@ import {
     Spacer,
     Text,
 } from 'src/components/atoms';
+import { RootScreensParamsList } from 'src/navigators/types';
+import { awsOnForgotpwEmailSubmit } from 'src/services/aws';
 import theme from 'src/utils/theme';
 import { styles } from './styles';
 
@@ -19,17 +22,18 @@ interface Props {
     openPopup: boolean;
     emailRegex: RegExp;
     onClosePopup: () => void;
-    onNavigateToForgotPw: () => void;
 }
 
 const EmailVerificationPopup = ({
     openPopup,
     emailRegex,
     onClosePopup,
-    onNavigateToForgotPw,
 }: Props) => {
+    const navigation = useNavigation<NavigationProp<RootScreensParamsList>>();
+
     const [email, setEmail] = useState<string>('');
     const [emailError, setEmailError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onChangeEmail = (text: string) => setEmail(text);
 
@@ -53,12 +57,27 @@ const EmailVerificationPopup = ({
 
     const onSubmitEmail = () => {
         if (isEmailValidated()) {
-            // Call to the API
-            // Remember to reset field
+            awsOnForgotpwEmailSubmit(email)
+                .then(res => {
+                    setLoading(false);
+                    if (res.isSuccess) {
+                        onClosePopup();
+                        onResetField();
+                        navigation.navigate('ResetPw', {
+                            resetType: 'FORGOT_PW',
+                            userEmail: email,
+                        });
+                    } else {
+                        setEmailError(res.message);
+                    }
+                })
+                .catch(() => {
+                    setEmailError(
+                        'Something went wrong! Please contact your admin',
+                    );
+                });
         }
     };
-
-    // need to add basic email validation regex
 
     return (
         <Modal
@@ -94,6 +113,7 @@ const EmailVerificationPopup = ({
                     autoCapitalize='none'
                     onChangeText={onChangeEmail}
                     containerStyle={styles.inputContainer}
+                    onSubmitEditing={onSubmitEmail}
                 />
                 {emailError !== '' && (
                     <Text
@@ -105,6 +125,7 @@ const EmailVerificationPopup = ({
                 )}
                 <Spacer height={scale.sc10} />
                 <Button
+                    loading={loading}
                     label='Send verification code'
                     iconPosition='left'
                     icon='arrow-forward'

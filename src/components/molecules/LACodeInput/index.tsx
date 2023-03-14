@@ -93,9 +93,11 @@ const CodeInput = ({
                 ))}
             </View>
             <Spacer height={scale.sc1} />
-            <Text type='ParaSM' color={colors.error}>
-                {error}
-            </Text>
+            {error !== '' && (
+                <Text type='ParaSM' color={colors.error}>
+                    {error}
+                </Text>
+            )}
         </View>
     );
 };

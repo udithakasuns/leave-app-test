@@ -8,7 +8,8 @@ export const styles = StyleSheet.create({
         marginHorizontal: 0,
         marginBottom: 0,
     },
-    button: {
+
+    buttonReset: {
         alignSelf: 'flex-start',
         width: 'auto',
         minWidth: scale.sc160 + scale.sc40,
