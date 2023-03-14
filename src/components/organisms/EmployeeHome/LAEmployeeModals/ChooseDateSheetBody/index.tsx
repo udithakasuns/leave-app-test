@@ -43,6 +43,13 @@ interface Props extends Partial<TestProps> {
     formik: FormikProps<ApplyFormValues>;
     onBackPress: (modalType: EmployeeModal) => void;
 }
+const defaultCompanyHolidayMarker: MarkingProps = {
+    selected: true,
+    marked: true,
+    selectedColor: colors.dividerColor,
+    selectedTextColor: colors.gray400,
+    dotColor: '',
+};
 
 const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
     const [range, setRange] = useState<{
@@ -53,7 +60,6 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
     const [companyHolidayList, setCompanyHolidayList] = useState<
         CompanyHolidays[]
     >([]);
-    let alreadyLeaveDateList: { dateString: string }[] = [];
     const [holiday, setHoliday] = useState<MarkedDates>({});
     const {
         user: { userId },
@@ -87,22 +93,16 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
         return tempMarked;
     }, [range, holidays]);
 
-    const updateCompanyHolidays = (allCompanyHolidays: Holiday[]) => {
-        if (allCompanyHolidays) {
-            allCompanyHolidays.forEach(companyHoliday => {
-                const companyHolidayMarker: MarkingProps = {
-                    selected: true,
-                    marked: true,
+    const updateCompanyHolidays = (allCompanyHolidays: Holiday[]): void => {
+        allCompanyHolidays.forEach(companyHoliday => {
+            setHoliday(prevHoliday => ({
+                ...prevHoliday,
+                [companyHoliday.date]: {
+                    ...defaultCompanyHolidayMarker,
                     dotColor: companyHoliday.holidayColor,
-                    selectedColor: colors.dividerColor,
-                    selectedTextColor: colors.gray400,
-                };
-                setHoliday(prevHoliday => ({
-                    ...prevHoliday,
-                    [companyHoliday.date]: companyHolidayMarker,
-                }));
-            });
-        }
+                },
+            }));
+        });
     };
     // fetch All company holidays
     const { data: allCompanyHolidays, isLoading: isLoadingAllCompanyHolidays } =
@@ -114,10 +114,10 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                 keepPreviousData: true,
             },
         );
-    const getCompanyHolidaysForSelectedDates = (
+    const setCompanyHolidaysForSelectedDates = (
         startDate: string,
         endDate: string,
-    ): CompanyHolidays[] => {
+    ): void => {
         setCompanyHolidayList(
             Object.keys(holidays)
                 .filter(
@@ -128,27 +128,17 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                 )
                 .map(date => ({ dateString: date })),
         );
-
-        return companyHolidayList;
     };
 
-    const updateAlreadyLeaveDates = (alreadyLeaveDates: string[]) => {
-        if (alreadyLeaveDates) {
-            const allAlreadyLeaveDates: string[] =
-                Object.values(alreadyLeaveDates).flat();
-            allAlreadyLeaveDates.forEach(date => {
-                const companyHolidayMarker: MarkingProps = {
-                    selected: true,
-                    marked: false,
-                    selectedColor: colors.dividerColor,
-                    selectedTextColor: colors.gray400,
-                };
+    const updateAlreadyLeaveDates = (alreadyLeaveDates: string[]): void => {
+        Object.values(alreadyLeaveDates)
+            .flat()
+            .forEach(date => {
                 setHoliday(prevHoliday => ({
                     ...prevHoliday,
-                    [date]: companyHolidayMarker,
+                    [date]: { ...defaultCompanyHolidayMarker, marked: false },
                 }));
             });
-        }
     };
 
     // fetch already leave dates of the user
@@ -165,8 +155,8 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
     const getAlreadyLeaveDatesForSelectedDates = (
         startDate: string,
         endDate: string,
-    ): CompanyHolidays[] => {
-        alreadyLeaveDateList = Object.keys(holidays)
+    ): CompanyHolidays[] =>
+        Object.keys(holidays)
             .filter(
                 date =>
                     holidays[date].marked === false &&
@@ -174,9 +164,6 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                     date <= endDate,
             )
             .map(date => ({ dateString: date }));
-
-        return alreadyLeaveDateList;
-    };
 
     const daysInMonth = (month: number, year: number) =>
         new Date(year, month, 0).getDate();
@@ -252,8 +239,8 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
         ) {
             const newRange = { ...range, ...{ endDate: day.dateString } };
             setRange(newRange);
-            getCompanyHolidaysForSelectedDates(range.startDate, day.dateString);
-            getAlreadyLeaveDatesForSelectedDates(
+            setCompanyHolidaysForSelectedDates(range.startDate, day.dateString);
+            const alreadyLeaveDateList = getAlreadyLeaveDatesForSelectedDates(
                 range.startDate,
                 day.dateString,
             );
