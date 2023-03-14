@@ -193,7 +193,7 @@ const PasswordContent = ({
 
     const onFailResetPw = (message: string = defaultApiErrorMsg) => {
         setLoading(false);
-        //showErrorToast()
+        // showErrorToast()
         // Toast
     };
 
