@@ -15,6 +15,7 @@ export enum ErrorCodes {
     ERROR_OCCURRED = 'ERROR_OCCURRED',
     NO_RECIPIENT = 'NO_RECIPIENT',
     REQUEST_ALREADY_NUDGE = 'REQUEST_ALREADY_NUDGE',
+    LEAVE_ALREADY_APPLIED = 'LEAVE_ALREADY_APPLIED',
 }
 
 type ErrorProp = {
@@ -130,6 +131,12 @@ export const getErrorMessage = (
             errorCodeMessage = {
                 title: 'Consequent leave allocation exceeded',
                 message: 'Cannot apply for more than 3 casual leaves in a row',
+            };
+            break;
+        case 'LEAVE_ALREADY_APPLIED':
+            errorCodeMessage = {
+                title: 'Leave already applied',
+                message: 'You are already on leave on this date.',
             };
             break;
         default:
