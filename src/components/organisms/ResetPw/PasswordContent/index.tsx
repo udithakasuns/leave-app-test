@@ -2,6 +2,7 @@
 import { RouteProp } from '@react-navigation/native';
 import React, { useState, createRef, LegacyRef } from 'react';
 import { TextInput } from 'react-native';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { Button, Input, Spacer, Text } from 'src/components/atoms';
 import {
     LAPasswordStrength,
@@ -10,6 +11,8 @@ import {
 } from 'src/components/molecules';
 import { RootScreensParamsList } from 'src/navigators/types';
 import { awsOnForgotPwSubmit, awsOnResetInitialPw } from 'src/services/aws';
+import { GeneralSigninUser } from 'src/services/aws/types';
+import { showErrorToast, toastConfig } from 'src/utils/alerts';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import { styles } from './styles';
@@ -75,6 +78,8 @@ const errorMap: ErrorMap = {
 };
 
 const defaultCodeValues: string[] = ['', '', '', '', '', ''];
+
+const defaultApiErrorMsg = 'Something went wrong! Please contact your admin';
 
 const PasswordContent = ({
     route: { params },
@@ -180,43 +185,48 @@ const PasswordContent = ({
         setCpassword('');
     };
 
+    const onSuccessResetPw = () => {
+        setLoading(false);
+        onResetFields();
+        onNavigateToResetPwSuccess();
+    };
+
+    const onFailResetPw = (message: string = defaultApiErrorMsg) => {
+        setLoading(false);
+        //showErrorToast()
+        // Toast
+    };
+
+    const onResetInitialPw = (user: GeneralSigninUser) => {
+        if (isPwValidated() && isCpwValidated()) {
+            setLoading(true);
+            awsOnResetInitialPw(user, password)
+                .then(res => {
+                    if (res.isSuccess) onSuccessResetPw();
+                    else onFailResetPw(res.message);
+                })
+                .catch(() => onFailResetPw());
+        }
+    };
+
+    const onResetForgotPw = (userEmail: string) => {
+        if (isCodeValidated() && isPwValidated() && isCpwValidated()) {
+            setLoading(true);
+            const code = codeValues.join('');
+            awsOnForgotPwSubmit(userEmail, code, password)
+                .then(res => {
+                    if (res.isSuccess) onSuccessResetPw();
+                    else setLoading(false);
+                })
+                .catch(() => onFailResetPw());
+        }
+    };
+
     const onPressResetPw = () => {
         if (params.resetType === 'INITIAL') {
-            if (isPwValidated() && isCpwValidated()) {
-                setLoading(true);
-                awsOnResetInitialPw(params.user, password)
-                    .then(() => {
-                        setPassword('');
-                        setCpassword('');
-                        setLoading(false);
-                        onResetFields();
-                        onNavigateToResetPwSuccess();
-                    })
-                    .catch(() => {
-                        setLoading(false);
-                    });
-            }
+            onResetInitialPw(params.user);
         } else if (params.resetType === 'FORGOT_PW') {
-            if (isCodeValidated() && isPwValidated() && isCpwValidated()) {
-                setLoading(true);
-                const code = codeValues.join('');
-                // console.log('email:', params.userEmail);
-                awsOnForgotPwSubmit(params.userEmail, code, password)
-                    .then(res => {
-                        // console.log(res);
-                        setLoading(false);
-                        onResetFields();
-                        onNavigateToResetPwSuccess();
-                    })
-                    .catch(err => {
-                        // Handle the error
-                        // CodeMismatchException: Invalid verification code provided, please try again.
-                        setLoading(false);
-                        // console.log(err);
-                        // if (err && err.length > 0) {
-                        // }
-                    });
-            }
+            onResetForgotPw(params.userEmail);
         }
     };
 
@@ -298,6 +308,12 @@ const PasswordContent = ({
                 label='Reset password'
                 onPress={onPressResetPw}
                 buttonStyle={styles.buttonReset}
+            />
+            <Toast
+                config={toastConfig}
+                position='bottom'
+                bottomOffset={30}
+                autoHide
             />
         </>
     );

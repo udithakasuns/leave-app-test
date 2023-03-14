@@ -88,3 +88,8 @@ export interface GeneralSigninFailedProps {
     code: string;
     message: string;
 }
+
+export interface GenricResolveProps {
+    isSuccess: boolean;
+    message: string;
+}

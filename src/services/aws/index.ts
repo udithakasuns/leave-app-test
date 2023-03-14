@@ -5,6 +5,7 @@ import {
     GeneralSigninFailedProps,
     GeneralSigninSuccessProps,
     GeneralSigninUser,
+    GenricResolveProps,
 } from './types';
 
 export const awsOnGoogleSignIn = async () =>
@@ -44,18 +45,28 @@ export const awsOnResetInitialPw = (
     user: GeneralSigninUser,
     newPassword: string,
 ) =>
-    new Promise((resolve, reject) => {
+    new Promise<GenricResolveProps>((resolve, reject) => {
         Auth.completeNewPassword(user, newPassword, { name: user.username })
-            .then(res => {
-                resolve(res);
+            .then(() => {
+                resolve({
+                    isSuccess: true,
+                    message: '',
+                });
             })
             .catch(err => {
-                reject(err);
+                if (err) {
+                    resolve({
+                        isSuccess: false,
+                        message: err.message,
+                    });
+                } else {
+                    reject(err);
+                }
             });
     });
 
 export const awsOnForgotpwEmailSubmit = (username: string) =>
-    new Promise<{ isSuccess: boolean; message: string }>((resolve, reject) => {
+    new Promise<GenricResolveProps>((resolve, reject) => {
         Auth.forgotPassword(username)
             .then(() => {
                 resolve({
@@ -80,13 +91,20 @@ export const awsOnForgotPwSubmit = (
     code: string,
     password: string,
 ) =>
-    new Promise((resolve, reject) => {
+    new Promise<GenricResolveProps>((resolve, reject) => {
         Auth.forgotPasswordSubmit(username, code, password)
-            .then(res => {
-                resolve(res);
+            .then(() => {
+                resolve({ isSuccess: true, message: '' });
             })
             .catch(err => {
-                reject(err);
+                if (err) {
+                    resolve({
+                        isSuccess: false,
+                        message: err.message,
+                    });
+                } else {
+                    reject(err);
+                }
             });
     });
 
