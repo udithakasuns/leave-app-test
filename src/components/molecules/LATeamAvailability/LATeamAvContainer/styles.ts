@@ -5,12 +5,15 @@ const { colors, scale, radius } = theme;
 
 interface Props {
     outline: boolean;
+    allTeamAvailable: boolean;
 }
 
-export const useStyles = ({ outline }: Props) =>
+export const useStyles = ({ outline, allTeamAvailable }: Props) =>
     StyleSheet.create({
         container: {
-            backgroundColor: colors.tertiaryColor,
+            backgroundColor: allTeamAvailable
+                ? colors.lime600
+                : colors.tertiaryColor,
             borderRadius: radius.rd4,
             paddingHorizontal: scale.sc12,
             paddingVertical: scale.sc12,
