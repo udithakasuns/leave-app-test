@@ -11,6 +11,7 @@ import { ErrorCodes } from 'src/utils/helpers/errorCodes';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootScreensParamsList } from 'src/navigators/types';
+import { TID } from 'src/utils/testIds';
 import { styles } from './styles';
 import EmailVerificationPopup from './EmailVerificationPopup';
 
@@ -124,17 +125,19 @@ const Content = () => {
     return (
         <>
             <Input
+                testIdInput={`${TID}INPUT_EMAIL`}
                 label='Enter work email'
                 placeholder=''
-                value={email}
                 autoCapitalize='none'
-                onChangeText={onChangeEmail}
-                onSubmitEditing={onSubmitEmail}
-                error={errors.emailError !== ''}
                 containerStyle={styles.inputContainer}
+                value={email}
+                error={errors.emailError !== ''}
+                onSubmitEditing={onSubmitEmail}
+                onChangeText={onChangeEmail}
             />
             {errors.emailError !== '' && (
                 <Text
+                    testID={`${TID}TEXT_EMAIL_ERROR`}
                     style={styles.errorText}
                     color={colors.error}
                     type='ParaSM'>
@@ -143,22 +146,24 @@ const Content = () => {
             )}
             <Spacer height={scale.sc1} />
             <Input
+                testIdInput={`${TID}INPUT_PW`}
                 reference={passwordRef}
                 label='Enter password'
                 placeholder=''
-                value={password}
                 autoCapitalize='none'
-                onChangeText={onChangePassword}
                 rightIconName={hidePassword ? 'eye-outline' : 'eye-off-outline'}
                 rightIconColor={colors.gray}
-                secureTextEntry={hidePassword}
-                onSubmitEditing={onSignin}
                 error={errors.passwordError !== ''}
-                onPressRightIcon={onToggleHidePassword}
                 containerStyle={styles.inputContainer}
+                secureTextEntry={hidePassword}
+                value={password}
+                onSubmitEditing={onSignin}
+                onPressRightIcon={onToggleHidePassword}
+                onChangeText={onChangePassword}
             />
             {errors.passwordError !== '' && (
                 <Text
+                    testID={`${TID}TEXT_PW_ERROR`}
                     style={styles.errorText}
                     color={colors.error}
                     type='ParaSM'>
@@ -167,11 +172,13 @@ const Content = () => {
             )}
             <Spacer height={scale.sc1} />
             <LALinkText
+                testIdText={`${TID}LINK_FORGOT_PW`}
                 text='Forgot Password ?'
                 onPress={onOpenEmailVerifyPopup}
             />
             <Spacer height={scale.sc20} />
             <Button
+                testIdLabel={`${TID}BUTTON_LOGIN`}
                 loading={loading}
                 label='Login'
                 onPress={onSignin}

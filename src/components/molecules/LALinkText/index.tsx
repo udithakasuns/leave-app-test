@@ -36,7 +36,7 @@ const LALinkText = ({
         disabled={!onPress}
         onPress={onPress}>
         <Text
-            testId={testIdText}
+            testID={testIdText}
             type={textType}
             style={[styles.text, textStyle]}
             color={textColor}>

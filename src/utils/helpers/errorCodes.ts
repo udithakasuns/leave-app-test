@@ -16,6 +16,7 @@ export enum ErrorCodes {
     NO_RECIPIENT = 'NO_RECIPIENT',
     REQUEST_ALREADY_NUDGE = 'REQUEST_ALREADY_NUDGE',
     GENERAL_SIGNIN_ERROR = 'GENERAL_SIGNIN_ERROR',
+    RESET_PW_ERROR = 'RESET_PW_ERROR',
 }
 
 type ErrorProp = {
@@ -136,6 +137,12 @@ export const getErrorMessage = (
         case 'GENERAL_SIGNIN_ERROR':
             errorCodeMessage = {
                 title: 'Login error',
+                message: patchContent || '',
+            };
+            break;
+        case 'RESET_PW_ERROR':
+            errorCodeMessage = {
+                title: 'Reset password error',
                 message: patchContent || '',
             };
             break;

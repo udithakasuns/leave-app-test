@@ -13,6 +13,7 @@ import {
 } from 'src/components/atoms';
 import { RootScreensParamsList } from 'src/navigators/types';
 import { awsOnForgotpwEmailSubmit } from 'src/services/aws';
+import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import { styles } from './styles';
 
@@ -52,24 +53,27 @@ const EmailVerificationPopup = ({
     const onResetField = () => {
         setTimeout(() => {
             setEmail('');
+            setEmailError('');
         }, 100);
+    };
+
+    const onSuccessEmailSubmit = () => {
+        onResetField();
+        onClosePopup();
+        navigation.navigate('ResetPw', {
+            resetType: 'FORGOT_PW',
+            userEmail: email,
+        });
     };
 
     const onSubmitEmail = () => {
         if (isEmailValidated()) {
+            setLoading(true);
             awsOnForgotpwEmailSubmit(email)
                 .then(res => {
                     setLoading(false);
-                    if (res.isSuccess) {
-                        onClosePopup();
-                        onResetField();
-                        navigation.navigate('ResetPw', {
-                            resetType: 'FORGOT_PW',
-                            userEmail: email,
-                        });
-                    } else {
-                        setEmailError(res.message);
-                    }
+                    if (res.isSuccess) onSuccessEmailSubmit();
+                    else setEmailError(res.message);
                 })
                 .catch(() => {
                     setEmailError(
@@ -77,6 +81,11 @@ const EmailVerificationPopup = ({
                     );
                 });
         }
+    };
+
+    const onPressClose = () => {
+        onResetField();
+        onClosePopup();
     };
 
     return (
@@ -89,34 +98,38 @@ const EmailVerificationPopup = ({
             useNativeDriver>
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
-                    <Text type='H1Bold'>Forgot Password</Text>
+                    <Text testID={`${TID}TEXT_TITLE_FORGOT_PW`} type='H1Bold'>
+                        Forgot Password
+                    </Text>
                     <Icon
                         name='close'
                         enableBackground
                         size={IconSize.medium}
                         increasePadding={2}
-                        onPress={onClosePopup}
+                        onPress={onPressClose}
                     />
                 </View>
                 <Spacer height={scale.sc2} />
                 <Divider />
                 <Spacer height={scale.sc10} />
-                <Text type='SubH'>
+                <Text testID={`${TID}TEXT_SUBTITLE_FORGOT_PW`} type='SubH'>
                     Enter your work email and we’ll send you a verification code
                     to reset your password
                 </Text>
                 <Spacer height={scale.sc10} />
                 <Input
+                    testIdInput={`${TID}INPUT_EMAIL`}
                     label='Work email'
                     placeholder=''
                     value={email}
                     autoCapitalize='none'
-                    onChangeText={onChangeEmail}
                     containerStyle={styles.inputContainer}
+                    onChangeText={onChangeEmail}
                     onSubmitEditing={onSubmitEmail}
                 />
                 {emailError !== '' && (
                     <Text
+                        testID={`${TID}TEXT_EMAIL_ERROR`}
                         style={styles.errorText}
                         color={colors.error}
                         type='ParaSM'>
@@ -125,6 +138,7 @@ const EmailVerificationPopup = ({
                 )}
                 <Spacer height={scale.sc10} />
                 <Button
+                    testIdLabel={`${TID}BUTTON_SEND_CODE`}
                     loading={loading}
                     label='Send verification code'
                     iconPosition='left'

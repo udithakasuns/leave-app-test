@@ -31,7 +31,6 @@ export type RootScreensParamsList = {
     LoginGeneral: undefined;
     ResetPw: InitialPwResetProps | ForgotPwResetProps;
     ResetPwSuccess: undefined;
-    ForgotPw: undefined;
     ProviderCode: undefined;
     Auth: NavigatorScreenParams<AuthScreensParamList>;
 };
@@ -59,11 +58,6 @@ export type ResetPwScreenProps = NativeStackScreenProps<
 export type ResetPwSuccessScreenProps = NativeStackScreenProps<
     RootScreensParamsList,
     'ResetPwSuccess'
->;
-
-export type ForgotPwScreenProps = NativeStackScreenProps<
-    RootScreensParamsList,
-    'ForgotPw'
 >;
 
 export type ProviderCodeScreenProps = NativeStackScreenProps<

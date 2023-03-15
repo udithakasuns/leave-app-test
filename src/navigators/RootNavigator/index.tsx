@@ -11,7 +11,6 @@ import {
     LoginGeneral,
     ResetPw,
     ResetPwSuccess,
-    ForgotPw,
 } from 'src/screens/RootScreens';
 import { useAuthentication } from 'src/utils/hooks/useAuthentication';
 import useLogout from 'src/utils/hooks/useLogout';
@@ -66,7 +65,6 @@ const RootNavigator = () => {
                             name='ResetPwSuccess'
                             component={ResetPwSuccess}
                         />
-                        <StackNav.Screen name='ForgotPw' component={ForgotPw} />
                     </>
                 )}
             </StackNav.Navigator>

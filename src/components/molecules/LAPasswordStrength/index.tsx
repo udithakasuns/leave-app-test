@@ -63,8 +63,9 @@ const LAPasswordStrength = ({ password, rules, onUpdateRules }: Props) => {
     return (
         <View>
             <View style={styles.srokeContainer}>
-                {[...Array(4)].map((_, index) => (
+                {[...Array(4)].map((item, index) => (
                     <View
+                        key={item}
                         testID={`${TID}STROKE_${index.toString()}`}
                         style={[
                             styles.stroke,
@@ -88,7 +89,7 @@ const LAPasswordStrength = ({ password, rules, onUpdateRules }: Props) => {
             </View>
             <Spacer height={scale.sc8} />
             {rules.map((rule, index) => (
-                <View style={styles.ruleContainer}>
+                <View key={rule.key} style={styles.ruleContainer}>
                     <Icon
                         name={
                             rule.isMatched
