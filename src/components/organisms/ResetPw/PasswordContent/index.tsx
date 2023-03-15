@@ -239,7 +239,7 @@ const PasswordContent = ({
                 }
                 rightIconColor={colors.gray}
                 secureTextEntry={hideCpassword}
-                onSubmitEditing={() => {}}
+                onSubmitEditing={onPressResetPw}
                 containerStyle={styles.inputContainer}
                 onPressRightIcon={onToggleHideCpassword}
                 error={errors.cPwError !== ''}
@@ -262,12 +262,6 @@ const PasswordContent = ({
                 label='Reset password'
                 onPress={onPressResetPw}
                 buttonStyle={styles.buttonReset}
-            />
-            <Toast
-                config={toastConfig}
-                position='bottom'
-                bottomOffset={30}
-                autoHide
             />
         </>
     );

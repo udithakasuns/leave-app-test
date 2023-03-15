@@ -5,6 +5,8 @@ import { PasswordContent } from 'src/components/organisms/ResetPw';
 import { ResetPwScreenProps } from 'src/navigators/types';
 import { screenStyles } from 'src/utils/styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { toastConfig } from 'src/utils/alerts';
 
 const ResetPw: React.FC<ResetPwScreenProps> = ({ route, navigation }) => {
     const onGoBack = () => navigation.goBack();
@@ -26,6 +28,12 @@ const ResetPw: React.FC<ResetPwScreenProps> = ({ route, navigation }) => {
                     onNavigateToResetPwSuccess={onNavigateToResetPwSuccess}
                 />
             </KeyboardAwareScrollView>
+            <Toast
+                config={toastConfig}
+                position='bottom'
+                bottomOffset={30}
+                autoHide
+            />
         </View>
     );
 };

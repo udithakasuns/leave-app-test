@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
 import { Button, Text } from 'src/components/atoms';
 import CodeInput from 'src/components/molecules/LACodeInput';
 import { awsOnForgotpwEmailSubmit } from 'src/services/aws';
@@ -59,6 +58,13 @@ const VerificationCode = ({
             });
     };
 
+    const getResendText = (): string => {
+        if (seconds !== 0) {
+            return `You can resend a code in ${seconds}s`;
+        }
+        return '';
+    };
+
     return (
         <>
             <CodeInput
@@ -68,30 +74,24 @@ const VerificationCode = ({
                 onChangeCodeValue={onChangeCodeValue}
                 onAutoSubmit={onSubmitCode}
             />
-            <View style={styles.resendContainer}>
-                {seconds !== 0 ? (
-                    <Text
-                        testID={`${TID}TEXT_RESEND`}
-                        style={styles.resentText}
-                        type='ParaLG'>
-                        You can resend a code in {seconds}s
-                    </Text>
-                ) : (
-                    <View />
-                )}
 
-                <Button
-                    testIdLabel={`${TID}BUTTON_RESEND_CODE`}
-                    disabled={isButtonDisabled}
-                    mode={isButtonDisabled ? 'contained-gray' : 'contained'}
-                    size='small'
-                    iconPosition='left'
-                    icon='arrow-forward'
-                    label={loading ? 'Resending...' : 'Resend code'}
-                    buttonStyle={styles.button}
-                    onPress={onResendCode}
-                />
-            </View>
+            <Button
+                testIdLabel={`${TID}BUTTON_RESEND_CODE`}
+                disabled={isButtonDisabled}
+                mode={isButtonDisabled ? 'contained-gray' : 'contained'}
+                size='small'
+                iconPosition='left'
+                icon='arrow-forward'
+                label={loading ? 'Resending...' : 'Resend code'}
+                onPress={onResendCode}
+            />
+
+            <Text
+                style={styles.resentText}
+                testID={`${TID}TEXT_RESEND`}
+                type='ParaSM'>
+                {getResendText()}
+            </Text>
         </>
     );
 };

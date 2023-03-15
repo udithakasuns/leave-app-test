@@ -74,7 +74,7 @@ const Content = () => {
 
     const onSubmitEmail = () => {
         if (passwordRef && passwordRef.current) {
-            isPasswordValidated();
+            isEmailValidated();
             passwordRef.current.focus();
         }
     };
@@ -95,6 +95,7 @@ const Content = () => {
                 const result = await awsOnGeneralSignIn(email, password);
                 setLoading(false);
                 if (result.isSuccess) {
+                    onResetFields();
                     /* If user comes 1st time, will navigate to ResetPw */
                     if (result.user.challengeName === 'NEW_PASSWORD_REQUIRED') {
                         navigation.navigate('ResetPw', {
@@ -102,7 +103,6 @@ const Content = () => {
                             user: result.user,
                         });
                     } else {
-                        onResetFields();
                         setUserAuth({ loading: true, type: 'general' });
                     }
                 } else {

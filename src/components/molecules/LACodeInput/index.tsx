@@ -76,7 +76,7 @@ const CodeInput = ({
                 {codeValues.map((value, index) => (
                     <Input
                         testIdInput={`${TID}INPUT_PROVIDER_CODE_${index.toString()}`}
-                        key={value + index.toString()}
+                        key={`key${index.toString()}`}
                         reference={inputRefs[index]}
                         label=''
                         containerStyle={styles.inputView}
