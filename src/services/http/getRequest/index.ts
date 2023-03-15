@@ -125,6 +125,6 @@ export const getHttpAwayEmployees = async ({
 };
 
 export const getHttpTeamByUser = async (userId: string) => {
-    const res = await axiosInstance.get(`/v1/employees/get/teams/${userId}`);
+    const res = await axiosInstance.get(`/v1/employees/teams/${userId}`);
     return res.data.results;
 };

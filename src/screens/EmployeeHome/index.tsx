@@ -327,13 +327,14 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     ]}>
                     <LAAppBar currentScreen='employee' />
                     <Spacer />
-                    <Text testID='txtGreetingEmpHome' type='H1Bold'>
+                    <Text testID='txtGreetingHome' type='H1Bold'>
                         Hey {firstName} {'\n'}
                         {getGreetingsByTime()}
                     </Text>
                     <Spacer height={5} />
                     {entitlements && (
                         <LAEntitlementGrid
+                            testId='EmployeeHome'
                             entitlements={
                                 entitlements as EntitlementSelection[]
                             }

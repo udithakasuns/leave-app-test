@@ -190,6 +190,7 @@ const ChooseDateSheetBody = ({ formik, onBackPress }: Props) => {
                 </>
             )}
             <Calendar
+                testID='ChooseDateSheetBody_calendar'
                 markedDates={marked}
                 markingType='dot'
                 onDayPress={day => {

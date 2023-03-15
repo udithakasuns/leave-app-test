@@ -16,6 +16,7 @@ const LAEntitlementGrid = ({
     entitlements,
     onEntitlementPress,
     isError,
+    testId,
 }: Props) => {
     const { managers } = useRecipientStore();
 
@@ -34,6 +35,7 @@ const LAEntitlementGrid = ({
                 leaveType={item.leaveType.name}
                 isDisable={item.balanceInDays === 0 || managers.length < 1}
                 isError={isError}
+                testId={`${testId}_LeaveEntitlementCard_${item.leaveType.name}`}
             />
         </Pressable>
     );

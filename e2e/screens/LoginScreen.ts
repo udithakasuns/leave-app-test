@@ -18,7 +18,7 @@ export default class LoginScreen {
 
     // Actions
 
-    checkLoginPageLoaded = async () => {
+    verifyLoginPageLoaded = async () => {
         await waitFor(element(this.lblSignIn)).toBeVisible().withTimeout(30000);
     };
 
@@ -53,5 +53,17 @@ export default class LoginScreen {
         await waitFor(element(this.lblGreeting))
             .toBeVisible()
             .withTimeout(30000);
+    };
+
+    loginByPasswordAuthentication = async (
+        username: string,
+        password: string,
+    ) => {
+        await this.clearEmail();
+        await this.typeEmail(username);
+        await this.clearPassword();
+        await this.typePassword(password);
+        await this.tapLogin();
+        await this.acceptInvalidUserPopup();
     };
 }

@@ -96,6 +96,7 @@ const LAAppBar = ({ currentScreen }: AppBarProps) => {
                 <Spacer width={5} />
                 {role === 'manager' && (
                     <Chip
+                        testIdRightPressable='drpdownRoleSwitcher'
                         content={appBarProperties().label}
                         rightIconName='arrow-drop-down'
                         outline

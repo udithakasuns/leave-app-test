@@ -70,6 +70,7 @@ export const useAuthentication = (): ReturnProps => {
 
             if (!isValidUser) {
                 setOpenInvalidUserPopup(true);
+                await updateUser();
             } else {
                 await updateUser();
             }

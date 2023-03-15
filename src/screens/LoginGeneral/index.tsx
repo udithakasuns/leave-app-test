@@ -13,8 +13,8 @@ const { colors } = theme;
 const LoginGeneral = () => {
     const { setAuthLoading } = useUserStore();
     const passwordRef: LegacyRef<TextInput> = createRef();
-    const [email, setEmail] = useState<string>('tharindusilva095@gmail.com');
-    const [password, setPassword] = useState<string>('Test@1234');
+    const [email, setEmail] = useState<string>('udithakasun311@gmail.com');
+    const [password, setPassword] = useState<string>('^67Svi6DsqMe@j');
     const [hidePassword, setHidePassword] = useState<boolean>(true);
 
     const onChangeEmail = (text: string) => setEmail(text);
