@@ -17,9 +17,9 @@ import {
 } from 'src/screens/AuthScreens/DrawerScreens';
 import LAGlobalEmployee from 'src/components/organisms/Global/LAGlobalEmployee';
 import LAGlobalManager from 'src/components/organisms/Global/LAGlobalManager';
+import LADrawer from '../../components/organisms/Global/LADrawer';
 import { AuthScreensParamList } from '../types';
 
-import LADrawer from '../../components/organisms/Global/LADrawer';
 /* Screens */
 
 const DrawerNav = createDrawerNavigator<AuthScreensParamList>();
