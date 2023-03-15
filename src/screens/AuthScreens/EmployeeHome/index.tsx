@@ -327,10 +327,10 @@ const EmployeeHome: React.FC<EmployeeHomeScreensProps> = () => {
                     ]}>
                     <LAAppBar currentScreen='employee' />
                     <Spacer />
-                    <Text type='H1Bold'>
-                        Hey {firstName} {'\n'}
-                        {getGreetingsByTime()}
+                    <Text numberOfLines={1} type='H1Bold'>
+                        Hey {firstName}
                     </Text>
+                    <Text type='H1Bold'>{getGreetingsByTime()}</Text>
                     <Spacer height={5} />
                     {entitlements && (
                         <LAEntitlementGrid

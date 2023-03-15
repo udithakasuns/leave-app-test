@@ -5,12 +5,14 @@ import { AuthUserPayload } from 'src/services/aws/types';
 import { usePersistStore, useRecipientStore, useUserStore } from 'src/store';
 import amplifiConfig from 'src/aws-exports';
 import { COGNITO_CUSTOM_DOMAIN } from 'src/configs';
+import { getHttpEmployee } from 'src/services/http';
 import { getCurrentUserRoleFromToken } from '../helpers/gettersUtil';
 import { inAppAuthUrlHandler } from '../helpers/inAppUrlHandler';
 import {
     setAppCenterAnalyticsLogs,
     setCrashlyticsLogs,
 } from '../helpers/crashlyticsUtil';
+import { EmployeeType } from '../types';
 
 Amplify.configure({
     ...amplifiConfig,
@@ -28,22 +30,8 @@ type ReturnProps = {
     onCloseInvalidUserPopup: () => void;
 };
 
-const isRootcodeUser = (email: string): boolean => {
-    const rootcodeLabsDomain = 'rootcodelabs.com';
-    const rootcodeSoftwareDomain = 'rootcode.software';
-    const emailDomain = email.split('@')[1];
-    if (
-        emailDomain === rootcodeLabsDomain ||
-        emailDomain === rootcodeSoftwareDomain
-    ) {
-        return true;
-    }
-    return false;
-};
-
 export const useAuthentication = (): ReturnProps => {
-    const { setUserAuth, saveUser, updateUser, removeUser, userAuth } =
-        useUserStore();
+    const { setUserAuth, setUser, removeUser, userAuth } = useUserStore();
     const { updateRecipients, removeUserRecipients } = useRecipientStore();
     const { setDeviceUniqueId } = usePersistStore();
 
@@ -56,23 +44,17 @@ export const useAuthentication = (): ReturnProps => {
             const authUser: AuthUserPayload =
                 await Auth.currentAuthenticatedUser();
             const {
-                attributes: { email, name, family_name, picture },
+                attributes: { email },
                 signInUserSession: { accessToken },
             } = authUser;
 
             const userRole = getCurrentUserRoleFromToken(accessToken.jwtToken);
 
-            saveUser(email, name, family_name, picture, userRole);
+            const employee: EmployeeType = await getHttpEmployee();
+
+            setUser(employee, userRole);
             setCrashlyticsLogs(email);
             setAppCenterAnalyticsLogs(email);
-
-            const isValidUser = isRootcodeUser(email);
-
-            if (!isValidUser) {
-                setOpenInvalidUserPopup(true);
-            } else {
-                await updateUser();
-            }
 
             updateRecipients();
             setVisibleAuthNav(true);

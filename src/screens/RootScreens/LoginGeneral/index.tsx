@@ -6,6 +6,8 @@ import { Content } from 'src/components/organisms/LoginGeneral';
 import { LoginGeneralScreenProps } from 'src/navigators/types';
 import { screenStyles } from 'src/utils/styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { toastConfig } from 'src/utils/alerts';
 
 const LoginGeneral: React.FC<LoginGeneralScreenProps> = ({ navigation }) => {
     const onGoBack = () => navigation.goBack();
@@ -23,6 +25,12 @@ const LoginGeneral: React.FC<LoginGeneralScreenProps> = ({ navigation }) => {
                 <Content />
             </KeyboardAwareScrollView>
             <LARootFooter />
+            <Toast
+                config={toastConfig}
+                position='bottom'
+                bottomOffset={0}
+                autoHide
+            />
         </View>
     );
 };

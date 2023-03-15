@@ -10,7 +10,7 @@ export const getHttpEmployee = async () => {
     try {
         const res = await axiosInstance.get('/v1/employees/me');
 
-        return res.data;
+        return res.data.results[0];
     } catch (err) {
         return err;
     }

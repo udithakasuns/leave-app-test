@@ -6,9 +6,8 @@ import { LALinkText } from 'src/components/molecules';
 import { awsOnGeneralSignIn } from 'src/services/aws';
 import { useUserStore } from 'src/store';
 import theme from 'src/utils/theme';
-import { showErrorToast, toastConfig } from 'src/utils/alerts';
+import { showErrorToast } from 'src/utils/alerts';
 import { ErrorCodes } from 'src/utils/helpers/errorCodes';
-import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootScreensParamsList } from 'src/navigators/types';
 import { TID } from 'src/utils/testIds';
@@ -92,12 +91,19 @@ const Content = () => {
         if (isEmailValidated() && isPasswordValidated()) {
             setLoading(true);
             try {
+                /* Only auth type is changed */
+                setUserAuth({ loading: false, type: 'general' });
                 const result = await awsOnGeneralSignIn(email, password);
                 setLoading(false);
                 if (result.isSuccess) {
                     onResetFields();
                     /* If user comes 1st time, will navigate to ResetPw */
                     if (result.user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+                        /* Change the auth type to none, Otherwise user will navigate(automatically) to home once changed the password */
+                        setUserAuth({
+                            loading: false,
+                            type: 'none',
+                        });
                         navigation.navigate('ResetPw', {
                             resetType: 'INITIAL',
                             user: result.user,
@@ -191,12 +197,6 @@ const Content = () => {
                 openPopup={openEmailVerifyPopup}
                 emailRegex={EMAIL_REGEX}
                 onClosePopup={onCloseEmailVerifyPopup}
-            />
-            <Toast
-                config={toastConfig}
-                position='bottom'
-                bottomOffset={0}
-                autoHide
             />
         </>
     );

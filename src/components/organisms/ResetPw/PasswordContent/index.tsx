@@ -183,7 +183,6 @@ const PasswordContent = ({
 
     return (
         <>
-            <Spacer height={scale.sc20} />
             {params.resetType === 'FORGOT_PW' && (
                 <VerificationCode
                     codeValues={codeValues}
