@@ -32,7 +32,7 @@ const LATeamAvContent = ({
                 </Text>
                 <Chip
                     testIdContent={`${TID}CHIP_ONLINE`}
-                    content='Online'
+                    content='Available'
                     contentColor={colors.green800}
                     contentTextType='ParaSM'
                     backgroundColor={colors.lime200}
