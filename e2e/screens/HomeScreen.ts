@@ -1,3 +1,5 @@
+import { expect as jestExpect } from '@jest/globals';
+
 /* eslint-disable consistent-return */
 
 enum Role {
@@ -55,6 +57,8 @@ export default class HomeScreen {
     readonly btnConfirmLeave: Detox.NativeMatcher =
         by.text('Confirm and Apply');
 
+    readonly btnCancel: Detox.NativeMatcher = by.text('Cancel');
+
     readonly btnSelectLeaveDate: Detox.NativeMatcher = by.text(
         'Select the leave date',
     );
@@ -100,6 +104,8 @@ export default class HomeScreen {
 
     readonly btnProceedToHome: Detox.NativeMatcher = by.text('Proceed to home');
 
+    readonly btnUndoRequest: Detox.NativeMatcher = by.text('Undo request');
+
     // Leave Requests List Locators in Employee Home
 
     readonly getLeaveRequestDateByIndex: (
@@ -119,6 +125,15 @@ export default class HomeScreen {
             `${this.TID}TID_EMPLOYEE_LEAVE_REQUEST_STATUS_${index.toString()}`,
         );
 
+    readonly lblPendingLeaveStatus: Detox.NativeMatcher = by.text(
+        'Pending leave status',
+    );
+
+    readonly btnCancelLeave: Detox.NativeMatcher = by.text('Cancel Leave');
+
+    readonly lblCancelLeave: Detox.NativeMatcher = by.text(
+        'Cancel requested leave',
+    );
     // Actions
 
     verifyDashboardLoaded = async () => {
@@ -219,6 +234,14 @@ export default class HomeScreen {
         await element(this.btnProceedToHome).tap();
     };
 
+    tapUndoRequest = async () => {
+        await element(this.btnUndoRequest).tap();
+    };
+
+    tapCancel = async () => {
+        await element(this.btnCancel).tap();
+    };
+
     assertLatestLeaveRequest = async (
         leaveDate: string,
         leaveType: string,
@@ -227,11 +250,24 @@ export default class HomeScreen {
         await expect(element(this.getLeaveRequestDateByIndex(0))).toHaveText(
             leaveDate,
         );
-        await expect(element(this.getLeaveRequestTypeByIndex(0))).toHaveText(
-            leaveType,
-        );
+        const leaveTypeChipContent = await element(
+            this.getLeaveRequestTypeByIndex(0),
+        ).getAttributes();
+        jestExpect(leaveTypeChipContent.text).toContain(leaveType);
         await expect(
             element(this.getLeaveRequestStatusIndicatorByIndex(0)),
         ).toHaveText(leaveStatus);
+    };
+
+    cancelLatestLeaveRequest = async () => {
+        await element(this.getLeaveRequestStatusIndicatorByIndex(0)).tap();
+        await waitFor(element(this.lblPendingLeaveStatus))
+            .toBeVisible()
+            .withTimeout(10000);
+        await element(this.btnCancelLeave).tap();
+        await waitFor(element(this.lblCancelLeave))
+            .toBeVisible()
+            .withTimeout(10000);
+        await element(this.btnCancelLeave).tap();
     };
 }

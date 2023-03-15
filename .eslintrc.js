@@ -43,6 +43,7 @@ module.exports = {
                 tsx: 'never',
             },
         ],
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/e2e/tests/*.test.js"]}]
     },
     overrides: [
         {
