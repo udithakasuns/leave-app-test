@@ -3,7 +3,10 @@ import { View } from 'react-native';
 import { Spacer, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { Toggles, Key } from 'src/screens/Settings/types';
+import {
+    Toggles,
+    Key,
+} from 'src/screens/AuthScreens/DrawerScreens/Settings/types';
 import {
     TID_TOGGLE_LEAVE_REQUEST,
     TID_TOGGLE_NUDGE_NOTIFICATION,

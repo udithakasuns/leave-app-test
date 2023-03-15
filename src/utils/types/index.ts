@@ -135,24 +135,82 @@ export enum FilterDates {
 
 export type FilterDatesType = keyof typeof FilterDates;
 
+export type EmployeeContractState =
+    | 'CONFIRMED'
+    | 'PROBATION'
+    | 'INTERN'
+    | 'INACTIVE'
+    | 'PENDING';
+
+export type EmployeeContractType = 'PERMANENT' | 'INTERNSHIP' | 'CONTRACT';
+
+export type EmployeePermission = {
+    changedBy: string;
+    changedDate: string;
+    employeePermissionId: number;
+};
+
+export type EmployeeManager = {
+    manager: {
+        employeeId: string;
+        authPic: string;
+        designation: string;
+        identificationNo: string;
+        lastName: string;
+        name: string;
+        permission: string;
+    };
+};
+
+export type EmployeeGender = 'MALE' | 'FEMALE';
+
+export type EmployeePermissionType =
+    | 'SUPER_ADMIN'
+    | 'SUB_ADMIN'
+    | 'ADMIN'
+    | 'MANAGERS'
+    | 'EMPLOYEES';
+
+export type EmployeeTeam = {
+    team: Team;
+};
+
 export type EmployeeType = {
     employeeId: string;
-    name: string | null;
-    designation: string | null;
-    authPic: string | null;
+    name: string;
+    designation: string;
+    authPic: string;
+    active: boolean;
+    contractState: EmployeeContractState;
+    contractType: EmployeeContractType;
+    country: string;
+    email: string;
+    employeePermission: EmployeePermission;
+    employees: EmployeeManager;
+    gender: EmployeeGender;
+    identificationNo: string;
+    jobRole: string;
+    joinDate: string;
+    lastName: string;
+    permission: EmployeePermissionType;
+    personalEmail: string;
+    phone: string;
+    teams: EmployeeTeam[];
+    timeZone: string;
+    workHourCapacity: string;
+};
+
+export type Manager = {
+    employeeId: string;
+    authPic: string;
+    designation: string;
+    identificationNo: string;
+    lastName: string;
+    name: string;
+    permission: EmployeePermissionType;
 };
 
 export type UserRole = 'employee' | 'manager';
-
-export type UserType = {
-    userId: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    profilePic: string;
-    designation: string;
-    role: UserRole;
-};
 
 export type LeaveState = 'HALFDAY_MORNING' | 'HALFDAY_EVENING' | 'FULLDAY';
 
@@ -395,6 +453,13 @@ export interface EmployeeOnLeaveByDay {
     adminEmployeesOnLeaveByTeamDto: AvailableTeam;
 }
 
+export const PwResetTypeConst = {
+    INITIAL: 'INITIAL',
+    FORGOT_PW: 'FORGOT_PW',
+} as const;
+
+export type PwResetType =
+    (typeof PwResetTypeConst)[keyof typeof PwResetTypeConst];
 export interface Holiday {
     id: number;
     date: string;

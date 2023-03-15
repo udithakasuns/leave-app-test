@@ -20,6 +20,13 @@ export { default as PendingListItem } from './LAPendingListItem';
 export { default as BackHeader } from './LABackHeader';
 export { default as SelectableButton } from './LASelectableButton';
 export { default as LAErrorContent } from './LAErrorContent';
+export * from './LARoot';
+
+export { default as LACodeInput } from './LACodeInput';
+export { default as LALinkText } from './LALinkText';
+export { default as LAPasswordStrength } from './LAPasswordStrength';
+export type { Rule as LAPasswordStrengthRule } from './LAPasswordStrength/types';
+export type { RuleKey as LAPasswordStrengthRuleKey } from './LAPasswordStrength/types';
 
 export { default as PopUp } from './LAPopUp';
 export type { MultiChipProps } from './LAChipGroup';
