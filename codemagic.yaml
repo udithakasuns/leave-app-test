@@ -16,8 +16,9 @@ workflows:
     triggering:
       events:
         - pull_request
+        - push
       branch_patterns: 
-        - pattern: detox-integration
+        - pattern: develop
       cancel_previous_builds: true
     scripts:
       - name: AWS CLI configuration
