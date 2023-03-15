@@ -17,6 +17,7 @@ export enum ErrorCodes {
     REQUEST_ALREADY_NUDGE = 'REQUEST_ALREADY_NUDGE',
     GENERAL_SIGNIN_ERROR = 'GENERAL_SIGNIN_ERROR',
     RESET_PW_ERROR = 'RESET_PW_ERROR',
+    LEAVE_ALREADY_APPLIED = 'LEAVE_ALREADY_APPLIED',
 }
 
 type ErrorProp = {
@@ -144,6 +145,12 @@ export const getErrorMessage = (
             errorCodeMessage = {
                 title: 'Reset password error',
                 message: patchContent || '',
+            };
+            break;
+        case 'LEAVE_ALREADY_APPLIED':
+            errorCodeMessage = {
+                title: 'Leave already applied',
+                message: 'You are already on leave on this date.',
             };
             break;
         default:

@@ -23,6 +23,16 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: colors.red50,
         padding: scale.sc16,
+        minHeight: scale.vsc64,
+    },
+    warningToastContainer: {
+        width: '90%',
+        borderRadius: radius.rd4,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: colors.amber50,
+        paddingVertical: scale.vsc50,
         paddingHorizontal: scale.vsc20,
         minHeight: scale.vsc64,
         maxHeight: pixel(78),
@@ -35,8 +45,14 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     innerContainer: {
+        flex: 5,
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    leftInnerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
         alignItems: 'center',
     },
     leftSuccessContainer: {
@@ -51,7 +67,13 @@ export const styles = StyleSheet.create({
         borderColor: colors.red500,
         borderRadius: radius.rd4,
     },
-    content: {
-        flex: 1,
+    leftwarningContainer: {
+        height: scale.vsc32,
+        borderWidth: 1,
+        borderColor: colors.yellow300,
+        borderRadius: radius.rd4,
+    },
+    rightwarningContainer: {
+        flex: 5,
     },
 });

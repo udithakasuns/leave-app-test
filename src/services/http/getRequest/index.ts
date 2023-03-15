@@ -128,3 +128,15 @@ export const getHttpTeamByUser = async (userId: string) => {
     const res = await axiosInstance.get(`/v1/employees/teams/${userId}`);
     return res.data.results;
 };
+
+export const getHttpAllHolidays = async () => {
+    const res = await axiosInstance.get(`/v1/holiday`);
+    return res.data.results[0].items;
+};
+
+export const getHttpLeavesByUser = async (userId: string) => {
+    const res = await axiosInstance.get(
+        `/v1/leaves/already-leave-days/${userId}`,
+    );
+    return res.data.results[0];
+};

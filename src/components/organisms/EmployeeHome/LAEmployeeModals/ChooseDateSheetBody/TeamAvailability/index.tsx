@@ -20,7 +20,12 @@ import {
     getFormattedDay,
 } from 'src/utils/helpers/dateHandler';
 import theme from 'src/utils/theme';
-import { EmployeeOnLeaveByDay, EmployeeType, Team } from 'src/utils/types';
+import {
+    CompanyHolidays,
+    EmployeeOnLeaveByDay,
+    EmployeeType,
+    Team,
+} from 'src/utils/types';
 import { SkelitonLoaderFull, SkelitonLoaderContent } from './SkelitonLoaders';
 
 const { scale } = theme;
@@ -28,6 +33,7 @@ const { scale } = theme;
 interface Props {
     startDate: string;
     endDate: string;
+    companyHolidays: CompanyHolidays[];
 }
 interface OpenAwayTeamDetailItem {
     isOpen: boolean;
@@ -39,7 +45,7 @@ const initialOpenAwayTeamDetailItem: OpenAwayTeamDetailItem = {
 };
 
 const MODAL_TIMER = 550;
-const TeamAvailability = ({ startDate, endDate }: Props) => {
+const TeamAvailability = ({ startDate, endDate, companyHolidays }: Props) => {
     const [selectedTeam, setSelectedTeam] = useState<Team>({
         teamId: -1,
         teamName: '',
@@ -125,6 +131,10 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
         <>
             <LATeamAvContainer
                 outline
+                allTeamAvailable={
+                    availableTeam?.adminEmployeesOnLeaveByTeamDto
+                        .onLeaveCount === 0
+                }
                 onPress={
                     isAllowToPressTeamAv() ? onOpenDetailModal : undefined
                 }>
@@ -156,7 +166,15 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
                         />
                         <Spacer height={scale.vsc2} />
                         <LATeamAvContent
-                            showAvailableTeamCount
+                            showAvailableTeamCount={
+                                !(startDate && endDate) ||
+                                availableTeam.adminEmployeesOnLeaveByTeamDto
+                                    .onLeaveCount === 0
+                            }
+                            showAwayTeam={
+                                availableTeam.adminEmployeesOnLeaveByTeamDto
+                                    .onLeaveCount !== 0
+                            }
                             awayTeamImages={
                                 availableTeam.adminEmployeesOnLeaveByTeamDto
                                     .imageList
@@ -185,6 +203,7 @@ const TeamAvailability = ({ startDate, endDate }: Props) => {
                             onOpenDetailItemModal(data);
                         }}
                         onPressGoBack={onCloseDetailModal}
+                        companyHolidays={companyHolidays}
                     />
                 }
             />

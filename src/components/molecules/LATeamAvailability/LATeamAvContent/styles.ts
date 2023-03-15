@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
     availableContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
         marginRight: scale.sc20,
     },
     availableChip: {

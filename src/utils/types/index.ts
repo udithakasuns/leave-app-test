@@ -39,6 +39,8 @@ export type Colors = {
     lime800: string;
     grey600: string;
     iconLabel: string;
+    yellow300: string;
+    amber50: string;
 };
 
 // Custom Utility type to set attributes required.
@@ -458,3 +460,13 @@ export const PwResetTypeConst = {
 
 export type PwResetType =
     (typeof PwResetTypeConst)[keyof typeof PwResetTypeConst];
+export interface Holiday {
+    id: number;
+    date: string;
+    reason: string;
+    holidayType: string;
+    holidayDuration: string;
+    holidayColor: string;
+}
+
+export type CompanyHolidays = { dateString: string };

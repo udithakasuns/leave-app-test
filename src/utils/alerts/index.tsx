@@ -67,6 +67,64 @@ export const toastConfig = {
                     </Text>
                 </View>
             </View>
+            <View style={styles.leftInnerContainer}>
+                <Icon
+                    onPress={() => Toast.hide()}
+                    name='close'
+                    color={colors.black}
+                    size={IconSize.small}
+                />
+            </View>
+        </View>
+    ),
+    warningToast: ({ props }: AlertProps) => (
+        <View style={styles.errorToastContainer}>
+            <View style={styles.innerContainer}>
+                <View style={styles.leftwarningContainer} />
+                <Spacer width={5} />
+                <Icon
+                    name='info'
+                    color={colors.yellow300}
+                    size={IconSize.small}
+                />
+                <Spacer width={5} />
+                <View style={styles.rightwarningContainer}>
+                    <Text testID={TID_TOAST_TITLE} type='ParaSMBold'>
+                        {props.title}
+                    </Text>
+                    <Spacer height={0.1} />
+                    <Text testID={TID_TOAST_SUB_TITLE} type='ParaXS'>
+                        {props.content}
+                    </Text>
+                </View>
+            </View>
+            <View>
+                <Icon
+                    onPress={() => Toast.hide()}
+                    name='close'
+                    color={colors.black}
+                    size={IconSize.small}
+                />
+            </View>
+        </View>
+    ),
+    errorWithInfoToast: ({ props }: AlertProps) => (
+        <View style={styles.errorToastContainer}>
+            <View style={styles.innerContainer}>
+                <View style={styles.leftErrorContainer} />
+                <Spacer width={5} />
+                <Icon name='info' color={colors.red500} size={IconSize.small} />
+                <Spacer width={5} />
+                <View style={styles.rightwarningContainer}>
+                    <Text testID={TID_TOAST_TITLE} type='ParaSMBold'>
+                        {props.title}
+                    </Text>
+                    <Spacer height={0.1} />
+                    <Text testID={TID_TOAST_SUB_TITLE} type='ParaXS'>
+                        {props.content}
+                    </Text>
+                </View>
+            </View>
             <View>
                 <Icon
                     onPress={() => Toast.hide()}
@@ -101,6 +159,25 @@ export const showSuccessToast = (
         props: {
             title: getSuccessMessage(successCode, patchContent).title,
             content: getSuccessMessage(successCode, patchContent).message,
+        },
+    });
+};
+
+export const showWarningToast = (title: string, content?: string) => {
+    Toast.show({
+        type: 'warningToast',
+        props: {
+            title,
+            content,
+        },
+    });
+};
+export const showErrorWithInfoToast = (title: string, content?: string) => {
+    Toast.show({
+        type: 'errorWithInfoToast',
+        props: {
+            title,
+            content,
         },
     });
 };
