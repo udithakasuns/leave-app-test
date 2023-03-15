@@ -1,7 +1,7 @@
-import { EmployeeType, UserRole, UserType } from 'utils/types';
+import { Manager } from 'utils/types';
 
 export interface State {
-    managers: [EmployeeType];
+    managers: [Manager];
     loading: boolean;
     error: string;
 }

@@ -1,9 +1,7 @@
 import { create } from 'zustand';
-import { EmployeeType, UserType, UserRole } from 'utils/types';
-import { getHttpEmployee } from 'services/http';
-import { State, Actions } from './types';
+import { State, Actions, User } from './types';
 
-const initialUser: UserType = {
+const initialUser: User = {
     userId: '',
     email: '',
     firstName: '',
@@ -15,7 +13,10 @@ const initialUser: UserType = {
 
 const initialState: State = {
     user: initialUser,
-    authLoading: true,
+    userAuth: {
+        loading: true,
+        type: 'none',
+    },
     error: '',
 };
 
@@ -23,38 +24,21 @@ const initialState: State = {
 
 const userStore = create<State & Actions>(set => ({
     ...initialState,
-    saveUser: (
-        email: string,
-        firstName: string,
-        lastName: string,
-        profilePic: string,
-        role: UserRole,
-    ) =>
-        set(state => ({
-            ...state,
+    setUser: (employee, userRole) => {
+        set(() => ({
             user: {
-                ...state.user,
-                email,
-                firstName,
-                lastName,
-                profilePic,
-                role,
-            },
-        })),
-    updateUser: async () => {
-        const res = await getHttpEmployee();
-        const employee: EmployeeType = res.results[0];
-        set(state => ({
-            ...state,
-            user: {
-                ...state.user,
                 userId: employee.employeeId,
-                designation: employee.designation || '',
+                email: employee.email,
+                firstName: employee.name ?? employee.email,
+                lastName: employee.lastName,
+                designation: employee.designation,
+                profilePic: employee.authPic,
+                role: userRole,
             },
         }));
     },
-    removeUser: () => set(state => ({ ...state, user: initialUser })),
-    setAuthLoading: authLoading => set(() => ({ authLoading })),
+    removeUser: () => set(() => ({ user: initialUser })),
+    setUserAuth: userAuth => set(() => ({ userAuth })),
 }));
 
 export default userStore;

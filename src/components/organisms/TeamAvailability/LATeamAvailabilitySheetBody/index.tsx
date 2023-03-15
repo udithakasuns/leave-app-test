@@ -4,7 +4,12 @@ import { Button, Spacer, Text } from 'src/components/atoms';
 import { getFormattedDay } from 'src/utils/helpers/dateHandler';
 import { TID } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
-import { AwayTeamByDate, EmployeeType } from 'src/utils/types';
+import {
+    AwayTeamByDate,
+    CompanyHolidays,
+    EmployeeType,
+    PartialBy,
+} from 'src/utils/types';
 import DateRangeItem from './DateRangeItem';
 import { styles } from './styles';
 import AwayTeamListItem from './AwayTeamListItem';
@@ -19,13 +24,15 @@ interface Props {
     awayTeamsByDate: AwayTeamByDate[];
     onPressGoBack: () => void;
     onPressTeamDetailItem: (awayTeam: EmployeeType[]) => void;
+    companyHolidays: CompanyHolidays[];
 }
 
 const LATeamAvailabilitySheetBody = ({
     awayTeamsByDate,
     onPressGoBack,
     onPressTeamDetailItem,
-}: Props) => {
+    companyHolidays,
+}: PartialBy<Props, 'companyHolidays'>) => {
     const [isRangeVisible, setIsRangeVisible] = useState<boolean>(false);
     const [selectedDateRangeId, setSelectedDateRangeId] = useState<number>(0);
     const [selectedTeam, setSelectedTeam] = useState<AwayTeamByDate[]>([]);
@@ -121,6 +128,7 @@ const LATeamAvailabilitySheetBody = ({
                         onPressTeamDetailItem={() =>
                             onPressTeamDetailItem(item.employeeResponseDtos)
                         }
+                        companyHolidays={companyHolidays || []}
                     />
                 ))}
             </View>

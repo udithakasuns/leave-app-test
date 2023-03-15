@@ -8,7 +8,6 @@ import {
     View,
     ViewStyle,
 } from 'react-native';
-import { Circle as ProgressBar } from 'react-native-progress';
 import theme from '../../../utils/theme';
 import {
     AtLeast,
@@ -17,6 +16,7 @@ import {
     TextTypeProps,
 } from '../../../utils/types';
 import LAIcon, { IconSize } from '../LAIcon';
+import Loader from '../LALoader';
 import LAText from '../LAText';
 import styles from './styles';
 import { AlignType, ButtonMode, ButtonSize, PropertiesBySize } from './types';
@@ -142,12 +142,18 @@ const LAButton = ({
                     )}
                 </View>
             ) : (
-                <ProgressBar
+                // <ProgressBar
+                //     testID={testIdLoading}
+                //     color={loadingContainer.color as string}
+                //     borderWidth={2}
+                //     size={scale.sc20}
+                //     indeterminate
+                // />
+                <Loader
                     testID={testIdLoading}
-                    color={loadingContainer.color as string}
-                    borderWidth={2}
-                    size={scale.sc20}
-                    indeterminate
+                    marginTop={0}
+                    isVisible
+                    indicatorColor={loadingContainer.color as string}
                 />
             )}
         </Pressable>

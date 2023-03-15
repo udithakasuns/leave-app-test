@@ -4,9 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { Platform, SafeAreaView, StatusBar } from 'react-native';
 import LAErrorPopup from 'src/components/organisms/Global/LAErrorPopup';
-import Loading from 'src/screens/Loading';
-// import LoginSocial from 'src/screens/LoginSocial';
-import LoginGeneral from 'screens/LoginGeneral';
+import {
+    Loading,
+    LoginSocial,
+    ProviderCode,
+    LoginGeneral,
+    ResetPw,
+    ResetPwSuccess,
+} from 'src/screens/RootScreens';
 import { useAuthentication } from 'src/utils/hooks/useAuthentication';
 import useLogout from 'src/utils/hooks/useLogout';
 import { useNotifications } from 'src/utils/hooks/useNotifications';
@@ -42,8 +47,25 @@ const RootNavigator = () => {
                 ) : isAuthenticated ? (
                     <StackNav.Screen name='Auth' component={AuthNavigator} />
                 ) : (
-                    //  <StackNav.Screen name='Login' component={LoginSocial} />
-                    <StackNav.Screen name='Login' component={LoginGeneral} />
+                    <>
+                        <StackNav.Screen
+                            name='LoginSocial'
+                            component={LoginSocial}
+                        />
+                        <StackNav.Screen
+                            name='ProviderCode'
+                            component={ProviderCode}
+                        />
+                        <StackNav.Screen
+                            name='LoginGeneral'
+                            component={LoginGeneral}
+                        />
+                        <StackNav.Screen name='ResetPw' component={ResetPw} />
+                        <StackNav.Screen
+                            name='ResetPwSuccess'
+                            component={ResetPwSuccess}
+                        />
+                    </>
                 )}
             </StackNav.Navigator>
             <LAErrorPopup

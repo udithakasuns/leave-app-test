@@ -5,13 +5,13 @@ import { useQueryClient } from '@tanstack/react-query';
 
 const useLogout = () => {
     const { resetCount } = useNotificationStore();
-    const { setAuthLoading } = useUserStore();
+    const { setUserAuth } = useUserStore();
     const { deviceUniqueId } = usePersistStore();
 
     const queryClient = useQueryClient();
 
     const onLogout = async () => {
-        setAuthLoading(true);
+        setUserAuth({ loading: true, type: 'none' });
         if (deviceUniqueId) {
             await deleteHttpNotificationDevice(deviceUniqueId);
         }
