@@ -5,16 +5,18 @@ import { useStyles } from './styles';
 
 interface Props {
     outline: boolean;
+    allTeamAvailable: boolean;
     onPress: () => void;
     children: ReactNode;
 }
 
 const LATeamAvContainer = ({
     outline = false,
+    allTeamAvailable = false,
     onPress,
     children,
 }: AtLeast<Props, 'children'>) => {
-    const styles = useStyles({ outline });
+    const styles = useStyles({ outline, allTeamAvailable });
 
     return (
         <TouchableOpacity

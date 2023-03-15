@@ -10,6 +10,7 @@ const { colors } = theme;
 
 interface Props {
     showAvailableTeamCount: boolean;
+    showAwayTeam: boolean;
     availableTeamCount: number;
     awayTeamImages: string[];
     onPressAwayTeamImages: () => void;
@@ -17,30 +18,26 @@ interface Props {
 
 const LATeamAvContent = ({
     showAvailableTeamCount = false,
+    showAwayTeam = true,
     availableTeamCount,
     awayTeamImages,
     onPressAwayTeamImages,
 }: AtLeast<Props, 'availableTeamCount' | 'awayTeamImages'>) => {
-    const displayTeamCountContent = () => {
-        if (awayTeamImages.length === 0) {
-            return null;
-        }
-        return (
-            <View style={styles.availableContainer}>
-                <Text testID={`${TID}TEXT_AVAILABLE_COUNT`} type='H1Bold'>
-                    {availableTeamCount}
-                </Text>
-                <Chip
-                    testIdContent={`${TID}CHIP_ONLINE`}
-                    content='Available'
-                    contentColor={colors.green800}
-                    contentTextType='ParaSM'
-                    backgroundColor={colors.lime200}
-                    containerStyle={styles.availableChip}
-                />
-            </View>
-        );
-    };
+    const displayTeamCountContent = () => (
+        <View style={styles.availableContainer}>
+            <Text testID={`${TID}TEXT_AVAILABLE_COUNT`} type='H1Bold'>
+                {availableTeamCount}
+            </Text>
+            <Chip
+                testIdContent={`${TID}CHIP_ONLINE`}
+                content='Available'
+                contentColor={colors.green800}
+                contentTextType='ParaSM'
+                backgroundColor={colors.lime200}
+                containerStyle={styles.availableChip}
+            />
+        </View>
+    );
 
     const displayImagContent = () => {
         if (awayTeamImages.length === 0) {
@@ -90,7 +87,7 @@ const LATeamAvContent = ({
     return (
         <View style={styles.container}>
             {showAvailableTeamCount && displayTeamCountContent()}
-            {displayImagContent()}
+            {showAwayTeam && displayImagContent()}
         </View>
     );
 };
