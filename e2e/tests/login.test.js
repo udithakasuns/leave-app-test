@@ -44,7 +44,7 @@ describe('Login Tests', () => {
     it('Should be able to switch between employee & manager view', async () => {
         await loginScreen.verifyLoginPageLoaded();
         await loginScreen.tapLoginWithEmail();
-        await loginScreen.loginByPasswordAuthentication(managerUserName, MANAGER_PASSWORD);
+        await loginScreen.loginByPasswordAuthentication(managerUserName, managerPassword);
         await homeScreen.verifyDashboardLoaded();
         await homeScreen.tapRoleSwitcher();
         await homeScreen.switchToEmployeeView();
