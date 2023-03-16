@@ -7,7 +7,9 @@ describe('Login Tests', () => {
     let loginScreen;
     let homeScreen;
     const empUserName = process.env.EMP_USERNAME;
-    const empPassword = process.env.EMP_PASSWORD;    
+    const empPassword = process.env.EMP_PASSWORD;
+    const managerUserName = process.env.MANAGER_USERNAME;
+    const managerPassword = process.env.MANAGER_PASSWORD;     
     beforeAll(async () => {
         loginScreen = new LoginScreen();
         homeScreen = new HomeScreen();
@@ -25,10 +27,10 @@ describe('Login Tests', () => {
         await homeScreen.logoutUser();
     });
 
-    it.skip('Should be able to login as a manager', async () => {
+    it('Should be able to login as a manager', async () => {
         await loginScreen.verifyLoginPageLoaded();
         await loginScreen.tapLoginWithEmail();
-        await loginScreen.loginByPasswordAuthentication('', '');
+        await loginScreen.loginByPasswordAuthentication(managerUserName, managerPassword);
         await homeScreen.verifyDashboardLoaded();
     });
 
@@ -39,10 +41,10 @@ describe('Login Tests', () => {
         await homeScreen.verifyDashboardLoaded();
     });
 
-    it.skip('Should be able to switch between employee & manager view', async () => {
+    it('Should be able to switch between employee & manager view', async () => {
         await loginScreen.verifyLoginPageLoaded();
         await loginScreen.tapLoginWithEmail();
-        await loginScreen.loginByPasswordAuthentication('', '');
+        await loginScreen.loginByPasswordAuthentication(managerUserName, MANAGER_PASSWORD);
         await homeScreen.verifyDashboardLoaded();
         await homeScreen.tapRoleSwitcher();
         await homeScreen.switchToEmployeeView();

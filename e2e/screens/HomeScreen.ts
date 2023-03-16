@@ -22,7 +22,7 @@ export enum HalfDayLeaveType {
     EVENING = 'Evening',
 }
 
-const TIMEOUT = 30000;
+const TIMEOUT = 10000;
 
 export default class HomeScreen {
     readonly TID: string = 'test:id/';
