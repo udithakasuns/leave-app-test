@@ -74,7 +74,8 @@ const AwayTeamListItem = ({
         }
         return (
             <TouchableOpacity
-                style={{ flexDirection: 'row' }}
+                disabled={awayTeam.length <= 5}
+                style={styles.container}
                 onPress={() => {
                     onPressTeamDetailItem(awayTeam);
                 }}>
