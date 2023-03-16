@@ -9,14 +9,16 @@ describe('Login Tests', () => {
     const empUserName = process.env.EMP_USERNAME;
     const empPassword = process.env.EMP_PASSWORD;
     const managerUserName = process.env.MANAGER_USERNAME;
-    const managerPassword = process.env.MANAGER_PASSWORD;     
+    const managerPassword = process.env.MANAGER_PASSWORD;
+
     beforeAll(async () => {
         loginScreen = new LoginScreen();
         homeScreen = new HomeScreen();
         await device.launchApp({
             delete: true,
-            permissions: { notifications: 'YES' },
+            permissions: { notifications: 'YES' }
         });
+        await device.setURLBlacklist(['.*codepush\.appcenter\.ms.*','.*in\.appcenter\.ms.*']);
     });
 
     beforeEach(async () => {
