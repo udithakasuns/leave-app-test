@@ -27,6 +27,7 @@ export default class LoginScreen {
 
     verifyLoginPageLoaded = async () => {
         await waitFor(element(this.lblSignIn)).toBeVisible().withTimeout(30000);
+        await device.disableSynchronization();
     };
 
     tapLoginWithEmail = async () => {
@@ -51,6 +52,7 @@ export default class LoginScreen {
 
     tapLogin = async () => {
         await element(this.btnLogin).tap();
+        await device.enableSynchronization();
     };
 
     loginByPasswordAuthentication = async (
