@@ -51,7 +51,7 @@ export default class LoginScreen {
     };
 
     tapLogin = async () => {
-        await element((this.txtLoginPassword)).tapReturnKey();
+        await element(this.txtLoginPassword).tapReturnKey();
         await device.enableSynchronization();
     };
 
