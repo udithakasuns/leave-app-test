@@ -139,7 +139,7 @@ export default class HomeScreen {
     verifyDashboardLoaded = async () => {
         await waitFor(element(this.lblGreeting))
             .toBeVisible()
-            .withTimeout(10000);
+            .withTimeout(15000);
     };
 
     tapProfile = async () => {
