@@ -10,6 +10,9 @@ interface Props {
 
 export const useStyles = ({ isHoliday }: Props) =>
     StyleSheet.create({
+        container: {
+            flexDirection: 'row',
+        },
         listItemContainer: {
             flexDirection: 'row',
             justifyContent: 'flex-start',
