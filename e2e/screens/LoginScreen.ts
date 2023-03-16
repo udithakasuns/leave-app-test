@@ -17,7 +17,7 @@ export default class LoginScreen {
         `${this.TID}INPUT_PW`,
     );
 
-    readonly btnLogin: Detox.NativeMatcher = by.id(`${this.TID}BUTTON_LOGIN`);
+    readonly btnLogin: Detox.NativeMatcher = by.text('Login');
 
     readonly lblInvalidUser: Detox.NativeMatcher = by.text('Invalid User');
 
