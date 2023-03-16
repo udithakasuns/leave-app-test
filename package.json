@@ -10,7 +10,7 @@
         "test:unit": "jest --testPathPattern 'src/components'",
         "test:e2e": "npx detox test --configuration ios.sim.debug",
         "e2e:build": "npx detox build --configuration",
-        "e2e:test": "npx detox --debug-synchronization 5000 test --configuration",
+        "e2e:test": "npx detox --debug-synchronization 10000 test --configuration",
         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
         "lint:fix": "eslint --fix .",
         "prepare": "husky install",
