@@ -42,7 +42,7 @@ workflows:
         script: |
                     brew tap wix/brew
                     brew install applesimutils
-                    rm -rf $HOME/Library/Detox/ios/
+                    npx detox clean-framework-cache && detox build-framework-cache
       - name: Install AWS Amplify
         script: |
                     npm install -g @aws-amplify/cli
