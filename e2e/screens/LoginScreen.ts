@@ -1,3 +1,5 @@
+import { device } from 'detox';
+
 export default class LoginScreen {
     readonly TID: string = 'test:id/';
 
@@ -50,7 +52,9 @@ export default class LoginScreen {
     };
 
     tapLogin = async () => {
+        await device.disableSynchronization();
         await element(this.btnLogin).tap();
+        await device.enableSynchronization();
     };
 
     loginByPasswordAuthentication = async (

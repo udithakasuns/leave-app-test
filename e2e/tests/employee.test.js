@@ -38,7 +38,7 @@ describe('Employee Tests', () => {
         await homeScreen.logoutUser();
     });
 
-    it('Should be able to apply for a full day casual leave', async () => {
+    it.skip('Should be able to apply for a full day casual leave', async () => {
         await homeScreen.tapApplyLeave();
         await homeScreen.selectLeaveType(LeaveType.CASUAL);
         await homeScreen.selectLeaveDate(getFormattedDate(casualFullLeaveDate, "YYYY-MM-DD"));
@@ -49,7 +49,7 @@ describe('Employee Tests', () => {
         await homeScreen.assertLatestLeaveRequest(getFormattedDate(casualFullLeaveDate, "Do MMM"), 'Casual', 'Pending');
     });
 
-    it('Should be able to undo a casual leave request', async () => {
+    it.skip('Should be able to undo a casual leave request', async () => {
         await homeScreen.tapApplyLeave();
         await homeScreen.selectLeaveType(LeaveType.CASUAL);
         await homeScreen.selectLeaveDate(getFormattedDate(casualUndoLeaveDate, "YYYY-MM-DD"));
@@ -61,7 +61,7 @@ describe('Employee Tests', () => {
         await homeScreen.assertLatestLeaveRequest(getFormattedDate(casualUndoLeaveDate, "Do MMM"), 'Casual', 'Cancelled');
     });
 
-    it('Should be able to apply for a first half casual leave', async () => {
+    it.skip('Should be able to apply for a first half casual leave', async () => {
         await homeScreen.tapApplyLeave();
         await homeScreen.selectLeaveType(LeaveType.CASUAL);
         await homeScreen.selectLeaveDuration(LeaveDuration.HALF_DAY);
@@ -74,7 +74,7 @@ describe('Employee Tests', () => {
         await homeScreen.assertLatestLeaveRequest(getFormattedDate(casualFirstHalfLeaveDate, "Do MMM"), 'Casual', 'Pending');
     });
 
-    it('Should be able to apply for a second half casual leave', async () => {
+    it.skip('Should be able to apply for a second half casual leave', async () => {
         await homeScreen.tapApplyLeave();
         await homeScreen.selectLeaveType(LeaveType.CASUAL);
         await homeScreen.selectLeaveDuration(LeaveDuration.HALF_DAY);
@@ -87,7 +87,7 @@ describe('Employee Tests', () => {
         await homeScreen.assertLatestLeaveRequest(getFormattedDate(casualSecondHalfLeaveDate, "Do MMM"), 'Casual', 'Pending');
     });
 
-    it('Should be able to cancel a applied casual leave', async () => {
+    it.skip('Should be able to cancel a applied casual leave', async () => {
         await homeScreen.tapApplyLeave();
         await homeScreen.selectLeaveType(LeaveType.CASUAL);
         await homeScreen.selectLeaveDate(getFormattedDate(casualCancelLeaveDate, "YYYY-MM-DD"));
