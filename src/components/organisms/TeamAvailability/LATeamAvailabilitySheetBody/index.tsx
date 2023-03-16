@@ -124,7 +124,7 @@ const LATeamAvailabilitySheetBody = ({
                         testID={`${TID}TEXT_SELECTED_DATE_${index}`}
                         key={item.date}
                         date={item.date}
-                        awayTeam={item.employeeResponseDtos}
+                        awayTeam={item.employeeResponseDtos || []}
                         onPressTeamDetailItem={() =>
                             onPressTeamDetailItem(item.employeeResponseDtos)
                         }
