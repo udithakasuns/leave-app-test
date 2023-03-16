@@ -30,8 +30,6 @@ describe('Employee Tests', () => {
         await device.reloadReactNative();
         await loginScreen.verifyLoginPageLoaded();
         await loginScreen.tapLoginWithEmail();
-        console.log('empUserName' + empUserName)
-        console.log('empUserName' + empPassword)
         await loginScreen.loginByPasswordAuthentication(empUserName, empPassword);
         await homeScreen.verifyDashboardLoaded();
     });

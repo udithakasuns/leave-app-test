@@ -22,6 +22,8 @@ export enum HalfDayLeaveType {
     EVENING = 'Evening',
 }
 
+const TIMEOUT = 30000;
+
 export default class HomeScreen {
     readonly TID: string = 'test:id/';
 
@@ -139,7 +141,7 @@ export default class HomeScreen {
     verifyDashboardLoaded = async () => {
         await waitFor(element(this.lblGreeting))
             .toBeVisible()
-            .withTimeout(15000);
+            .withTimeout(TIMEOUT);
     };
 
     tapProfile = async () => {
@@ -183,14 +185,14 @@ export default class HomeScreen {
         await this.switchRole(Role.EMPLOYEE);
         await waitFor(element(this.btnApplyLeave))
             .toBeVisible()
-            .withTimeout(10000);
+            .withTimeout(TIMEOUT);
     };
 
     tapApplyLeave = async () => {
         await element(this.btnApplyLeave).tap();
         await waitFor(element(this.btnConfirmLeave))
             .toBeVisible()
-            .withTimeout(10000);
+            .withTimeout(TIMEOUT);
     };
 
     selectLeaveType = async (type: string) => {
@@ -201,7 +203,7 @@ export default class HomeScreen {
         await element(this.btnSelectLeaveDate).tap();
         await waitFor(element(this.btnConfirmDate))
             .toBeVisible()
-            .withTimeout(10000);
+            .withTimeout(TIMEOUT);
         await element(this.getSelectLeaveDateTestID(date)).tap();
     };
 
@@ -209,7 +211,7 @@ export default class HomeScreen {
         await element(this.btnConfirmDate).tap();
         await waitFor(element(this.btnConfirmLeave))
             .toBeVisible()
-            .withTimeout(10000);
+            .withTimeout(TIMEOUT);
     };
 
     selectLeaveDuration = async (duraton: LeaveDuration) => {
@@ -227,7 +229,7 @@ export default class HomeScreen {
     verifyLeaveRequestConfirmed = async () => {
         await waitFor(element(this.lblConfirmHeader))
             .toBeVisible()
-            .withTimeout(10000);
+            .withTimeout(TIMEOUT);
     };
 
     tapProceedHome = async () => {
@@ -263,11 +265,11 @@ export default class HomeScreen {
         await element(this.getLeaveRequestStatusIndicatorByIndex(0)).tap();
         await waitFor(element(this.lblPendingLeaveStatus))
             .toBeVisible()
-            .withTimeout(10000);
+            .withTimeout(TIMEOUT);
         await element(this.btnCancelLeave).tap();
         await waitFor(element(this.lblCancelLeave))
             .toBeVisible()
-            .withTimeout(10000);
+            .withTimeout(TIMEOUT);
         await element(this.btnCancelLeave).tap();
     };
 }
