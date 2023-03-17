@@ -3,28 +3,31 @@ import theme from 'src/utils/theme';
 
 const { scale, colors } = theme;
 
-const MINERS_MARGIN = -scale.sc6;
+const MINERS_MARGIN = -scale.sc8;
 
 export const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'center',
+    },
+    imageContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     availableContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: scale.sc20,
+        marginRight: scale.sc10,
     },
     availableChip: {
         marginLeft: scale.sc4,
         paddingVertical: scale.sc2,
         paddingHorizontal: 0,
-        alignSelf: 'flex-end',
+        alignSelf: 'center',
     },
     avatarContainer: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
     },
     avatar: {
         borderColor: colors.white,
@@ -39,7 +42,7 @@ export const styles = StyleSheet.create({
         paddingVertical: scale.sc2,
         paddingHorizontal: 0,
         alignSelf: 'flex-end',
-        marginLeft: MINERS_MARGIN,
+        marginLeft: MINERS_MARGIN + scale.sc2,
     },
     plusIcon: {
         flexDirection: 'row',
