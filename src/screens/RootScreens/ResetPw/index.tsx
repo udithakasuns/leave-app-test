@@ -14,7 +14,7 @@ const ResetPw: React.FC<ResetPwScreenProps> = ({ route, navigation }) => {
         navigation.navigate('ResetPwSuccess');
 
     return (
-        <View style={screenStyles.containerScollable}>
+        <View style={screenStyles.container}>
             <BackHeader title='' onBackPress={onGoBack} />
             <KeyboardAwareScrollView
                 showsVerticalScrollIndicator={false}
