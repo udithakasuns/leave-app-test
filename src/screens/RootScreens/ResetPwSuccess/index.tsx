@@ -14,7 +14,7 @@ const ResetPwSucces: React.FC<ResetPwSuccessScreenProps> = ({ navigation }) => {
     const onNavigateToLoginGeneral = () => navigation.navigate('LoginGeneral');
 
     return (
-        <View style={screenStyles.containerScollable}>
+        <View style={screenStyles.container}>
             <BackHeader title='' onBackPress={onBackPress} />
             <ScrollView
                 contentContainerStyle={screenStyles.scrollViewCenterContainer}>

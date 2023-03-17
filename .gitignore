@@ -94,3 +94,6 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+
+ios/MyLeave.app.dSYM.zip
