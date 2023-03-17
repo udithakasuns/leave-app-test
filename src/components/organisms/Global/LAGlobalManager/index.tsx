@@ -16,6 +16,7 @@ import { MultiChipProps } from 'src/components/molecules';
 import { useFilterTypesData } from 'src/utils/hooks/useFilterTypesData';
 import { patchHttpManagerLeave } from 'src/services/http/patchRequest';
 import { ModalLoader } from 'src/components/atoms';
+import { useQueryManagerTeams } from 'src/utils/query/TeamAvailablity';
 import LAManagerModals, {
     LAManagerModalProps,
 } from '../../ManagerHome/LAManagerModals';
@@ -82,6 +83,10 @@ const LAGlobalManager = () => {
         },
     );
 
+    const { onRefetchManagerTeams } = useQueryManagerTeams({
+        enableQuery: false,
+    });
+
     const { mutate: updateLeaveMutate } = useMutation(
         ['updateLeave'],
         patchHttpManagerLeave,
@@ -89,6 +94,7 @@ const LAGlobalManager = () => {
             onSuccess: (data: any, { previousStatus }) => {
                 const leaveData: PendingRequestByID = data[0];
                 setManagerRequest(leaveData);
+                onRefetchManagerTeams();
                 refetchLeaveRequests();
                 statusTypesRefetch();
                 switch (leaveData.status) {
