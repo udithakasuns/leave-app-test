@@ -1,0 +1,58 @@
+workflows:
+  ios:
+    name: iOS E2E Testing
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - leave-app-secrets
+      node: 14.21.3
+      npm: latest
+      xcode: 14.2
+    cache:
+      cache_paths:
+        - $CM_BUILD_DIR/node_modules
+        - $HOME/Library/Caches/CocoaPods
+        - $HOME/Library/Detox/ios/
+    triggering:
+      events:
+        - pull_request
+        - push
+      branch_patterns: 
+        - pattern: develop
+      cancel_previous_builds: true
+    scripts:
+      - name: AWS CLI configuration
+        script: |
+                  mkdir ~/.aws
+                  cat >> ~/.aws/config <<EOF
+                  [default]
+                  aws_access_key_id=$AWS_ACCESS_KEY_ID
+                  aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
+                  region=$AWS_DEFAULT_REGION
+                  output=json
+                  EOF
+      - name: Install Yarn Dependencies
+        script: |
+                    yarn install
+      - name: Install Pod Dependencies
+        script: |
+                    cd ./ios && pod install && cd ..
+      - name: Install Detox Dependencies
+        script: |
+                    brew tap wix/brew
+                    brew install applesimutils
+      - name: Install AWS Amplify
+        script: |
+                    npm install -g @aws-amplify/cli
+      - name: Checkout Amplify Environment
+        script: | 
+                     yarn run amplify:dev
+      - name: Run Detox Build
+        script: |
+                      yarn e2e:build ios.sim.release
+      - name: Free Port 8081
+        script: |
+                      kill -9 $(lsof -ti:8081)
+      - name: Run Detox Test(s)
+        script: |
+                      bash ./scripts/run-e2e-ios-release.sh

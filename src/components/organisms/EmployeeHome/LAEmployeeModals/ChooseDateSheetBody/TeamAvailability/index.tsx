@@ -131,6 +131,10 @@ const TeamAvailability = ({ startDate, endDate, companyHolidays }: Props) => {
         <>
             <LATeamAvContainer
                 outline
+                allTeamAvailable={
+                    availableTeam?.adminEmployeesOnLeaveByTeamDto
+                        .onLeaveCount === 0
+                }
                 onPress={
                     isAllowToPressTeamAv() ? onOpenDetailModal : undefined
                 }>
@@ -162,7 +166,15 @@ const TeamAvailability = ({ startDate, endDate, companyHolidays }: Props) => {
                         />
                         <Spacer height={scale.vsc2} />
                         <LATeamAvContent
-                            showAvailableTeamCount={!(startDate && endDate)}
+                            showAvailableTeamCount={
+                                !(startDate && endDate) ||
+                                availableTeam.adminEmployeesOnLeaveByTeamDto
+                                    .onLeaveCount === 0
+                            }
+                            showAwayTeam={
+                                availableTeam.adminEmployeesOnLeaveByTeamDto
+                                    .onLeaveCount !== 0
+                            }
                             awayTeamImages={
                                 availableTeam.adminEmployeesOnLeaveByTeamDto
                                     .imageList

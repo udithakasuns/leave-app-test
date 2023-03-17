@@ -1,0 +1,64 @@
+name: E2E (iOS)
+
+on:
+  pull_request:
+    branches: [detox-integration]
+
+jobs:
+  build:
+    name: E2E (iOS)
+    runs-on: macOS-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+          cache: 'yarn'
+
+      - name: Install Yarn Dependencies
+        run: yarn install
+
+      - name: Run Unit Test(s)
+        run: yarn test:unit
+
+      - name: Cache Pods
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install Pod Dependencies
+        run: cd ./ios && pod install && cd ..
+
+      - name: Install Detox Dependencies
+        run: |
+          brew tap wix/brew
+          brew install applesimutils
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: global
+
+      - name: Installl AWS Amplify
+        run: curl -sL https://aws-amplify.github.io/amplify-cli/install | bash && $SHELL
+
+      - name: Checkout Amplify Environment
+        run: yarn run amplify:dev
+      
+      - name: Run Detox Build
+        run: yarn e2e:build ios.sim.release
+        
+      - name: Copy Scripts
+        run: cp -R scripts/ ${{ github.workspace }}/scripts
+
+      - name: Run Detox Test(s)
+        run: bash ${{ github.workspace }}/scripts/run-e2e-ios-release.sh
+

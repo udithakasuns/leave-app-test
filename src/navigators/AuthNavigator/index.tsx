@@ -3,20 +3,23 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useUserStore } from 'src/store';
-
-import ManagerHome from 'screens/ManagerHome';
-import EmployeeHome from 'screens/EmployeeHome';
-import ManagerViewAll from 'src/screens/ManagerViewAll';
-import EmployeeViewAll from 'src/screens/EmployeeViewAll';
-import NotificationViewAll from 'src/screens/NotificationViewAll';
-import Account from 'src/screens/Account';
-import Settings from 'src/screens/Settings';
-import Support from 'src/screens/Support';
+import {
+    EmployeeHome,
+    EmployeeViewAll,
+    ManagerHome,
+    ManagerViewAll,
+    NotificationViewAll,
+} from 'src/screens/AuthScreens';
+import {
+    Account,
+    Settings,
+    Support,
+} from 'src/screens/AuthScreens/DrawerScreens';
 import LAGlobalEmployee from 'src/components/organisms/Global/LAGlobalEmployee';
 import LAGlobalManager from 'src/components/organisms/Global/LAGlobalManager';
+import LADrawer from '../../components/organisms/Global/LADrawer';
 import { AuthScreensParamList } from '../types';
 
-import LADrawer from '../../components/organisms/Global/LADrawer';
 /* Screens */
 
 const DrawerNav = createDrawerNavigator<AuthScreensParamList>();

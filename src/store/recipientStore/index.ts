@@ -1,13 +1,16 @@
 import { getHttpRecipients } from 'services/http';
-import { EmployeeType } from 'utils/types';
+import { Manager } from 'utils/types';
 import { create } from 'zustand';
 import { Actions, State } from './types';
 
-const initialManager = {
+const initialManager: Manager = {
     authPic: '',
     designation: '',
     employeeId: '',
     name: '',
+    identificationNo: '',
+    lastName: '',
+    permission: 'EMPLOYEES',
 };
 
 const initialState: State = {
@@ -20,7 +23,7 @@ const recipientStore = create<State & Actions>(set => ({
     ...initialState,
     updateRecipients: async () => {
         const res = await getHttpRecipients();
-        const managersData: [EmployeeType] = res.results[0].items;
+        const managersData: [Manager] = res.results[0].items;
         set(state => ({
             ...state,
             managers: managersData,

@@ -166,6 +166,7 @@ const ApplyLeaveSheetBody = ({
             <Spacer height={2} />
             {formik.values.entitlements && (
                 <LAEntitlementGrid
+                    testId='ApplyLeaveSheet'
                     entitlements={formik.values.entitlements}
                     onEntitlementPress={handleOnEntitlementPress}
                     isError={formik.errors.typeId !== undefined}

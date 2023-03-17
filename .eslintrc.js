@@ -43,6 +43,7 @@ module.exports = {
                 tsx: 'never',
             },
         ],
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/e2e/screens/*.ts", "src/components/atoms/**/**/*.test.tsx", "src/components/molecules/**/**/*.test.tsx"]}]
     },
     overrides: [
         {

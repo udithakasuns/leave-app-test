@@ -21,6 +21,7 @@ import {
     TID_EMPLOYEE_LEAVE_REQUEST_LIST,
     TID_EMPLOYEE_LEAVE_REQUEST_ROW,
     TID_EMPLOYEE_LEAVE_REQUEST_STATUS,
+    TID_EMPLOYEE_LEAVE_REQUEST_TYPE,
 } from 'src/utils/testIds';
 import theme from 'src/utils/theme';
 import {
@@ -169,8 +170,9 @@ const LALeaveRequestList = ({
                 renderItem={({ item, index }) => (
                     <RequestListItem
                         testIdRow={`${TID_EMPLOYEE_LEAVE_REQUEST_ROW}_${index.toString()}`}
-                        testIdStatus={`${TID_EMPLOYEE_LEAVE_REQUEST_STATUS}_${index.toString()}`}
                         testIdContent={`${TID_EMPLOYEE_LEAVE_REQUEST_DATE}_${index.toString()}`}
+                        testIdChip={`${TID_EMPLOYEE_LEAVE_REQUEST_TYPE}_${index.toString()}`}
+                        testIdStatus={`${TID_EMPLOYEE_LEAVE_REQUEST_STATUS}_${index.toString()}`}
                         date={getStartEndDate(item.startDate, item.endDate)}
                         status={item.status}
                         entitlement={getEntitlementChipText(

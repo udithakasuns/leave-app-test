@@ -7,9 +7,16 @@ import {
     TextInputProps,
     ViewStyle,
     Pressable,
+    StyleProp,
+    TextStyle,
 } from 'react-native';
 import theme from 'src/utils/theme';
-import { AtLeast, IconLibrary, TestProps } from 'src/utils/types';
+import {
+    AtLeast,
+    IconLibrary,
+    TestProps,
+    TextTypeProps,
+} from 'src/utils/types';
 import LAIcon, { IconSize } from '../LAIcon';
 import LAText from '../LAText';
 import inputStyles from './styles';
@@ -22,8 +29,10 @@ export interface Props extends TextInputProps, TestProps {
     placeholderColor: string;
     containerStyle: ViewStyle;
     inputContainerStyle: ViewStyle;
+    inputStyle: StyleProp<TextStyle>;
     type: InputTypes;
     label: string;
+    labelType: TextTypeProps;
     error: boolean;
     editable: boolean;
     caption: string;
@@ -43,8 +52,10 @@ const LAInput = ({
     reference,
     containerStyle,
     inputContainerStyle,
+    inputStyle,
     type = 'DEFAULT',
     label,
+    labelType = type === 'COMMENT' ? 'ParaLG' : 'SubH',
     placeholder,
     disabled = false,
     editable,
@@ -113,7 +124,7 @@ const LAInput = ({
                 style={[styles.container, containerStyle]}>
                 <LAText
                     testID={testIdLabel}
-                    type='ParaLG'
+                    type={labelType}
                     color={styles.label.color}>
                     {label}
                 </LAText>
@@ -145,7 +156,7 @@ const LAInput = ({
                 <Pressable onPress={onPressLeftIcon}>
                     <LAText
                         testID={testIdLabel}
-                        type='SubH'
+                        type={labelType}
                         color={styles.label.color}>
                         {label}
                     </LAText>
@@ -168,7 +179,7 @@ const LAInput = ({
                     testID={testIdInput}
                     ref={reference}
                     editable={editable ?? !disabled}
-                    style={styles.input}
+                    style={[styles.input, inputStyle]}
                     placeholder={placeholder}
                     placeholderTextColor={getPlaceholderTextColor()}
                     value={value}

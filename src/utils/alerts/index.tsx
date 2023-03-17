@@ -57,7 +57,7 @@ export const toastConfig = {
                 <Spacer width={5} />
                 <Icon name='info' color={colors.red500} size={IconSize.small} />
                 <Spacer width={5} />
-                <View>
+                <View style={styles.content}>
                     <Text testID={TID_TOAST_TITLE} type='ParaSMBold'>
                         {props.title}
                     </Text>
