@@ -46,40 +46,41 @@ const LATeamAvContent = ({
         return (
             <TouchableOpacity
                 disabled={!onPressAwayTeamImages || awayTeamImages.length <= 5}
-                onPress={onPressAwayTeamImages}
-                style={styles.container}>
-                {awayTeamImages.slice(0, 5).map((image, index) => (
-                    <Avatar
-                        testId={`${TID}IMAGE_AVATAR_${index}`}
-                        key={image}
-                        size={AvatarSize.small}
-                        source={{
-                            uri: image,
-                        }}
-                        style={
-                            index === 0
-                                ? styles.avatar
-                                : styles.avatarWithLeftSpace
-                        }
+                onPress={onPressAwayTeamImages}>
+                <View style={styles.imageContainer}>
+                    {awayTeamImages.slice(0, 5).map((image, index) => (
+                        <Avatar
+                            testId={`${TID}IMAGE_AVATAR_${index}`}
+                            key={image}
+                            size={AvatarSize.small}
+                            source={{
+                                uri: image,
+                            }}
+                            style={
+                                index === 0
+                                    ? styles.avatar
+                                    : styles.avatarWithLeftSpace
+                            }
+                        />
+                    ))}
+                    {awayTeamImages.length > 5 && (
+                        <View style={styles.plusIcon}>
+                            <Text
+                                testID={`${TID}TEXT_AWAY_COUNT`}
+                                color={colors.iconLabel}>
+                                +{awayTeamImages.length - 5}
+                            </Text>
+                        </View>
+                    )}
+                    <Chip
+                        testIdContent={`${TID}CHIP_AWAY`}
+                        content='Away'
+                        contentColor={colors.red800}
+                        contentTextType='ParaSM'
+                        backgroundColor={colors.errorBackground}
+                        containerStyle={styles.awayChip}
                     />
-                ))}
-                {awayTeamImages.length > 5 && (
-                    <View style={styles.plusIcon}>
-                        <Text
-                            testID={`${TID}TEXT_AWAY_COUNT`}
-                            color={colors.iconLabel}>
-                            +{awayTeamImages.length - 5}
-                        </Text>
-                    </View>
-                )}
-                <Chip
-                    testIdContent={`${TID}CHIP_AWAY`}
-                    content='Away'
-                    contentColor={colors.red800}
-                    contentTextType='ParaSM'
-                    backgroundColor={colors.errorBackground}
-                    containerStyle={styles.awayChip}
-                />
+                </View>
             </TouchableOpacity>
         );
     };

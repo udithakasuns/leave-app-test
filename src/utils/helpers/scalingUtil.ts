@@ -21,7 +21,9 @@ export const WIDTH = (value: number) => {
 };
 
 export const PIXEL = (value: number) => {
-    const newValue = value * 0.2 + 0.6;
+    // const newValue = value * 0.2 + 0.6;
+
+    const newValue = value * 0.2 + DEVICE_WIDTH * 0.001;
     if (DEVICE_WIDTH >= 1000) {
         return DEVICE_WIDTH * (newValue / 175);
     }
@@ -34,10 +36,7 @@ export const PIXEL = (value: number) => {
     return DEVICE_WIDTH * (newValue / 100);
 };
 
-export const FONT = (value: number) => {
-    const newValue = value * 0.2 + 0.6;
-    return WIDTH(newValue);
-};
+export const FONT = (value: number) => PIXEL(value);
 
 const pixel = PIXEL;
 const height = HEIGHT;

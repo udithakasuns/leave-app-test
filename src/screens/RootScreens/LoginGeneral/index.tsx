@@ -13,7 +13,7 @@ const LoginGeneral: React.FC<LoginGeneralScreenProps> = ({ navigation }) => {
     const onGoBack = () => navigation.goBack();
 
     return (
-        <View style={screenStyles.containerScollable}>
+        <View style={screenStyles.container}>
             <BackHeader title='' onBackPress={onGoBack} />
             <KeyboardAwareScrollView
                 contentContainerStyle={screenStyles.scrollViewCenterContainer}>

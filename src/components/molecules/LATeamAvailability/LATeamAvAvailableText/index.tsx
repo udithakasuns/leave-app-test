@@ -21,7 +21,7 @@ const LATeamAvAvailabileText = ({
     const getDisplayText = (): string => {
         const awayMembersCount = awayTeamList.length;
         if (awayMembersCount === 0) {
-            return '🥳  All team members are available!';
+            return 'All team members are available! 🥳';
         }
         if (awayMembersCount === 1) {
             const firstName = awayTeamList[0].split(' ')[0];
