@@ -47,7 +47,10 @@ workflows:
                     npm install -g @aws-amplify/cli
       - name: Checkout Amplify Environment
         script: | 
-                     yarn run amplify:dev
+                     yarn amplify:dev
+      - name: Prepare Environment
+        script: |
+                      yarn e2e:prepare
       - name: Run Detox Build
         script: |
                       yarn e2e:build ios.sim.release
