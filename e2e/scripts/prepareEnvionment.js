@@ -4,10 +4,7 @@ const mysql = require('mysql2/promise');
 const moment = require('moment');
 
 async function getConnection() {
-    const { LEAVE_DB_URL } = process.env;
-    const { LEAVE_DB_USERNAME } = process.env;
-    const { LEAVE_DB_PASSWORD } = process.env;
-    const { LEAVE_DB_NAME } = process.env;
+    const { LEAVE_DB_URL, LEAVE_DB_USERNAME, LEAVE_DB_PASSWORD, LEAVE_DB_NAME  } = process.env;
     const connection = await mysql.createConnection({
         host: LEAVE_DB_URL,
         user: LEAVE_DB_USERNAME,
