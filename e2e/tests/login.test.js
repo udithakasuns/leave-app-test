@@ -16,8 +16,7 @@ describe('Login Tests', () => {
         homeScreen = new HomeScreen();
         await device.launchApp({
             delete: true,
-            permissions: { notifications: 'YES' },
-            launchArgs: { 'DTXEnableVerboseSyncSystem': 'YES', 'DTXEnableVerboseSyncResources': 'YES' }
+            permissions: { notifications: 'YES' }
         });
         await device.setURLBlacklist(['.*codepush\.appcenter\.ms.*','.*in\.appcenter\.ms.*']);
     });

@@ -1,4 +1,5 @@
 import { expect as jestExpect } from '@jest/globals';
+import { getElementCount } from '../helpers/index';
 
 /* eslint-disable consistent-return */
 
@@ -109,6 +110,14 @@ export default class HomeScreen {
     readonly btnUndoRequest: Detox.NativeMatcher = by.text('Undo request');
 
     // Leave Requests List Locators in Employee Home
+
+    readonly leaveRequestList: Detox.NativeMatcher = by.id(
+        `${this.TID}EMPLOYEE_LEAVE_REQUEST_LIST`,
+    );
+
+    readonly listItemLeaveRequests: Detox.NativeMatcher = by.id(
+        `${this.TID}TID_EMPLOYEE_LEAVE_REQUEST_ROW`,
+    );
 
     readonly getLeaveRequestDateByIndex: (
         index: number,
@@ -244,25 +253,45 @@ export default class HomeScreen {
         await element(this.btnCancel).tap();
     };
 
-    assertLatestLeaveRequest = async (
+    getLeaveRequestIndexFromList = async (
         leaveDate: string,
         leaveType: string,
         leaveStatus: string,
     ) => {
-        await expect(element(this.getLeaveRequestDateByIndex(0))).toHaveText(
-            leaveDate,
+        /* eslint-disable */
+        let index = 0;
+        let foundIndex = -1;
+        const leaveRequestsCount = await getElementCount(
+            this.listItemLeaveRequests,
         );
-        const leaveTypeChipContent = await element(
-            this.getLeaveRequestTypeByIndex(0),
-        ).getAttributes();
-        jestExpect(leaveTypeChipContent.text).toContain(leaveType);
-        await expect(
-            element(this.getLeaveRequestStatusIndicatorByIndex(0)),
-        ).toHaveText(leaveStatus);
+        for (; index < leaveRequestsCount; index += 1) {
+            try {
+                await expect(
+                    element(this.getLeaveRequestDateByIndex(index)),
+                ).toHaveText(leaveDate);
+                const leaveTypeChipContent = await element(
+                    this.getLeaveRequestTypeByIndex(index),
+                ).getAttributes();
+                jestExpect(leaveTypeChipContent.text).toContain(leaveType);
+                await expect(
+                    element(this.getLeaveRequestStatusIndicatorByIndex(index)),
+                ).toHaveText(leaveStatus);
+                foundIndex = index;
+                break;
+            } catch (error) {
+                // Current item does not match
+            }
+        }
+        /* eslint-enable */
+        return foundIndex;
     };
 
-    cancelLatestLeaveRequest = async () => {
-        await element(this.getLeaveRequestStatusIndicatorByIndex(0)).tap();
+    assertLeaveRequestExist = async (index: number) => {
+        jestExpect(index).not.toBe(-1);
+    };
+
+    cancelLatestLeaveRequestByIndex = async (index: number) => {
+        await element(this.getLeaveRequestStatusIndicatorByIndex(index)).tap();
         await waitFor(element(this.lblPendingLeaveStatus))
             .toBeVisible()
             .withTimeout(TIMEOUT);

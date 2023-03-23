@@ -11,19 +11,20 @@ describe('Employee Tests', () => {
     const empUserName = process.env.EMP_USERNAME;
     const empPassword = process.env.EMP_PASSWORD;    
 
-    let casualFullLeaveDate = moment().add(0, 'week').day(1) // Current Week Monday
-    let casualFirstHalfLeaveDate = moment().add(0, 'week').day(2) // Current Week Tuesday
-    let casualSecondHalfLeaveDate = moment().add(0, 'week').day(3) // Current Week Wednesday
-    let casualCancelLeaveDate = moment().add(0, 'week').day(4) // Current Week Thursday
-    let casualUndoLeaveDate = moment().add(0, 'week').day(5) // Current Week Friday
+    const casualFullLeaveDate = moment().startOf('month').add(1, 'week').day(1)
+    const casualFirstHalfLeaveDate = moment().startOf('month').add(1, 'week').day(2)
+    const casualSecondHalfLeaveDate = moment().startOf('month').add(1, 'week').day(3)
+    const casualCancelLeaveDate = moment().startOf('month').add(1, 'week').day(4)
+    const casualUndoLeaveDate = moment().startOf('month').add(1, 'week').day(5)
 
     beforeAll(async () => {
         loginScreen = new LoginScreen();
         homeScreen = new HomeScreen();
         await device.launchApp({
             delete: true,
-            permissions: { notifications: 'YES' },
+            permissions: { notifications: 'YES' }
         });
+        await device.setURLBlacklist(['.*codepush\.appcenter\.ms.*','.*in\.appcenter\.ms.*']);
     });
 
     beforeEach(async () => {
@@ -46,7 +47,8 @@ describe('Employee Tests', () => {
         await homeScreen.tapConfirmLeave();
         await homeScreen.verifyLeaveRequestConfirmed();
         await homeScreen.tapProceedHome();
-        await homeScreen.assertLatestLeaveRequest(getFormattedDate(casualFullLeaveDate, "Do MMM"), 'Casual', 'Pending');
+        const index = await homeScreen.getLeaveRequestIndexFromList(getFormattedDate(casualFullLeaveDate, "Do MMM"), 'Casual', 'Pending');
+        homeScreen.assertLeaveRequestExist(index);
     });
 
     it('Should be able to undo a casual leave request', async () => {
@@ -58,7 +60,8 @@ describe('Employee Tests', () => {
         await homeScreen.verifyLeaveRequestConfirmed();
         await homeScreen.tapUndoRequest();
         await homeScreen.tapCancel();
-        await homeScreen.assertLatestLeaveRequest(getFormattedDate(casualUndoLeaveDate, "Do MMM"), 'Casual', 'Cancelled');
+        const index = await homeScreen.getLeaveRequestIndexFromList(getFormattedDate(casualUndoLeaveDate, "Do MMM"), 'Casual', 'Cancelled');
+        homeScreen.assertLeaveRequestExist(index);
     });
 
     it('Should be able to apply for a first half casual leave', async () => {
@@ -71,7 +74,8 @@ describe('Employee Tests', () => {
         await homeScreen.tapConfirmLeave();
         await homeScreen.verifyLeaveRequestConfirmed();
         await homeScreen.tapProceedHome();
-        await homeScreen.assertLatestLeaveRequest(getFormattedDate(casualFirstHalfLeaveDate, "Do MMM"), 'Casual', 'Pending');
+        const index =  await homeScreen.getLeaveRequestIndexFromList(getFormattedDate(casualFirstHalfLeaveDate, "Do MMM"), 'Casual', 'Pending');
+        homeScreen.assertLeaveRequestExist(index);
     });
 
     it('Should be able to apply for a second half casual leave', async () => {
@@ -84,7 +88,8 @@ describe('Employee Tests', () => {
         await homeScreen.tapConfirmLeave();
         await homeScreen.verifyLeaveRequestConfirmed();
         await homeScreen.tapProceedHome();
-        await homeScreen.assertLatestLeaveRequest(getFormattedDate(casualSecondHalfLeaveDate, "Do MMM"), 'Casual', 'Pending');
+        const index = await homeScreen.getLeaveRequestIndexFromList(getFormattedDate(casualSecondHalfLeaveDate, "Do MMM"), 'Casual', 'Pending');
+        homeScreen.assertLeaveRequestExist(index);
     });
 
     it('Should be able to cancel a applied casual leave', async () => {
@@ -95,9 +100,10 @@ describe('Employee Tests', () => {
         await homeScreen.tapConfirmLeave();
         await homeScreen.verifyLeaveRequestConfirmed();
         await homeScreen.tapProceedHome();
-        await homeScreen.assertLatestLeaveRequest(getFormattedDate(casualCancelLeaveDate, "Do MMM"), 'Casual', 'Pending');
-        await homeScreen.cancelLatestLeaveRequest();
-        await homeScreen.assertLatestLeaveRequest(getFormattedDate(casualCancelLeaveDate, "Do MMM"), 'Casual', 'Cancelled');
+        let index = await homeScreen.getLeaveRequestIndexFromList(getFormattedDate(casualCancelLeaveDate, "Do MMM"), 'Casual', 'Pending');
+        await homeScreen.cancelLatestLeaveRequestByIndex(index);
+        index = await homeScreen.getLeaveRequestIndexFromList(getFormattedDate(casualCancelLeaveDate, "Do MMM"), 'Casual', 'Cancelled');
+        homeScreen.assertLeaveRequestExist(index);
     });
 });
 

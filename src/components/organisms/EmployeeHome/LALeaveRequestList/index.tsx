@@ -169,6 +169,7 @@ const LALeaveRequestList = ({
                 keyExtractor={item => item.leaveRequestId.toLocaleString()}
                 renderItem={({ item, index }) => (
                     <RequestListItem
+                        testId={`${TID_EMPLOYEE_LEAVE_REQUEST_ROW}`}
                         testIdRow={`${TID_EMPLOYEE_LEAVE_REQUEST_ROW}_${index.toString()}`}
                         testIdContent={`${TID_EMPLOYEE_LEAVE_REQUEST_DATE}_${index.toString()}`}
                         testIdChip={`${TID_EMPLOYEE_LEAVE_REQUEST_TYPE}_${index.toString()}`}

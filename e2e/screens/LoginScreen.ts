@@ -27,7 +27,6 @@ export default class LoginScreen {
 
     verifyLoginPageLoaded = async () => {
         await waitFor(element(this.lblSignIn)).toBeVisible().withTimeout(30000);
-        await device.disableSynchronization();
     };
 
     tapLoginWithEmail = async () => {
@@ -56,7 +55,6 @@ export default class LoginScreen {
             As a solution to this detox synchronization is disabled on page load and enabled after login is submitted
         */
         await element(this.txtLoginPassword).tapReturnKey();
-        await device.enableSynchronization();
     };
 
     loginByPasswordAuthentication = async (
