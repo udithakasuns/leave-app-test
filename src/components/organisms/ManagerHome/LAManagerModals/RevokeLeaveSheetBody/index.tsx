@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Button, Input, Spacer, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import { TestProps } from 'src/utils/types';
+import {
+    TID_REVOKE_LEAVE_SHEET_TXT_REVOKE_REASON,
+    TID_REVOKE_LEAVE_SHEET_BUTTON_REQUEST_REVOKE_LEAVE,
+} from 'src/utils/testIds';
 
 interface Props extends Partial<TestProps> {
     // requestDetails: RequestDetails;
@@ -31,6 +35,7 @@ const RevokeLeaveSheetBody = ({
                 the employee. Leave entitlements will be updated.
             </Text>
             <Input
+                testIdInput={TID_REVOKE_LEAVE_SHEET_TXT_REVOKE_REASON}
                 error={showError}
                 placeholder='Add message'
                 label='Why do you want to revoke the leave?'
@@ -49,6 +54,7 @@ const RevokeLeaveSheetBody = ({
             )}
             <Spacer />
             <Button
+                testID={TID_REVOKE_LEAVE_SHEET_BUTTON_REQUEST_REVOKE_LEAVE}
                 mode='outlined-error'
                 icon='close'
                 label='Request to be revoked'

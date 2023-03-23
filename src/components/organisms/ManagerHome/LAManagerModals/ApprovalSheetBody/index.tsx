@@ -4,10 +4,13 @@ import {
     AvatarChip,
     ButtonDock,
     ManagerRequestDetails,
-    SelectionButton,
 } from 'src/components/molecules';
 import theme from 'src/utils/theme';
 import { PendingRequestByID, TestProps } from 'src/utils/types';
+import {
+    TID_APPROVAL_SHEET_BODY_BUTTON_APPROVE_LEAVE,
+    TID_APPROVAL_SHEET_BODY_BUTTON_DECLINE_LEAVE,
+} from 'src/utils/testIds';
 import TeamAvailability from './TeamAvailability';
 import { styles } from './styles';
 
@@ -47,22 +50,18 @@ const ApprovalSheetBody = ({
             placeholderColor={colors.gray600}
         />
         <Spacer />
-        {/* <SelectionButton
-            label='Upload Attachment'
-            icon='file'
-            iconLibrary='svg'
-            onPress={() => {}}
-        /> */}
         <TeamAvailability requestDetails={requestDetails} />
         <Spacer />
         <ButtonDock
             iconPosition='left'
             primaryButton={{
+                testID: TID_APPROVAL_SHEET_BODY_BUTTON_APPROVE_LEAVE,
                 label: 'Approve Leave',
                 icon: 'arrow-forward',
                 onPress: onPressApproveLeave,
             }}
             secondaryButton={{
+                testID: TID_APPROVAL_SHEET_BODY_BUTTON_DECLINE_LEAVE,
                 label: 'Decline Leave',
                 mode: 'outlined-error',
                 onPress: onPressDeclineLeave,

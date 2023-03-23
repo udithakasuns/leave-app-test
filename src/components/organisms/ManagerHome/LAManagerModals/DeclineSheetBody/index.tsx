@@ -3,6 +3,10 @@ import { View } from 'react-native';
 import { Button, Input, Spacer, Text } from 'src/components/atoms';
 import theme from 'src/utils/theme';
 import { TestProps } from 'src/utils/types';
+import {
+    TID_DECLINE_LEAVE_SHEET_BODY_BUTTON_DECLINE_LEAVE,
+    TID_DECLINE_LEAVE_SHEET_BODY_TXT_DECLINE_REASON,
+} from 'src/utils/testIds';
 
 interface Props extends Partial<TestProps> {
     onDeclineLeaveRequest: (reviewerComment: string) => void;
@@ -24,6 +28,7 @@ const DeclineSheetBody = ({ onDeclineLeaveRequest }: Props) => {
         <View style={{ flex: 1 }}>
             <Spacer height={2} />
             <Input
+                testIdInput={TID_DECLINE_LEAVE_SHEET_BODY_TXT_DECLINE_REASON}
                 error={showError}
                 placeholder='Add your reason'
                 label='Reason to decline'
@@ -42,6 +47,7 @@ const DeclineSheetBody = ({ onDeclineLeaveRequest }: Props) => {
             )}
             <Spacer />
             <Button
+                testID={TID_DECLINE_LEAVE_SHEET_BODY_BUTTON_DECLINE_LEAVE}
                 iconPosition='left'
                 mode='outlined-error'
                 icon='close'

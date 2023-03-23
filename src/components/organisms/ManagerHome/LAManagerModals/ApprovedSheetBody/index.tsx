@@ -6,6 +6,8 @@ import {
     MoreDetailsButton,
 } from 'src/components/molecules';
 import { PendingRequestByID, TestProps } from 'src/utils/types';
+import { TID_APPROVED_LEAVE_SHEET_BUTTON_REVOKE_LEAVE } from 'src/utils/testIds';
+
 import { styles } from './styles';
 
 interface Props extends Partial<TestProps> {
@@ -40,6 +42,7 @@ const ApprovedSheetBody = ({
         <MoreDetailsButton onPress={onPressViewMoreDetails} />
         <Spacer />
         <Button
+            testID={TID_APPROVED_LEAVE_SHEET_BUTTON_REVOKE_LEAVE}
             mode='outlined-error'
             icon='close'
             label='Revoke Leave'

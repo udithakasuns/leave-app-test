@@ -140,6 +140,7 @@ const LAPendingRequestList = ({
                 }}
                 renderItem={({ item, index }) => (
                     <PendingListItem
+                        testId={`${TID_MANAGER_LEAVE_REQUEST_ROW}`}
                         testIdRow={`${TID_MANAGER_LEAVE_REQUEST_ROW}_${index.toString()}`}
                         date={getStartEndDate(item.startDate, item.endDate)}
                         employee={item.employee}

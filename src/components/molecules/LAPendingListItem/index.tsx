@@ -24,17 +24,16 @@ const LAPendingListItem = ({
     testIdRow,
     date,
     employee,
-    // entitlement,
+    testId,
     testIdContent,
-    // testIdChip,
     onPress,
-    // entitlementChipColor,
     testIdStatus,
     status,
     chipsColor,
 }: Props) => (
-    <Pressable testID={testIdRow} onPress={onPress} style={styles.container}>
+    <Pressable onPress={onPress} style={styles.container}>
         <AvatarChip
+            testIdContent={testIdRow}
             label={employee.name?.split(' ')[0] ?? ''}
             source={{
                 uri: employee.authPic ?? '',
@@ -50,20 +49,12 @@ const LAPendingListItem = ({
             }}
         />
         <StatusChip
+            testId={testId}
             testIdContent={testIdStatus}
             status={status}
             containerStyle={{ backgroundColor: chipsColor }}
             onPress={onPress}
         />
-        {/* <Chip
-            testIdContent={testIdChip}
-            content={entitlement}
-            contentColor={colors.gray600}
-            contentTextType='ParaLG'
-            contentStyle={styles.contentStyle}
-            backgroundColor={entitlementChipColor}
-            containerStyle={styles.containerStyle}
-        /> */}
         <View style={styles.dateContainer}>
             <Text testID={testIdContent} type='ParaSM'>
                 {date}

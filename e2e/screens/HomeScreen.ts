@@ -1,4 +1,14 @@
 import { expect as jestExpect } from '@jest/globals';
+import {
+    TID_LEAVE_STATUS_TYPE,
+    TID_LEAVE_STATUS_DATE,
+    TID_LEAVE_STATUS_DURATION,
+    TID_DECLINE_LEAVE_SHEET_BODY_BUTTON_DECLINE_LEAVE,
+    TID_DECLINE_LEAVE_SHEET_BODY_TXT_DECLINE_REASON,
+    TID_APPROVED_LEAVE_SHEET_BUTTON_REVOKE_LEAVE,
+    TID_REVOKE_LEAVE_SHEET_TXT_REVOKE_REASON,
+    TID_REVOKE_LEAVE_SHEET_BUTTON_REQUEST_REVOKE_LEAVE,
+} from 'src/utils/testIds';
 import { getElementCount } from '../helpers/index';
 
 /* eslint-disable consistent-return */
@@ -23,7 +33,7 @@ export enum HalfDayLeaveType {
     EVENING = 'Evening',
 }
 
-const TIMEOUT = 300000;
+const TIMEOUT = 30000;
 
 export default class HomeScreen {
     readonly TID: string = 'test:id/';
@@ -145,6 +155,88 @@ export default class HomeScreen {
     readonly lblCancelLeave: Detox.NativeMatcher = by.text(
         'Cancel requested leave',
     );
+
+    // Leave Requests List Locators in Manager Home
+
+    readonly listItemManagerLeaveRequests: Detox.NativeMatcher = by.id(
+        `${this.TID}TID_MANAGER_LEAVE_REQUEST_ROW`,
+    );
+
+    readonly getManagerLeaveRequesterNameByIndex: (
+        index: number,
+    ) => Detox.NativeMatcher = (index: number) =>
+        by.id(`${this.TID}TID_MANAGER_LEAVE_REQUEST_ROW_${index.toString()}`);
+
+    readonly getManagerLeaveRequestStatusByIndex: (
+        index: number,
+    ) => Detox.NativeMatcher = (index: number) =>
+        by.id(
+            `${this.TID}TID_MANAGER_LEAVE_REQUEST_STATUS_${index.toString()}`,
+        );
+
+    readonly getManagerLeaveRequestDateByIndex: (
+        index: number,
+    ) => Detox.NativeMatcher = (index: number) =>
+        by.id(`${this.TID}TID_MANAGER_LEAVE_REQUEST_DATE_${index.toString()}`);
+
+    // Approve Leave Modal
+
+    readonly btnApproveLeaveModal: Detox.NativeMatcher = by.id(
+        `${this.TID}TID_APPROVAL_SHEET_BODY_BUTTON_APPROVE_LEAVE`,
+    );
+
+    readonly btnDeclineLeaveModal: Detox.NativeMatcher = by.id(
+        `${this.TID}TID_APPROVAL_SHEET_BODY_BUTTON_DECLINE_LEAVE`,
+    );
+
+    readonly lblLeaveTypeModal: Detox.NativeMatcher = by.id(
+        `${TID_LEAVE_STATUS_TYPE}`,
+    );
+
+    readonly lblLeaveDateModal: Detox.NativeMatcher = by.id(
+        `${TID_LEAVE_STATUS_DATE}`,
+    );
+
+    readonly lblLeaveDurationModal: Detox.NativeMatcher = by.id(
+        `${TID_LEAVE_STATUS_DURATION}`,
+    );
+
+    readonly lblLeaveRequestApproved: Detox.NativeMatcher = by.text(
+        'Leave request approved',
+    );
+
+    readonly btnUndoApproval: Detox.NativeMatcher = by.text('Undo approval');
+
+    // Decline Leave Modal
+
+    readonly btnConfirmDeclineLeave: Detox.NativeMatcher = by.id(
+        `${TID_DECLINE_LEAVE_SHEET_BODY_BUTTON_DECLINE_LEAVE}`,
+    );
+
+    readonly txtDeclineLeaveReason: Detox.NativeMatcher = by.id(
+        `${TID_DECLINE_LEAVE_SHEET_BODY_TXT_DECLINE_REASON}`,
+    );
+
+    readonly lblLeaveRequestDeclined: Detox.NativeMatcher = by.text(
+        'Leave request denied',
+    );
+
+    // Approved Leave Modal
+
+    readonly btnRevokeApproval: Detox.NativeMatcher = by.id(
+        `${TID_APPROVED_LEAVE_SHEET_BUTTON_REVOKE_LEAVE}`,
+    );
+
+    readonly txtRevokeReason: Detox.NativeMatcher = by.id(
+        `${TID_REVOKE_LEAVE_SHEET_TXT_REVOKE_REASON}`,
+    );
+
+    readonly btnRequestRevoke: Detox.NativeMatcher = by.id(
+        `${TID_REVOKE_LEAVE_SHEET_BUTTON_REQUEST_REVOKE_LEAVE}`,
+    );
+
+    readonly lblLeaveRevoked: Detox.NativeMatcher = by.text('Leave revoked');
+
     // Actions
 
     verifyDashboardLoaded = async () => {
@@ -300,5 +392,110 @@ export default class HomeScreen {
             .toBeVisible()
             .withTimeout(TIMEOUT);
         await element(this.btnCancelLeave).tap();
+    };
+
+    getManagerLeaveRequestIndexFromList = async (
+        employeeName: string,
+        leaveStatus: string,
+        leaveDate: string,
+    ) => {
+        /* eslint-disable */
+        let index = 0;
+        let foundIndex = -1;
+        const leaveRequestsCount = await getElementCount(
+            this.listItemManagerLeaveRequests,
+        );
+        for (; index < leaveRequestsCount; index += 1) {
+            try {
+                await expect(
+                    element(this.getManagerLeaveRequesterNameByIndex(index)),
+                ).toHaveText(employeeName);
+                const leaveRequestStatus = await element(
+                    this.getManagerLeaveRequestStatusByIndex(index),
+                ).getAttributes();
+                jestExpect(leaveRequestStatus.text).toContain(leaveStatus);
+                await expect(
+                    element(this.getManagerLeaveRequestDateByIndex(index)),
+                ).toHaveText(leaveDate);
+                foundIndex = index;
+                break;
+            } catch (error) {
+                // Current item does not match
+            }
+        }
+        /* eslint-enable */
+        return foundIndex;
+    };
+
+    viewManagerLeaveRequestInfoByIndex = async (index: number) => {
+        await element(this.getManagerLeaveRequestStatusByIndex(index)).tap();
+        await waitFor(element(this.btnApproveLeaveModal))
+            .toBeVisible()
+            .withTimeout(TIMEOUT);
+    };
+
+    viewManagerApprovedRequestInfoByIndex = async (index: number) => {
+        await element(this.getManagerLeaveRequestStatusByIndex(index)).tap();
+        await waitFor(element(this.btnRevokeApproval))
+            .toBeVisible()
+            .withTimeout(TIMEOUT);
+    };
+
+    assertRequestedLeaveDetails = async (
+        leaveType: string,
+        leaveDate: string,
+        leaveDuration: string,
+    ) => {
+        const displayedLeaveType = await element(
+            this.lblLeaveTypeModal,
+        ).getAttributes();
+        jestExpect(displayedLeaveType.text).toContain(leaveType);
+        await expect(element(this.lblLeaveDateModal)).toHaveText(leaveDate);
+        await expect(element(this.lblLeaveDurationModal)).toHaveText(
+            leaveDuration,
+        );
+    };
+
+    tapApproveLeaveRequest = async () => {
+        await element(this.btnApproveLeaveModal).tap();
+        await waitFor(element(this.lblLeaveRequestApproved))
+            .toBeVisible()
+            .withTimeout(TIMEOUT);
+    };
+
+    tapDeclineLeaveRequest = async () => {
+        await element(this.btnDeclineLeaveModal).tap();
+        await waitFor(element(this.btnConfirmDeclineLeave))
+            .toBeVisible()
+            .withTimeout(TIMEOUT);
+    };
+
+    tapRevokeLeaveRequest = async () => {
+        await element(this.btnRevokeApproval).tap();
+        await waitFor(element(this.btnRequestRevoke))
+            .toBeVisible()
+            .withTimeout(TIMEOUT);
+    };
+
+    confirmDeclineLeave = async (declineReason: string) => {
+        await waitFor(element(this.btnConfirmDeclineLeave))
+            .toBeVisible()
+            .withTimeout(TIMEOUT);
+        await element(this.txtDeclineLeaveReason).typeText(declineReason);
+        await element(this.btnConfirmDeclineLeave).tap();
+        await waitFor(element(this.lblLeaveRequestDeclined))
+            .toBeVisible()
+            .withTimeout(TIMEOUT);
+    };
+
+    confirmRevokeLeave = async (revokeReason: string) => {
+        await waitFor(element(this.btnRequestRevoke))
+            .toBeVisible()
+            .withTimeout(TIMEOUT);
+        await element(this.txtRevokeReason).typeText(revokeReason);
+        await element(this.btnRequestRevoke).tap();
+        await waitFor(element(this.lblLeaveRevoked))
+            .toBeVisible()
+            .withTimeout(TIMEOUT);
     };
 }
