@@ -1,24 +1,26 @@
-/* eslint-disable */
-
-import LoginScreen from '../screens/LoginScreen';
-import HomeScreen from '../screens/HomeScreen';
+import LoginActions from '../actions/LoginActions';
+import HomeActions from '../actions/HomeActions';
 
 describe('Login Tests', () => {
-    let loginScreen;
-    let homeScreen;
+    let loginActions;
+    let homeActions;
+
     const empUserName = process.env.EMP_USERNAME;
     const empPassword = process.env.EMP_PASSWORD;
     const managerUserName = process.env.MANAGER_USERNAME;
     const managerPassword = process.env.MANAGER_PASSWORD;
 
     beforeAll(async () => {
-        loginScreen = new LoginScreen();
-        homeScreen = new HomeScreen();
+        loginActions = new LoginActions();
+        homeActions = new HomeActions();
         await device.launchApp({
             delete: true,
-            permissions: { notifications: 'YES' }
+            permissions: { notifications: 'YES' },
         });
-        await device.setURLBlacklist(['.*codepush\.appcenter\.ms.*','.*in\.appcenter\.ms.*']);
+        await device.setURLBlacklist([
+            '.*codepush.appcenter.ms.*',
+            '.*in.appcenter.ms.*',
+        ]);
     });
 
     beforeEach(async () => {
@@ -26,31 +28,40 @@ describe('Login Tests', () => {
     });
 
     afterEach(async () => {
-        await homeScreen.logoutUser();
+        await homeActions.logoutUser();
     });
 
     it('Should be able to login as a manager', async () => {
-        await loginScreen.verifyLoginPageLoaded();
-        await loginScreen.tapLoginWithEmail();
-        await loginScreen.loginByPasswordAuthentication(managerUserName, managerPassword);
-        await homeScreen.verifyDashboardLoaded();
+        await loginActions.verifyLoginPageLoaded();
+        await loginActions.tapLoginWithEmail();
+        await loginActions.loginByPasswordAuthentication(
+            managerUserName,
+            managerPassword,
+        );
+        await homeActions.verifyDashboardLoaded();
     });
 
     it('Should be able to login as an employee', async () => {
-        await loginScreen.verifyLoginPageLoaded();
-        await loginScreen.tapLoginWithEmail();
-        await loginScreen.loginByPasswordAuthentication(empUserName, empPassword);
-        await homeScreen.verifyDashboardLoaded();
+        await loginActions.verifyLoginPageLoaded();
+        await loginActions.tapLoginWithEmail();
+        await loginActions.loginByPasswordAuthentication(
+            empUserName,
+            empPassword,
+        );
+        await homeActions.verifyDashboardLoaded();
     });
 
     it('Should be able to switch between employee & manager view', async () => {
-        await loginScreen.verifyLoginPageLoaded();
-        await loginScreen.tapLoginWithEmail();
-        await loginScreen.loginByPasswordAuthentication(managerUserName, managerPassword);
-        await homeScreen.verifyDashboardLoaded();
-        await homeScreen.tapRoleSwitcher();
-        await homeScreen.switchToEmployeeView();
-        await homeScreen.tapRoleSwitcher();
-        await homeScreen.switchToManagerView();
+        await loginActions.verifyLoginPageLoaded();
+        await loginActions.tapLoginWithEmail();
+        await loginActions.loginByPasswordAuthentication(
+            managerUserName,
+            managerPassword,
+        );
+        await homeActions.verifyDashboardLoaded();
+        await homeActions.tapRoleSwitcher();
+        await homeActions.switchToEmployeeView();
+        await homeActions.tapRoleSwitcher();
+        await homeActions.switchToManagerView();
     });
 });

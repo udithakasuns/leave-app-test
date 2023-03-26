@@ -43,7 +43,7 @@ module.exports = {
                 tsx: 'never',
             },
         ],
-        "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/e2e/screens/*.ts", "src/components/atoms/**/**/*.test.tsx", "src/components/molecules/**/**/*.test.tsx"]}]
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/e2e/actions/*.ts", "src/components/atoms/**/**/*.test.tsx", "src/components/molecules/**/**/*.test.tsx"]}]
     },
     overrides: [
         {
@@ -60,4 +60,11 @@ module.exports = {
             },
         },
     ],
+    globals: {
+        "device": false,
+        "expect": false,
+        "waitFor": false,
+        "element": false,
+        "by": false,
+      }
 };
