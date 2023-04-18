@@ -196,7 +196,7 @@ const PasswordContent = ({
             <Input
                 testIdInput={`${TID}INPUT_PASSWORD`}
                 reference={passwordRef}
-                label='New password'
+                label='New passwords'
                 placeholder=''
                 value={password}
                 autoCapitalize='none'

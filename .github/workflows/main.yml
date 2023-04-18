@@ -15,8 +15,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
-          cache: 'yarn'
+          node-version: '16.14'
 
       - name: Install Yarn Dependencies
         run: yarn install
@@ -45,20 +44,17 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: global
-
+          aws-region: us-east-1
+          
       - name: Installl AWS Amplify
-        run: curl -sL https://aws-amplify.github.io/amplify-cli/install | bash && $SHELL
+        run: npm install -g @aws-amplify/cli
 
       - name: Checkout Amplify Environment
         run: yarn run amplify:dev
       
       - name: Run Detox Build
         run: yarn e2e:build ios.sim.release
-        
-      - name: Copy Scripts
-        run: cp -R scripts/ ${{ github.workspace }}/scripts
-
+  
       - name: Run Detox Test(s)
         run: bash ${{ github.workspace }}/scripts/run-e2e-ios-release.sh
 
